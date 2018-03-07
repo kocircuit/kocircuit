@@ -10,6 +10,7 @@ type stepResult struct {
 	Error  error
 }
 
+// TODO: playPar must forward the first step panic unchanged.
 func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 	cross := map[*Step]chan Edge{}
 	for _, s := range f.Step {
