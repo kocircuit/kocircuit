@@ -1,0 +1,28 @@
+import "integer"
+
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabFib
+// 21
+CodelabFib() {
+	return: Show(Fib(7))
+}
+
+// Fib returns the n-th Fibonacci number.
+// Fibonacci numbers are defined here: https://en.wikipedia.org/wiki/Fibonacci_number
+Fib(n?) {
+	result: Yield(
+		if: Or(
+			integer.Equal(n, 0)
+			integer.Equal(n, 1)
+		)
+		then: Return[1]
+		else: fibSum[n]
+	)()
+	return: result
+}
+
+fibSum(m?) {
+	return: integer.Sum(
+		Fib(integer.Sum(m, -1))
+		Fib(integer.Sum(m, -2))
+	)
+}

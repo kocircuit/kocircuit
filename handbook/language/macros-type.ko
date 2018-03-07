@@ -1,0 +1,41 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+import "github.com/kocircuit/kocircuit/handbook/compiler"
+
+TypeMacrosChapter() {
+	return: wiki.Chapter(
+		bullet: "2.4.5."
+		label: "type"
+		caption: "Ko Macros for Types"
+		title: wiki.Text("Macros for type manipulations")
+		content: typeMacrosContent()
+	)
+}
+
+typeMacrosContent() {
+	return: (
+		P(f: `When a circuit operation invokes a %%, the Ko values passed to
+		the gate are “integrated” into the type structure expected by the Go gate implementation.`
+			a: wiki.Ref(ref: compiler.GateChapterLink(), nodes: wiki.Text(`gate`))
+		)
+		P(`Integration performs automatic safe type conversions over basic types (among others).
+			For instance a 16-bit signed integer will be converted to a 32-bit signed integer, if necessary,
+			but not to any unsigned one or a narrow type.`)
+		P(f: `For cases where such conversions need to be forced by the programmer,
+			the language provides the macros
+			%%, %%, %%, %%,
+			%%, %%, %%, %%, %% and %%.`
+			a: C(`Int8`)
+			a: C(`Int16`)
+			a: C(`Int32`)
+			a: C(`Int64`)
+			a: C(`Uint8`)
+			a: C(`Uint16`)
+			a: C(`Uint32`)
+			a: C(`Uint64`)
+			a: C(`Float32`)
+			a: C(`Float64`)
+		)
+		P(`All of these macros converts its monadic (unnamed) argument to the required type,
+		using the same conversion semantics as the Go language.`)
+	)
+}

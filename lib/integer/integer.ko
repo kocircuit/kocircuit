@@ -1,0 +1,23 @@
+// Package integer provides circuits for manipulating the built-in integer types.
+//
+// The macros Sum(n?), Prod(n?), Ratio(n?), Moduli(n?), Less(n?), Equal(n?) and Negative(n?)
+// are implemented by the backends (eval and weave).
+
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/integer" as gointeger
+
+FormatInt64(int64?, base) {
+	return: gointeger.FormatInt64(int64: int64, base: base)
+}
+
+IsEven(num?) {
+	return: integer.Equal(integer.Moduli(num, 2), 0)
+}
+
+IsOdd(num?) {
+	return: integer.Equal(integer.Moduli(num, 2), 1)
+}
+
+Inc(num?) {
+	return: integer.Sum(num, 1)
+}

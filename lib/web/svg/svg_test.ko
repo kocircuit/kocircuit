@@ -1,0 +1,6 @@
+// ko play github.com/kocircuit/kocircuit/lib/web/svg/TestSVG
+
+// TODO: add SVG test
+TestSVG() {
+	return: true
+}

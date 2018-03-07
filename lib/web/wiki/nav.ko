@@ -1,0 +1,15 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+
+TableOfNavigation(chapter, renderingCtx) {
+	return: Rows(
+		Merge(
+			series.Map(
+				over: renderingCtx.stack
+				with: tableOfNavigation(ctxChapter?) {
+					return: ChapterRef(renderingCtx: ctxChapter.renderingCtx, chapter: ctxChapter.chapter)
+				}
+			)
+			ChapterStrong(renderingCtx: renderingCtx, chapter: chapter)
+		)
+	)
+}

@@ -1,0 +1,57 @@
+import "github.com/kocircuit/kocircuit/handbook/language"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+ArchitectureChapter() {
+	return: wiki.Chapter(
+		cross: ArchitectureChapterLink()
+		bullet: "3.1."
+		label: "arch"
+		caption: "Ko Compiler Architecture"
+		title: wiki.Text("Compiler architecture")
+		content: architectureContent()
+	)
+}
+
+ArchitectureChapterLink() {
+	return: wiki.Crosslink("compiler/arch")
+}
+
+architectureContent() {
+	return: (
+		P(`The Ko evaluator and weaver pipelines comprise multiple steps, the first few
+		of which are shared. Both pipelines begin by parsing the Ko source code
+		and producing libraries of named circuit wiring diagrams, including resolutions
+		for all references across circuits and packages.`)
+		P(`This stage is the first place, where dataflow-based (and still type-free)
+		automatic program rewriting and analysis can be performed.`)
+		P(`The evaluator and weaver take different paths from here (described in the
+		following sections). However, they both reuse the same dataflow engine
+		which guides the execution of custom logic over circuit programs.`)
+		// evaluator
+		H(`Evaluator architecture`)
+		P(`The evaluator executes the wired circuit program optimistically “on-the-fly”,
+		before verifying that the entire program is type-safe.
+		It simulates the flow of values as the program execution unfolds and, in an efficient manner,
+		accummulates type information about the whole program as execution unfolds.
+		Type inconsistencies are caught as they occur and result in a Ko stack trace and
+		an error message.`)
+		// weaver
+		H(`Weaver architecture for transpilation`)
+		P(`The weaving process comprises two stages: type-inference and code generation.`)
+		P(`In the type-inference stage, the weaver executes a Ko program by flowing types
+			(instead of values) across the circuit wires connecting the output and input of transformations
+			in the program.`)
+		P(`As a result, it produces an Intermediate Representation (IR) of the Ko program
+			which is represented as a list of circuits (together with their wiring diagrams) as well as
+			concrete deep-type annotations on all arguments, return values and internal wires of each
+			circuit.`)
+		P(`This IR can then be used to implement straightforward code-generators
+			that convert the IR representation (type annotated circuits)
+			into fully-statically typed code in any
+			general-purpose programming language, like Go, Java, C++, etc.`)
+		P(`Our weaver (still in development) currently supports code generation
+			of Go code. After code-generation completes, a direct invocation of
+			the Go compiler produces the final binary. This is handled by the Ko
+			compiler for convenience and encapsulation.`)
+	)
+}

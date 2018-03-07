@@ -1,0 +1,10 @@
+Resource(
+	repoFile // path to a resource file, relative to the repo root
+	url // URL of this resource, relative to wiki resources root URL
+) {
+	return: (
+		hash: Hash("resource", repoFile, url)
+		repoFile: repoFile
+		url: url
+	)
+}

@@ -1,0 +1,33 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+MacrosChapter() {
+	return: wiki.Chapter(
+		cross: MacroChapterLink()
+		bullet: "2.4."
+		label: "macros"
+		caption: "Ko Macros"
+		title: wiki.Text("Macros")
+		sub: GenericMacrosChapter()
+		sub: SequenceMacrosChapter()
+		sub: ControlMacrosChapter()
+		sub: DebugMacrosChapter()
+		sub: TypeMacrosChapter()
+		sub: ArithmeticMacrosChapter()
+		content: macrosContent()
+	)
+}
+
+MacroChapterLink() {
+	return: wiki.Crosslink("language/macros")
+}
+
+macrosContent() {
+	return: (
+		P(
+			f: `%% are transformations that are built into the compiler.
+			They provide access to core language control functionalities (like starting new processes),
+			as well as type-safe generic value manipulations (like ranging over sequence types).`
+			a: D(`Macros`)
+		)
+	)
+}

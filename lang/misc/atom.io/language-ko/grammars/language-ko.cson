@@ -1,0 +1,278 @@
+'scopeName': 'source.ko'
+'name': 'Ko'
+'comment': 'Ko language'
+'fileTypes': [
+  'ko'
+]
+'foldingStartMarker': '({|\\()\\s*$'
+'foldingStopMarker': '(}|\\))\\s*$'
+'patterns': [
+  {
+    'include': '#comments'
+  }
+  {
+    'comment': 'Interpreted string literals'
+    'begin': '"'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.ko'
+    'end': '"'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.ko'
+    'name': 'string.quoted.double.ko'
+    'patterns': [
+      {
+        'include': '#string_escaped_char'
+      }
+      {
+        'include': '#string_placeholder'
+      }
+    ]
+  }
+  {
+    'comment': 'Raw string literals'
+    'begin': '`'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.ko'
+    'end': '`'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.ko'
+    'name': 'string.quoted.raw.ko',
+    'patterns': [
+      {
+        'include': '#string_placeholder'
+      }
+    ]
+  }
+  {
+    'comment': 'Syntax error numeric literals'
+    'match': '\\b0[0-7]*[89]\\d*\\b'
+    'name': 'invalid.illegal.numeric.ko'
+  }
+  {
+    'comment': 'Built-in functions'
+    'match': '\\b(Range|Yield|And|Or|Not|Sort|Spin|Len|Merge|Switch|Possible)\\b(?=\\()'
+    'name': 'support.function.builtin.ko'
+  }
+  {
+    'comment': 'Assignment'
+    'match': '(\\b\\w+\\b)(?:\\s*)(:)'
+    'captures':
+      '1':
+        'patterns': [
+          {
+            'match': '\\d\\w*'
+            'name': 'invalid.illegal.identifier.ko'
+          }
+          {
+            'match': '\\w+'
+            'name': 'entity.name.label.ko'
+          }
+        ]
+      '2':
+        'name': 'keyword.operator.assign.ko'
+  }
+  {
+    'comment': 'Floating-point literals'
+    'match': '(\\.\\d+([Ee][\-\+]\\d+)?i?)\\b|\\b\\d+\\.\\d*(([Ee][\-\+]\\d+)?i?\\b)?'
+    'name': 'constant.numeric.floating-point.ko'
+  }
+  {
+    'comment': 'Integers'
+    'match': '\\b((0x[0-9a-fA-F]+)|(0[0-7]+i?)|(\\d+([Ee]\\d+)?i?)|(\\d+[Ee][\-\+]\\d+i?))\\b'
+    'name': 'constant.numeric.integer.ko'
+  }
+  {
+    'comment': 'Language constants'
+    'match': '\\b(true|false|empty)\\b'
+    'name': 'constant.language.ko'
+  }
+  {
+    'comment': 'Import'
+    'begin': '\\b(import)\\s+'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.import.ko'
+    'end': '(?!\\G)'
+    'patterns': [
+      {
+        'include': '#imports'
+      }
+    ]
+  }
+  {
+    'comment': 'Terminators'
+    'match': '(;|,)'
+    'name': 'punctuation.terminator.ko'
+  }
+  {
+    'include': '#brackets'
+  }
+  {
+    'include': '#delimiters'
+  }
+  {
+    'include': '#keywords'
+  }
+  {
+    'include': '#augment_invoke_def'
+  }
+]
+'repository':
+  'augment_invoke_def':
+    'patterns': [
+      {
+        'match': '\\b((?:\\w|.)+)\\s*(?=\\(|\\])'
+        'captures':
+          '1':
+            'patterns': [
+              {
+                'match': '\\d(?:\\w|.)*'
+                'name': 'invalid.illegal.identifier.ko'
+              }
+              {
+                'match': '(?:\\w|.)+'
+                'name': 'entity.name.function.ko'
+              }
+            ]
+      }
+    ]
+  'brackets':
+    'patterns': [
+      {
+        'begin': '{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.begin.bracket.curly.ko'
+        'end': '}'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.end.bracket.curly.ko'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+      {
+        'begin': '\\('
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.begin.bracket.round.ko'
+        'end': '\\)'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.end.bracket.round.ko'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+      {
+        'match': '\\[|\\]'
+        'begin': '\\['
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.begin.bracket.square.ko'
+        'end': '\\]'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.end.bracket.square.ko'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+    ]
+  'comments':
+    'patterns': [
+      {
+        'begin': '/\\*'
+        'end': '\\*/'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.ko'
+        'name': 'comment.block.ko'
+      }
+      {
+        'begin': '//'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.ko'
+        'end': '$'
+        'name': 'comment.line.double-slash.ko'
+      }
+    ]
+  'delimiters':
+    'patterns': [
+      {
+        'match': ','
+        'name': 'punctuation.other.comma.ko'
+      }
+      {
+        'match': '\\.(?!\\.\\.)'
+        'name': 'punctuation.other.period.ko'
+      }
+      {
+        'match': ':'
+        'name': 'punctuation.other.colon.ko'
+      }
+    ]
+  'imports':
+    'patterns': [
+      {
+        # Only single-line import declarations
+        'match': '\\s*((")([^"]*)("))\\s*(as\\s+(\\w+))?'
+        'captures':
+          '1':
+            'name': 'string.quoted.double.ko'
+          '2':
+            'name': 'punctuation.definition.string.begin.ko'
+          '3':
+            'name': 'entity.name.import.ko'
+          '4':
+            'name': 'punctuation.definition.string.end.ko'
+          '6':
+            'patterns': [
+              {
+                'match': '\\d\\w*'
+                'name': 'invalid.illegal.identifier.ko'
+              }
+              {
+                'match': '\\w+'
+                'name': 'entity.alias.import.ko'
+              }
+            ]
+      }
+    ]
+  'keywords':
+    'patterns': [
+      {
+        'comment': 'Flow control keywords'
+        'match': '\\b(etc|over|with|else|then|if|return)\\b'
+        'name': 'keyword.control.ko'
+      }
+    ]
+  'string_escaped_char':
+    'patterns': [
+      {
+        'match': '\\\\([0-7]{3}|[abfnrtv\\\\\'"]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})'
+        'name': 'constant.character.escape.ko'
+      }
+      {
+        'match': '\\\\[^0-7xuUabfnrtv\\\'"]'
+        'name': 'invalid.illegal.unknown-escape.ko'
+      }
+    ]
+  'string_placeholder':
+    'patterns': [
+      {
+        'match': '%(\\[\\d+\\])?([\\+#\\-0\\x20]{,2}((\\d+|\\*)?(\\.?(\\d+|\\*|(\\[\\d+\\])\\*?)?(\\[\\d+\\])?)?))?[vT%tbcdoqxXUbeEfFgGsp]'
+        'name': 'constant.other.placeholder.ko'
+      }
+    ]

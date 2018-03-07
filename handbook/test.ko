@@ -1,0 +1,52 @@
+import "circuit"
+import "github.com/kocircuit/kocircuit/lib/os"
+import "github.com/kocircuit/kocircuit/lib/file"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/web/html"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+// ko play github.com/kocircuit/kocircuit/handbook/TestBuild
+TestBuild() {
+	return: wiki.Build(
+		topChapter: Root()
+		siteDir: testSiteDir()
+		resourcesURL: "/resources"
+		topChapterURL: "/"
+		PageHTML: testPageHTML
+	)
+}
+
+testSiteDir() {
+	return: Show(testDir: filepath.Join(os.TempDir(), circuit.PkgPath())).testDir
+}
+
+testPageHTML(title, navHTML, tocHTML, contentHTML) {
+	return: html.HTML(
+		head: html.HEAD(title: title)
+		body: html.BODY(
+			Merge(
+				html.DIV(html.DIV(html.DIV(html.DIV(
+					html.DIV(html.DIV(html.DIV(html.DIV(
+						html.DIV(html.DIV(html.DIV(html.DIV(
+							navHTML
+						))))
+					))))
+				))))
+				html.DIV(html.DIV(html.DIV(html.DIV(
+					html.DIV(html.DIV(html.DIV(html.DIV(
+						html.DIV(html.DIV(html.DIV(html.DIV(
+							tocHTML
+						))))
+					))))
+				))))
+				html.DIV(html.DIV(html.DIV(html.DIV(
+					html.DIV(html.DIV(html.DIV(html.DIV(
+						html.DIV(html.DIV(html.DIV(html.DIV(
+							contentHTML
+						))))
+					))))
+				))))
+			)
+		)
+	)
+}

@@ -1,0 +1,13 @@
+import "github.com/kocircuit/kocircuit/lib/web/xml"
+
+// ko play github.com/kocircuit/kocircuit/lib/web/xml/TestXML
+TestXML() {
+	elem: xml.Element(
+		tag: "div"
+		attrs: xml.Attr(name: "class", values: "blue", values: "green")
+		children: xml.Text("Здравей, свят!")
+		children: xml.Element(tag: "hr")
+		children: xml.Text("Здравей, свят!")
+	)
+	return: Print(xml.Render(elem), "\n")
+}

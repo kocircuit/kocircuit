@@ -1,0 +1,294 @@
+// Package html provides a grammar for building HTML documents.
+
+import "github.com/kocircuit/kocircuit/lib/web/xml"
+
+// Render renders an HTML element to a string.
+Render(html?) {
+	return: xml.Render(html)
+}
+
+// Attr returns an HTML attribute.
+Attr(name, values) { 
+	return: xml.Attr(name: name, values: values)
+}
+
+// Attr returns an HTML attribute that has no values.
+AttrNoValues(name) { 
+	return: xml.AttrNoValues(name: name)
+}
+
+HTML(head, body?) {
+	return: xml.Group(
+		xml.DocType("html")
+		xml.Element(
+			tag: "HTML"
+			children: head
+			children: body
+		)
+	)
+}
+
+HEAD(title, children?) {
+	return: xml.Element(
+		tag: "HEAD"
+		children: Merge(
+			children
+			Yield(if: Have(title), then: TITLE(title))
+		)
+	)
+}
+
+TITLE(title?) {
+	return: xml.Element(tag: "TITLE", children: xml.Text(title))
+}
+
+BODY(children?) {
+	return: xml.Element(tag: "BODY", children: children)
+}
+
+META(attrs?) {
+	return: xml.Element(tag: "META", attrs: attrs)
+}
+
+LINK(href?, rel, type, media) {
+	return: xml.Element(
+		tag: "LINK"
+		attrs: Attr(name: "href", values: href)
+		attrs: Attr(name: "rel", values: rel)
+		attrs: Attr(name: "type", values: type)
+		attrs: Attr(name: "media", values: media)
+	)
+}
+
+SCRIPT(type, src?, code, defer, async) {
+	return: xml.Element(
+		tag: "SCRIPT"
+		attrs: Yield(if: HaveTrue(defer), then: AttrNoValues(name: "defer"))
+		attrs: Yield(if: HaveTrue(async), then: AttrNoValues(name: "async"))
+		attrs: Attr(name: "src", values: src)
+		attrs: Attr(name: "type", values: type)
+		children: Yield(if: Have(code), then: T(code), else: T(""))
+	)
+}
+
+T(string?) { return: xml.Text(string) }
+
+PRE(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "PRE"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+DIV(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "DIV"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+UL(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "UL"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+LI(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "LI"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+SECTION(id, classes, children?) {
+	return: xml.Element(
+		tag: "SECTION"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+FOOTER(id, classes, children?) {
+	return: xml.Element(
+		tag: "FOOTER"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+SPAN(id, classes, style, children?) {
+	return: xml.Element(
+		tag: "SPAN"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+STRONG(id, classes, children?) {
+	return: xml.Element(
+		tag: "STRONG"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+SMALL(id, classes, children?) {
+	return: xml.Element(
+		tag: "SMALL"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+I(id, classes) {
+	return: xml.Element(
+		tag: "I"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: T("")
+	)
+}
+
+CODE(id, classes, children?) {
+	return: xml.Element(
+		tag: "CODE"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+P(id, classes, children?) {
+	return: xml.Element(
+		tag: "P"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+BLOCKQUOTE(id, classes, children?) {
+	return: xml.Element(
+		tag: "BLOCKQUOTE"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+A(id, classes, href, children, target, style) {
+	return: xml.Element(
+		tag: "A"
+		attrs: Attr(name: "href", values: href)
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "target", values: target)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+H1(id, children?, classes) {
+	return: xml.Element(
+		tag: "H1"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+H2(id, children?, classes) {
+	return: xml.Element(
+		tag: "H2"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+H3(id, children?, classes) {
+	return: xml.Element(
+		tag: "H3"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+H4(id, children?, classes) {
+	return: xml.Element(
+		tag: "H4"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+DL(id, classes, children?) {
+	return: xml.Element(
+		tag: "DL"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: children
+	)
+}
+
+DT(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "DT"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
+BR() {
+	return: xml.Element(tag: "BR")
+}
+
+IMG(src?, id, classes, alt, height, width) {
+	return: xml.Element(
+		tag: "IMG"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "src", values: src)
+		attrs: Attr(name: "alt", values: alt)
+		attrs: Attr(name: "height", values: height)
+		attrs: Attr(name: "width", values: width)
+	)
+}
+
+FIGURE(id, classes, caption, children) {
+	return: xml.Element(
+		tag: "FIGURE"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		children: Merge(
+			children
+			xml.Element(
+				tag: "FIGCAPTION"
+				children: caption
+			)
+		)
+	)
+}

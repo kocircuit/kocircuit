@@ -1,0 +1,67 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+DebugMacrosChapter() {
+	return: wiki.Chapter(
+		bullet: "2.4.4."
+		label: "debug"
+		caption: "Ko Macros for Debugging and Profiling"
+		title: wiki.Text("Macros for debugging and profiling")
+		content: debugMacrosContent()
+	)
+}
+
+debugMacrosContent() {
+	return: (
+		// show and peek
+		H(`Show and Peek`)
+		P(f: `As transformations, %% and %% behave like the %%: they return their
+			arguments unchanged. Additionally, %% prints out the value of its arguments,
+			while %% prints out its current stack and the value of its arguments.`
+			a: C(`Show`)
+			a: C(`Peek`)
+			a: wiki.Ref(ref: JoinMacroLink(), nodes: wiki.Text(`join macro`))
+			a: C(`Show`)
+			a: C(`Peek`)
+		)
+		P(`For instace`)
+		CB(
+`Show(num: 1, text: "abc")   // returns (num: 1, text: "abc") and prints the same
+Show(1, 2, 3) // returns (1, 2, 3) and prints the same`
+)
+		H(`ShowType and PeekType`)
+		P(f: `%% and %% behave analogously to %% and %% with the
+			difference that they print out the types their values (rather than the values themselves).`
+			a: C(`ShowType`)
+			a: C(`PeekType`)
+			a: C(`Show`)
+			a: C(`Peek`)
+		)
+		//
+		H(`Bug`)
+		P(f: `%% prints out its arguments and then immediately kills the ongoing
+			execution reporting with an error state.`
+			a: C(`Bug`)
+		)
+		//
+		H(`Profile`)
+		P(f: `%% recognizes a moandic (unnamed) argument of type variety.
+			It executes this variety, returning whatever it returns, while also
+			printing its stack trace and the execution duration on the console.`
+			a: C(`Profile`)
+		)
+		P(f: `The following sample shows a printout from %%, while building this website.`
+			a: C(`Profile`)
+		)
+		CB(
+`[0] span:1duizes, github.com/kocircuit/kocircuit/kocircuit_io/build.ko:12:10, BuildLocallySkipResourcesThenServe:return
+[1] span:390eu42, github.com/kocircuit/kocircuit/kocircuit_io/build.ko:18:10, BuildLocallyThenServe:8
+[2] span:12wb43w, github.com/kocircuit/kocircuit/kocircuit_io/build.ko:47:3, Build:17
+[3] span:8ng9ahj, github.com/kocircuit/kocircuit/kocircuit_io/build.ko:68:14, buildSite:4
+[4] span:3gb7pha, github.com/kocircuit/kocircuit/kocircuit_io/wiki/build.ko:5:10, Build:return
+[5] span:6hhxbp4, github.com/kocircuit/kocircuit/lib/web/wiki/build.ko:52:22, Build:syncedChapterFiles
+[6] span:1e86oa5, github.com/kocircuit/kocircuit/lib/web/wiki/build.ko:73:9, syncChapterFiles:8
+[7] span:390sl5y, github.com/kocircuit/kocircuit/lib/web/wiki/build.ko:73:9, Profile
+(span:390sl5y, ko/lang/go/eval/symbol/invoke.go:9, github.com/kocircuit/kocircuit/lib/web/wiki/build.ko:73:9) 0.881s`
+		)
+	)
+}

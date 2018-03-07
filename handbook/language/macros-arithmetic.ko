@@ -1,0 +1,87 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+ArithmeticMacrosChapter() {
+	return: wiki.Chapter(
+		bullet: "2.4.6."
+		label: "arithmetic"
+		caption: "Ko Macros for Generic Arithmetic"
+		title: wiki.Text("Macros for generic arithmetic")
+		content: arithmeticMacrosContent()
+	)
+}
+
+arithmeticMacrosContent() {
+	return: (
+		P(f: `Programming languages typically provide arithmetic and boolean
+			operators to perform basic algebraic operation over the respective types.
+			In Ko, this is accomplished by a few arithmetic macros. (Additional
+			arithmetic macros will be added as the language evolves.)`)
+
+		H(`Operations over integers`)
+		P(f: `Macros for integer operations are placed in a builtin package %%
+			which must be imported before using the macros. E.g.`
+			a: C(`"integer"`)
+		)
+		CB(
+`import "integer"
+
+ThreeXPlus1(x) {
+	return: integer.Sum(
+		integer.Prod(3, x)
+		1
+	)
+}`
+		)
+		P(f: `%% expects a sequence of integral arguments. It returns %%
+			if all argument integers are equal, and %% otherwise. If no arguments
+			are passed, the default return value is %%.`
+			a: C(`Equal`)
+			a: C(`true`)
+			a: C(`false`)
+			a: C(`true`)
+		)
+		P(f: `%% expects a sequence of integral arguments. It returns %%
+			if the sequence of argument integers is strictly increasing (each
+			argument is smaller than the next one).`
+			a: C(`Less`)
+			a: C(`true`)
+		)
+		P(f: `%%, %%, %% expect a sequence of integral arguments. 
+		%% returns the product of its arguments;
+		%% returns the ratio of its arguments, and
+		%% returns the sum of its arguments.`
+			a: C(`Prod`)
+			a: C(`Ratio`)
+			a: C(`Sum`)
+			a: C(`Prod`)
+			a: C(`Ratio`)
+			a: C(`Sum`)
+		)
+		P(f: `%% expects a single integral argument and returns its negation.`
+			a: C(`Negative`)
+		)
+		// boolean
+		H(`Operations over booleans`)
+		P(f: `%%, %%, %% expect a sequence of boolean arguments. 
+		%% returns the conjunction of its arguments;
+		%% returns the disjunction of its arguments, and
+		%% returns the result of applying exclusive-or to all of its arguments.`
+			a: C(`And`)
+			a: C(`Or`)
+			a: C(`Xor`)
+			a: C(`And`)
+			a: C(`Or`)
+			a: C(`Xor`)
+		)
+		P(f: `%% expects a single boolean argument and returns its negation.`
+			a: C(`Not`)
+		)
+		P(`For instance, one could define NAND (not-and) as:`)
+		CB(
+`NotAnd(seq?) {
+	return: Not(And(seq))
+}
+`
+		)
+	)
+}

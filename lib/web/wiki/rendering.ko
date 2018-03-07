@@ -1,0 +1,49 @@
+// Package wiki provides a grammar for building a wiki.
+
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/series"
+
+RenderingCtx(
+	resourcesURL // resourcesURL (a string) the URL path to the root of the resource namespace.
+	chapterURL // chapterURL (a string) is the URL path of the enclosing chapter.
+	PageHTML // PageHTML(title, navHTML, tocHTML, contentHTML) returns the HTML of a chapter page.
+	crosslinkMemory // crosslinkMemory is a memory mapping crosslink names (string) to URLs (string)
+	stack // stack is a sequence of upstream (renderingCtx, chapter) pairs.
+) {
+	return: (
+		resourcesURL: resourcesURL
+		chapterURL: chapterURL
+		PageHTML: PageHTML
+		crosslinkMemory: crosslinkMemory
+		stack: stack
+	)
+}
+
+RenderingCtxStack(renderingCtx, chapter) {
+	return: RenderingCtx(
+		resourcesURL: renderingCtx.resourcesURL
+		chapterURL: filepath.Join(renderingCtx.chapterURL, chapter.label)
+		PageHTML: renderingCtx.PageHTML
+		crosslinkMemory: renderingCtx.crosslinkMemory
+		stack: Merge(
+			renderingCtx.stack
+			(renderingCtx: renderingCtx, chapter: chapter)
+		)
+	)
+}
+
+IndexFilename() {
+	return: "index.html"
+}
+
+RenderingCtxPageURL(renderingCtx, path) {
+	return: filepath.Join(renderingCtx.chapterURL, path, IndexFilename())
+}
+
+RenderingCtxResourceURL(renderingCtx, resource) {
+	return: filepath.Join(renderingCtx.resourcesURL, resource.url)
+}
+
+RenderingCtxCrossRefURL(renderingCtx, ref) { // ref is a crosslink.
+	return: renderingCtx.crosslinkMemory.Recall(key: ref.name, otherwise: "")
+}

@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+FormatPar(f?, a) {
+	return: Par(Fmt(f: f, a: a))
+}
+
+Fmt(f?, a) {
+	return: Format(
+		format: f
+		args: a
+		withString: formatString(string?) {
+			return: Yield(
+				if: Not(strings.Equal(string, ""))
+				then: Text(string)
+			)
+		}
+		withArg: Return
+	)
+}
+
+FormatString(f?, a) {
+	return: strings.Join(
+		Format(format: f, args: a, withString: Return, withArg: Return)
+	)
+}

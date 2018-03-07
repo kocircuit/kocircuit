@@ -1,0 +1,28 @@
+
+Max(series, smallest, less) {
+	return: Range(
+		start: smallest
+		over: series
+		with: maxRange(less, carry, elem) {
+			return: Yield(
+				if: less(p: carry, q: elem)
+				then: (carry: elem)
+				else: (carry: carry)
+			)
+		} [less: less]
+	).residue
+}
+
+Min(series, largest, less) {
+	return: Range(
+		start: largest
+		over: series
+		with: minRange(less, carry, elem) {
+			return: Yield(
+				if: less(p: carry, q: elem)
+				then: (carry: carry)
+				else: (carry: elem)
+			)
+		} [less: less]
+	).residue
+}

@@ -1,0 +1,34 @@
+digraph F {
+	node [style=filled,color="#a0b0d0",fontsize=13,fontname="luxi serif",fontcolor="white"];
+	edge [labelfontname="luxi serif",labelfontsize=11,labelfontcolor="#a0b0d0",color=grey];
+	label = "F";
+	//
+	x [shape=ellipse,style="",fontcolor="#d07070",color=grey];
+	y [shape=ellipse,style="",fontcolor="#d07070",color=grey];
+	return [shape=ellipse,style="",fontcolor="#7070d0",color=grey];
+	//
+	{ rank = same; x; y; }
+	{ rank = source; x; y; }
+	{ rank = sink; return; }
+	//
+	sin_1 -> exp_1 [headlabel="exp"];
+	sin_2 -> exp_2 [headlabel="exp"];
+	exp_1 -> ratio [headlabel="denom"];
+	lit_1 -> ratio [headlabel="nom"];
+	ratio -> sum [headlabel="left"];
+	exp_2 -> sum [headlabel="right"];
+	//
+	exp_1 [label="Exp"];
+	exp_2 [label="Exp"];
+	sin_1 [label="Sin"];
+	sin_2 [label="Sin"];
+	lit_1 [label="1"];
+	ratio [label="Ratio"];
+	sum [label="Sum"];
+	//
+	x -> exp_1 [headlabel="base"];
+	x -> exp_2 [headlabel="base"];
+	y -> sin_1 [headlabel="angle"];
+	y -> sin_2 [headlabel="angle"];
+	sum -> return;
+}

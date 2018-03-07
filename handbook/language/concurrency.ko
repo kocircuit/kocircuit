@@ -1,0 +1,121 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+ConcurrencyChapter() {
+	return: wiki.Chapter(
+		cross: ConcurrencyChapterLink()
+		bullet: "2.5."
+		label: "concurrency"
+		caption: "Ko Concurrency and Synchronization"
+		title: wiki.Text("Concurrency and synchronization")
+		content: concurrencyContent()
+	)
+}
+
+ConcurrencyChapterLink() {
+	return: wiki.Crosslink("language/concurrency")
+}
+
+concurrencyContent() {
+	return: (
+		P(`Concurrency and synchronization are embodied directly into
+		the Ko language model. Concurrency is captured by the directed
+		acyclic graph structure of circuits. Synchronization 
+		is captured by function boundaries. This is made precise by
+		the following execution invariants, which also guarantee the Ko programs 
+		can never deadlock:`)
+		// C1
+		P(f: `%% Allocation and execution of a circuit transformation
+			(a transformation is an invocation of a function or a macro) does not begin until all
+			arguments passed to it have arrived from upstream transformations.`
+			a: wiki.Strong(wiki.Text(`C1.`))
+		)
+		P(f: `So, for instance, in %% the function %% will not commence execution
+			until both %% and %% argument values have arrived. Similarly,
+			%% will not execute until %% and %% have arrived, and so on.`
+			a: wiki.Ref(ref: Fig5Crosslink(), nodes: wiki.Text(`this example`))
+			a: C(`G`)
+			a: C(`x`)
+			a: C(`y`)
+			a: C(`Sum`)
+			a: C(`left`)
+			a: C(`right`)
+		)
+		P(f: `The pattern shown in the example below, based on (C1), is often handy.
+			In this example the transformation labeled %% will not execute until both
+			%% and %% have been invoked and returned their results.`
+			a: C(`barrier`)
+			a: C(`F(x)`)
+			a: C(`G(x)`)
+		)
+		CB(
+`Example1(x) {
+	barrier: (
+		fx: F(x)
+		gx: G(x)
+	)
+	return: barrier.fx
+}`
+		)
+		P(f: `Another useful pattern takes advantage of the fact that the Ko language allows
+			passing “throw-away” arguments that are not expected by the invoked function. In the example
+			below, %% does not recognize an argument named %%. Regardless, the execution
+			of %% will not commence until %% has completed. This technique allows the programmer
+			to force a sequential execution relationship (first %%, second %%),
+			even if the sequenced transformations do not
+			depend on each other from a returned-values point of view.`
+			a: C(`strings.Join`)
+			a: C(`unused`)
+			a: C(`strings.Join`)
+			a: C(`Show(x, y)`)
+			a: C(`Show(x, y)`)
+			a: C(`strings.Join`)
+		)
+		CB(
+`Example2(x, y) {
+	return: strings.Join(
+		unused: Show(x, y)
+		string: x
+		string: y
+	)
+}
+`
+		)
+		// C2
+		P(f: `%% Once a circuit is executing, it blocks until all of its internal transformations
+			complete, regardless of whether they affect the circuit's return value or not.`
+			a: wiki.Strong(wiki.Text(`C2.`))
+		)
+		P(f: `For instance, in the following example the value returned by %%
+			does not affect the return value of %%. Regardless, %% will not complete
+			until %% has completed (and printed the value of %%) on the console.`
+			a: C(`Show`)
+			a: C(`ShowAndReturn`)
+			a: C(`ShowAndReturn`)
+			a: C(`Show`)
+			a: C(`x`)
+		)
+		CB(
+`ShowAndReturn(x) {
+	showed: Show(x)
+	return: x
+}`
+		)
+		// C3
+		P(f: `%% Transformations within a circuit always execute in an order consistent with
+			their dependency graph.`
+			a: wiki.Strong(wiki.Text(`C3.`))
+		)
+		P(f: `By default, circuits are executed sequentially (with internal transformations
+			executed in topological order with respect to the circuit graph). Invoking
+			a given circuit with parallel execution can be arranged by using the %%.`
+			a: wiki.Ref(ref: ParallelMacroLink(), nodes: (C(`Parallel`), wiki.Text(`macro`)))
+		)
+		P(f: `In general, complex scaled synchronization and parallelism patterns can be
+			safely composed using %%, like %% and %%, in combination with %%.`
+			a: wiki.Ref(ref: ControlMacrosChapterLink(), nodes: wiki.Text(`macros for control`))
+			a: C(`Spin`)
+			a: C(`Wait`)
+			a: C(`Range`)
+		)
+	)
+}

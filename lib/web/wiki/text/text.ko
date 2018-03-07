@@ -1,0 +1,15 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// S returns a string tree containing its string argument.
+S(string?) {
+	return: strings.Tree(prefix: string)
+}
+
+// J return a string tree joining the texts with delimiter.
+J(texts?, delimiter) {
+	return: strings.Tree(delimiter: delimiter, middle: texts)
+}
+
+Flush(texts?) {
+	return: strings.Flush(texts)
+}

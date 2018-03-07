@@ -1,0 +1,176 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+TypesChapter() {
+	return: wiki.Chapter(
+		cross: TypesChapterLink()
+		bullet: "2.2."
+		label: "types"
+		caption: "Ko Type System"
+		title: wiki.Text("Type system")
+		content: typeContent()
+		sub: TypeUnificationChapter()
+		sub: TypeIntegrationChapter()
+	)
+}
+
+TypesChapterLink() {
+	return: wiki.Crosslink("language/types")
+}
+
+typeContent() {
+	return: (
+		P(
+			f: `The type system utilized by Ko is a “common denominator"
+			of industry-wide protocol type systems, like %%, %%, %% and others,
+			together with one additional type, called a “variety”, which corresponds
+			to %% in other programming languages.`
+			a: wiki.URL(href: "https://developers.google.com/protocol-buffers/", nodes: wiki.Text("Protocol Buffers"))
+			a: wiki.URL(href: "http://graphql.org/", nodes: wiki.Text("GraphQL"))
+			a: wiki.URL(href: "https://thrift.apache.org/", nodes: wiki.Text("Apache Thrift"))
+			a: wiki.URL(
+				href: "https://en.wikipedia.org/wiki/Closure_(computer_programming)"
+				nodes: wiki.Text("closures")
+			)
+		)
+		P(`The type notations shown in this chapter are
+		used by the compiler to report to the programmer (e.g. in the context of error messages).
+		The Ko programmer does not need to define types explicitly.
+		They are inferred from the structure of programs and the
+		utilized externally-implemented transformations,
+		which introduce concrete type constraints into a program.`)
+		P(`The value notations shown here are used both for
+		writing these values in source code, as well as for printouts by the compiler.`)
+		//
+		H(`Constant literals`)
+		P(`Ko supports constant literals for integers, floating-point numbers, strings and booleans.`)
+		P(f: `String literals can be escaped double-quoted, e.g. %%,
+			or backquoted %% for verbatim interpretation.`
+			a: wiki.Code(`"foo\nbar"`), a: wiki.Code("`verbatim string`")
+		)
+		P(f: `Boolean literals can be either %% or %%.`
+			a: wiki.Code(`true`), a: wiki.Code(`false`)
+		)
+		P(f: `Integer and floating-point literals use standard conventions,
+			e.g. %% and %% respectively.`
+			a: wiki.Code(`-123`), a: wiki.Code(`2.13e-2`)
+		)
+		//
+		H(`Basic types`)
+		P(f: `The basic types in Ko are: %%
+			Values for the basic types are printed as their corresponding literals.`
+			a: wiki.CodeBlock(
+`Bool, String
+Int8, Int16, Int32, Int64
+Uint8, Uint16, Uint32, Uint64
+Float32, Float64`
+			)
+		)
+		//
+		H(`Sequence type`)
+		P(
+			f: `One can have a sequence type from any element type %%, 
+			written as %%, i.e. using brackets surrounding the type %%.
+			This type is similar to slices in Go, or the “repeated” type in Protocol Buffers.`
+			a: wiki.Code("T")
+			a: wiki.Code("(T)")
+			a: wiki.Code("T")
+		)
+		P(
+			f: `A sequence type indicates that zero or more values of the element type will be present at runtime.
+			Values for sequence types are written as a sequence of the element values, surrounded
+			by round brackets. For instance, a value of type %% might be %%.`
+			a: wiki.Code(`(String)`)
+			a: wiki.Code(`("Hello", "world")`)
+		)
+		H(`Optional type`)
+		P(
+			f: `One can have an optional type from any element type %%, 
+			which is written as %%, i.e. using a star preceding the type %%.`
+			a: wiki.Code("T")
+			a: wiki.Code("*T")
+			a: wiki.Code("T")
+		)
+		P(
+			f: `An optional type indicates that a value of the given element type
+			may or may not be present at run-time. Iterated optional types,
+			e.g. %%, cannot arise as the compiler takes care of collapsing those to %%.`
+			a: wiki.Code("**T")
+			a: wiki.Code("*T")
+		)
+		//
+		H(`Structure type`)
+		P(
+			f: `A %% type has a set of typed, named %%. For instance, %%
+			is a structure with three fields named %%, %% and %%.
+			Field %% is a 64-bit integer;
+			field %% is an optional string; and
+			field %% is a sequence of booleans.`
+			a: wiki.Def(wiki.Text("structure"))
+			a: wiki.Def(wiki.Text("fields"))
+			a: wiki.CodeBlock(
+`(
+	A: Int64
+	B: *String
+	C: (Bool)
+)`
+			)
+			a: wiki.Code(`A`), a: wiki.Code(`B`), a: wiki.Code(`C`)
+			a: wiki.Code(`A`), a: wiki.Code(`B`), a: wiki.Code(`C`)
+		)
+		P(
+			f: `An example value for the above type would be written as %%`
+			a: wiki.CodeBlock(
+`(
+	A: 123
+	B: "abc"
+	C: (true, false)
+)
+`
+			)
+		)
+		P(
+			f: `Values for optional fields are omitted. E.g. the following value is also
+			valid for the example struct type: %%`
+			a: wiki.CodeBlock(
+`(
+	A: 123
+	C: (true, false)
+)
+`
+			)
+		)
+		P(
+			f: `Similarly, values for empty sequence-type fields can be omitted. E.g. %%`
+			a: wiki.CodeBlock(
+`(
+	A: 123
+	B: "abc"
+)
+`
+			)
+		)
+		//
+		H(`Varieties`)
+		P(`A variety is analogous to a closure in other languages (like LISP).
+		It is a first-class value that captures the name of a Ko transformation together
+		with a list of arguments to be passed to the transformation on execution.`)
+		P(
+			f: `The type of a variety is denotated as in the following example: %%
+			It starts with the full path of the Ko transformation being applied,
+			followed by an argument structure which is identical to the notation
+			for structure types, except for the use of square brackets %%, instead of round ones %%.`
+			a: wiki.CodeBlock(
+`github.com/kocircuit/kocircuit/strings.Join[
+	String: (String)
+	Delimiter: String
+]`
+			)
+			a: wiki.Code("[]")
+			a: wiki.Code("()")
+		)
+		P(
+			f: `Creating, augmenting and executing varieties is discussed in a %%.`
+			a: wiki.Ref(ref: VarietiesChapterLink(), nodes: wiki.Text(`dedicated chapter`))
+		)
+	)
+}

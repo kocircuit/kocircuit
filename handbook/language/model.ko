@@ -1,0 +1,226 @@
+import "github.com/kocircuit/kocircuit/handbook/language/images"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+ModelChapter() {
+	return: wiki.Chapter(
+		bullet: "2.1."
+		label: "model"
+		caption: "Ko Computational Model"
+		title: wiki.Text("Computational model")
+		content: modelContent()
+	)
+}
+
+modelContent() {
+	return: (
+		P(`
+		Ko is based on a new, simple, general-purpose computational model,
+		called Recursive Circuits or simply circuits.
+		`)
+		P(`
+		The basic building block of computation is captured by a circuit.
+		Whereas a program comprises one or more circuits that can refer,
+		i.e. use, each other.
+		`)
+		P(`
+		Circuits uniquely correspond to (mathematical) functions that 
+		map (zero or more) input values into a single output value.
+		`)
+		P(`
+		An individual circuit describes how the values of
+		zero or more named arguments (the input values)
+		are to be transformed into an output value.
+		`)
+		H(`Circuits`)
+		P(`
+		Formally, a circuit is a named directed-acyclic graph with
+		(a) zero or more named “argument” vertices with no inbound edges, and
+		(b) exactly one “return” vertex, with a single inbound edge and no outbound edges.
+		`)
+		P(`The argument and return vertices of the circuit are called “bounadry” vertices,
+		and they correspond to the input values and the output value of the circuit.`)
+		P(`All non-boundary vertices, called “steps” or “elements” (of the circuit),
+		represent transformations of the values arriving on their inbound edges
+		into the value delivered to all of their outbound edges.`)
+		P(`Every circuit element has a label identifying the transformation that it performs.
+		Labels can (recursively) refer to circuits (using their names), or
+		they may refer to transformations provided by the runtime
+		(and implemented in another language).`)
+		P(`The edges incoming a circuit element are labelled after the
+		name of the input argument (of the element transformation) they correspond to.`)
+		//
+		H(`Example`)
+		P(f: `Take for instance the mathematical function
+		$$ F(x,y)=x^{\sin(y)}+\frac{1}{x^{\sin(y)}} $$
+		Supposing circuits for sine, exponentiation, addition and division are provided,
+		\( F(x,y) \) can be implemented by the circuit in the following %%.`
+		a: wiki.Ref(ref: Fig1Crosslink(), nodes: wiki.Text(`figure`)))
+		Fig1()
+		P(f: `Circuit diagrams follow a few conventions.
+		A circuit definition is represented by a bounding box with 
+		argument vertices at the top and return vertex at the bottom.`)
+		P(`Circuit elements are circles within the bounding box.
+		Edges are directed downwards with respect to the page.
+		Labels inside circuit elements indicate the transformations they refer to.
+		Labels on edge endpoints represent the name of the argument
+		(of the following transformation) that they provide.`)
+		P(`Circuit diagrams have a corresponding source code representation,
+		also shown in the figure.`)
+		H(`Expansion`)
+		P(f: `Notice that the circuit for \(F(x,y)\) has a repeated subgraph
+		corresponding to \(x^{\sin(y)}\), as does the original formula. This
+		repetition is highlighted in the %%.`
+		a: wiki.Ref(ref: Fig2Crosslink(), nodes: wiki.Text(`figure below`)))
+		Fig2()
+		P(f: `To accomplish this,
+		we can capture the repeated logic into an auxiliary function,
+		say \(G(x,y)=x^{\sin(y)}\),
+		and substitute the corresponding subgraphs in %% with references to %%.`
+		a: wiki.Code(`F`)
+		a: wiki.Code(`G`)
+		)
+		Fig3()
+		P(f: `The updated implementation of %% is shown below.` 
+		a: wiki.Code(`F`))
+		Fig4()
+		P(f: `Making this substitution saves writing (or drawing) and makes code more readable.
+		However, the computation of %% remains unchanged:
+		At runtime the two invocations of %% will be effectively
+		expanded into two copies of %%'s circuit logic.`
+		a: wiki.Code(`F`)
+		a: wiki.Code(`G`)
+		a: wiki.Code(`G`)
+		)
+		H(`Entanglement`)
+		P(f: `Naturally, we would like to reuse the value from a single computation of \(G(x,y)\)
+		to save computation. This is accomplished in the following modification of %%'s implementation.`
+		a: wiki.Code(`F`))
+		Fig5()
+		P(f: `Here the value of \(G(x,y)\) is computed by a single invocation to %%. 
+		A purely-syntactic circuit-scope label, %%, is assigned to it so that
+		it can be refered to (in the two places in the code for %%) where needed.`
+		a: wiki.Code(`G`)
+		a: wiki.Code(`g`)
+		a: wiki.Code(`F`))
+		P(f: `(Note that circuits can recursively invoke themselves to implement 
+		self-referential functions like the Fibonacci function. This is accomplished
+		through the use of %%.)`
+		a: wiki.Ref(ref: VarietiesChapterLink(), nodes: wiki.Text(`varieties`)))
+	)
+}
+
+Fig1Crosslink() {
+	return: wiki.Crosslink(`language/model/fig1`)
+}
+
+Fig1() {
+	return: wiki.Figure(
+		cross: Fig1Crosslink()
+		caption: P(
+			f: `TOP: Circuit implementation of the function
+			\( F(x,y)=x^{\sin(y)}+\frac{1}{x^{\sin(y)}} \). %%
+			BOTTOM: Ko source code corresponding to the circuit.`
+			a: wiki.LineBreak()
+		)
+		nodes: wiki.Rows(
+			wiki.Image(resource: images.CircuitFig1(), width: "400px")
+			wiki.CodeBlock(
+`F(x, y) {
+	return: Sum(
+		left: Ratio(
+			nom: 1
+			denom: Exp(base: x, exp: Sin(angle: y))
+		)
+		right: Exp(base: x, exp: Sin(angle: y))
+	)
+}`
+			)
+		)
+	)
+}
+
+Fig2Crosslink() {
+	return: wiki.Crosslink(`language/model/fig2`)
+}
+
+Fig2() {
+	return: wiki.Figure(
+		cross: Fig2Crosslink()
+		caption: P(
+			`Circuit implementation of
+			\( F(x,y)=x^{\sin(y)}+\frac{1}{x^{\sin(y)}} \),
+			highlighting the repetition of \(x^{\sin(y)}\).`
+		)
+		nodes: wiki.Image(resource: images.CircuitFig2(), width: "400px")
+	)
+}
+
+Fig3() {
+	return: wiki.Figure(
+		caption: P(
+			`Circuit implementation of
+			\( G(x,y)=x^{\sin(y)} \) (top) and its corresponding Ko source (bottom).`
+		)
+		nodes: wiki.Rows(
+			wiki.Image(resource: images.CircuitFig3(), width: "250px")
+			wiki.CodeBlock(
+`G(x, y) {
+	return: Exp(
+		base: x
+		exp: Sin(angle: y)
+	)
+}`
+			)
+		)
+	)
+}
+
+Fig4() {
+	return: wiki.Figure(
+		caption: P(`Circuit for \( F(x,y)=G(x,y)+\frac{1}{G(x,y)} \) with its corresponding Ko source code.`)
+		nodes: wiki.Rows(
+			wiki.Image(resource: images.CircuitFig4(), width: "300px")
+			wiki.CodeBlock(
+`F(x, y) {
+	return: Sum(
+		left: Ratio(
+			nom: 1
+			denom: G(x: x, y: y)
+		)
+		right: G(x: x, y: y)
+	)
+}`
+			)
+		)
+	)
+}
+
+Fig5Crosslink() {
+	return: wiki.Crosslink(`language/model/fig5`)
+}
+
+Fig5() {
+	return: wiki.Figure(
+		cross: Fig5Crosslink()
+		caption: P(
+			f: `Circuit for \( F(x,y)=G(x,y)+\frac{1}{G(x,y)} \) which 
+			avoids computing \( G(x,y) \) twice. The label %%,
+			attached to the result of \( G(x,y) \), is a way of
+			reusing the value in multiple locations.
+			`
+			a: wiki.Code(`g`)
+		)
+		nodes: wiki.Rows(
+			wiki.Image(resource: images.CircuitFig5(), width: "270px")
+			wiki.CodeBlock(
+`F(x, y) {
+	g: G(x: x, y: y)
+	return: Sum(
+		left: Ratio(nom: 1, denom: g)
+		right: g
+	)
+}`
+			)
+		)
+	)
+}

@@ -1,0 +1,5 @@
+'.source.ko':
+  'editor':
+    'commentStart': '// '
+    'increaseIndentPattern': '^.*(\\([^)]*|\\[[^\\]]*|{[^}]*)$'
+    'decreaseIndentPattern': '^\\s*(\\)[,;]?|\\][,;]?|}[,;]?)$'

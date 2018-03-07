@@ -1,0 +1,14 @@
+import "github.com/kocircuit/kocircuit/lib/net/http"
+
+// ko play github.com/kocircuit/kocircuit/lib/net/http/ServeThisDir
+ServeThisDir() {
+	return: ServeLocalDir(address: ":3000", dir: ".", url: "/")
+}
+
+ServeLocalDir(
+	address // address (a string) is the desired http server address
+	dir // dir (a string) is a local directory
+	url // url (a string) is the root URL for serving dir
+) {
+	return: http.GoServeLocalDir(address: address, dir: dir, url: url)
+}

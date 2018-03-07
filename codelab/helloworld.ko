@@ -1,0 +1,3 @@
+HelloWorld() {
+	return: Println("Hello, world!")
+}

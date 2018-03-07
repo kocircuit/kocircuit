@@ -1,0 +1,171 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+GenericMacrosChapter() {
+	return: wiki.Chapter(
+		bullet: "2.4.1."
+		label: "generic"
+		caption: "Ko Generic Macros"
+		title: wiki.Text("Generic macros")
+		content: genericMacrosContent()
+	)
+}
+
+genericMacrosContent() {
+	return: Merge(
+		sectionEqual()
+		sectionHash()
+		sectionPick()
+		sectionJoin()
+		sectionMemory()
+	)
+}
+
+sectionEqual() {
+	return: (
+		H(`Equal`)
+		P(
+			f: `%% determines if its argument values are equal.
+			It expects a monadic sequence argument. It returns %% if all sequence elements
+			are equal, and %% otherwise.
+			If the sequence is empty or has a single element, %% returns %%.`
+			a: C(`Equal`)
+			a: C(`true`)
+			a: C(`false`)
+			a: C(`Equal`)
+			a: C(`true`)
+		)
+		P(
+			f: `Example usage: %%`
+			a: CB(
+`IsFoo(arg) {
+	return: Equal("foo", arg)
+}`
+			)
+		)
+	)
+}
+
+sectionHash() {
+	return: (
+		H(`Hash`)
+		P(
+			f: `%% computes a short hash string corresponding to its argument value. 
+			It accepts any argument structure.`
+			a: C(`Hash`)
+		)
+		P(
+			f: `Example uses: %%`
+			a: CB(
+`Hash("abc")
+Hash(arg1: "abc", arg2: 123)
+Hash(arg1: (1, 2, 3), arg2: "123")`
+			)
+		)
+	)
+}
+
+sectionMemory() {
+	return: (
+		H(`Memory, Remember and Recall`)
+		P(f: `A trio of macros (memory, remember and recall) allow for the creation
+		of generic type-safe hash tables, with keys and values from the full spectrum of Ko types.`)
+		P(f: `%% has no arguments. It creates a new hash table. The value returned by invoking
+			%% is a structure with two fields, %% and %%, both of which are varieties. In other words, you 
+			can view them as “methods” attached to a structure.`
+			a: C(`Memory`)
+			a: C(`Memory`)
+			a: C(`Remember`)
+			a: C(`Recall`)
+		)
+		P(f: `%% expects two arguments, named %% and %%, which can be of any type.
+			It has the effect of placing the key-and-value pair into the hash table. Note that 
+			even though the key and value can be of any types, the compiler will ensure that
+			the key and value types of a hash table instance do not change over the course of
+			its use.`
+			a: C(`Remember`)
+			a: C(`key`)
+			a: C(`value`)
+		)
+		P(f: `%% expects two arguments, named %% and %%. The latter is optional.
+			If a value is found in the hash table under the requested key, it is returned.
+			Otherwise, if the %% argument is present its value is returned. If it is not
+			present, the Ko type system will determine that this %% macro returns
+			an optional type (which will inform type checking downstream) and will
+			return an empty value.`
+			a: C(`Recall`)
+			a: C(`key`)
+			a: C(`otherwise`)
+			a: C(`otherwise`)
+			a: C(`Recall`)
+		)
+		CB(
+`ShowMeTheValue(x) {
+	memory: Memory()   // create a hash table
+	remember: memory.Remember(key: "abc", value: x)
+	found: memory.Recall(
+		_: remember   // passing an unused argument ensures Recall runs after Remember
+		key: "abc"
+	)
+	return: Show(found)   // display the looked-up value
+}
+`
+		)
+	)
+}
+
+sectionPick() {
+	return: (
+		H(`Pick`)
+		P(f: `%% takes two arguments, named %% and %%. If the value of %%
+		is not empty, %% will return it. Otherwise, it will return the value of the %% argument.`
+			a: C(`Pick`)
+			a: C(`either`)
+			a: C(`or`)
+			a: C(`either`)
+			a: C(`Pick`)
+			a: C(`or`)
+		)
+		P(f: `%% is used in situations where an optional value (say %%) is expected, but
+			a default value is available (say %%). As a result, the value returned by %%
+			will be guaranteed to be non-optional (%% in this example). For example,`
+			a: C(`Pick`)
+			a: C(`*String`)
+			a: C(`String`)
+			a: C(`Pick`)
+			a: C(`String`)
+		)
+		CB(
+`Say(something) {
+	return: Show(Pick(either: something, or: "hello"))
+}`
+		)
+	)
+}
+
+JoinMacroLink() {
+	return: wiki.Crosslink("language/macros/join")
+}
+
+sectionJoin() {
+	return: (
+		wiki.Head(cross: JoinMacroLink(), nodes: wiki.Text(`Join`))
+		P(`The name of the “join” macro inside the Ko programming environment
+			is actually the empty string. The macro accepts any arguments that the user passes
+			and returns a Ko value holding its argument structure. In other words,
+			the “join” macro is the standard mechanism for creating ad-hoc values.
+			Let's look at a few examples.`
+		)
+		P(`When join is invoked with named arguments, it returns structure values. For instance`)
+		CB(
+`(x: 123, y: "abc")   // of type (x: Int64, y: String)
+(x: 123, y: (f: 3.13, g: "def"))   // of type (x: Int64, y: (f: Float64, g: String))`
+		)
+		P(`When join is invoked with a monadic (unnamed) argument,
+			it returns the argument itself. For instance`
+		)
+		CB(
+`(123)   // returns 123 of type Int64
+("abc", "def")   // returns ("abc", "def") of type (String)`
+		)
+	)
+}

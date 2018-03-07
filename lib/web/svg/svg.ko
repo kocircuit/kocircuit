@@ -1,0 +1,197 @@
+// Package svg provides a grammar for building SVG documents.
+// SVG is defined at https://developer.mozilla.org/en-US/docs/Web/SVG
+
+import "github.com/kocircuit/kocircuit/lib/integer"
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/lib/web/xml"
+
+// Render renders an SVG element to a string.
+Render(svg?) {
+	return: xml.Render(svg)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg
+SVG(x, y, width, height, viewBox, nodes?) {
+	return: xml.Element(
+		tag: "SVG"
+		attrs: xml.Attr(name: "xmlns", values: "http://www.w3.org/2000/svg")
+		attrs: xml.Attr(name: "x", values: OptInt64String(x)) 
+		attrs: xml.Attr(name: "y", values: OptInt64String(y))
+		attrs: xml.Attr(name: "width", values: OptInt64String(width))
+		attrs: xml.Attr(name: "height", values: OptInt64String(height))
+		attrs: xml.Attr(name: "viewBox", values: viewBox)
+		children: nodes
+	)
+}
+
+ViewBox(minX, minY, width, height) {
+	return: strings.Join(
+		delimiter: " "
+		string: integer.FormatInt64(minX)
+		string: integer.FormatInt64(minY)
+		string: integer.FormatInt64(width)
+		string: integer.FormatInt64(height)
+	)
+}
+
+// Groups
+
+G(id, classes, style, transforms, nodes?) {
+	return: xml.Element(
+		tag: "G"
+		attrs: xml.Attr(name: "id", values: id)
+		attrs: xml.Attr(name: "class", values: classes)
+		attrs: xml.Attr(name: "style", values: style)
+		attrs: xml.Attr(name: "transform", values: TransformsValue(transforms))
+		children: nodes
+	)
+}
+
+// Transformations
+
+MatrixTransform(a, b, c, d, e, f) {
+	return: strings.Join(
+		string: "matrix("
+		string: strings.Join(
+			delimiter: ","
+			string: integer.FormatInt64(a)
+			string: integer.FormatInt64(b)
+			string: integer.FormatInt64(c)
+			string: integer.FormatInt64(d)
+			string: integer.FormatInt64(e)
+			string: integer.FormatInt64(f)
+		)
+		string: ")"
+	)
+}
+
+TranslateTransform(x, y) {
+	return: strings.Join(
+		string: "translate("
+		string: strings.Join(
+			delimiter: " "
+			string: integer.FormatInt64(x)
+			string: OptInt64String(y)
+		)
+		string: ")"
+	)
+}
+
+ScaleTransform(x, y) {
+	return: strings.Join(
+		string: "scale("
+		string: strings.Join(
+			delimiter: " "
+			string: integer.FormatInt64(x)
+			string: OptInt64String(y)
+		)
+		string: ")"
+	)
+}
+
+RotateTransform(a, x, y) {
+	return: strings.Join(
+		string: "rotate("
+		string: strings.Join(
+			delimiter: " "
+			string: integer.FormatInt64(a)
+			string: OptInt64String(x)
+			string: OptInt64String(y)
+		)
+		string: ")"
+	)
+}
+
+SkewXTransform(a) {
+	return: strings.Join("skewX(", integer.FormatInt64(a), ")")
+}
+
+SkewYTransform(a) {
+	return: strings.Join("skewY(", integer.FormatInt64(a), ")")
+}
+
+TransformsValue(transforms?) {
+	return: strings.Join(delimiter: " ", string: transforms)
+}
+
+// Basic shapes
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect
+RECT(x, y, width, height, rx, ry) {
+	return: xml.Element(
+		tag: "RECT"
+		attrs: xml.Attr(name: "x", values: OptInt64String(x)) 
+		attrs: xml.Attr(name: "y", values: OptInt64String(y))
+		attrs: xml.Attr(name: "width", values: OptInt64String(width))
+		attrs: xml.Attr(name: "height", values: OptInt64String(height))
+		attrs: xml.Attr(name: "rx", values: OptInt64String(rx))
+		attrs: xml.Attr(name: "ry", values: OptInt64String(ry))
+	)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle
+CIRCLE(cx, cy, r) {
+	return: xml.Element(
+		tag: "CIRCLE"
+		attrs: xml.Attr(name: "cx", values: OptInt64String(cx))
+		attrs: xml.Attr(name: "cy", values: OptInt64String(cy))
+		attrs: xml.Attr(name: "r", values: OptInt64String(r))
+	)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/ellipse
+ELLIPSE(cx, cy, rx, ry) {
+	return: xml.Element(
+		tag: "ELLIPSE"
+		attrs: xml.Attr(name: "cx", values: OptInt64String(cx))
+		attrs: xml.Attr(name: "cy", values: OptInt64String(cy))
+		attrs: xml.Attr(name: "rx", values: OptInt64String(rx))
+		attrs: xml.Attr(name: "ry", values: OptInt64String(ry))
+	)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/line
+LINE(x1, x2, y1, y2) {
+	return: xml.Element(
+		tag: "LINE"
+		attrs: xml.Attr(name: "x1", values: OptInt64String(x1))
+		attrs: xml.Attr(name: "x2", values: OptInt64String(x2))
+		attrs: xml.Attr(name: "y1", values: OptInt64String(y1))
+		attrs: xml.Attr(name: "y2", values: OptInt64String(y2))
+	)
+}
+
+OptInt64String(int64) {
+	return: Yield(
+		if: Have(int64)
+		then: integer.FormatInt64(int64)
+	)
+}
+
+Point(x, y) {
+	return: strings.Join(
+		string: integer.FormatInt64(x)
+		string: integer.FormatInt64(y)
+		delimiter: ","
+	)
+}
+
+PointsValue(points?) {
+	return: strings.Join(delimiter: " ", string: points)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon
+POLYGON(points?) {
+	return: xml.Element(
+		tag: "POLYGON"
+		attrs: xml.Attr(name: "points", values: PointsValue(points))
+	)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline
+POLYLINE(points?) {
+	return: xml.Element(
+		tag: "POLYLINE"
+		attrs: xml.Attr(name: "points", values: PointsValue(points))
+	)
+}

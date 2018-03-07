@@ -1,0 +1,204 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+ControlMacrosChapter() {
+	return: wiki.Chapter(
+		cross: ControlMacrosChapterLink()
+		bullet: "2.4.3."
+		label: "control"
+		caption: "Ko Macros for Control"
+		title: wiki.Text("Macros for control")
+		content: controlMacrosContent()
+	)
+}
+
+ControlMacrosChapterLink() {
+	return: wiki.Crosslink("language/macros/control")
+}
+
+YieldMacroLink() {
+	return: wiki.Crosslink("language/macro/control/yield")
+}
+
+ParallelMacroLink() {
+	return: wiki.Crosslink("language/macro/control/parallel")
+}
+
+controlMacrosContent() {
+	return: (
+		// yield
+		wiki.Head(cross: YieldMacroLink(), nodes: C(`Yield`))
+		P(f: `%% recognizes three arguments: %% (boolean), %% and %%.
+			If %% is %%, %% returns the value of %%, otherwise it returns the
+			value of %%. If either of %% or %% is omitted, an empty value is
+			returned in the respective case.`
+			a: C(`Yield`)
+			a: C(`if`)
+			a: C(`then`)
+			a: C(`else`)
+			a: C(`if`)
+			a: C(`true`)
+			a: C(`Yield`)
+			a: C(`then`)
+			a: C(`else`)
+			a: C(`then`)
+			a: C(`else`)
+		)
+		CB(
+`Say(hello) {
+	return: Show(
+		Yield(
+			if: hello   // hello must be boolean
+			then: "hello"
+			else: "good-bye"
+		)
+	)
+}
+`
+		)
+		// loop
+		H(`Loop`)
+		P(f: `%% recognizes three arguments: %%, %% and %%, of which only %% is required.`
+			a: C(`Loop`)
+			a: C(`start`)
+			a: C(`step`)
+			a: C(`stop`)
+			a: C(`step`)
+		)
+		P(f: `%% invokes the %% variety repeatedly in a loop. On each iteration, it passes a
+			“carry” value returned from the previous iteration as a monadic argument to %%.
+			On the first iteration, %% passes the value of %% instead.`
+			a: C(`Loop`)
+			a: C(`step`)
+			a: C(`step`)
+			a: C(`Loop`)
+			a: C(`start`)
+		)
+		P(f: `If %% is provided, it must be a variety with one monadic argument, returning a boolean.
+			On each iteration, after the invocation of %% completes, the returned carry value is passed
+			to %%. If %% returns %%, the loop terminates and %% returns the last carry.
+			If %% returns %%, the loop continues.`
+			a: C(`stop`)
+			a: C(`step`)
+			a: C(`stop`)
+			a: C(`stop`)
+			a: C(`true`)
+			a: C(`Loop`)
+			a: C(`stop`)
+			a: C(`false`)
+		)
+		P(`The following function enumerates all integers, starting from 0:`)
+		CB(
+`import "integer"
+
+ListAllIntegers() {
+	return: Loop(
+		start: 0
+		step: printAndIncrement(n?) {
+			_: Show(n)
+			return: integer.Sum(n, 1)
+		}
+	)
+}
+`
+		)
+		P(`The following function enumerates all integers up to a given limit:`)
+		CB(
+`import "integer"
+
+ListIntegersUpTo(limit) {
+	return: Loop(
+		start: 0
+		step: printAndIncrement(n?) {   // printAndIncrement is defined inline
+			_: Show(n)
+			return: integer.Sum(n, 1)
+		}
+		stop: ifNotSmallerThan(limit, n?) {   // ifNotSmallerThan is defined inline
+			return: integer.Less(limit, n)
+		} [limit: limit]   // fix the limit argument of ifNotSmallerThan
+	)
+}
+`
+		)
+		// spin
+		H(`Spin and Wait`)
+		P(f: `%% recognizes a monadic (unnamed) argument which must be a variety.
+			It executes the variety (a function lambda) in a new
+			process (co-routine) and immediately returns a handle to the executing process.`
+			a: C(`Spin`)
+		)
+		P(f: `The returned handle is a structure with a single field named %%.
+			Invoking %% blocks until the executed process terminates and returns
+			the return value of the function executing inside. Repeated calls to %%
+			return immediately with the value returned on the first call.`
+			a: C(`Wait`)
+			a: C(`Wait`)
+			a: C(`Wait`)
+		)
+		P(f: `%% returns a structure value with two fields: %% and %%.
+			%% is boolean and equals %% unless the execution resulted in a panic.
+			%% holds the returned value.`
+			a: C(`Wait`)
+			a: C(`success`)
+			a: C(`returned`)
+			a: C(`success`)
+			a: C(`true`)
+			a: C(`returned`)
+		)
+		P(f: `In the following example, two processes are started: one printing %%
+			and one printing %%. The enclosing function does not return until both have finished.`
+			a: C(`"hello"`)
+			a: C(`"world"`)
+		)
+		CB(
+`TwoInParallel() {
+	p1: Spin(Print["hello"])
+	p2: Spin(Print["world"])
+	return: (
+		returned1: p1.Wait()
+		returned2: p2.Wait()
+	)
+}`
+		)
+		wiki.Head(cross: ParallelMacroLink(), nodes: wiki.Text(`Parallel`))
+		P(f: `By default, circuit functions are executed sequentially (in %% with respect
+			to its directed acyclic structure). The %% macro, when applied to a circuit
+			function variety, executes that circuit in parallel.`
+			a: wiki.URL(
+				href: "https://en.wikipedia.org/wiki/Topological_sorting"
+				nodes: wiki.Text("topological order")
+			)
+			a: C(`Parallel`)
+		)
+		P(f: `When a circuit starts executing in parallel, new processes are allocated for
+			each of its elements. Individual circuit elements (which are themselves invocations
+			to other circuits or macros) begin execution as soon as their arguments arrive from
+			upstream.`)
+		P(f: `The typical use of %% is to create a parallel version of a circuit, as in the following example.`
+			a: C(`Parallel`)
+		)
+		CB(
+`DoSomeWork(name) {
+	return: (
+		job1: Print("hello")
+		job2: Print("world")
+		job3: Print(name)
+	)
+}
+
+DoSomeWorkInParallel(name) {
+	return: Parallel(
+		DoSomeWork[name: name]
+	)
+}
+`
+		)
+		P(f: `Invoking %% will cause the %% elements (computing %%, %% and %%)
+			to be executed in parallel.`
+			a: C(`DoSomeWorkInParallel`)
+			a: C(`Print`)
+			a: C(`job1`)
+			a: C(`job2`)
+			a: C(`job3`)
+		)
+	)
+}

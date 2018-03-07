@@ -1,0 +1,289 @@
+// This file provides a grammar for building wiki content nodes.
+
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/web/html"
+
+// Ref returns a reference node to to, containing nodes in its body.
+Ref(ref, nodes) {
+	return: Node(
+		nodes: nodes
+		RenderHTML: refRenderHTML(ref, nodes, renderingCtx) {
+			return: html.A(
+				href: RenderingCtxCrossRefURL(renderingCtx: renderingCtx, ref: ref)
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [ref: ref, nodes: nodes]
+	)
+}
+
+// URL returns a reference node to a URL, containing nodes in its body.
+URL(cross, href, nodes) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: urlRenderHTML(cross, href, nodes, renderingCtx) {
+			return: html.A(
+				id: cross.hash
+				href: href
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, href: href, nodes: nodes]
+	)
+}
+
+// Image returns an image node.
+Image(cross, resource?, height, width) {
+	return: Node(
+		cross: cross
+		RenderHTML: imageRenderHTML(cross, resource, height, width, renderingCtx) {
+			return: html.IMG(
+				id: cross.hash
+				classes: "image"
+				height: height
+				width: width
+				src: RenderingCtxResourceURL(renderingCtx: renderingCtx, resource: resource)
+			)
+		} [cross: cross, height: height, width: width, resource: resource]
+	)
+}
+
+// Head returns a heading node, containing nodes.
+Head(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: headRenderHTML(cross, nodes, renderingCtx) {
+			return: html.H2(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+// Figure returns a figure node with a given caption node, and containing nodes.
+Figure(cross, caption, nodes) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: figRenderHTML(cross, caption, nodes, renderingCtx) {
+			return: html.FIGURE(
+				id: cross.hash
+				caption: caption.RenderHTML(renderingCtx: renderingCtx)
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, caption: caption, nodes: nodes]
+	)
+}
+
+// Par returns a paragraph node, containing nodes.
+Par(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: parRenderHTML(cross, nodes, renderingCtx) {
+			return: html.P(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+// Quote returns a quotation block node, containing nodes.
+Quote(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: quoteRenderHTML(cross, nodes, renderingCtx) {
+			return: html.BLOCKQUOTE(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+// Text returns a text node.
+Text(cross, string?) {
+	return: Node(
+		cross: cross
+		RenderHTML: textRenderHTML(cross, string, renderingCtx) {
+			return: html.SPAN(id: cross.hash, children: html.T(string))
+		} [cross: cross, string: string]
+	)
+}
+
+LineBreak() {
+	return: Node(
+		RenderHTML: linebreakRenderHTML(renderingCtx) {
+			return: html.BR()
+		}
+	)
+}
+
+// Math returns a math node, containing nodes.
+Math(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: mathRenderHTML(cross, nodes, renderingCtx) {
+			return: html.SPAN(
+				id: cross.hash, classes: "math"
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+// Code returns a code node.
+Code(cross, code?) {
+	return: Node(
+		cross: cross
+		RenderHTML: codeRenderHTML(cross, code, renderingCtx) {
+			return: html.CODE(id: cross.hash, children: html.T(code))
+		} [cross: cross, code: String(code)]
+	)
+}
+
+// CodeBlock returns a code block node, containing nodes.
+CodeBlock(cross, code?) {
+	return: Node(
+		cross: cross
+		RenderHTML: codeblockRenderHTML(cross, code, renderingCtx) {
+			return: html.PRE(
+				id: cross.hash
+				children: html.CODE(children: html.T(code))
+			)
+		} [cross: cross, code: code]
+	)
+}
+
+// Def returns a definition node comprising given nodes.
+Def(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: defRenderHTML(cross, nodes, renderingCtx) {
+			return: html.SPAN(
+				id: cross.hash, classes: ("def", "is-italic")
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+Strong(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: strongRenderHTML(cross, nodes, renderingCtx) {
+			return: html.STRONG(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+Title(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: titleRenderHTML(cross, nodes, renderingCtx) {
+			return: html.STRONG(
+				id: cross.hash
+				classes: "has-text-weight-semibold"
+				classes: "is-size-3"
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+Indent(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: indentRenderHTML(cross, nodes, renderingCtx) {
+			return: html.DIV(
+				id: cross.hash
+				style: "padding-left: 1rem"
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+List(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: listRenderHTML(cross, nodes, renderingCtx) {
+			return: html.UL(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+Item(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: itemRenderHTML(cross, nodes, renderingCtx) {
+			return: html.LI(
+				id: cross.hash
+				children: nodesRenderHTML(renderingCtx: renderingCtx, nodes: nodes)
+			)
+		} [cross: cross, nodes: nodes]
+	)
+}
+
+// Rows returns a content node representing a list of rows.
+Rows(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: rowsRenderHTML[cross: cross, nodes: nodes]
+	)
+}
+
+rowsRenderHTML(cross, nodes, renderingCtx) {
+	return: html.DL(
+		id: cross.hash, classes: "rows"
+		children: series.Map(
+			over: nodes
+			with: rowRenderHTML(renderingCtx, node?) {
+				return: html.DT(
+					classes: "row"
+					children: node.RenderHTML(renderingCtx: renderingCtx)
+				)
+			} [renderingCtx: renderingCtx]
+		)
+	)
+} 
+
+Columns(cross, nodes?) {
+	return: Node(
+		cross: cross
+		nodes: nodes
+		RenderHTML: columnsRenderHTML[cross: cross, nodes: nodes]
+	)
+}
+
+columnsRenderHTML(cross, nodes, renderingCtx) {
+	return: html.DIV(
+		id: cross.hash, classes: "columns"
+		children: series.Map(
+			over: nodes
+			with: columnRenderHTML(renderingCtx, node?) {
+				return: html.DIV(
+					classes: "column"
+					children: node.RenderHTML(renderingCtx: renderingCtx)
+				)
+			} [renderingCtx: renderingCtx]
+		)
+	)
+} 

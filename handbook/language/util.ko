@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+P(f?, a) {
+	return: wiki.FormatPar(f: f, a: a)
+}
+
+H(t?) {
+	return: wiki.Head(wiki.Text(t))
+}
+
+D(t?) {
+	return: wiki.Def(wiki.Text(t))
+}
+
+C(t?) {
+	return: wiki.Code(t)
+}
+
+M(t?) {
+	return: wiki.Math(wiki.Text(t))
+}
+
+CB(t?) {
+	return: wiki.CodeBlock(t)
+}

@@ -1,0 +1,46 @@
+
+// Filter selects the elements in over which meet the predicate with.
+Filter(
+	over // over is a series.
+	with // with is a moandic function.
+) {
+	return: Range(
+		over: over
+		with: filter(with, elem) {
+			return: (
+				emit: Yield(
+					if: with(elem)
+					then: elem
+				)
+			)
+		} [with: with]
+	).image
+}
+
+// Map applies with to all elements in over. 
+Map(
+	over // over is a series.
+	with // with is a monadic function.
+) {
+	return: Range(
+		over: over
+		with: map(with, elem) {
+			return: (emit: with(elem))
+		} [with: with]
+	).image
+}
+
+ParMap(over, with) {
+	started: Map(
+		over: over
+		with: parMapStart(with, elem?) {
+			return: Spin(with[elem])
+		} [with: with]
+	)
+	return: Map(
+		over: started
+		with: parMapWait(spinned?) {
+			return: spinned.Wait().returned
+		}
+	)
+}

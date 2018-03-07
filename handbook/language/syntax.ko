@@ -1,0 +1,323 @@
+import "github.com/kocircuit/kocircuit/handbook/language/images"
+import "github.com/kocircuit/kocircuit/handbook/compiler"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+SyntaxChapter() {
+	return: wiki.Chapter(
+		bullet: "2.6."
+		label: "syntax"
+		caption: "Ko Syntax"
+		title: wiki.Text("Syntax")
+		content: syntaxContent()
+	)
+}
+
+MonadicLink() {
+	return: wiki.Crosslink("language/syntax/monadic")
+}
+
+AugmentationSyntaxLink() {
+	return: wiki.Crosslink("language/syntax/augmentation")
+}
+
+syntaxContent() {
+	return: (
+		P(
+			f: `The root of your Ko repository currently defaults to %%.
+			In other words it coincides with the root of your Go repository.
+			This ensures that the (fully-qualified) names of Go
+			transform implementations (called %%) and Ko functions
+			reside in the same namespace for simplicity.`
+			a: C(`$GOPATH/src`)
+			a: wiki.Ref(ref: compiler.GateChapterLink(), nodes: wiki.Text(`gates`))
+		)
+		//
+		H(`Source file`)
+		P(f: `Ko source files have a %% extension. A collection of %% files in the
+			same directory forms a package. Unlike Go, Ko source files do not
+			contain a package name definition.`
+			a: C(`.ko`)
+			a: C(`.ko`)
+		)
+		P(f:`A Ko source file is a sequence of import statments (denoted %%),
+			function definitions (denoted %%) and comments (denoted %%), separated by
+			new lines (denoted %%).`
+			a: C(`<Import>`)
+			a: C(`<Func>`)
+			a: C(`<Comment>`)
+			a: C(`<NewLine>`)
+		)
+		//
+		H(`Comments, whitespace and literals`)
+		P(f: `Ko sources support Go-style (i.e. C-style) comments: both comment-blocks %%,
+			and end-of-line comments %%.`
+			a: C(`/* ... */`)
+			a: C(`// ...`)
+		)
+		P(f: `Outside of comments, the Ko syntax recognizes two types of whitespace. 
+			%% is any non-empty sequence of spaces or tabs.
+			%% is any non-empty sequence of comma, semicolon or the ASCII new line character.`
+			a: C(`<Space>`)
+			a: C(`<NewLine>`)
+		)
+		P(f: `There are four types of constant literals: boolean, string, integer and floating-point.
+			All four literals follow the corresponding Go syntax. Booleans are %% or %%.
+			Strings can be single-line double-quoted %% (containing escape sequences)
+			or multi-line backquoted %% (treated verbatim). Integral and floating-point constants
+			can be signed or unsigned, e.g. %% and %%.`
+			a: C(`true`)
+			a: C(`false`)
+			a: C(`"..."`)
+			a: C("`...`")
+			a: C(`-2018`)
+			a: C(`2.1e-37`)
+		)
+		//
+		H(`Import statements`)
+		P(f: `An import statement provides access to the Ko functions (and Go transformations)
+			defined within a referenced package path. Importing has two alternative forms.
+			%% without specifying a package alias conforms to the syntax:`
+			a: C(`<Import>`)
+		)
+		CB(`import <PkgPath>`)
+		P(f: `%% with a specified package alias conforms to:`
+			a: C(`<Import>`)
+		)
+		CB(`import <PkgPath> as <PkgAlias>`)
+		P(f: `In both cases, %% is a string literal containing the repo-based package directory path.
+			If an %% is not specified, the last part of the package path directory is used as %%.`
+			a:C(`<PkgPath>`)
+			a:C(`<Alias>`)
+			a:C(`<Alias>`)
+		)
+		P(`Functions defined in the imported package can be referenced as`)
+		CB(`<Alias>.<FuncName>`)
+		//
+		H(`Cyclical imports`)
+		P(`Unlike other languages, Ko allows cyclical package imports: 
+		two packages using each other's function definitions.`)
+		//
+		H(`Function (circuit) defintion`)
+		P(f: `A function definition, %%, conforms to the syntax:`
+			a: C(`<FuncDef>`)
+		)
+		CB(
+`<FuncName>(<FuncArgs>) {
+	<Label>: <Formula>   // zero or more labelled formulas
+	return: <Formula>   // mandatory return formulas
+}`)
+		P(f: `%% is an identifier, which must be unique in its package scope.`
+			a: C(`<FuncName>`)
+		)
+		//
+		H(`Arguments`)
+		P(f: `%% is a list of zero or more %% (argument) declarations, separated by
+			%%s. Each %% in the list %% must be a unique identifier with respect to the function scope.
+			Here's an example function definition, eliding the body:`
+			a: C(`<FuncArgs>`)
+			a: C(`<Arg>`)
+			a: C(`<NewLine>`)
+			a: C(`<Arg>`)
+			a: C(`<FuncArgs>`)
+		)
+		CB(
+`Max(x, y) {
+	return: ... // body elided
+}`)
+		P(f: `Subsequently when functions are called, their arguments are 
+			assigned explicitly by providing the argument names. For instance,
+			the function above could be called as %%.`
+			a: C(`Max(x: 3, y: -5)`)
+		)
+		// monadic
+		P(f: `In a %% list, one argument may be designated as %%  (aka “default”) by appending a 
+		question mark character, %%, right after the argument's identifier. For example,`
+			a: C(`<FuncArgs>`)
+			a: wiki.Def(cross: MonadicLink(), nodes: wiki.Text(`monadic`))
+			a: C(`?`)
+		)
+		CB(
+`JoinStrings(strings?, delimiter) {
+	return: ... // body elided
+}`)
+		P(f: `Functions that have a monadic argument can be called in two ways. Either by
+			providing argument names explicitly, e.g. %%, or by supplying only the default
+			argument and eliding argument labels, e.g. %%. The latter can also be written
+			as %%, because the lack of labels
+			makes this simplification unambiguous.`
+			a: C(`JoinStrings(strings: ("a", "b"), delimiter: ",")`)
+			a: C(`JoinStrings(("a", "b"))`)
+			a: C(`JoinStrings("a", "b")`)
+		)
+		// formulas
+		H(`Formulas`)
+		P(f: `%%s are the building block of functions. A formula describes how to obtain a value.
+			Simple formulas directly refer to readily available values
+			(e.g. the value of a local function argument or a constant).
+			Transformation formulas specify how to derive a value
+			from previously-available values.`
+			a: C(`<Formula>`)
+		)
+		// simple formulas
+		H(`Simple formulas`)
+		P(`A simple formula is one of:`)
+		P(f: `%%, an argument identifier refering to the value of the corresponding function argument`
+			a: C(`<ArgRef>`)
+		)
+		P(f: `%%, a constant literal (described above) specifying a boolean, string, integer or 
+			floating-point constant.`
+			a: C(`<Literal>`)
+		)
+		P(f: `%% is a reference to a function, which is interpreted as a variety value (“variety” is the
+			Ko nomenclature for a “lambda” or “closure”). Function references can be of two types.
+			References to package-local functions entail simply using the function name
+			identifier %%. References to imported functions are in the form %%.`
+			a: C(`<FuncRef>`)
+			a: C(`<FuncName>`)
+			a: C(`<PkgAlias>.<FuncName>`)
+		)
+		P(f: `%%, is a reference to a %%, which is also interpreted as a variety value.
+			Macro references are simply the macro name identifier.`
+			a: C(`<MacroRef>`)
+			a: wiki.Ref(ref: MacroChapterLink(), nodes: wiki.Text(`macro`))
+		)
+		P(f: `%%, a function definition (defined above) is also a valid formula and it
+			is interpreted as a variety value refering to the defined function.
+			Note that, unlike in other languages, function definitions that are inline
+			still need to have a unique package-wide name. They are not anonymous!
+			For example:`
+			a: C(`<FuncDef>`)
+		)
+		CB(
+`ReturnsVarietyReturning8() {
+	return: Return8() {
+		return: 8
+	}
+}`)
+		//
+		H(`Transformation formulas`)
+		P(f: `There are three types of transformation formulas: selection, invocation and augmentation.
+			They are all defined recursively (in terms of the %% rule).`
+			a: C(`<Formula>`)
+		)
+		// invocation
+		H(`Invocation`)
+		P(`Invocation formulas derive a new value by invoking a Ko transformation
+		(provided as a variety value) to a set of zero or more argument values.`)
+		P(`In the simplest case, an invocation formula invokes a Ko transformation
+		without passing any arguments. Such formulas conform to the syntax:`)
+		CB(`<Formula>()`)
+		P(f: `Note that the formula preceding the round brackets, %%, must
+			evaluate to a variety value for the invocation to be valid.`
+			a: C(`()`)
+		)
+		P(f: `The most common type of invocation is one where argument values
+			are passed to explicitly named arguments of the transformation to be applied.
+			This conforms to the syntax:`)
+		CB(
+`<Formula>(
+	<ArgName>: <Formula> // one or more argument assignments
+)`)
+		P(f: `Here, again, the formula preceding the opening round brackets, %%, must
+			evaluate to a variety value for the invocation to be meaningful.`
+			a: C(`(`)
+		)
+		P(`Finally, transformations that support monadic (default) arguments
+		can be invoked using this simplified syntax:`)
+		CB(
+`<Formula>(<Formula>)`)
+		P(f: `Here the formula preceding the opening round brackets, %%, must
+			evaluate to a variety value (which refers to a transformation with a monadic argument)
+			for the invocation to be meaningful. The formula inside the round brackets is
+			passed to the monadic argument of the underlying transformation.`
+			a: C(`(`)
+		)
+		// augmentation
+		wiki.Head(cross: AugmentationSyntaxLink(), nodes: wiki.Text(`Augmentation`))
+		P(f: `Augmentation is Ko nomenclature for “closure”, in the lingo of functional languages.
+			Augmentation syntax is identical to invocation syntaxes (described above), except that
+			the round braces, %%, are replaced with square ones, %%.`
+			a: C(`()`)
+			a: C(`[]`)
+		)
+		P(f: `For example, let %% be a function with three named arguments, defined as`
+			a: C(`F`)
+		)
+		CB(
+`F(x, y, z) {
+	return: ... // body elided
+}`)
+		P(f: `Then the formula %% represents a variety refering to the function %% (with no arguments set),
+		and so does %%.`
+			a: C(`F`)
+			a: C(`F`)
+			a: C(`F[]`)
+		)
+		P(f: `On the other hand, %% refers to %% with the %% argument set to %%.
+			And so it can be invoked, for instance by writing %%.`
+			a: C(`F[x: 1]`)
+			a: C(`F`)
+			a: C(`x`)
+			a: C(`1`)
+			a: C(`F[x: 1](y: 2, z: 3)`)
+		)
+		// selection
+		H(`Selection`)
+		P(f: `%% conforms to the syntax %%. Selection is valid only when the preceding formula
+			evaluates to a structure-type value, where selection of a field value makes sense.
+			For example, the function below returns %%:`
+			a: C(`<Selection>`)
+			a: C(`<Formula>.<FieldName>`)
+			a: C(`"abc"`)
+		)
+		CB(
+`ReturnFirstField() {
+	return: (firstField: "abc", secondField: 123).firstField
+}`)
+		// chaining 
+		H(`Chaining`)
+		P(f: `It is worth pointing out that the recursive nature
+			of the rules for selection, invocation and augmentation formulas
+			(in terms of them being %%s,  recursively defined in terms of other %%s),
+			imply that one can do “chaining”. Take for instance the following example:`
+			a: C(`<Formula>`)
+			a: C(`<Formula>`)
+		)
+		CB(
+`F(flag) {   // flag is boolean
+	return: Yield(
+		if: flag
+		then: (call: G)   // G is a function defined in “this” package
+		else: (call: H)   // H is also a function defined in “this” package
+	).call()
+}`)
+		P(f: `Here the invocation of the %% macro returns the structure %% 
+			if the argument %% is %%, and %% otherwise.`
+			a: C(`Yield`)
+			a: C(`(call: G)`)
+			a: C(`flag`)
+			a: C(`true`)
+			a: C(`(call: H)`)
+		)
+		P(f: `Following the invocation of %%, the field %% (of whichever structure
+			was returned by %%) is selected and then immediately invoked by
+			the round brackets %% after %%. Without chaining, %% could be
+			equivalently implemented as:`
+			a: C(`Yield`)
+			a: C(`call`)
+			a: C(`Yield`)
+			a: C(`()`)
+			a: C(`call`)
+			a: C(`F`)
+		)
+		CB(
+`F(flag) {
+	y: Yield(
+		if: flag
+		then: (call: G)
+		else: (call: H)
+	)
+	return: y.call()
+}`)
+	)
+}

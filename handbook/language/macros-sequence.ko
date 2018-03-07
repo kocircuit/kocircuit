@@ -1,0 +1,117 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+SequenceMacrosChapter() {
+	return: wiki.Chapter(
+		bullet: "2.4.2."
+		label: "sequence"
+		caption: "Ko Macros for Sequences"
+		title: wiki.Text("Macros for sequences")
+		content: sequenceMacrosContent()
+	)
+}
+
+sequenceMacrosContent() {
+	return: (
+		// Len
+		H(`Len`)
+		P(
+			f: `%% returns the length of its (monadic) argument.
+			If the argument is a sequence type, its length is returned.
+			If the argument is a non-sequence type (basic, opaque, variety or structure),
+			%% returns 1. If argument is empty, %% returns 0.`
+			a: C(`Len`)
+			a: C(`Len`)
+			a: C(`Len`)
+		)
+		P(
+			f: `For example, %% returns %%, whereas %% returns %%.`
+			a: C(`Len("abc")`)
+			a: C(`1`)
+			a: C(`Len("a", "b", "c")`)
+			a: C(`3`)
+		)
+		//
+		H(`Merge`)
+		P(f: `%% concatenates multiple sequences holding the same type of elements
+			into a single sequence. Non-sequence arguments are lifted to singleton sequences
+			for convenience. For example,`
+			a: C(`Merge`)
+		)
+		CB(
+`Merge((1, 2, 3), (4, 5))   // returns (1, 2, 3, 4, 5)
+Merge ((1, 2, 3), 4) // returns (1, 2, 3, 4)
+Merge(1, 2, 3) // returns (1, 2, 3)`
+		)
+		//XXX
+		H(`Range`)
+		P(f: `%% recognizes three arguments: %%, %% and %%.
+			%% applies the variety %% to each element of the sequence %% sequentially
+			and returns the results.`
+			a: C(`Range`)
+			a: C(`start`)
+			a: C(`over`)
+			a: C(`with`)
+			a: C(`Range`)
+			a: C(`with`)
+			a: C(`over`)
+		)
+		P(f: `The iterator %% must recognize two arguments: %% and %%.
+			The %% argument holds the element of the sequence %% being processed.
+			The %% argument holds a “carry” value returned from the previous iteration of
+			%%, or the value of %% in the case of the first iteration.`
+			a: C(`with`)
+			a: C(`elem`)
+			a: C(`elem`)
+			a: C(`carry`)
+			a: C(`over`)
+			a: C(`carry`)
+			a: C(`with`)
+			a: C(`start`)
+		)
+		P(f : `The iterator %% must return a structure with two fields: %% and %%.
+			Values (or sequences) stored in %% will be concatenated across all
+			iterations and returned by %%. The value stored in %% will passed on to the
+			next iteration. The carry of the final iteration will be returned by %%.`
+			a: C(`with`)
+			a: C(`emit`)
+			a: C(`carry`)
+			a: C(`emit`)
+			a: C(`Range`)
+			a: C(`carry`)
+			a: C(`Range`)
+		)
+		P(f: `The %% macro returns a structure with two fields: %% and %%.
+			Field %% holds the sequence of values (if any) emitted by the iterations.
+			Field %% holds the value of the carry returned by the final iteration.`
+			a: C(`Range`)
+			a: C(`image`)
+			a: C(`residue`)
+			a: C(`image`)
+			a: C(`residue`)
+		)
+		P(`The following example computes the individual string lengths in a sequence
+		of strings, as well as the total length and prints them out.`)
+		CB(
+`import "integer"
+import "github.com/kocircuit/kocircuit/strings"
+
+ComputeStringsLengthsAndTotal(strings) { // string is a sequence of strings
+	result: Range(
+		start: 0
+		over: strings
+		with: processString(carry, elem) {   // carry is Int64, elem is String
+			stringLen: strings.Len(elem)   // compute length of string elem
+			return: (
+				emit: stringLen
+				carry: integer.Sum(carry, stringLen)   // aggregate total length in carry
+			)
+		}
+	)
+	return: Show(
+		individualStringLengths: result.image
+		totalLength: result.residue
+	)
+}`
+		)
+	)
+}

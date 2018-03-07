@@ -1,0 +1,213 @@
+import "github.com/kocircuit/kocircuit/handbook/language/images"
+import "github.com/kocircuit/kocircuit/handbook/language"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+GateChapter() {
+	return: wiki.Chapter(
+		cross: GateChapterLink()
+		bullet: "3.2."
+		label: "gate"
+		caption: "Ko Gates"
+		title: wiki.Text("Gates: Transformations in Go")
+		content: gateContent()
+	)
+}
+
+GateChapterLink() {
+	return: wiki.Crosslink("compiler/gate")
+}
+
+gateContent() {
+	return: (
+		P(f: `%% are a mechanism for implementing transformations in Go and making them
+			accessible within (call-able from) Ko.`
+			a: D(`Gates`)
+		)
+		P(f: `Implementing a transformation in Go (a gate) requires three simple steps.
+			First, describe the argument structure of the transformation by defining
+			a Go %% for it. Second, implement the transformation as a %% method
+			attached to the Go argument structure (from step 1). Third, 
+			register the implementation with the Ko compiler (in Go) and
+			build an “extended” compiler which links in the new implementation.`
+			a: C(`struct`)
+			a: C(`Play`)
+		)
+		P(f: `In the following complete example, we imlpement a gate which returns
+			the maximum of two 64-bit integers and is visible from Ko as the
+			two-argument function %%.`
+			a: C(`GoMaxInt64(x, y)`)
+		)
+		P(f: `The entire implementation fits in a single %% file which 
+			we can place, say, in %%.`
+			a: C(`.go`)
+			a: C(`github.com/kocircuit/kocircuit/utils/integer/max.go`)
+		)
+		example1()
+		P(f: `After Go package %% is linked into the compiler (described below),
+			the transformation %% will be accessible from Ko with the appropriate
+			package import clause. For instance, the following Ko code utilizes
+			%% to return the maximum of three 64-bit integers:`
+			a: C(`integer`)
+			a: C(`GoMaxInt64`)
+			a: C(`GoMaxInt64`)
+		)
+		example1a()
+		//
+		H(`Monadic arguments`)
+		P(f: `It is also possible to implement Go transformations, where one of the arguments
+			is %% (i.e. the transformation can be invoked with a shorthand notation
+			by passing a single argument value and not specifying the argument name).`
+			a: wiki.Ref(ref: language.MonadicLink(), nodes: wiki.Text(`monadic`))
+		)
+		P(f: `The following variation of %% accepts a sequence of integers
+			(the monadic argument %%) and an additional optional argument %%,
+			determining the result if the sequence is empty:`
+			a: C(`GoMaxInt64`)
+			a: C(`int64s`)
+			a: C(`otherwise`)
+		)
+		example2()
+		P(f: `This new implementation of %% can be invoked (in Ko) in two different ways.
+			The standard way entails passing the arguments and specifying their names:`
+			a: C(`GoMaxInt64`)
+		)
+		CB(
+`util.GoMaxInt64(int64s: (1, 2, 3), otherwise: 0) // or
+util.GoMaxInt64(int64s: (1, 2, 3))
+`
+	)
+		P(f: `The latter case, where the optional %% argument is not passed, can also be
+			written as %%, thereby taking advantage of the fact that %% is defined as
+			the monadic argument (default argument when no argument name is specified).`
+			a: C(`otherwise`)
+			a: C(`util.GoMaxInt64(1, 2, 3)`)
+			a: C(`int64s`)
+		)
+		//
+		H(`Type translations`)
+		// interfaces
+		P(f: `The Go types used for the fields of the gate structure, as well as
+			for the return value of the %% method, are generally unconstrained.`
+			a: C(`Play`)
+		)
+		P(f: `The Ko compiler transparently converts Go types to their unambiguously
+			corresponding %%.
+			Primitive types (boolean, string, signed and unsigned integers
+			and floating-point numbers) are mapped respectively. 
+			Go structures and slices are mapped to Ko structures and sequences.
+			Go pointers correspond to optional types in Ko.
+			Go interfaces are mapped to Ko opaque values.
+			(This facilitates transporting Go runtime objects, which might be mutable,
+			through the Ko immutable type system without complications.)
+			Go channels, arrays and functional types are — for the moment — disallowed
+			as they are not in line (or necessary for) common protocol type systems 
+			(like Protocol Buffers or GraphQL). If their use is necessary, in cases of 
+			low-level systems programming with Ko, they can always be hidden behind
+			a Go interface to be treated as opaque inside Ko.
+			`
+			a: wiki.Ref(ref: language.TypesChapterLink(), nodes: wiki.Text(`Ko types`))
+		)
+		H(`Extending the compiler`)
+		P(`Before the Ko compiler can see and reflect on new gates,
+			they need to be linked into the compiler. We have provided an
+			easy way to do so.`)
+		P(`Create a new Go binary package (which will build to the new compiler)
+		and import the Ko compiler infrastructure package, as well as any
+		number of Go packages containing gate implementations. For the 
+		example from this article, you would simply need:`)
+		example3()
+		P(`There are also simlpe methods (excluded here for brevity)
+		to embed the Ko compiler in your software (rather than using it on
+		the command-line) and utilize it , for example, as a “scripting engine”.`)
+	)
+}
+
+example1() {
+	return: CB(
+		wiki.FormatString(
+f: `package integer
+
+import (
+	"github.com/kocircuit/kocircuit/lang/go/eval"
+	"github.com/kocircuit/kocircuit/lang/go/runtime"
+)
+
+func init() {   // Register the new gate with Ko.
+	eval.RegisterEvalGate(new(GoMaxInt64))
+}
+
+type GoMaxInt64 struct {   // gate argument structure
+	X int64 %%   // The Ko field name is specified in a tag.
+	Y int64 %%   // There are no restrictions on field types.
+}
+
+// Play implements the gate transformation.
+// Play can return any Go type as necessary.
+func (g *GoMaxInt64) Play(ctx *runtime.Context) int64 {
+	if g.X < g.Y {
+		return g.Y
+	} else {
+		return g.X
+	}
+}
+`
+a: "`ko:\"name=x\"`"
+a: "`ko:\"name=y\"`"
+		) // format
+	) // CB
+}
+
+example1a() { 
+	return: CB(
+`import "github.com/kocircuit/kocircuit/utils/integer" as util
+
+Max3(x, y, z) {
+	return: util.GoMaxInt64(
+		x: util.GoMaxInt64(x: x, y: y)
+		y: util.GoMaxInt64(x: y, y: z)
+	)
+}`
+	)
+}
+
+example2() {
+	return: CB(
+		wiki.FormatString(
+f: `type GoMaxInt64 struct {
+	Int64s []int64 %%
+	Otherwise *int64 %%
+}
+
+func (g *GoMaxInt64) Play(ctx *runtime.Context) int64 {
+	var max int64
+	if g.Otherwise != nil {
+		max = *g.Otherwise
+	}
+	for _, n := range g.Int64s {
+		if n > max {
+			max = n
+		}
+	}
+	return max
+}
+`
+a: "`ko:\"name=int64s,monadic\"`"
+a: "`ko:\"name=otherwise\"`"
+		) // format
+	) // CB
+}
+
+example3() {
+	return: CB(
+`package main
+
+import (
+	"github.com/kocircuit/kocircuit/lang/ko/cmd"   // provides the Ko compiler command-line
+	_ "github.com/kocircuit/kocircuit/util/integer"   // links the gate into the new compiler
+)
+
+func main() {
+	cmd.Execute()
+}`
+	)
+}

@@ -1,0 +1,104 @@
+import "circuit"
+import "github.com/kocircuit/kocircuit/lib/os"
+import "github.com/kocircuit/kocircuit/lib/file"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/web/html"
+
+// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestAll
+TestAll() {
+	return: (
+		t1: TestContentNodes()
+		t2: TestWiki()
+		t3: TestBuild()
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestContentNodes
+TestContentNodes() {
+	cited: Quote(Math(Text("some math here")))
+	doc: Par(
+		Text("Как се чуствате")
+		Text("днес?")
+		cited
+	)
+	return: Print(html.Render(doc.RenderHTML(renderingCtx: testRenderingCtx())))
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestWiki
+TestWiki() {
+	return: Print(
+		html.Render(
+			ChapterPageHTML(
+				chapter: testTOC()
+				renderingCtx: testRenderingCtx()
+			)
+		)
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestBuild
+TestBuild() {
+	return: Build(
+		topChapter: testTOC()
+		siteDir: testSiteDir()
+		resourcesURL: "/resources"
+		topChapterURL: "/"
+		PageHTML: testPageHTML
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestBuildLocallyThenServe
+TestBuildLocallyThenServe() {
+	return: BuildLocallyThenServe(
+		topChapter: testTOC()
+		siteDir: testSiteDir()
+		resourcesURL: "/resources"
+		topChapterURL: "/"
+		PageHTML: testPageHTML
+		address: ":3000"
+	)
+}
+
+testSiteDir() {
+	return: Peek(testDir: filepath.Join(os.TempDir(), circuit.PkgPath())).testDir
+}
+
+testTOC() {
+	return: Chapter(
+		caption: "Root chapter"
+		title: Text("Root chapter")
+		content: Par(Text("hello"), Math(Text("world")))
+		sub: ch1
+		sub: ch2
+	)
+	ch1: Chapter(
+		bullet: "1."
+		label: "chapter_1"
+		caption: "Chapter 1"
+		title: Text("Chapter 1")
+		content: Par(Text("foo"), Math(Text("bar")))
+	)
+	ch2: Chapter(
+		bullet: "2."
+		label: "chapter_2"
+		caption: "Chapter 2"
+		title: Text("Chapter 2")
+		content: Par(Text("dr"), Def(Text("dolittle")))
+	)
+}
+
+testPageHTML(title, navHTML, tocHTML, contentHTML) {
+	return: html.HTML(
+		head: html.HEAD(title: title)
+		body: html.BODY(Merge(navHTML, tocHTML, contentHTML))
+	)
+}
+
+testRenderingCtx() {
+	return: RenderingCtx(
+		resourcesURL: "/resources"
+		chapterURL: "/"
+		PageHTML: testPageHTML
+		crosslinkMemory: () // empty
+	)
+}

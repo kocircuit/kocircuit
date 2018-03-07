@@ -1,0 +1,19 @@
+// ko play github.com/kocircuit/kocircuit/lib/web/html/TestHTML
+TestHTML() {
+	dom: HTML(
+		head: HEAD(
+			title: "Ko HTML grammar test"
+			children: META(Attr(name: "charset", values: "utf-8"))
+			children: LINK("https://aljabr.io")
+			children: SCRIPT(type: "text/javascript", src: "jquery.min.js")
+		)
+		body: BODY(
+			DIV(
+				id: "a-div"
+				children: SPAN(T("Здравей, святъ!"))
+				children: IMG("https://img.cloud")
+			)
+		)
+	)
+	return: Print(Render(dom), "\n")
+}

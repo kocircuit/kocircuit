@@ -1,0 +1,96 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+VarietiesChapter() {
+	return: wiki.Chapter(
+		cross: VarietiesChapterLink()
+		bullet: "2.3."
+		label: "varieties"
+		caption: "Ko Varieties"
+		title: wiki.Text("Varieties and recursion")
+		content: varietiesContent()
+	)
+}
+
+VarietiesChapterLink() {
+	return: wiki.Crosslink("language/varieties")
+}
+
+varietiesContent() {
+	return: (
+		P(f: `Ko has lambdas (functional values) and closures (creating functional values
+			by fixing some or all arguments) as in other languages.
+			In Ko, functional values are called %%, whereas the operation of fixing arguments 
+			of a variety (to produce a new, restricted variety) is called %%.`
+			a: D(`varieties`)
+			a: D(`augmentation`)
+		)
+		P(f: `The exact syntax of augmentation is described in the %%.
+				In brief, augmentation uses the same syntax as invocation, replacing the
+				round brackets, %%, with square ones, %%.
+				In the following example we assume that a function %% which returns the
+				maximum of its three arguments is given.`
+			a: wiki.Ref(ref: AugmentationSyntaxLink(), nodes: wiki.Text(`syntax chapter`))
+			a: C(`()`)
+			a: C(`[]`)
+			a: C(`Max3(a, b, c)`)
+		)
+		CB(
+`ReturnTheMax(x, y, z) {
+	max2: Max3[a: x]   // fix the a-argument of Max3 to x
+	max1: max2[b: y]   // fix the b-argument of max2 to y
+	max0: max1[c: z]   // fix the c-argument of max1 to z
+	return: max0()
+}`
+		)
+		P(f: `Calling %% (for some arguments %%, %% and %%) is 
+		equivalent to calling %%.`
+			a: C(`ReturnTheMax(x: p, y: q, z: r)`)
+			a: C(`p`)
+			a: C(`q`)
+			a: C(`r`)
+			a: C(`Max3(a: p, b: q, c: r)`)
+		)
+		//
+		H(`Recursion`)
+		P(f: `Varieties are particularly important when implementing
+			recursive functions. Consider the following implementation of a function
+			computing the n-th Fibonacci number.`)
+		CB(
+`import "integer"
+
+Fib(n?) {
+	branch: Yield(
+		if: Or(   // If n is a base case (0 or 1),
+			integer.Equal(n, 0)
+			integer.Equal(n, 1)
+		)
+		then: [1]   // then Yield returns a variety that will return 1 when invoked,
+		else: fibSum[n]   // otherwise Yield returns a variety for the recursive step.
+	)
+	return: branch()   // Whichever variety was returned, invoke it.
+}
+
+fibSum(m?) {
+	return: integer.Sum(
+		Fib(integer.Sum(m, -1))
+		Fib(integer.Sum(m, -2))
+	)
+}`
+		)
+		P(f: `The key point in this example is that the %% step does not
+			invoke the recursive function %%, rather it returns a variety to it.
+			If the function were to be invoked (by writing %% instead of %%), then
+			%% would hang in an infinite recursive loop. This follows from the
+			%% that once a function starts executing (in this case %%) all of its 
+			elements will be executed and waited on to complete before the 
+			function completes itself.`
+			a: C(`Yield`)
+			a: C(`fibSum`)
+			a: C(`fibSum(n)`)
+			a: C(`fibSum[n]`)
+			a: C(`Fib`)
+			a: wiki.Ref(ref: ConcurrencyChapterLink(), nodes: wiki.Text(`rule`))
+			a: C(`Fib`)
+		)
+	)
+}

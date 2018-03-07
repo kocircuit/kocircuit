@@ -1,0 +1,19 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+RecursionChapter() {
+	return: wiki.Chapter(
+		bullet: "2.5."
+		label: "recursion"
+		caption: "Ko Recursion"
+		title: wiki.Text("Recursion")
+		content: recursionContent()
+	)
+}
+
+recursionContent() {
+	return: (
+		P(`
+		Ko is manipulates ...
+		`)
+	)
+}

@@ -1,0 +1,23 @@
+import "integer"
+
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabLoop
+CodelabLoop() {
+	return: RangeNumbers(7)
+}
+
+RangeNumbers(below?) {
+	return: Loop(
+		start: 0
+		step: loopRangeStep
+		stop: loopRangeStop[below: below]
+	)
+}
+
+loopRangeStep(num?) {
+	return: Show(integer.Sum(num, 1))
+}
+
+loopRangeStop(below, num?) {
+	stop: Not(integer.Less(num, below))
+	return: stop
+}

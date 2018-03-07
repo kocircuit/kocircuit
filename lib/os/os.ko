@@ -1,0 +1,24 @@
+import "github.com/kocircuit/kocircuit/lib/os"
+
+Mkdir(path?) {
+	return: os.GoMkdir(path)
+}
+
+Env(name?) {
+	return: os.GoEnv(name)
+}
+
+TempDir() {
+	return: os.GoTempDir()
+}
+
+Task(name, binary, arg, env, dir, after) {
+	return: os.GoTask(
+		name: name
+		binary: binary
+		arg: arg
+		env: env
+		dir: dir
+		after: after
+	)
+}

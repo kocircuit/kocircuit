@@ -1,0 +1,61 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+QuickStartChapter() {
+	return: wiki.Chapter(
+		bullet: "1."
+		label: "quick"
+		caption: "Ko Quick Start"
+		title: wiki.Text("Quick start")
+		content: quickStartContent()
+	)
+}
+
+quickStartContent() {
+	return: (
+		H(`Install Go`)
+		P(f: `Ko requires the %% toolchain. Start by %%
+				and configuring your %%.`
+			a: wiki.URL(href: "https://golang.org", nodes: wiki.Text(`Go compiler`))
+			a: wiki.URL(href: "https://golang.org/doc/install", nodes: wiki.Text(`installing Go`))
+			a: wiki.URL(
+				href: "https://github.com/golang/go/wiki/SettingGOPATH"
+				nodes: (C(`GOPATH`), wiki.Text(`environment`))
+			)
+		)
+		P(f: `Ko reuses your Go source repo (located at %%) as your Ko repo.`
+			a: C(`$GOPATH/src`)
+		)
+		H(`Install Ko`)
+		P(`Install the Ko compiler. If you are installing from the public github repo,
+			you can accomplish this with one command:`)
+		CB(`go get github.com/kocircuit/kocircuit/lang/ko`)
+		P(`If you are a contributor:`)
+		CB(
+`cd $GOPATH/src
+mkdir -p github.com/kocircuit
+cd github.com/kocircuit
+git clone https://github.com/kocircuit/kocircuit
+go install github.com/kocircuit/kocircuit/lang/ko`
+		)
+		H(`Run “Hello, world!”`)
+		P(`Run the basic “Hello world!” application to make sure everything is working:`)
+		CB(`ko play github.com/kocircuit/kocircuit/codelab/HelloWorld`)
+		P(f: `In general, the command %% will execute any Ko function in your repo.`
+			a: C(`ko play <PkgPath>/<FuncName>`)
+		)
+		H(`Codelabs`)
+		P(f: `Find short codelabs in %% that demonstrate various use cases and techniques.`
+			a: C(`github.com/kocircuit/kocircuit/codelab`)
+		)
+		H(`Aljabr Ko compiler and codelabs`)
+		P(f: `If you are looking for codelabs that involve controlling real-world
+				technologies, like Twitter or Telegram for instance, consider installing the
+				Aljabr Ko compiler which links drivers for various (currently few) Internet
+				technologies into the compiler. To get the Aljabr compiler and codelabs, go to %%.`
+			a: wiki.URL(
+				href: "https://github.com/aljabrio/aljabrio"
+				nodes: wiki.Text(`https://github.com/aljabrio/aljabrio`)
+			)
+		)
+	)
+}

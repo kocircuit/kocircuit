@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+import "github.com/kocircuit/kocircuit/handbook/quick"
+import "github.com/kocircuit/kocircuit/handbook/language"
+import "github.com/kocircuit/kocircuit/handbook/compiler"
+
+Root() {
+	return: wiki.Chapter(
+		bullet: "", label: ""
+		caption: "Ko"
+		title: wiki.Text("Ko")
+		depth: 2
+		sub: quick.QuickStartChapter()
+		sub: language.LanguageChapter()
+		sub: compiler.CompilerChapter()
+		content: rootContent()
+	)
+}
+
+rootContent() {
+	return: wiki.FormatPar(
+		f:		`Ko is a programming language based on a new, simple
+				and general model of computation, called %%.`
+		a:	wiki.Def(wiki.Text(`Recursive Circuits`))
+	)
+}

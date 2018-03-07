@@ -1,0 +1,46 @@
+// Package xml provides a grammar for building XML documents.
+
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/lib/web/xml" as xmlgo
+
+// Render renders an XML element to a string.
+Render(xml?) {
+	return: xmlgo.GoRenderElement(xml)
+}
+
+// Text returns an XML text element with content given by string.
+Text(string?) {
+	return: xmlgo.GoTextElement(Pick(either: string, or: ""))
+}
+
+Group(nodes?) {
+	return: xmlgo.GoGroupElement(nodes)
+}
+
+DocType(docType?) {
+	return: xmlgo.GoDocTypeElement(docType)
+}
+
+// Elements returns an XML tag element with a given tag, attributes and child element(s).
+Element(tag, attrs, children) {
+	return: xmlgo.GoTagElement(tag: tag, attrs: attrs, children: children)
+}
+
+// Attr returns an XML attribute with a given name and value(s).
+Attr(name, values) {
+	return: Yield(
+		if: Have(values)
+		then: strings.Join(
+			name
+			"="
+			strings.Quote(strings.Join(string: values, delimiter: " "))
+		)
+	)
+}
+
+AttrNoValues(name?) {
+	return: Yield(
+		if: Have(name)
+		then: name
+	)
+}

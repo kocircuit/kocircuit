@@ -1,0 +1,131 @@
+import "repo"
+import "github.com/kocircuit/kocircuit/lib/file"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/net/http"
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/shell"
+
+BuildLocallyThenServe(
+	topChapter // top-level chapter
+	resources // resources is a list of all resources used by content nodes.
+	siteDir // siteDir (a string) is the local output directory for the site.
+	resourcesURL // resourcesURL (a string) the URL path to the root of the resource namespace.
+	topChapterURL // topChapterURL (a string) is the URL path of the enclosing chapter.
+	PageHTML // PageHTML(title, navHTML, tocHTML, contentHTML) returns the HTML of a chapter page.
+	address // server bind address (a string)
+) {
+	return: http.ServeLocalDir(
+		after: Build(
+			topChapter: topChapter
+			resources: resources
+			siteDir: siteDir
+			resourcesURL: resourcesURL
+			topChapterURL: topChapterURL
+			PageHTML: PageHTML
+		)
+		address: address
+		dir: siteDir
+		url: "/"
+	)
+}
+
+// Build generates the wiki source tree (HTML, CSS, etc.) to a given file system.
+Build(
+	topChapter // topChapter (a chapter) is the top-level chapter of the wiki.
+	resources // resources is a list of all resources used by content nodes.
+	siteDir // siteDir (a string) is the local output directory for the site.
+	resourcesURL // resourcesURL (a string) the URL path to the root of the resource namespace.
+	topChapterURL // topChapterURL (a string) is the URL path of the enclosing chapter.
+	PageHTML // PageHTML(title, navHTML, tocHTML, contentHTML) returns the HTML of a chapter page.
+) {
+	crosslinkMemory: buildCrosslinkMemory(
+		linkingCtx: LinkingCtx(chapterURL: topChapterURL)
+		chapter: topChapter
+	)
+	renderingCtx: RenderingCtx(
+		resourcesURL: resourcesURL
+		chapterURL: topChapterURL
+		PageHTML: PageHTML
+		crosslinkMemory: crosslinkMemory
+	)
+	siteFS: file.LocalFileSystem(root: siteDir)
+	syncedChapterFiles: syncChapterFiles(
+		siteDir: siteDir
+		renderingCtx: renderingCtx
+		topChapter: topChapter
+	)
+	copiedResources: series.Map(
+		over: resources
+		with: copyResource(renderingCtx, siteDir, resource?) {
+			return: shell.CopyFile(
+				source: filepath.Join(repo.Path(), resource.repoFile)
+				sink: filepath.Join(siteDir, renderingCtx.resourcesURL, resource.url)
+			)
+		} [renderingCtx: renderingCtx, siteDir: siteDir]
+	)
+	return: And(Merge(syncedChapterFiles, copiedResources))
+}
+
+syncChapterFiles(siteDir, renderingCtx, topChapter) {
+	siteFS: file.LocalFileSystem(root: siteDir)
+	return: series.ParMap(
+		//over: buildChapter(renderingCtx: renderingCtx, chapter: topChapter)
+		over: Profile(buildChapter[renderingCtx: renderingCtx, chapter: topChapter])
+		with: syncFile(siteFS, file?) {
+			return: file.Sync(siteFS)
+		} [siteFS: siteFS]
+	)
+}
+
+parallelBuildChapter(renderingCtx, chapter?) { // returns files
+	return: Parallel(buildChapter[renderingCtx: renderingCtx, chapter: chapter])
+}
+
+buildChapter(renderingCtx, chapter?) { // returns files
+	childrenCtx: RenderingCtxStack(renderingCtx: renderingCtx, chapter: chapter)
+	subChapterFiles: series.ParMap(
+		over: chapter.sub
+		with: parallelBuildChapter[renderingCtx: childrenCtx]
+	)
+	return: Merge(
+		// (petar): profiling the following line shows that most almost all 
+		// computational effort in building the wiki is in ChapterPageFile.
+		ChapterPageFile(chapter: chapter, renderingCtx: renderingCtx)
+		Merge(subChapterFiles)
+	)
+}
+
+buildCrosslinkMemory(linkingCtx, chapter?) { // returns a memory from (string) crosslink name to (string) URL.
+	resolutions: resolveChapter(linkingCtx: linkingCtx, chapter: chapter)
+	memory: Memory()
+	return: (
+		memory: memory
+		after: series.Map(
+			over: resolutions
+			with: memorizeResolution(memory, resolution?) {
+				return: memory.Remember(key: resolution.name, value: resolution.url)
+			} [memory: memory]
+		)
+	).memory
+}
+
+resolveChapter(linkingCtx, chapter?) { // returns (name, url) pairs
+	chapterCtx: LinkingCtxStack(linkingCtx: linkingCtx, chapter: chapter)
+	subChapterResolutions: series.Map(
+		over: chapter.sub
+		with: resolveChapter[linkingCtx: chapterCtx]
+	)
+	return: Merge(
+		Branch(
+			if: Have(chapter.cross)
+			then: chapterCrosslinkURL[linkingCtx: chapterCtx, cross: chapter.cross]
+		)
+		Merge(
+			series.Map(
+				over: chapter.content
+				with: nodeCrosslinkURLs[linkingCtx: chapterCtx]
+			)
+		)
+		Merge(subChapterResolutions)
+	)
+}

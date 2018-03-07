@@ -1,0 +1,38 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+Crosslink(name?) {
+	return: (name: name, hash: Hash(name))
+}
+
+nodesCrosslinkURLs(linkingCtx, cross, nodes) {
+	here: Branch(
+		if: Have(cross)
+		then: crosslinkURL[linkingCtx: linkingCtx, cross: cross]
+	)
+	return: Merge(
+		here
+		series.Map(
+			over: nodes
+			with: nodeCrosslinkURLs[linkingCtx: linkingCtx]
+		)
+	)
+}
+
+nodeCrosslinkURLs(linkingCtx, node?) {
+	return: node.CrosslinkURLs(linkingCtx: linkingCtx)
+}
+
+crosslinkURL(cross, linkingCtx) {
+	return: (
+		name: cross.name
+		url: strings.Join(LinkingCtxPageURL(linkingCtx), "#", cross.hash)
+	)
+}
+
+chapterCrosslinkURL(cross, linkingCtx) {
+	return: (
+		name: cross.name
+		url: strings.Join(LinkingCtxPageURL(linkingCtx))
+	)
+}

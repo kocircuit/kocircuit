@@ -1,0 +1,13 @@
+
+// File returns a file object, which can write itself to a file system, by calling the included Sync(system).
+File(
+	path // path is a string, relative to the root of the file system wherein the file will be rendered.
+	write // write returns the contents of the file as a string.
+) {
+	return: (
+		filePath: path // string
+		Sync: fileSync(path, write, system?) {
+			return: system.WriteFile(path: path, body: write())
+		} [path: path, write: write]
+	)
+}

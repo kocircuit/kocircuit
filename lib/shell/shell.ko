@@ -1,0 +1,16 @@
+import "github.com/kocircuit/kocircuit/lib/os"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/shell"
+
+// CopyFile copies a source file to a sink file. Intermediate sink directories are created if necessary.
+// CopyFile returns a boolean indicating the success state of the operation.
+CopyFile(
+	source // source is a file or directory path
+	sink // sink is the destination path
+) {
+	return: shell.GoShellCopy(
+		after: os.Mkdir(filepath.Dir(sink))
+		source: source
+		sink: sink
+	)
+}

@@ -1,0 +1,33 @@
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/integer" as util
+
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabCollatz
+// 16
+CodelabCollatz() {
+	return: Show(CollatzDistance(7))
+}
+
+// CollatzDistance returns the number of Collatz sequence steps from n to 1.
+// The Collatz sequence is defined here: https://en.wikipedia.org/wiki/Collatz_conjecture
+CollatzDistance(n?) {
+	return: Yield(
+		if: integer.Equal(n, 1)
+		then: Return[0]
+		else: collatzDistanceStep[n]
+	)()
+}
+
+collatzDistanceStep(n?) {
+	return: integer.Sum(
+		CollatzDistance(CollatzStep(n))
+		1
+	)
+}
+
+CollatzStep(n?) {
+	return: Yield(
+		if: util.IsEven(n)
+		then: integer.Ratio(n, 2)
+		else: integer.Sum(integer.Prod(3, n), 1)
+	)
+}

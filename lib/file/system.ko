@@ -1,0 +1,14 @@
+import "github.com/kocircuit/kocircuit/lib/file"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+
+// LocalFileSystem returns a file system backed by the local file system rooted at path.
+LocalFileSystem(root?) {
+	return: (
+		WriteFile: localWriteFile(root, path, body) {
+			return: file.GoWriteLocalFile(
+				path: filepath.Join(root, path)
+				body: body
+			)
+		} [root: root]
+	)
+}

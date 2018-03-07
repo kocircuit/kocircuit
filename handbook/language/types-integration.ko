@@ -1,0 +1,59 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+import "github.com/kocircuit/kocircuit/handbook/compiler"
+
+TypeIntegrationChapter() {
+	return: wiki.Chapter(
+		cross: IntegrationChapterLink()
+		bullet: "2.2.1."
+		label: "integration"
+		caption: "Ko Type Integration"
+		title: wiki.Text("Type integration")
+		content: integrationContent()
+	)
+}
+
+IntegrationChapterLink() {
+	return: wiki.Crosslink("language/type/integration")
+}
+
+integrationContent() {
+	return: (
+		P(f: `When functions invoke %% (implementations of transformations in Go),
+			the argument Ko values are “integrated” into, i.e. converted to, the Go type structure
+			of the gate. The process of type integration (from Ko to Go) is designed to aid
+			the programmer both in flexibility (and genericity), as well as in safety.`
+			a: wiki.Ref(ref: compiler.GateChapterLink(), nodes: wiki.Text(`gates`))
+		)
+		P(`Type integration enforces the following rules in converting a Ko type to a Go type.`)
+		P(f: `Suppose %% is a type (excluding varieties which are not convertible to Go types).
+			Then the following safe conversions will be applied automatically, as necessary:`
+			a: C(`T`)
+		)
+		CB(
+`// Ko types on left, Go types on right
+T -> T   // e.g. String -> string
+T -> *T   // e.g. String -> *string
+T -> []T   // e.g. String -> []string
+*T -> []T   // e.g. *String -> []string
+`
+		)
+		P(f: `Type integration is performed recursively to structure fields as well.`)
+		P(f: `When converting Ko structures to Go structures, the compiler enforces
+			two additional rules that add flexibility and safety.`
+		)
+		P(f: `First (safety), for every non-pointer or non-slice field in the (receiving) Go structure,
+			the compiler ensures that field is explicitly set in the Ko program. (This
+			rule has its roots in the %% field semantic in %%.)`
+			a: C(`required`)
+			a: wiki.URL(
+				href: "https://developers.google.com/protocol-buffers/"
+				nodes: wiki.Text("Protocol Buffers")
+			)
+		)
+		P(f: `Second (flexibility), the Ko structure being integrated into a Go structure
+			can be wider: it can have more fields than are recognized by the Go structure type.
+			Such additional fields are discarded.`)
+		P(f: `All integration rules are applied recursively throughout the full depth
+		of types at play.`)
+	)
+}

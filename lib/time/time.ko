@@ -1,0 +1,17 @@
+import "github.com/kocircuit/kocircuit/lib/time" // for go gates
+
+Sleep(duration?) {
+	return: time.GoSleep(duration: duration)
+}
+
+Second(scale?) {
+	return: time.GoSecond(scale: scale)
+}
+
+Minute(scale?) {
+	return: time.GoMinute(scale: scale)
+}
+
+Hour(scale?) {
+	return: time.GoHour(scale: scale)
+}

@@ -1,0 +1,24 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/lib/series"
+
+// Node returns a wiki node.
+Node(
+	cross // an optional crosslink for this node
+	nodes // a list of this node's child nodes
+	RenderHTML // (renderingCtx) returns the HTML of this node
+) {
+	return: (
+		CrosslinkURLs: nodesCrosslinkURLs[cross: cross, nodes: nodes]
+		RenderHTML: RenderHTML
+	)
+}
+
+// nodesRenderHTML returns a series of HTML elements.
+nodesRenderHTML(renderingCtx, nodes) {
+	return: series.Map(
+		over: nodes
+		with: nodeRenderHTML(renderingCtx, node?) {
+			return: node.RenderHTML(renderingCtx: renderingCtx)
+		} [renderingCtx: renderingCtx]
+	)
+}

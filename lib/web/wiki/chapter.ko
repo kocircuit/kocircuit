@@ -1,0 +1,99 @@
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/file"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/web/html"
+
+// Chapter returns a wiki chapter, comprising a title, an exposition (content) and subordinate chapter.
+Chapter(
+	cross // cross is an optional crosslink to this chapter.
+	bullet // bullet (a string) is the bullet to apply to the chapter.
+	label // label (a string) is an identifier for the chapter, used in URL paths.
+	caption // caption (a string) is a textual version of the chapter title.
+	title // title (a content node) is the title of the chapter.
+	content // content (a content node) captures the contents of the chapter page.
+	sub // sub is an optional list of subchapters (returned by SubChapter)
+	depth // depth (an int64) of chapter's TOC to show in the chapter page heading.
+) {
+	return: (
+		cross: cross
+		bullet: Pick(either: bullet, or: "")
+		label: Pick(either: label, or: "")
+		caption: String(caption)
+		title: title
+		content: content
+		sub: sub
+		depth: Pick(either: depth, or: 1)
+	)
+}
+
+TableOfContents(chapter, renderingCtx, depth, nonRoot) { // returns node
+	subCtx: RenderingCtxStack(renderingCtx: renderingCtx, chapter: chapter)
+	return: Rows(
+		Merge(
+			Branch(
+				if: HaveTrue(nonRoot)
+				then: ChapterRef[renderingCtx: renderingCtx, chapter: chapter]
+				else: ChapterTitle[renderingCtx: renderingCtx, chapter: chapter]
+			)
+			Branch(
+				if: integer.Less(0, depth)
+				then: series.Map[
+					over: chapter.sub
+					with: subTableOfContents[subRenderingCtx: subCtx, subDepth: integer.Sum(depth, -1)]
+				]
+			)
+		)
+	)
+}
+
+subTableOfContents(subRenderingCtx, subDepth, subChapter?) {
+	return: Indent(
+		TableOfContents(
+			chapter: subChapter
+			renderingCtx: subRenderingCtx
+			depth: subDepth
+			nonRoot: true
+		)
+	)
+}
+
+ChapterTitle(chapter?) { // returns content node
+	return: Title(
+		nodes: Text(chapter.bullet)
+		nodes: chapter.title
+	)
+}
+
+ChapterStrong(chapter?) { // returns content node
+	return: Strong(
+		nodes: Text(chapter.bullet)
+		nodes: chapter.title
+	)
+}
+
+ChapterRef(renderingCtx, chapter?) { // returns a list item content node
+	return: URL(
+		href: RenderingCtxPageURL(renderingCtx: renderingCtx, path: chapter.label)
+		nodes: Text(chapter.bullet)
+		nodes: chapter.title
+	)
+}
+
+ChapterPageHTML(chapter, renderingCtx) {
+	tableOfNavigation: TableOfNavigation(chapter: chapter, renderingCtx: renderingCtx)
+	tableOfContents: TableOfContents(chapter: chapter, renderingCtx: renderingCtx, depth: chapter.depth)
+	return: renderingCtx.PageHTML(
+		title: chapter.caption
+		navHTML: tableOfNavigation.RenderHTML(renderingCtx: renderingCtx)
+		tocHTML: tableOfContents.RenderHTML(renderingCtx: renderingCtx)
+		contentHTML: nodesRenderHTML(renderingCtx: renderingCtx, nodes: chapter.content)
+	)
+}
+
+ChapterPageFile(chapter, renderingCtx) { // returns an HTML file
+	return: file.File(
+		path: RenderingCtxPageURL(renderingCtx: renderingCtx, path: chapter.label)
+		write: html.Render[ChapterPageHTML(chapter: chapter, renderingCtx: renderingCtx)]
+	)
+}

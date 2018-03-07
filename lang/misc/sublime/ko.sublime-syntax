@@ -1,0 +1,173 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: Ko
+file_extensions: [ko]
+first_line_match: "-[*]-( Mode:)? Ko -[*]-"
+scope: source.ko
+variables:
+  identifier: '\b[[:alpha:]_][[:alnum:]_]*\b'
+  type_chars: '[[:alnum:]\s,._*&<>\[\]-]'
+  path: '(({{identifier}}\.)+{{identifier}})'
+  path_or_identifier: '(({{identifier}}\.)*{{identifier}})'
+  args_super_chars: '[^\(\)]'
+  newline: '[$,;\n]'
+
+contexts:
+  main:
+    - include: import # import "pkg/path" as pkg
+    - include: use # use "pkg/path" as pkg
+    - include: body
+
+  body:
+    - include: comment # // comment
+    - include: field # field:
+    - include: field-etc # ...:
+    - include: arg # arg
+    - include: string # "abc"
+    - include: number # 3.14
+    - include: invoke # Name—(...)
+    - include: augment # Name—[...]
+    - include: bracket-curly # {...}
+    - include: bracket-round # (...)
+    - include: bracket-square # [...]
+
+  field:
+    - match: '\b({{identifier}}\s*\:)'
+      scope: step.function.ko entity.name.label.ko
+
+  arg:
+    - match: '\b({{path}})'
+      scope: ref.ko
+    - match: '\b({{identifier}})'
+      scope: arg.ko
+
+  invoke:
+    - match: '\b({{path_or_identifier}})\s*(?=\()'
+      captures:
+        1: ref.ko
+
+  augment:
+    - match: '\b({{path_or_identifier}})\s*(?=\[)'
+      captures:
+        1: ref.ko entity.name.function.ko
+
+  bracket-curly:
+    - match: \{
+      push:
+        # - clear_scopes: true
+        # - meta_scope: curly.bracket.ko
+        - include: body
+        - match: \}
+          pop: true
+
+  bracket-round:
+    - match: \(
+      push:
+        # - clear_scopes: true
+        # - meta_scope: round.bracket.ko
+        - include: body
+        - match: \)
+          pop: true
+
+  bracket-square:
+    - match: \[
+      push:
+        # - clear_scopes: true
+        # - meta_scope: square.bracket.ko
+        - include: body
+        - match: \]
+          pop: true
+
+  import:
+    - match: '^\s*(import)\s+(?=")'
+      scope: meta.import.ko
+      captures:
+        1: keyword.control.import.ko
+      push:
+        - meta_scope: meta.import.ko
+        - include: comment
+        - include: string
+        - match: '$'
+          pop: true
+
+  use:
+    - match: '^\s*(use)\s+(?=")'
+      scope: meta.import.ko
+      captures:
+        1: keyword.control.import.ko
+      push:
+        - meta_scope: meta.import.ko
+        - include: comment
+        - include: string
+        - match: '$'
+          pop: true
+
+# shared with Go
+
+  comment:
+    - match: ^/\* =(\s*.*?)\s*= \*/$\n?
+      scope: comment.block.ko
+      captures:
+        1: meta.toc-list.banner.block.ko
+    - match: /\*
+      scope: punctuation.definition.comment.ko
+      push:
+        - meta_scope: comment.block.ko
+        - match: \*/
+          scope: punctuation.definition.comment.ko
+          pop: true
+    - match: \*/
+      scope: invalid.illegal.stray-comment-end.ko
+    - match: ^// =(\s*.*?)\s*=\s*$\n?
+      scope: comment.line.double-slash.banner.ko
+      captures:
+        1: meta.toc-list.banner.line.ko
+    - match: //
+      scope: punctuation.definition.comment.ko
+      push:
+        - meta_scope: comment.line.double-slash.ko
+        - match: \n
+          pop: true
+
+  string-escaped-char:
+    - match: '\\(\\|[abfnrutv''"]|x\h{2}|u\h{4}|U\h{8}|[0-7]{3})'
+      scope: constant.character.escape.ko
+    - match: \\.
+      scope: invalid.illegal.unknown-escape.ko
+
+  string-placeholder:
+    - match: |-
+        (?x)%
+            [#0\- +']*                                  # flags
+            (\[\d+\])?                                  # field (argument #)
+            [,;:_]?                                     # separator character (AltiVec)
+            ((-?\d+)|(\[\d+\])?\*)?                     # minimum field width
+            (\.((-?\d+)|(\[\d+\])?\*)?)?                # precision
+            [diouxXDOUeEfFgGaAcCsSpqnvtTbyYhHmMzZ%]     # conversion type
+      scope: constant.other.placeholder.ko
+    - match: "%"
+      scope: invalid.illegal.placeholder.ko
+
+  string:
+    - match: '"'
+      scope: punctuation.definition.string.begin.ko
+      push:
+        - meta_scope: string.quoted.double.ko
+        - match: '"'
+          scope: punctuation.definition.string.end.ko
+          pop: true
+        - include: string-placeholder
+        - include: string-escaped-char
+    - match: "`"
+      scope: punctuation.definition.string.begin.ko
+      push:
+        - meta_scope: string.quoted.raw.ko
+        - match: "`"
+          scope: punctuation.definition.string.end.ko
+          pop: true
+        - include: string-placeholder
+
+  number:
+    - match: '\b((0(x|X)\h*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)\b'
+      scope: number.ko constant.numeric.go

@@ -1,0 +1,17 @@
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+
+LinkingCtx(
+	chapterURL // chapterURL (a string) is the URL path of the enclosing chapter.
+) {
+	return: (chapterURL: chapterURL)
+}
+
+LinkingCtxStack(linkingCtx, chapter) {
+	return: LinkingCtx(
+		chapterURL: filepath.Join(linkingCtx.chapterURL, chapter.label)
+	)
+}
+
+LinkingCtxPageURL(linkingCtx?) {
+	return: filepath.Join(linkingCtx.chapterURL, IndexFilename())
+}

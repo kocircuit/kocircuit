@@ -1,0 +1,118 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+TypeUnificationChapter() {
+	return: wiki.Chapter(
+		cross: UnificationChapterLink()
+		bullet: "2.2.1."
+		label: "unification"
+		caption: "Ko Type Unification"
+		title: wiki.Text("Type unification")
+		content: unificationContent()
+	)
+}
+
+UnificationChapterLink() {
+	return: wiki.Crosslink("language/type/unification")
+}
+
+unificationContent() {
+	return: (
+		P(f: `Type “unification” is an operation that the compiler performs
+			in all places of a Ko program where: (i) multiple values are 
+			combined into a sequence, or (ii) different code paths return
+			values at the same place (e.g. the %% macro).`
+			a: wiki.Ref(ref: YieldMacroLink(), nodes: (C(`Yield`), wiki.Text(`macro`)))
+		)
+		H(`Unification for sequences`)
+		P(f: `In the first case, type unification helps determine a type for the
+			resulting sequence, while allowing safe variation in the types of the comprising values.
+			For instace, the following function tries to create a sequence out of a %% element
+			and a %% (sequence of strings) element.`
+			a: C(`String`)
+			a: C(`(String)`)
+		)
+		CB(
+`MakeSeqSeqString() {   // returns type ((String))
+	return: (
+		"abc"    // type String
+		("def", "ghi")   // type (String)
+	)
+}
+`
+		)
+		P(f: `Unification will find the smallest type such that both elements, %% and %%, are 
+			assignable to. Thus the unified element type is derived to be %%. As a result,
+			the function will return a sequence of sequence of strings, i.e. %%.`
+			a: C(`String`)
+			a: C(`(String)`)
+			a: C(`(String)`)
+			a: C(`((String))`)
+		)
+		H(`Unification for branching`)
+		P(f: `In the second case, unification ensures that regardless of which of
+			two code paths deliver a value to the same location, that value's type
+			can be known before execution unambiguously. This scenario is embodied
+			in the %% macro. For instance,`
+			a: C(`Yield`)
+		)
+		CB(
+`SaySomething(casual) {   // casual is a boolean argument
+	return: Yield(
+		if: casual
+		then: "hi"
+		else: ("hello", "world")
+	)
+}`
+		)
+		P(f: `In this example, which of the two values (%% or %%) is returned is something
+			that can only be determined at runtime, after the value of the boolean %% is known.`
+			a: C(`"hi"`)
+			a: C(`("hello", "world")`)
+			a: C(`casual`)
+		)
+		P(f: `However, the smallest common type that accommodates both values can
+			be determined at compile time, and it is %%, as in the previous example.
+			Knowing the type of branching operations before they have happened is
+			one of the key reasons for Ko's compiler ability do complete type inference.`
+			a: C(`(String)`)
+		)
+		H(`The algebra of unification`)
+		P(f: `Let %% denote the binary (two-argument) operation of type unification,
+			and let %%, %% and %% be types.
+			Unification is both commutative, %%, and associative, %%.`
+			a: C(`U`)
+			a: C(`p`)
+			a: C(`q`)
+			a: C(`r`)
+			a: C(`U(p, q) = U(q, p)`)
+			a: C(`U(p, U(q, r)) = U(U(p, q), r)`)
+		)
+		P(f: `To define unification we use the %% type to denote places where
+			no value was passed to a function argument in the Ko program
+			(this is determined at compile-time).`
+			a: C(`Empty`)
+		)
+		P(f: `Unification greedily follows the recursive rules:`
+		)
+		CB(
+`U(P, Empty) = *P
+U(P,(Q)) = (U(P,Q))   // for type T, (T) means "sequence of T" 
+U(*P, (Q)) = (U(P, Q))`
+		)
+		P(f: `When two structure types %% and %% are being unified, %%, 
+			the result is a new structure. The unified structure
+			has fields unifying the corresponding (by name)
+			fields in %% and %%. If either %% or %% has a field
+			which is missing in its counterpart, then this field is assumed
+			present (in the counterpart structure) with type %%.`
+			a: C(`p`)
+			a: C(`q`)
+			a: C(`U(p, q)`)
+			a: C(`p`)
+			a: C(`q`)
+			a: C(`p`)
+			a: C(`q`)
+			a: C(`Empty`)
+		)
+	)
+}

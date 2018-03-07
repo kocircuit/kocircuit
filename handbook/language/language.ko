@@ -1,0 +1,27 @@
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+
+LanguageChapter() {
+	return: wiki.Chapter(
+		depth: 3
+		bullet: "2."
+		label: "language"
+		caption: "Ko Language"
+		title: wiki.Text("Language")
+		sub: ModelChapter()
+		sub: TypesChapter()
+		sub: VarietiesChapter()
+		sub: MacrosChapter()
+		sub: ConcurrencyChapter()
+		sub: SyntaxChapter()
+		content: langContent()
+	)
+}
+
+langContent() {
+	return: (
+		P(`Ko is a programming language (syntax with a packaging system) for
+			a new general purpose (i.e. universal) model of computation, called Recursive Circuits,
+			which has the benfit (over Turing and von Neuman Machines) of
+			supporting full type inference, concurrency and deadlock-free synchronization.`)
+	)
+}

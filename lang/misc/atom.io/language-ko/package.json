@@ -1,0 +1,21 @@
+{
+  "name": "language-ko",
+  "description": "Ko language support in Atom",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "atom": "*",
+    "node": "*"
+  },
+  "homepage": "http://github.com/kocircuit/kocircuit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kocircuit/kocircuit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kocircuit/kocircuit/issues"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.16.0"
+  }
+}

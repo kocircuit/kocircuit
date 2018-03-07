@@ -1,0 +1,37 @@
+import "circuit"
+import "github.com/kocircuit/kocircuit/lib/web/wiki"
+import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+
+Resources() {
+	return: (
+		CircuitFig1()
+		CircuitFig2()
+		CircuitFig3()
+		CircuitFig4()
+		CircuitFig5()
+	)
+}
+
+CircuitFig1() {
+	return: wiki.Resource(repoFile: pkgFile("circuit-fig1.jpg"), url: "language/model/fig1")
+}
+
+CircuitFig2() {
+	return: wiki.Resource(repoFile: pkgFile("circuit-fig2.jpg"), url: "language/model/fig2")
+}
+
+CircuitFig3() {
+	return: wiki.Resource(repoFile: pkgFile("circuit-fig3.jpg"), url: "language/model/fig3")
+}
+
+CircuitFig4() {
+	return: wiki.Resource(repoFile: pkgFile("circuit-fig4.jpg"), url: "language/model/fig4")
+}
+
+CircuitFig5() {
+	return: wiki.Resource(repoFile: pkgFile("circuit-fig5.jpg"), url: "language/model/fig5")
+}
+
+pkgFile(name?) {
+	return: filepath.Join(circuit.PkgPath(), name)
+}

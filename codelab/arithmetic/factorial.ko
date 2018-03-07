@@ -1,0 +1,23 @@
+import "integer"
+
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabFact
+// 5040
+CodelabFact() {
+	return: Show(Fact(7))
+}
+
+// Fact returns the n-th factorial number.
+Fact(n?) {
+	return: Branch(
+		if: Or(
+			integer.Equal(n, 0)
+			integer.Equal(n, 1)
+		)
+		then: Return[1]
+		else: factStep[n]
+	)
+}
+
+factStep(m?) {
+	return: integer.Prod(m, Fact(integer.Sum(m, -1)))
+}
