@@ -379,12 +379,31 @@ var testEval = []struct {
 		Result: []string{"abc ", "X", " def ", "Y", " hij ", "Z", ""},
 	},
 	{ // recover/panic macro
-		// TODO: test recovery from parallel invocations
 		Enabled: true,
 		File: `
 		Main(x) {
 			return: Recover(
 				invoke: panicOnAll[x]
+				panic: Return
+			)
+		}
+		panicOnAll(x?) {
+			return: Panic(x)
+		}
+		`,
+		Arg: struct {
+			Ko_x string `ko:"name=x"`
+		}{
+			Ko_x: "msg",
+		},
+		Result: "msg",
+	},
+	{ // recover/panic macro through parallel execution
+		Enabled: true,
+		File: `
+		Main(x) {
+			return: Recover(
+				invoke: Parallel[panicOnAll[x]]
 				panic: Return
 			)
 		}

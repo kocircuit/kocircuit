@@ -8,9 +8,9 @@ type stepResult struct {
 	Step   *Step
 	Result Edge
 	Error  error
+	Panic  interface{}
 }
 
-// TODO: playPar must forward the first step panic unchanged.
 func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 	cross := map[*Step]chan Edge{}
 	for _, s := range f.Step {
@@ -20,7 +20,9 @@ func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 	abort := make(chan bool)
 	for i := 0; i < len(f.Step); i++ {
 		s := f.Step[len(f.Step)-1-i] // iterate steps in forward time order
+		// start step co-routine
 		go func() {
+			// wait for each incoming edge to pass a value, or an abort signal
 			gather := make([]GatherEdge, len(s.Gather))
 			for j, g := range s.Gather {
 				select {
@@ -30,6 +32,12 @@ func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 					gather[j] = GatherEdge{Field: g.Field, Edge: edge}
 				}
 			}
+			// catch a panic from the step execution
+			defer func() {
+				if r := recover(); r != nil {
+					done <- &stepResult{Step: s, Panic: r}
+				}
+			}()
 			if sReturns, err := StepPlayer.PlayStep(s, gather); err != nil {
 				done <- &stepResult{Step: s, Error: err}
 			} else {
@@ -42,10 +50,15 @@ func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 	}
 	r = map[*Step]Edge{}
 	aborting := false
+	var stepPanic interface{}
 	for i := 0; !aborting && i < len(f.Step); i++ {
 		select {
 		case sr := <-done:
-			if sr.Error != nil {
+			if sr.Panic != nil {
+				stepPanic = sr.Panic
+				close(abort)
+				aborting = true
+			} else if sr.Error != nil {
 				err = sr.Error
 				close(abort)
 				aborting = true
@@ -53,6 +66,9 @@ func playPar(f *Func, StepPlayer StepPlayer) (r map[*Step]Edge, err error) {
 				r[sr.Step] = sr.Result
 			}
 		}
+	}
+	if stepPanic != nil {
+		panic(stepPanic)
 	}
 	if err != nil {
 		return nil, err
