@@ -93,6 +93,17 @@ DIV(id, classes, children?, style) {
 	)
 }
 
+OBJECT(id, children?, attrs) {
+	return: xml.Element(
+		tag: "OBJECT"
+		attrs: Merge(
+			Attr(name: "id", values: id)
+			attrs
+		)
+		children: children
+	)
+}
+
 UL(id, classes, children?, style) {
 	return: xml.Element(
 		tag: "UL"
