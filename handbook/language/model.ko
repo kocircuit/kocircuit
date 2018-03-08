@@ -123,7 +123,7 @@ Fig1() {
 			a: wiki.LineBreak()
 		)
 		nodes: wiki.Rows(
-			wiki.Image(resource: images.CircuitFig1(), width: "300px")
+			wiki.Image(resource: images.CircuitFig1(), width: "280px")
 			wiki.CodeBlock(
 `F(x, y) {
 	return: Sum(
@@ -151,7 +151,7 @@ Fig2() {
 			\( F(x,y)=x^{\sin(y)}+\frac{1}{x^{\sin(y)}} \),
 			highlighting the repetition of \(x^{\sin(y)}\).`
 		)
-		nodes: wiki.Image(resource: images.CircuitFig2(), width: "300px")
+		nodes: wiki.Image(resource: images.CircuitFig2(), width: "280px")
 	)
 }
 
