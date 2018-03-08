@@ -1,0 +1,21 @@
+digraph G {
+	node [style=filled,color="#8090d0",fontsize=13,fontname="go",fontcolor="white"];
+	edge [labelfontname="go",labelfontsize=11,labelfontcolor="#8090d0",color="#80c080"];
+	//
+	x [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	y [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	return [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	//
+	{ rank = same; x; y; }
+	{ rank = source; x; y; }
+	{ rank = sink; return; }
+	//
+	sin_1 -> exp_1 [headlabel="exp"];
+	//
+	exp_1 [label="Exp"];
+	sin_1 [label="Sin"];
+	//
+	x -> exp_1 [headlabel="base"];
+	y -> sin_1 [headlabel="angle"];
+	exp_1 -> return;
+}
