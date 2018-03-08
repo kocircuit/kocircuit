@@ -13,23 +13,23 @@ Resources() {
 }
 
 CircuitFig1() {
-	return: wiki.Resource(repoFile: pkgFile("circuit-fig1.jpg"), url: "language/model/fig1")
+	return: wiki.Resource(repoFile: pkgFile("f1.svg"), url: "language/model/fig1.svg")
 }
 
 CircuitFig2() {
-	return: wiki.Resource(repoFile: pkgFile("circuit-fig2.jpg"), url: "language/model/fig2")
+	return: wiki.Resource(repoFile: pkgFile("f2.svg"), url: "language/model/fig2.svg")
 }
 
 CircuitFig3() {
-	return: wiki.Resource(repoFile: pkgFile("circuit-fig3.jpg"), url: "language/model/fig3")
+	return: wiki.Resource(repoFile: pkgFile("f3.svg"), url: "language/model/fig3.svg")
 }
 
 CircuitFig4() {
-	return: wiki.Resource(repoFile: pkgFile("circuit-fig4.jpg"), url: "language/model/fig4")
+	return: wiki.Resource(repoFile: pkgFile("f4.svg"), url: "language/model/fig4.svg")
 }
 
 CircuitFig5() {
-	return: wiki.Resource(repoFile: pkgFile("circuit-fig5.jpg"), url: "language/model/fig5")
+	return: wiki.Resource(repoFile: pkgFile("f5.svg"), url: "language/model/fig5.svg")
 }
 
 pkgFile(name?) {

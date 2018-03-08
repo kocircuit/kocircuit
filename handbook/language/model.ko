@@ -123,7 +123,7 @@ Fig1() {
 			a: wiki.LineBreak()
 		)
 		nodes: wiki.Rows(
-			wiki.Image(resource: images.CircuitFig1(), width: "400px")
+			wiki.Image(resource: images.CircuitFig1(), width: "300px")
 			wiki.CodeBlock(
 `F(x, y) {
 	return: Sum(
@@ -151,7 +151,7 @@ Fig2() {
 			\( F(x,y)=x^{\sin(y)}+\frac{1}{x^{\sin(y)}} \),
 			highlighting the repetition of \(x^{\sin(y)}\).`
 		)
-		nodes: wiki.Image(resource: images.CircuitFig2(), width: "400px")
+		nodes: wiki.Image(resource: images.CircuitFig2(), width: "300px")
 	)
 }
 
@@ -162,7 +162,7 @@ Fig3() {
 			\( G(x,y)=x^{\sin(y)} \) (top) and its corresponding Ko source (bottom).`
 		)
 		nodes: wiki.Rows(
-			wiki.Image(resource: images.CircuitFig3(), width: "250px")
+			wiki.Image(resource: images.CircuitFig3(), width: "170px")
 			wiki.CodeBlock(
 `G(x, y) {
 	return: Exp(
@@ -179,7 +179,7 @@ Fig4() {
 	return: wiki.Figure(
 		caption: P(`Circuit for \( F(x,y)=G(x,y)+\frac{1}{G(x,y)} \) with its corresponding Ko source code.`)
 		nodes: wiki.Rows(
-			wiki.Image(resource: images.CircuitFig4(), width: "300px")
+			wiki.Image(resource: images.CircuitFig4(), width: "230px")
 			wiki.CodeBlock(
 `F(x, y) {
 	return: Sum(
@@ -211,7 +211,7 @@ Fig5() {
 			a: wiki.Code(`g`)
 		)
 		nodes: wiki.Rows(
-			wiki.Image(resource: images.CircuitFig5(), width: "270px")
+			wiki.Image(resource: images.CircuitFig5(), width: "200px")
 			wiki.CodeBlock(
 `F(x, y) {
 	g: G(x: x, y: y)
