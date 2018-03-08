@@ -1,0 +1,33 @@
+digraph F {
+	node [style=filled,color="#a0a0b0",fontsize=13,fontname="go",fontcolor="white"];
+	edge [labelfontname="go",labelfontsize=11,labelfontcolor="#a0a0b0",color="#a0a0b0"];
+	//
+	x [shape=ellipse,style="",fontcolor="#a0a0b0",color="#a0a0b0"];
+	y [shape=ellipse,style="",fontcolor="#a0a0b0",color="#a0a0b0"];
+	return [shape=ellipse,style="",fontcolor="#a0a0b0",color="#a0a0b0"];
+	//
+	{ rank = same; x; y; }
+	{ rank = source; x; y; }
+	{ rank = sink; return; }
+	//
+	sin_1 -> exp_1 [headlabel="exp",color="#e08090",fontcolor="#e08090"];
+	sin_2 -> exp_2 [headlabel="exp",color="#5080e0",fontcolor="#5080e0"];
+	exp_1 -> ratio [headlabel="denom",color="#e08090"];
+	lit_1 -> ratio [headlabel="nom"];
+	ratio -> sum [headlabel="left"];
+	exp_2 -> sum [headlabel="right",color="#5080e0"];
+	//
+	exp_1 [label="Exp", color="#e08090"];
+	exp_2 [label="Exp", color="#5080e0"];
+	sin_1 [label="Sin", color="#e08090"];
+	sin_2 [label="Sin", color="#5080e0"];
+	lit_1 [label="1"];
+	ratio [label="Ratio"];
+	sum [label="Sum"];
+	//
+	x -> exp_1 [headlabel="base",color="#e08090"];
+	x -> exp_2 [headlabel="base",color="#5080e0"];
+	y -> sin_1 [headlabel="angle",color="#e08090"];
+	y -> sin_2 [headlabel="angle",color="#5080e0"];
+	sum -> return;
+}

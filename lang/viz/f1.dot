@@ -1,11 +1,10 @@
 digraph F {
-	node [style=filled,color="#a0b0d0",fontsize=13,fontname="luxi serif",fontcolor="white"];
-	edge [labelfontname="luxi serif",labelfontsize=11,labelfontcolor="#a0b0d0",color=grey];
-	label = "F";
+	node [style=filled,color="#8090d0",fontsize=13,fontname="go",fontcolor="white"];
+	edge [labelfontname="go",labelfontsize=11,labelfontcolor="#8090d0",color="#80c080"];
 	//
-	x [shape=ellipse,style="",fontcolor="#d07070",color=grey];
-	y [shape=ellipse,style="",fontcolor="#d07070",color=grey];
-	return [shape=ellipse,style="",fontcolor="#7070d0",color=grey];
+	x [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	y [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	return [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
 	//
 	{ rank = same; x; y; }
 	{ rank = source; x; y; }
