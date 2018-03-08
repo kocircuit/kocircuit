@@ -93,6 +93,16 @@ DIV(id, classes, children?, style) {
 	)
 }
 
+NAV(id, classes, children?, style) {
+	return: xml.Element(
+		tag: "NAV"
+		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "class", values: classes)
+		attrs: Attr(name: "style", values: style)
+		children: children
+	)
+}
+
 OBJECT(id, children?, attrs) {
 	return: xml.Element(
 		tag: "OBJECT"
