@@ -1,0 +1,29 @@
+digraph F {
+	node [style=filled,color="#8090d0",fontsize=13,fontname="go",fontcolor="white"];
+	edge [labelfontname="go",labelfontsize=11,labelfontcolor="#8090d0",color="#80c080"];
+	//
+	x [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	y [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	return [shape=ellipse,style="",fontcolor="#8090d0",color="#80c080"];
+	//
+	{ rank = same; x; y; }
+	{ rank = source; x; y; }
+	{ rank = sink; return; }
+	//
+	g_1 -> ratio [headlabel="denom"];
+	lit_1 -> ratio [headlabel="nom"];
+	ratio -> sum [headlabel="left"];
+	g_2 -> sum [headlabel="right"];
+	//
+	g_1 [label="G"];
+	g_2 [label="G"];
+	lit_1 [label="1"];
+	ratio [label="Ratio"];
+	sum [label="Sum"];
+	//
+	x -> g_1 [headlabel="x"];
+	x -> g_2 [headlabel="x"];
+	y -> g_1 [headlabel="y"];
+	y -> g_2 [headlabel="y"];
+	sum -> return;
+}
