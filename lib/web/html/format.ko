@@ -1,7 +1,7 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
 FmtDIV(f?, a) {
-	return: html.DIV(Fmt(f: f, a: a))
+	return: DIV(Fmt(f: f, a: a))
 }
 
 Fmt(f?, a) {
