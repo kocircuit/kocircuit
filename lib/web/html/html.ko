@@ -316,9 +316,12 @@ FIGURE(id, classes, caption, children) {
 		attrs: Attr(name: "class", values: classes)
 		children: Merge(
 			children
-			xml.Element(
-				tag: "FIGCAPTION"
-				children: caption
+			Branch(
+				if: Have(caption)
+				then: xml.Element[
+					tag: "FIGCAPTION"
+					children: caption
+				]
 			)
 		)
 	)

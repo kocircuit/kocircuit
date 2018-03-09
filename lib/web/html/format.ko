@@ -4,6 +4,10 @@ FmtDIV(f?, a) {
 	return: DIV(Fmt(f: f, a: a))
 }
 
+FmtP(f?, a) {
+	return: P(Fmt(f: f, a: a))
+}
+
 Fmt(f?, a) {
 	return: Format(
 		format: f
