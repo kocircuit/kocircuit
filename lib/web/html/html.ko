@@ -208,10 +208,11 @@ CODE(id, classes, children?) {
 	)
 }
 
-P(id, classes, children?) {
+P(id, style, classes, children?) {
 	return: xml.Element(
 		tag: "P"
 		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "style", values: style)
 		attrs: Attr(name: "class", values: classes)
 		children: children
 	)
@@ -309,10 +310,11 @@ IMG(src?, id, classes, alt, height, width) {
 	)
 }
 
-FIGURE(id, classes, caption, children) {
+FIGURE(id, style, classes, caption, children) {
 	return: xml.Element(
 		tag: "FIGURE"
 		attrs: Attr(name: "id", values: id)
+		attrs: Attr(name: "style", values: style)
 		attrs: Attr(name: "class", values: classes)
 		children: Merge(
 			children
