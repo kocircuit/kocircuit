@@ -27,10 +27,13 @@ func (EvalExpectMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effec
 	a := arg.(*StructSymbol).SelectMonadic()
 	if IsEmptySymbol(a) {
 		panic(
-			MakeStructSymbol(
-				FieldSymbols{
-					{Name: "expected", Value: BasicTrue}, // indicate panic originates from Expect macro
-				},
+			NewEvalPanic(
+				span,
+				MakeStructSymbol(
+					FieldSymbols{
+						{Name: "expected", Value: BasicTrue}, // indicate panic originates from Expect macro
+					},
+				),
 			),
 		)
 	} else {

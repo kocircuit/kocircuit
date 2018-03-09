@@ -33,7 +33,10 @@ func (EvalSpinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 		go func() {
 			defer func() {
 				if r := recover(); r != nil {
-					log.Printf("spinning panic: %v", r)
+					evalPanic := r.(*EvalPanic)
+					log.Println(
+						evalPanic.Origin.Errorf(nil, "panic inside spin not recovered: %v", evalPanic.Panic),
+					)
 					done <- &waitResult{Success: false, Returned: EmptySymbol{}}
 					close(done)
 				}

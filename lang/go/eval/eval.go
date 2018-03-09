@@ -30,8 +30,26 @@ func NewEvaluator(faculty Faculty, repo Repo) *Evaluate {
 	}
 }
 
-func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (Symbol, Effect, error) {
-	if shape, effect, err := eval.Program.EvalSeq(span, f, arg); err != nil { // top-level evaluation strategy is sequential
+type EvalPanic struct {
+	Origin *Span  `ko:"name=origin"`
+	Panic  Symbol `ko:"name=panic"`
+}
+
+func NewEvalPanic(origin *Span, panik Symbol) *EvalPanic {
+	return &EvalPanic{Origin: origin, Panic: panik}
+}
+
+func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, eff Effect, err error) {
+	// catch unrecovered evaluator panics
+	defer func() {
+		if r := recover(); r != nil {
+			evalPanic := r.(*EvalPanic)
+			returned, eff, err = nil, nil, evalPanic.Origin.Errorf(nil, "unrecovered panic: %v", evalPanic.Panic)
+			return
+		}
+	}()
+	// top-level evaluation strategy is sequential
+	if shape, effect, err := eval.Program.EvalSeq(span, f, arg); err != nil {
 		return nil, nil, err
 	} else {
 		if sym, ok := shape.(Symbol); ok {

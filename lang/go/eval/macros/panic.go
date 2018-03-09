@@ -29,7 +29,9 @@ func (m EvalPanicMacro) Help() string {
 }
 
 func (EvalPanicMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	panic(arg.(*StructSymbol).SelectMonadic())
+	panic(
+		NewEvalPanic(span, arg.(*StructSymbol).SelectMonadic()),
+	)
 }
 
 type EvalRecoverMacro struct{}
@@ -59,7 +61,8 @@ func (EvalRecoverMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effe
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			panicKnot := Knot{{Name: "", Shape: r.(Symbol), Effect: nil, Frame: span}}
+			evalPanic := r.(*EvalPanic)
+			panicKnot := Knot{{Name: "", Shape: evalPanic.Panic, Effect: nil, Frame: span}}
 			returns, effect, err = panicVty.Evoke(span, panicKnot)
 			return
 		}
