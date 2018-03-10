@@ -1,0 +1,15 @@
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/series"
+
+// ko play github.com/kocircuit/kocircuit/lib/sync/TestAll
+TestAll() {
+	return: And(
+		TestRing()
+	)
+}
+
+TestRing() {
+	conn: MakeRing()
+	draw: series.Map(over: (1, 2, 3, 4, 5), with: conn.Lease)
+	return: integer.Equal(conn.Lease(after: draw), 5)
+}

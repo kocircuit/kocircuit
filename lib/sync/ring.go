@@ -8,12 +8,12 @@ import (
 )
 
 func init() {
-	RegisterEvalGate(new(GoDialRing))
+	RegisterEvalGate(new(GoMakeRing))
 	RegisterEvalGate(new(GoRingLease))
 }
 
-type GoDialRing struct {
-	Cap int64 `ko:"name=cap"`
+type GoMakeRing struct {
+	Cap int64 `ko:"name=cap,monadic"`
 }
 
 type GoRingConn interface {
@@ -21,7 +21,7 @@ type GoRingConn interface {
 	Lease() int64 // returns the sequential number of the lease
 }
 
-func (g *GoDialRing) Play(ctx *runtime.Context) GoRingConn {
+func (g *GoMakeRing) Play(ctx *runtime.Context) GoRingConn {
 	return newGoSyncRing(int(g.Cap))
 }
 

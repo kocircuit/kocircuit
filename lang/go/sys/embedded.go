@@ -14,6 +14,7 @@ import (
 	_ "github.com/kocircuit/kocircuit/lib/net/http"
 	_ "github.com/kocircuit/kocircuit/lib/shell"
 	_ "github.com/kocircuit/kocircuit/lib/strings"
+	_ "github.com/kocircuit/kocircuit/lib/sync"
 	_ "github.com/kocircuit/kocircuit/lib/time"
 	_ "github.com/kocircuit/kocircuit/lib/web/xml"
 	// _ "github.com/kocircuit/kocircuit/x/tree"

@@ -1,6 +1,11 @@
 import "github.com/kocircuit/kocircuit/lib/sync" as gosync // access go gates
 
-// DialRing returns a synchronization ring, uniquely identified by its name and capacity.
-DialRing(name?, cap) {
-	return: Bug("not impl")
+// MakeRing returns a synchronization ring with a given capacity.
+MakeRing(cap?) {
+	conn: gosync.GoMakeRing(cap: Pick(either: cap, or: 1))
+	return: (
+		Lease: ringLease(conn) {
+			return: gosync.GoRingLease(conn: conn)
+		} [conn: conn]
+	)
 }
