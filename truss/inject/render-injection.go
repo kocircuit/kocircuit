@@ -5,23 +5,23 @@ import (
 	"text/template"
 )
 
-type ElevatorProgram struct {
+type InjectionProgram struct {
 	GatePkgPath   string   `ko:"name=gatePkgPath"`
 	GateTypeName  string   `ko:"name=gateTypeName"`
 	InjectPkgPath []string `ko:"name=injectPkgPath"`
 }
 
-func RenderElevatorGoProgram(prog *ElevatorProgram) string {
+func (prog *InjectionProgram) Render() string {
 	var w bytes.Buffer
-	if err := elevatorTmpl.Execute(&w, prog); err != nil {
+	if err := injectionTmpl.Execute(&w, prog); err != nil {
 		panic(err)
 	}
 	return w.String()
 }
 
-var elevatorTmpl = template.Must(template.New("").Parse(elevatorSrc))
+var injectionTmpl = template.Must(template.New("").Parse(injectionSrc))
 
-var elevatorSrc = `
+var injectionSrc = `
 package main
 
 import (

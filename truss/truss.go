@@ -1,11 +1,10 @@
-// Package truss provides a framework for source manipulations within a repo.
+// Package truss provides a framework for code generation.
 package truss
 
-type Truss struct {
-	Repo string       `ko:"name=repo"`
-	Go   *GoToolchain `ko:"name=go"`
-}
+import (
+	. "github.com/kocircuit/kocircuit/lang/go/kit/toolchain"
+)
 
-type GoToolchain struct {
-	GoBinaryPath `ko:"name=goBinaryPath"`
+type TrussCtx struct {
+	Go *GoToolchain `ko:"name=go"` // compiler + repo
 }
