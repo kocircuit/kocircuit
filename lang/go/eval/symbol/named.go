@@ -37,7 +37,7 @@ func (named *NamedSymbol) Hash() string {
 }
 
 func (named *NamedSymbol) GoType() reflect.Type {
-	return reflect.TypeOf(named.Value)
+	return named.Value.Type()
 }
 
 func (named *NamedSymbol) Type() Type {

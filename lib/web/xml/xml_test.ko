@@ -11,10 +11,3 @@ TestXML() {
 	)
 	return: Print(xml.Render(elem), "\n")
 }
-
-TestXML1() {
-	return: xml.Element(
-		tag: "div"
-		children: ShowType(xml.Text("Здравей, свят!"))
-	)
-}
