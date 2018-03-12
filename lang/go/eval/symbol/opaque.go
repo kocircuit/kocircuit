@@ -46,6 +46,10 @@ func (opaque *OpaqueSymbol) Invoke(span *Span) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "opaque value %v cannot be invoked", opaque)
 }
 
+func (opaque *OpaqueSymbol) GoType() reflect.Type {
+	return opaque.Type_.Type
+}
+
 func (opaque *OpaqueSymbol) Type() Type {
 	return opaque.Type_
 }
@@ -61,5 +65,5 @@ type OpaqueType struct {
 func (opaque *OpaqueType) IsType() {}
 
 func (opaque *OpaqueType) Splay() Tree {
-	return NoQuote{fmt.Sprintf("<%v>", opaque.Type)}
+	return NoQuote{fmt.Sprintf("Opaque<%v>", opaque.Type)}
 }

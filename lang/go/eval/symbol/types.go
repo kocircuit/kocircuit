@@ -6,7 +6,7 @@ import (
 
 // Type implementations:
 //	BasicType, EmptyType,
-// *SeriesType, *StructType, *NamedType, *OpaqueType, VarietyType
+// *SeriesType, *StructType, NamedType, *OpaqueType, VarietyType
 // *OptionalType
 type Type interface {
 	Splayer

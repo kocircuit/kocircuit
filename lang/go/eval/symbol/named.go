@@ -41,7 +41,7 @@ func (named *NamedSymbol) GoType() reflect.Type {
 }
 
 func (named *NamedSymbol) Type() Type {
-	return &NamedType{
+	return NamedType{
 		Type: named.GoType(),
 	}
 }
@@ -92,5 +92,5 @@ type NamedType struct {
 func (named NamedType) IsType() {}
 
 func (named NamedType) Splay() Tree {
-	return NoQuote{fmt.Sprintf("%s.%s", named.Type.PkgPath(), named.Type.Name())}
+	return NoQuote{fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
 }

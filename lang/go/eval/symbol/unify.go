@@ -1,6 +1,8 @@
 package symbol
 
 import (
+	"reflect"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
@@ -52,7 +54,7 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case *SeriesType:
 			return ctx.UnifySeries(xt, yt)
-		case BasicType, *OpaqueType, *StructType, VarietyType:
+		case BasicType, *OpaqueType, *StructType, VarietyType, NamedType:
 			if elem, err := ctx.Unify(xt.Elem, y); err != nil {
 				return nil, err
 			} else {
@@ -72,6 +74,8 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case *OpaqueType:
 			return ctx.UnifyOpaque(xt, yt)
+		case NamedType:
+			return ctx.UnifyOpaqueNamed(xt, yt)
 		}
 	case *StructType:
 		switch yt := y.(type) {
@@ -86,6 +90,13 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case VarietyType:
 			return VarietyType{}, nil
+		}
+	case NamedType:
+		switch yt := y.(type) {
+		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *StructType, VarietyType:
+			return ctx.Unify(y, x) // symmetry
+		case NamedType:
+			return ctx.UnifyNamed(xt, yt)
 		}
 	}
 	return nil, ctx.Errorf(nil, "%s and %s cannot be unified", Sprint(x), Sprint(y))
@@ -112,5 +123,23 @@ func (ctx *typingCtx) UnifySeries(x, y *SeriesType) (*SeriesType, error) {
 		return nil, ctx.Errorf(nil, "cannot unify sequences %s and %s", Sprint(x), Sprint(y))
 	} else {
 		return &SeriesType{Elem: xyElem}, nil
+	}
+}
+
+func (ctx *typingCtx) UnifyNamed(x, y NamedType) (Type, error) {
+	if x.Type == y.Type {
+		return x, nil
+	} else {
+		return nil, ctx.Errorf(nil, "named types %s and %s cannot be unified", Sprint(x), Sprint(y))
+	}
+}
+
+func (ctx *typingCtx) UnifyOpaqueNamed(x *OpaqueType, y NamedType) (Type, error) {
+	if y.Type.AssignableTo(x.Type) {
+		return x, nil
+	} else if reflect.PtrTo(y.Type).AssignableTo(x.Type) {
+		return x, nil
+	} else {
+		return nil, ctx.Errorf(nil, "opaque and named types %s and %s cannot be unified", Sprint(x), Sprint(y))
 	}
 }

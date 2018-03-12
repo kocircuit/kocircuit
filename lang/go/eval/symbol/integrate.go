@@ -14,7 +14,8 @@ func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 }
 
 func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if typeName := TypeName(t); typeName != "" {
+	if typeName := TypeName(t); typeName != "" &&
+		t.Kind() != reflect.Interface { // the case "t is an interface" is handled below
 		return ctx.IntegrateNamed(s, t)
 	}
 	switch t.Kind() {
@@ -97,19 +98,29 @@ func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Valu
 	switch u := s.(type) {
 	case *OpaqueSymbol:
 		if u.Type_.Type.AssignableTo(t) {
-			w := reflect.New(t).Elem()
-			w.Set(u.Value)
-			return w, nil
+			if u.Value.CanAddr() {
+				return u.Value, nil
+			} else {
+				w := reflect.New(t).Elem()
+				w.Set(u.Value)
+				return w, nil
+			}
 		} else {
 			return reflect.Value{},
 				ctx.Errorf(nil, "cannot integrate opaque type %v into go interface %v", u.Type_, t)
 		}
-	case *NamedSymbol:
+	case *NamedSymbol: // matches logic in UnifyOpaqueNamed
 		goType := u.GoType()
 		if goType.AssignableTo(t) { // T -> interface
 			return u.Value, nil
-		} else if reflect.PtrTo(goType).AssignableTo(t) && u.Value.CanAddr() { // *T -> interface
-			return u.Value.Addr(), nil
+		} else if reflect.PtrTo(goType).AssignableTo(t) { // *T -> interface
+			if u.Value.CanAddr() {
+				return u.Value.Addr(), nil
+			} else {
+				w := reflect.New(goType)
+				w.Elem().Set(u.Value)
+				return w, nil
+			}
 		} else {
 			return reflect.Value{},
 				ctx.Errorf(nil, "cannot integrate named type %v into go interface %v", u.GoType(), t)
