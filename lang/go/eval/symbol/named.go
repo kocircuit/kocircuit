@@ -91,6 +91,10 @@ type NamedType struct {
 
 func (named NamedType) IsType() {}
 
+func (named NamedType) String() string {
+	return Sprint(named)
+}
+
 func (named NamedType) Splay() Tree {
 	return NoQuote{fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
 }

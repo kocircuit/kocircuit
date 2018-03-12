@@ -86,6 +86,10 @@ type SeriesType struct {
 
 func (*SeriesType) IsType() {}
 
+func (st *SeriesType) String() string {
+	return Sprint(st)
+}
+
 func (st *SeriesType) Splay() Tree {
 	return Series{
 		Label:   Label{Path: "", Name: ""},

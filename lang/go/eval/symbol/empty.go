@@ -55,6 +55,10 @@ type EmptyType struct{}
 
 func (EmptyType) IsType() {}
 
+func (EmptyType) String() string {
+	return Sprint(EmptyType{})
+}
+
 func (EmptyType) Splay() Tree {
 	return NoQuote{"Empty"}
 }

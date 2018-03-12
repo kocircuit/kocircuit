@@ -70,6 +70,10 @@ type VarietyType struct{}
 
 func (VarietyType) IsType() {}
 
+func (VarietyType) String() string {
+	return Sprint(VarietyType{})
+}
+
 func (VarietyType) Splay() Tree {
 	return NoQuote{"Variety"}
 }

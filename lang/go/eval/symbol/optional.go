@@ -10,6 +10,10 @@ type OptionalType struct {
 
 func (*OptionalType) IsType() {}
 
+func (ot *OptionalType) String() string {
+	return Sprint(ot)
+}
+
 func (ot *OptionalType) Splay() Tree {
 	return Sometimes{ot.Elem.Splay()}
 }

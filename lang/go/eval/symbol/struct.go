@@ -175,6 +175,10 @@ type FieldType struct {
 
 func (*StructType) IsType() {}
 
+func (st *StructType) String() string {
+	return Sprint(st)
+}
+
 func (st *StructType) Splay() Tree {
 	nameTrees := make([]NameTree, len(st.Field))
 	for i, field := range st.Field {

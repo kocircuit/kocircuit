@@ -9,6 +9,7 @@ import (
 // *SeriesType, *StructType, NamedType, *OpaqueType, VarietyType
 // *OptionalType
 type Type interface {
+	String() string
 	Splayer
 	IsType()
 }

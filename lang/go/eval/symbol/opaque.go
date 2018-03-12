@@ -63,6 +63,10 @@ type OpaqueType struct {
 
 func (opaque *OpaqueType) IsType() {}
 
+func (opaque *OpaqueType) String() string {
+	return Sprint(opaque)
+}
+
 func (opaque *OpaqueType) Splay() Tree {
 	return NoQuote{fmt.Sprintf("Opaque<%v>", opaque.Type)}
 }
