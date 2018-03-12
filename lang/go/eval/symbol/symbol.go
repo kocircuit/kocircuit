@@ -8,8 +8,8 @@ import (
 )
 
 type Symbol interface {
-	Shape
-	Splayer
+	Shape   // String, Select, Augment, Invoke
+	Splayer // Splay
 	Type() Type
 	Hash() string
 	Equal(Symbol) bool
