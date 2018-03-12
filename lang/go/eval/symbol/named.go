@@ -36,9 +36,13 @@ func (named *NamedSymbol) Hash() string {
 	return named.Splay().TreeHash()
 }
 
+func (named *NamedSymbol) GoType() reflect.Type {
+	return reflect.TypeOf(named.Value)
+}
+
 func (named *NamedSymbol) Type() Type {
 	return &NamedType{
-		Type: reflect.TypeOf(named.Value),
+		Type: named.GoType(),
 	}
 }
 

@@ -14,10 +14,9 @@ func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 }
 
 func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
-	// Symbol values are incompatible with the weaver. Use cases?
-	// if t == typeOfSymbol {
-	// 	return reflect.ValueOf(s), nil
-	// }
+	if typeName := TypeName(t); typeName != "" {
+		return ctx.IntegrateNamed(s, t)
+	}
 	switch t.Kind() {
 	case reflect.Invalid:
 		panic("o")
@@ -162,4 +161,18 @@ func FindIntegrationField(from *StructSymbol, to reflect.StructField) *FieldSymb
 		}
 	}
 	return from.FindName(name)
+}
+
+func (ctx *typingCtx) IntegrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if named, ok := s.(*NamedSymbol); ok {
+		stype := named.GoType()
+		if stype == t {
+			return named.Value, nil
+		} else {
+			return reflect.Value{},
+				ctx.Errorf(nil, "cannot integrate named type %s to named type %s", TypeName(stype), TypeName(t))
+		}
+	} else {
+		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %v to named type %s", s, TypeName(t))
+	}
 }

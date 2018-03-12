@@ -14,10 +14,6 @@ func Deconstruct(span *Span, v reflect.Value) (Symbol, error) {
 }
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
-	// Symbol values are incompatible with the weaver. Use cases?
-	// if v.Type().Implements(typeOfSymbol) {
-	// 	return v.Interface().(Symbol), nil
-	// }
 	if v.IsValid() {
 		if typeName := TypeName(v.Type()); typeName != "" {
 			return &NamedSymbol{Value: v}, nil
