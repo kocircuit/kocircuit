@@ -3,8 +3,6 @@ package inject
 import (
 	"fmt"
 	"reflect"
-
-	. "github.com/kocircuit/kocircuit/truss"
 )
 
 type InjectPlay struct {
@@ -12,7 +10,8 @@ type InjectPlay struct {
 	InjectPkgPath []string
 }
 
-func (g *InjectPlay) Play(ctx *TrussCtx) (result interface{}, err error) {
+/*
+func (g *InjectPlay) Play() (result interface{}, err error) {
 	gatePkgPath, gateName, err := gateTypeName(g.Gate)
 	injProg := &InjectionProgram{
 		GatePkgPath:   gatePkgPath,
@@ -30,6 +29,7 @@ func (g *InjectPlay) Play(ctx *TrussCtx) (result interface{}, err error) {
 	// read results file
 	XXX
 }
+*/
 
 func gateTypeName(v interface{}) (pkgPath, typeName string, err error) {
 	t := reflect.TypeOf(v)
