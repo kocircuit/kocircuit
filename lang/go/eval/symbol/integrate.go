@@ -13,10 +13,33 @@ func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 	return ctx.Integrate(s, t)
 }
 
+func (ctx *typingCtx) IntegrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
+	tName := TypeName(t)
+	if tName == "" {
+		return reflect.Value{}, ctx.Errorf(nil, "to-type is not named")
+	}
+	if t.Kind() == reflect.Interface {
+		// interface named types are handled in Integrate
+		return reflect.Value{}, ctx.Errorf(nil, "to-type is an interface")
+	}
+	sNamed, ok := s.(*NamedSymbol)
+	if !ok {
+		return reflect.Value{}, ctx.Errorf(nil, "from-symbol is not named")
+	}
+	sGoType := sNamed.GoType()
+	if sGoType == t {
+		return sNamed.Value, nil
+	} else {
+		return reflect.Value{}, ctx.Errorf(nil,
+			"cannot integrate named type %s to named type %s",
+			TypeName(sGoType), TypeName(t),
+		)
+	}
+}
+
 func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if typeName := TypeName(t); typeName != "" &&
-		t.Kind() != reflect.Interface { // the case "t is an interface" is handled below
-		return ctx.IntegrateNamed(s, t)
+	if r, err := ctx.IntegrateNamed(s, t); err == nil { // try
+		return r, nil
 	}
 	switch t.Kind() {
 	case reflect.Invalid:
@@ -184,18 +207,4 @@ func FindIntegrationField(from *StructSymbol, to reflect.StructField) *FieldSymb
 		}
 	}
 	return from.FindName(name)
-}
-
-func (ctx *typingCtx) IntegrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if named, ok := s.(*NamedSymbol); ok {
-		stype := named.GoType()
-		if stype == t {
-			return named.Value, nil
-		} else {
-			return reflect.Value{},
-				ctx.Errorf(nil, "cannot integrate named type %s to named type %s", TypeName(stype), TypeName(t))
-		}
-	} else {
-		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %v to named type %s", s, TypeName(t))
-	}
 }
