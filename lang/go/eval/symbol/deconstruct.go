@@ -83,10 +83,7 @@ func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 }
 
 func (ctx *typingCtx) DeconstructInterface(v reflect.Value) (Symbol, error) {
-	return &OpaqueSymbol{
-		Type_: &OpaqueType{Type: v.Type()},
-		Value: v,
-	}, nil
+	return &OpaqueSymbol{Value: v}, nil
 }
 
 func (ctx *typingCtx) DeconstructSlice(v reflect.Value) (Symbol, error) {

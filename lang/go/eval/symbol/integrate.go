@@ -120,7 +120,7 @@ func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error)
 func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Value, error) {
 	switch u := s.(type) {
 	case *OpaqueSymbol:
-		if u.Type_.Type.AssignableTo(t) {
+		if u.GoType().AssignableTo(t) {
 			if u.Value.CanAddr() {
 				return u.Value, nil
 			} else {
@@ -130,7 +130,7 @@ func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Valu
 			}
 		} else {
 			return reflect.Value{},
-				ctx.Errorf(nil, "cannot integrate opaque type %v into go interface %v", u.Type_, t)
+				ctx.Errorf(nil, "cannot integrate opaque type %v into go interface %v", u.Type(), t)
 		}
 	case *NamedSymbol: // matches logic in UnifyOpaqueNamed
 		goType := u.GoType()

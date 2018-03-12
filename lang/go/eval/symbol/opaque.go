@@ -10,7 +10,6 @@ import (
 )
 
 type OpaqueSymbol struct {
-	Type_ *OpaqueType   `ko:"name=type"`
 	Value reflect.Value `ko:"name=value"`
 }
 
@@ -47,11 +46,11 @@ func (opaque *OpaqueSymbol) Invoke(span *Span) (Shape, Effect, error) {
 }
 
 func (opaque *OpaqueSymbol) GoType() reflect.Type {
-	return opaque.Type_.Type
+	return opaque.Value.Type()
 }
 
 func (opaque *OpaqueSymbol) Type() Type {
-	return opaque.Type_
+	return &OpaqueType{Type: opaque.Value.Type()}
 }
 
 func (opaque *OpaqueSymbol) Splay() Tree {
