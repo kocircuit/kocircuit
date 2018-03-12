@@ -7,8 +7,9 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-// Symbol implementers:
-//	BasicSymbol, EmptySymbol, SeriesSymbol, StructSymbol, NamedSymbol, OpaqueSymbol
+// Symbol implementations:
+//	BasicSymbol, EmptySymbol,
+// *SeriesSymbol, *StructSymbol, *NamedSymbol, *OpaqueSymbol, *VarietySymbol
 type Symbol interface {
 	Shape   // String, Select, Augment, Invoke
 	Splayer // Splay
@@ -31,10 +32,3 @@ func (syms Symbols) Types() Types {
 	}
 	return types
 }
-
-type Type interface {
-	Splayer
-	IsType()
-}
-
-type Types []Type

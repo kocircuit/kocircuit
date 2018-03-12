@@ -94,16 +94,20 @@ func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error)
 }
 
 func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if opaque, ok := s.(*OpaqueSymbol); !ok {
-		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate non-opaque %s into go interface %v", Sprint(s), t)
-	} else {
+	switch s.(type) {
+	case *OpaqueSymbol:
 		if opaque.Type_.Type.AssignableTo(t) {
 			w := reflect.New(t).Elem()
 			w.Set(opaque.Value)
 			return w, nil
 		} else {
-			return reflect.Value{}, ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", opaque.Type_, t)
+			return reflect.Value{},
+				ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", opaque.Type_, t)
 		}
+	case *NamedType:
+		XXX
+	default:
+		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %v into go interface %v", s, t)
 	}
 }
 

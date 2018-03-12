@@ -14,7 +14,7 @@ func LiftToSeries(span *Span, sym Symbol) *SeriesSymbol {
 		}
 	case *SeriesSymbol:
 		return u
-	case BasicSymbol, *OpaqueSymbol, *StructSymbol, *VarietySymbol:
+	case BasicSymbol, *OpaqueSymbol, *StructSymbol, *VarietySymbol, *NamedSymbol:
 		return &SeriesSymbol{
 			Type_: &SeriesType{Elem: u.Type()},
 			Elem:  Symbols{u},
