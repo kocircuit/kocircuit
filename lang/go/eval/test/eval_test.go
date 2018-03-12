@@ -12,9 +12,11 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/subset"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
 func TestEval(t *testing.T) {
+	RegisterEvalGateAt("test", "Gate", new(testNamedGate))
 	for i, test := range testEval {
 		if !test.Enabled {
 			continue
@@ -441,4 +443,33 @@ var testEval = []struct {
 		},
 		Result: true,
 	},
+	{ // test named values
+		Enabled: true,
+		File: `
+		import "test"
+		Main(x) {
+			return: test.Gate(int64: x, same: test.Gate(int64: 2))
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: &testNamedGate{
+			Int64: 3,
+			Same: &testNamedGate{
+				Int64: 2,
+			},
+		},
+	},
+}
+
+type testNamedGate struct {
+	Int64 int64          `ko:"name=int64"`
+	Same  *testNamedGate `ko:"name=same"`
+}
+
+func (g *testNamedGate) Play(ctx *runtime.Context) *testNamedGate {
+	return g
 }
