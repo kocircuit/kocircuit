@@ -44,24 +44,24 @@ func registerEvalProtoFile(protoFile string) error {
 				MsgType:   msgType,
 			},
 		)
-		RegisterEvalPkgMacro( // ReadProto<MsgName>
+		RegisterEvalPkgMacro( // UnmarshalProto<MsgName>
 			msgType.PkgPath(),
-			fmt.Sprintf("ReadProto%s", msgName),
-			&EvalReadProtoMacro{
+			fmt.Sprintf("UnmarshalProto%s", msgName),
+			&EvalUnmarshalProtoMacro{
 				ProtoPkg:  protoPkg,
 				ProtoName: msgName,
 				MsgType:   msgType,
 			},
 		)
-		// RegisterEvalPkgMacro( // WriteProto<MsgName>
-		// 	msgType.PkgPath(),
-		// 	fmt.Sprintf("WriteProto%s", msgName),
-		// 	&EvalWriteProtoMacro{
-		// 		ProtoPkg:  protoPkg,
-		// 		ProtoName: msgName,
-		// 		MsgType:   msgType,
-		// 	},
-		// )
+		RegisterEvalPkgMacro( // MarshalProto<MsgName>
+			msgType.PkgPath(),
+			fmt.Sprintf("MarshalProto%s", msgName),
+			&EvalMarshalProtoMacro{
+				ProtoPkg:  protoPkg,
+				ProtoName: msgName,
+				MsgType:   msgType,
+			},
+		)
 	}
 	// XXX: enums
 	return nil

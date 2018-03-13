@@ -13,20 +13,20 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-type EvalReadProtoMacro struct {
+type EvalUnmarshalProtoMacro struct {
 	ProtoPkg  string       `ko:"name=protoPkg"`
 	ProtoName string       `ko:"name=protoName"`
 	MsgType   reflect.Type `ko:"name=msgType"` // MsgType is a proto message go struct
 }
 
-func (m *EvalReadProtoMacro) MacroID() string { return m.Help() }
+func (m *EvalUnmarshalProtoMacro) MacroID() string { return m.Help() }
 
-func (m *EvalReadProtoMacro) Label() string { return "readproto" }
+func (m *EvalUnmarshalProtoMacro) Label() string { return "unmarshalProto" }
 
-func (m *EvalReadProtoMacro) MacroSheathString() *string { return PtrString(m.Help()) }
+func (m *EvalUnmarshalProtoMacro) MacroSheathString() *string { return PtrString(m.Help()) }
 
-func (m *EvalReadProtoMacro) Help() string {
-	return fmt.Sprintf("ReadProto<%s.%s>", m.ProtoPkg, m.ProtoName)
+func (m *EvalUnmarshalProtoMacro) Help() string {
+	return fmt.Sprintf("UnmarshalProto<%s.%s>", m.ProtoPkg, m.ProtoName)
 }
 
 var (
@@ -34,7 +34,7 @@ var (
 	typeOfBytes = reflect.TypeOf(someBytes)
 )
 
-func (m *EvalReadProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+func (m *EvalUnmarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	bytesArg := a.Walk("bytes")
 	bytesValue, err := Integrate(span, bytesArg, typeOfBytes)
@@ -50,7 +50,7 @@ func (m *EvalReadProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect
 			NewEvalPanic(
 				span,
 				MakeStructSymbol(
-					FieldSymbols{{Name: "protoUnmarshal", Value: BasicStringSymbol(err.Error())}},
+					FieldSymbols{{Name: "unmarshalProto", Value: BasicStringSymbol(err.Error())}},
 				),
 			),
 		)
