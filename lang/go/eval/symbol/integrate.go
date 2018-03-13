@@ -13,7 +13,7 @@ func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 	return ctx.Integrate(s, t)
 }
 
-func (ctx *typingCtx) IntegrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
+func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
 	tName := TypeName(t)
 	if tName == "" {
 		return reflect.Value{}, ctx.Errorf(nil, "to-type is not named")
@@ -38,7 +38,7 @@ func (ctx *typingCtx) IntegrateNamed(s Symbol, t reflect.Type) (reflect.Value, e
 }
 
 func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if r, err := ctx.IntegrateNamed(s, t); err == nil { // try
+	if r, err := ctx.integrateNamed(s, t); err == nil { // try
 		return r, nil
 	}
 	// if s is named, deconstruct its go value

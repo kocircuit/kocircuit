@@ -35,16 +35,33 @@ func registerEvalProtoFile(protoFile string) error {
 		if msgType == nil {
 			return fmt.Errorf("cannot find message type for %q", msgFullName)
 		}
-		RegisterEvalPkgMacro(
+		RegisterEvalPkgMacro( // Proto<MsgName>
 			msgType.PkgPath(),
-			fmt.Sprintf("Proto%s", msgName),
+			fmt.Sprintf("MakeProto%s", msgName),
 			&EvalProtoMacro{
 				ProtoPkg:  protoPkg,
 				ProtoName: msgName,
 				MsgType:   msgType,
 			},
 		)
-		//XXX: read and write macros
+		RegisterEvalPkgMacro( // ReadProto<MsgName>
+			msgType.PkgPath(),
+			fmt.Sprintf("ReadProto%s", msgName),
+			&EvalReadProtoMacro{
+				ProtoPkg:  protoPkg,
+				ProtoName: msgName,
+				MsgType:   msgType,
+			},
+		)
+		// RegisterEvalPkgMacro( // WriteProto<MsgName>
+		// 	msgType.PkgPath(),
+		// 	fmt.Sprintf("WriteProto%s", msgName),
+		// 	&EvalWriteProtoMacro{
+		// 		ProtoPkg:  protoPkg,
+		// 		ProtoName: msgName,
+		// 		MsgType:   msgType,
+		// 	},
+		// )
 	}
 	// XXX: enums
 	return nil
