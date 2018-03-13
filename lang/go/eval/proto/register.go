@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	// . "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
@@ -20,20 +21,40 @@ func RegisterEvalProtoFile(protoFile string) {
 }
 
 func registerEvalProtoFile(protoFile string) error {
-	gzippedFileDescBuf := proto.FileDescriptor(protoFile)
-	if len(gzippedFileDescBuf) == 0 {
-		return fmt.Errorf("no registration for %q with proto package", protoFile)
-	}
-	fileDescBuf, err := UngzipBytes(gzippedFileDescBuf)
+	fileDesc, err := decodeFileDescriptor(protoFile)
 	if err != nil {
 		return err
 	}
+	protoPkg := fileDesc.GetPackage()
+	// register proto macros for messages (make, read and write)
+	for _, msgDesc := range fileDesc.MessageType {
+		msgName := msgDesc.GetName()
+		msgFullName := strings.Join([]string{protoPkg, msgName}, ".")
+		msgType := proto.MessageType(msgFullName)
+		if msgType == nil {
+			return fmt.Errorf("cannot find message type for %q", msgFullName)
+		}
+		// RegisterEvalMacro(XXX) //XXX
+		//XXX: read and write macros
+	}
+	// XXX: enums
+	return nil
+}
+
+func decodeFileDescriptor(protoFile string) (*descriptor.FileDescriptorProto, error) {
+	gzippedFileDescBuf := proto.FileDescriptor(protoFile)
+	if len(gzippedFileDescBuf) == 0 {
+		return nil, fmt.Errorf("no registration for %q with proto package", protoFile)
+	}
+	fileDescBuf, err := UngzipBytes(gzippedFileDescBuf)
+	if err != nil {
+		return nil, err
+	}
 	fileDesc := &descriptor.FileDescriptorProto{}
 	if err := proto.Unmarshal(fileDescBuf, fileDesc); err != nil {
-		return err
+		return nil, err
 	}
-	fmt.Println(Sprint(fileDesc))
-	return nil
+	return fileDesc, nil
 }
 
 func UngzipBytes(gzipped []byte) ([]byte, error) {
