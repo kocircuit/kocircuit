@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	// . "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	. "github.com/kocircuit/kocircuit/lang/go/eval"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
@@ -34,7 +35,15 @@ func registerEvalProtoFile(protoFile string) error {
 		if msgType == nil {
 			return fmt.Errorf("cannot find message type for %q", msgFullName)
 		}
-		// RegisterEvalMacro(XXX) //XXX
+		RegisterEvalPkgMacro(
+			msgType.PkgPath(),
+			fmt.Sprintf("Proto%s", msgName),
+			&EvalProtoMacro{
+				ProtoPkg:  protoPkg,
+				ProtoName: msgName,
+				MsgType:   msgType,
+			},
+		)
 		//XXX: read and write macros
 	}
 	// XXX: enums
