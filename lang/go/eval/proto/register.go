@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"path"
 	"strings"
 
-	// . "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 
 	"github.com/golang/protobuf/proto"
@@ -27,6 +27,7 @@ func registerEvalProtoFile(protoFile string) error {
 		return err
 	}
 	protoPkg := fileDesc.GetPackage()
+	koProtoPkg := path.Join("proto", protoPkg)
 	// register proto macros for messages (make, read and write)
 	for _, msgDesc := range fileDesc.MessageType {
 		msgName := msgDesc.GetName()
@@ -36,26 +37,26 @@ func registerEvalProtoFile(protoFile string) error {
 			return fmt.Errorf("cannot find message type for %q", msgFullName)
 		}
 		RegisterEvalPkgMacro( // Proto<MsgName>
-			msgType.PkgPath(),
-			fmt.Sprintf("MakeProto%s", msgName),
-			&EvalProtoMacro{
+			koProtoPkg,
+			fmt.Sprintf("Proto%s", msgName),
+			&EvalProtoMessageMacro{
 				ProtoPkg:  protoPkg,
 				ProtoName: msgName,
 				MsgType:   msgType,
 			},
 		)
-		RegisterEvalPkgMacro( // UnmarshalProto<MsgName>
-			msgType.PkgPath(),
-			fmt.Sprintf("UnmarshalProto%s", msgName),
+		RegisterEvalPkgMacro(
+			koProtoPkg,
+			fmt.Sprintf("UnmarshalProto%s", msgName), // UnmarshalProto<MsgName>
 			&EvalUnmarshalProtoMacro{
 				ProtoPkg:  protoPkg,
 				ProtoName: msgName,
 				MsgType:   msgType,
 			},
 		)
-		RegisterEvalPkgMacro( // MarshalProto<MsgName>
-			msgType.PkgPath(),
-			fmt.Sprintf("MarshalProto%s", msgName),
+		RegisterEvalPkgMacro(
+			koProtoPkg,
+			fmt.Sprintf("MarshalProto%s", msgName), // MarshalProto<MsgName>
 			&EvalMarshalProtoMacro{
 				ProtoPkg:  protoPkg,
 				ProtoName: msgName,
@@ -63,7 +64,23 @@ func registerEvalProtoFile(protoFile string) error {
 			},
 		)
 	}
-	// XXX: enums
+	// register macros for enum constants
+	for _, enumDesc := range fileDesc.EnumType {
+		enumName := enumDesc.GetName()
+		for _, valueDesc := range enumDesc.Value {
+			valueName := valueDesc.GetName()
+			RegisterEvalPkgMacro(
+				koProtoPkg,
+				fmt.Sprintf("ProtoEnum%s_%s", enumName, valueName), // ProtoEnum<EnumName>_<ValueName>
+				&EvalProtoEnumValueMacro{
+					ProtoPkg:  protoPkg,
+					EnumName:  enumName,
+					ValueName: valueName,
+					Number:    valueDesc.GetNumber(),
+				},
+			)
+		}
+	}
 	return nil
 }
 

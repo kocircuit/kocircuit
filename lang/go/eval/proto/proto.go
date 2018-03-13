@@ -6,28 +6,27 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	// . "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
-type EvalProtoMacro struct {
+type EvalProtoMessageMacro struct {
 	ProtoPkg  string       `ko:"name=protoPkg"`
 	ProtoName string       `ko:"name=protoName"`
 	MsgType   reflect.Type `ko:"name=msgType"` // MsgType is a proto message go struct
 }
 
-func (m *EvalProtoMacro) MacroID() string { return m.Help() }
+func (m *EvalProtoMessageMacro) MacroID() string { return m.Help() }
 
-func (m *EvalProtoMacro) Label() string { return "proto" }
+func (m *EvalProtoMessageMacro) Label() string { return "protoMessage" }
 
-func (m *EvalProtoMacro) MacroSheathString() *string { return PtrString(m.Help()) }
+func (m *EvalProtoMessageMacro) MacroSheathString() *string { return PtrString(m.Help()) }
 
-func (m *EvalProtoMacro) Help() string {
+func (m *EvalProtoMessageMacro) Help() string {
 	return fmt.Sprintf("Proto<%s.%s>", m.ProtoPkg, m.ProtoName)
 }
 
-func (m *EvalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+func (m *EvalProtoMessageMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	msgValue, err := Integrate(span, arg.(*StructSymbol), m.MsgType)
 	if err != nil {
 		return nil, nil, err
