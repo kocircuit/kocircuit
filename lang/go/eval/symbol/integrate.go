@@ -41,6 +41,18 @@ func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error)
 	if r, err := ctx.IntegrateNamed(s, t); err == nil { // try
 		return r, nil
 	}
+	// if s is named, deconstruct its go value
+	if named, ok := s.(*NamedSymbol); ok {
+		if dec, err := ctx.DeconstructKind(named.Value); err != nil {
+			return reflect.Value{}, err
+		} else {
+			s = dec
+		}
+	}
+	return ctx.IntegrateKind(s, t)
+}
+
+func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, error) {
 	switch t.Kind() {
 	case reflect.Invalid:
 		panic("o")

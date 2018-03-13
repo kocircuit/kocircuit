@@ -19,6 +19,10 @@ func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 			return &NamedSymbol{Value: v}, nil
 		}
 	}
+	return ctx.DeconstructKind(v)
+}
+
+func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 	switch v.Kind() {
 	case reflect.Invalid:
 		return EmptySymbol{}, nil
