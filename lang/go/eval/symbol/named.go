@@ -27,8 +27,6 @@ func (named *NamedSymbol) Equal(sym Symbol) bool {
 }
 
 func (named *NamedSymbol) Splay() Tree {
-	// XXX: Splay does not handle non-Ko fields (protobuf or generic go).
-	// Thus, hashing protocol buffers of native go types will have collisions.
 	return Splay(named.Value.Interface())
 }
 
@@ -69,7 +67,6 @@ func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
 	if v.Kind() != reflect.Struct {
 		return nil, span.Errorf(nil, "cannot select %s into %v", field, named)
 	}
-	// XXX: gate.StripFields should recognize protobuf names
 	if fieldIndex, ok := gate.StripFields(v.Type()).FieldByKoName(field); ok {
 		return Deconstruct(span, v.Field(fieldIndex))
 	} else {
