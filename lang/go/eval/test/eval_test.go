@@ -463,6 +463,29 @@ var testEval = []struct {
 			},
 		},
 	},
+	{ // test when
+		Enabled: true,
+		File: `
+		W(x?) {
+			return: When(have: x, then: Return, else: Return[5])
+		}
+		Main(x) {
+			return: (a: W(x), b: W())
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: struct {
+			Ko_a int64 `ko:"name=a"`
+			Ko_b int64 `ko:"name=b"`
+		}{
+			Ko_a: 3,
+			Ko_b: 5,
+		},
+	},
 }
 
 type testNamedGate struct {
