@@ -420,29 +420,6 @@ var testEval = []struct {
 		},
 		Result: "msg",
 	},
-	{ // recover/expect macro through parallel execution
-		Enabled: true,
-		File: `
-		Main(x) {
-			return: Recover(
-				invoke: Parallel[panicOnAll[x]]
-				panic: returnExpectedField
-			)
-		}
-		panicOnAll(x?, missing) {
-			return: Expect(missing)
-		}
-		returnExpectedField(panic?) {
-			return: panic.expected
-		}
-		`,
-		Arg: struct {
-			Ko_x string `ko:"name=x"`
-		}{
-			Ko_x: "msg",
-		},
-		Result: true,
-	},
 	{ // test named values
 		Enabled: true,
 		File: `
