@@ -28,19 +28,18 @@ Element(tag, attrs, children) {
 
 // Attr returns an XML attribute with a given name and value(s).
 Attr(name, values) {
-	return: Yield(
-		if: Have(values)
-		then: strings.Join(
-			name
-			"="
-			strings.Quote(strings.Join(string: values, delimiter: " "))
-		)
+	return: When(
+		have: values
+		then: attrWithValues(name, values?) {
+			return: strings.Join(
+				name
+				"="
+				strings.Quote(strings.Join(string: values, delimiter: " "))
+			)
+		} [name: name]
 	)
 }
 
 AttrNoValues(name?) {
-	return: Yield(
-		if: Have(name)
-		then: name
-	)
+	return: When(have: name, then: Return)
 }

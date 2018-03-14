@@ -116,9 +116,9 @@ resolveChapter(linkingCtx, chapter?) { // returns (name, url) pairs
 		with: resolveChapter[linkingCtx: chapterCtx]
 	)
 	return: Merge(
-		Branch(
-			if: Have(chapter.cross)
-			then: chapterCrosslinkURL[linkingCtx: chapterCtx, cross: chapter.cross]
+		When(
+			have: chapter.cross
+			then: chapterCrosslinkURL[linkingCtx: chapterCtx]
 		)
 		Merge(
 			series.Map(

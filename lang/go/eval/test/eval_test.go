@@ -165,14 +165,14 @@ var testEval = []struct {
 		Arg:    struct{}{},
 		Result: true,
 	},
-	{ // len, have
+	{ // len
 		Enabled: true,
 		File: `
 		Main() {
 			return: And(
-				Not(Have())
-				Have("a")
+				Equal(Len(), 0)
 				Equal(Len(5), 1)
+				Equal(Len(5, 5), 2)
 			)
 		}
 		`,
