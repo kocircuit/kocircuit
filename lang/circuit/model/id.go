@@ -42,6 +42,12 @@ func StringID(s string) ID {
 	return ID{Data: h.Sum64()}
 }
 
+func BytesID(b []byte) ID {
+	h := fnv.New64a() // alloc *uint64
+	h.Write(b)
+	return ID{Data: h.Sum64()}
+}
+
 func Blend(id ...ID) ID {
 	h := fnv.New64a() // alloc *uint64
 	for _, id := range id {

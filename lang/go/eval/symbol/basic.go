@@ -48,10 +48,6 @@ func AsBasicBool(sym Symbol) (value bool, ok bool) {
 	return b, ok
 }
 
-func IsBasicSymbolType(sym Symbol, t BasicType) bool {
-	return sym.Type() == BasicString
-}
-
 type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }

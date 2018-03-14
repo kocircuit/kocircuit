@@ -9,7 +9,10 @@ import (
 
 // Symbol implementations:
 //	BasicSymbol, EmptySymbol,
-// *SeriesSymbol, *StructSymbol, *NamedSymbol, *OpaqueSymbol, *VarietySymbol
+// *SeriesSymbol, *StructSymbol
+// *NamedSymbol, *OpaqueSymbol
+// *VarietySymbol,
+// *BlobSymbol
 type Symbol interface {
 	Shape   // String, Select, Augment, Invoke
 	Splayer // Splay
