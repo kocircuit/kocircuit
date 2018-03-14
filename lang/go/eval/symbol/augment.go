@@ -21,15 +21,23 @@ func (vty *VarietySymbol) Augment(span *Span, knot Knot) (Shape, Effect, error) 
 func KnotToFieldSymbols(span *Span, knot Knot) (FieldSymbols, error) {
 	ef := FieldSymbols{}
 	for _, fieldGroup := range knot.FieldGroup() {
+		fieldGroupName := fieldGroup[0].Name
 		fieldGroup = FilterEmptyFields(fieldGroup)
 		switch len(fieldGroup) {
-		case 0:
+		case 0: // add a field with an empty symbol value (useful to All macro)
+			ef = append(ef,
+				&FieldSymbol{
+					Name:    fieldGroupName,
+					Monadic: fieldGroupName == "",
+					Value:   EmptySymbol{},
+				},
+			)
 		case 1:
 			y := fieldGroup[0].Shape.(Symbol)
 			ef = append(ef,
 				&FieldSymbol{
-					Name:    fieldGroup[0].Name,
-					Monadic: fieldGroup[0].Name == "",
+					Name:    fieldGroupName,
+					Monadic: fieldGroupName == "",
 					Value:   y,
 				},
 			)
@@ -42,7 +50,7 @@ func KnotToFieldSymbols(span *Span, knot Knot) (FieldSymbols, error) {
 			}
 			unifiedElem, err := UnifyTypes(span, fieldTypes)
 			if err != nil {
-				return nil, span.Errorf(err, "field group %s", fieldGroup[0].Name)
+				return nil, span.Errorf(err, "field group %s", fieldGroupName)
 			}
 			series := &SeriesSymbol{
 				Type_: &SeriesType{Elem: unifiedElem},
@@ -50,8 +58,8 @@ func KnotToFieldSymbols(span *Span, knot Knot) (FieldSymbols, error) {
 			}
 			ef = append(ef,
 				&FieldSymbol{
-					Name:    fieldGroup[0].Name,
-					Monadic: fieldGroup[0].Name == "",
+					Name:    fieldGroupName,
+					Monadic: fieldGroupName == "",
 					Value:   series,
 				},
 			)

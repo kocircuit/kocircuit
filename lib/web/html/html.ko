@@ -63,8 +63,8 @@ LINK(href?, rel, type, media) {
 SCRIPT(type, src?, code, defer, async) {
 	return: xml.Element(
 		tag: "SCRIPT"
-		attrs: Yield(if: HaveTrue(defer), then: AttrNoValues(name: "defer"))
-		attrs: Yield(if: HaveTrue(async), then: AttrNoValues(name: "async"))
+		attrs: When(have: defer, then: AttrNoValues[name: "defer"])
+		attrs: When(have: async, then: AttrNoValues[name: "async"])
 		attrs: Attr(name: "src", values: src)
 		attrs: Attr(name: "type", values: type)
 		children: Yield(if: Have(code), then: T(code), else: T(""))

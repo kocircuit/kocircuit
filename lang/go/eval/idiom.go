@@ -22,16 +22,20 @@ Return(pass?) {
 	return: pass
 }
 
-HaveTrue(opt?) {
-	return: And(Have(opt), opt)
+Pick(either, or) {
+	return: When(have: either, then: Return, else: Return[or])
+}
+
+Invoke(variety?) {
+	return: variety()
 }
 
 Branch(if, then, else) {
-	return: Yield(
-		if: if
-		then: Yield(if: Have(then), then: then, else: [])
-		else: Yield(if: Have(else), then: else, else: [])
-	)()
+	return: When(
+		have: Yield(if: if, then: then, else: else)
+		then: Invoke
+		else: Nothing
+	)
 }
 
 Switch(case, otherwise) {

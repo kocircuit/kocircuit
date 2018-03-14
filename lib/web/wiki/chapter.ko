@@ -31,8 +31,8 @@ TableOfContents(chapter, renderingCtx, depth, nonRoot) { // returns node
 	subCtx: RenderingCtxStack(renderingCtx: renderingCtx, chapter: chapter)
 	return: Rows(
 		Merge(
-			Branch(
-				if: HaveTrue(nonRoot)
+			When(
+				have: nonRoot
 				then: ChapterRef[renderingCtx: renderingCtx, chapter: chapter]
 				else: ChapterTitle[renderingCtx: renderingCtx, chapter: chapter]
 			)

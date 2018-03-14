@@ -420,29 +420,6 @@ var testEval = []struct {
 		},
 		Result: "msg",
 	},
-	{ // recover/expect macro through parallel execution
-		Enabled: true,
-		File: `
-		Main(x) {
-			return: Recover(
-				invoke: Parallel[panicOnAll[x]]
-				panic: returnExpectedField
-			)
-		}
-		panicOnAll(x?, missing) {
-			return: Expect(missing)
-		}
-		returnExpectedField(panic?) {
-			return: panic.expected
-		}
-		`,
-		Arg: struct {
-			Ko_x string `ko:"name=x"`
-		}{
-			Ko_x: "msg",
-		},
-		Result: true,
-	},
 	{ // test named values
 		Enabled: true,
 		File: `
@@ -462,6 +439,54 @@ var testEval = []struct {
 				Int64: 2,
 			},
 		},
+	},
+	{ // test when
+		Enabled: true,
+		File: `
+		W(x?) {
+			return: When(have: x, then: Return, else: Return[5])
+		}
+		Main(x) {
+			return: (a: W(x), b: W())
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: struct {
+			Ko_a int64 `ko:"name=a"`
+			Ko_b int64 `ko:"name=b"`
+		}{
+			Ko_a: 3,
+			Ko_b: 5,
+		},
+	},
+	{ // test all
+		Enabled: false,
+		File: `
+		Pass(pass) { return: pass }
+		HaveBoth(x, y) {
+			return: When(
+				have: All(x: x, y: y)
+				then: Pass[pass: true]
+				else: Return[false]
+			)
+		}
+		Main(x) {
+			return: And(
+				HaveBoth(x: x, y: "abc")
+				Not(HaveBoth(y: "abc"))
+			)
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: true,
 	},
 }
 
