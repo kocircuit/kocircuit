@@ -52,7 +52,16 @@ func (blob *BlobSymbol) Type() Type {
 }
 
 func (blob *BlobSymbol) LiftToSeries(span *Span) *SeriesSymbol {
-	panic("XXX")
+	goBytes := blob.Bytes()
+	if len(goBytes) == 0 {
+		return EmptySeries
+	} else {
+		elemSymbols := make(Symbols, len(goBytes))
+		for i, b := range goBytes {
+			elemSymbols[i] = BasicByteSymbol(b)
+		}
+		return makeSeriesDontUnify(span, elemSymbols, BasicInt8)
+	}
 }
 
 func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

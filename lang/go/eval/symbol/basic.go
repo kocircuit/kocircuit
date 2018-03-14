@@ -22,6 +22,10 @@ func MakeBasicSymbol(span *Span, v interface{}) BasicSymbol {
 	}
 }
 
+func BasicByteSymbol(i byte) Symbol {
+	return BasicSymbol{i}
+}
+
 func BasicInt64Symbol(i int64) Symbol {
 	return BasicSymbol{i}
 }

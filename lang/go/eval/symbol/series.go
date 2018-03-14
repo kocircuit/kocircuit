@@ -48,13 +48,6 @@ func (ss *SeriesSymbol) Hash() string {
 	return Mix(h...)
 }
 
-func singletonSeries(e Symbol) *SeriesSymbol {
-	return &SeriesSymbol{
-		Type_: &SeriesType{Elem: e.Type()},
-		Elem:  Symbols{e},
-	}
-}
-
 func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return ss
 }
@@ -118,6 +111,24 @@ func MakeSeriesSymbol(span *Span, elem Symbols) (*SeriesSymbol, error) {
 			Type_: &SeriesType{Elem: unified},
 			Elem:  elem,
 		}, nil
+	}
+}
+
+var EmptySeries = &SeriesSymbol{
+	Type_: &SeriesType{Elem: EmptyType{}},
+}
+
+func makeSeriesDontUnify(span *Span, elem Symbols, elemType Type) *SeriesSymbol {
+	return &SeriesSymbol{
+		Type_: &SeriesType{Elem: elemType},
+		Elem:  elem,
+	}
+}
+
+func singletonSeries(e Symbol) *SeriesSymbol {
+	return &SeriesSymbol{
+		Type_: &SeriesType{Elem: e.Type()},
+		Elem:  Symbols{e},
 	}
 }
 
