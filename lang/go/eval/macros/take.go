@@ -24,7 +24,7 @@ func (m EvalTakeMacro) Help() string { return "Take" }
 
 func (EvalTakeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	if fromSeries := LiftToSeries(span, a.Walk("from")); fromSeries.Len() > 0 {
+	if fromSeries := a.Walk("from").LiftToSeries(span); fromSeries.Len() > 0 {
 		return fromSeries.Elem[0], nil, nil
 	} else {
 		return a.Walk("otherwise"), nil, nil

@@ -23,7 +23,7 @@ func (m EvalEqualMacro) MacroSheathString() *string { return PtrString("Equal") 
 func (m EvalEqualMacro) Help() string { return "Equal" }
 
 func (EvalEqualMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	series := LiftToSeries(span, arg.(*StructSymbol).SelectMonadic())
+	series := arg.(*StructSymbol).SelectMonadic().LiftToSeries(span)
 	for i := 1; i < len(series.Elem); i++ {
 		if !series.Elem[i-1].Equal(series.Elem[i]) {
 			return BasicFalse, nil, nil

@@ -22,6 +22,10 @@ func MakeBasicSymbol(span *Span, v interface{}) BasicSymbol {
 	}
 }
 
+func BasicByteSymbol(i byte) Symbol {
+	return BasicSymbol{i}
+}
+
 func BasicInt32Symbol(i int32) Symbol {
 	return BasicSymbol{i}
 }
@@ -50,10 +54,6 @@ func AsBasicBool(sym Symbol) (value bool, ok bool) {
 	}
 	b, ok := basic.Value.(bool)
 	return b, ok
-}
-
-func IsBasicSymbolType(sym Symbol, t BasicType) bool {
-	return sym.Type() == BasicString
 }
 
 type BasicSymbol struct {
@@ -87,6 +87,10 @@ func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error
 	} else {
 		return BasicSymbol{}, span.Errorf(nil, "cannot convert %v into %v", basic, to)
 	}
+}
+
+func (basic BasicSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return singletonSeries(basic)
 }
 
 func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

@@ -4,18 +4,23 @@ import (
 	"reflect"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
+	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 // Symbol implementations:
 //	BasicSymbol, EmptySymbol,
-// *SeriesSymbol, *StructSymbol, *NamedSymbol, *OpaqueSymbol, *VarietySymbol
+// *SeriesSymbol, *StructSymbol
+// *NamedSymbol, *OpaqueSymbol
+// *VarietySymbol,
+// *BlobSymbol
 type Symbol interface {
 	Shape   // String, Select, Augment, Invoke
 	Splayer // Splay
 	Type() Type
 	Hash() string
 	Equal(Symbol) bool
+	LiftToSeries(*Span) *SeriesSymbol
 }
 
 var (

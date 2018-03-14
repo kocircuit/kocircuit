@@ -33,7 +33,7 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 	over := a.Walk("over")
 	carry := a.Walk("start")
 	image := Symbols{}
-	for i, elem := range LiftToSeries(span, over).Elem {
+	for i, elem := range over.LiftToSeries(span).Elem {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", i))
 		knot := Knot{
 			{Name: "carry", Shape: carry, Effect: nil, Frame: iterSpan},

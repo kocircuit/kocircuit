@@ -79,12 +79,18 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 			return ctx.Deconstruct(v.Elem())
 		}
 	case reflect.Slice:
-		return ctx.DeconstructSlice(v)
+		if v.Type() == byteSliceType {
+			return &BlobSymbol{Value: v}, nil
+		} else {
+			return ctx.DeconstructSlice(v)
+		}
 	case reflect.Struct:
 		return ctx.DeconstructStruct(v)
 	}
 	panic("o")
 }
+
+var byteSliceType = reflect.TypeOf([]byte{1})
 
 func (ctx *typingCtx) DeconstructInterface(v reflect.Value) (Symbol, error) {
 	return &OpaqueSymbol{Value: v}, nil

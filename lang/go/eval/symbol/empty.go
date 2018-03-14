@@ -31,6 +31,14 @@ func (empty EmptySymbol) Hash() string {
 	return ""
 }
 
+func (empty EmptySymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	if emptySeries, err := MakeSeriesSymbol(span, nil); err != nil {
+		panic(err)
+	} else {
+		return emptySeries
+	}
+}
+
 func (empty EmptySymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	return empty, nil, nil
 }

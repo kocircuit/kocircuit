@@ -56,7 +56,13 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	switch t.Kind() {
 	case reflect.Invalid:
 		panic("o")
-	case reflect.String, reflect.Bool:
+	case reflect.String:
+		if IsBasicKind(s, t.Kind()) {
+			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
+		} else if blob, ok := s.(*BlobSymbol); ok { // blob -> string
+			return blob.Value.Convert(t), nil
+		}
+	case reflect.Bool:
 		if IsBasicKind(s, t.Kind()) {
 			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
 		}
@@ -120,9 +126,14 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Slice:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
-		} else {
-			return ctx.IntegrateSlice(s, t)
+		} else if t == byteSliceType {
+			if blob, isBlob := s.(*BlobSymbol); isBlob { // blob -> []byte
+				return blob.Value, nil
+			} else if s, isString := AsBasicString(s); isString { // string -> []byte
+				return reflect.ValueOf(s).Convert(t), nil
+			}
 		}
+		return ctx.IntegrateSlice(s, t)
 	case reflect.Struct: // catch missing fields
 		return ctx.IntegrateStruct(s, t)
 	}
@@ -166,7 +177,7 @@ func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Valu
 }
 
 func (ctx *typingCtx) IntegrateSlice(s Symbol, t reflect.Type) (reflect.Value, error) {
-	ss := LiftToSeries(ctx.Span, s)
+	ss := s.LiftToSeries(ctx.Span)
 	elems := make([]reflect.Value, len(ss.Elem))
 	ctx2 := ctx.Refine("()")
 	for i, symElem := range ss.Elem {

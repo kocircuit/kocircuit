@@ -48,6 +48,10 @@ func (ss *SeriesSymbol) Hash() string {
 	return Mix(h...)
 }
 
+func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return ss
+}
+
 func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return ss, nil, nil
@@ -107,6 +111,24 @@ func MakeSeriesSymbol(span *Span, elem Symbols) (*SeriesSymbol, error) {
 			Type_: &SeriesType{Elem: unified},
 			Elem:  elem,
 		}, nil
+	}
+}
+
+var EmptySeries = &SeriesSymbol{
+	Type_: &SeriesType{Elem: EmptyType{}},
+}
+
+func makeSeriesDontUnify(span *Span, elem Symbols, elemType Type) *SeriesSymbol {
+	return &SeriesSymbol{
+		Type_: &SeriesType{Elem: elemType},
+		Elem:  elem,
+	}
+}
+
+func singletonSeries(e Symbol) *SeriesSymbol {
+	return &SeriesSymbol{
+		Type_: &SeriesType{Elem: e.Type()},
+		Elem:  Symbols{e},
 	}
 }
 

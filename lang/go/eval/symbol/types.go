@@ -5,9 +5,12 @@ import (
 )
 
 // Type implementations:
-//	BasicType, EmptyType,
-// *SeriesType, *StructType, NamedType, *OpaqueType, VarietyType
 // *OptionalType
+//	BasicType, EmptyType,
+// *SeriesType, *StructType
+// NamedType, *OpaqueType
+// VarietyType
+// BlobType
 type Type interface {
 	String() string
 	Splayer

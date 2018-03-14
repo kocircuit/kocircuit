@@ -32,7 +32,7 @@ func (EvalFormatMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effec
 	if !ok {
 		return nil, nil, span.Errorf(nil, "format format argument must be string")
 	}
-	args := LiftToSeries(span, a.Walk("args"))
+	args := a.Walk("args").LiftToSeries(span)
 	withString, ok := a.Walk("withString").(*VarietySymbol)
 	if !ok {
 		return nil, nil, span.Errorf(nil, "format withString is not a variety")

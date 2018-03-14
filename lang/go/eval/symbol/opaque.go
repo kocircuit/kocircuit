@@ -29,6 +29,10 @@ func (opaque *OpaqueSymbol) Hash() string {
 	return "█"
 }
 
+func (opaque *OpaqueSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return singletonSeries(opaque)
+}
+
 func (opaque *OpaqueSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return opaque, nil, nil
