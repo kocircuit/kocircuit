@@ -162,10 +162,7 @@ LINE(x1, x2, y1, y2) {
 }
 
 OptInt64String(int64) {
-	return: Yield(
-		if: Have(int64)
-		then: integer.FormatInt64(int64)
-	)
+	return: When(have: int64, then: integer.FormatInt64)
 }
 
 Point(x, y) {

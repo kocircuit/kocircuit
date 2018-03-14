@@ -6,9 +6,9 @@ Crosslink(name?) {
 }
 
 nodesCrosslinkURLs(linkingCtx, cross, nodes) {
-	here: Branch(
-		if: Have(cross)
-		then: crosslinkURL[linkingCtx: linkingCtx, cross: cross]
+	here: When(
+		have: cross
+		then: crosslinkURL[linkingCtx: linkingCtx]
 	)
 	return: Merge(
 		here
@@ -23,14 +23,14 @@ nodeCrosslinkURLs(linkingCtx, node?) {
 	return: node.CrosslinkURLs(linkingCtx: linkingCtx)
 }
 
-crosslinkURL(cross, linkingCtx) {
+crosslinkURL(cross?, linkingCtx) {
 	return: (
 		name: cross.name
 		url: strings.Join(LinkingCtxPageURL(linkingCtx), "#", cross.hash)
 	)
 }
 
-chapterCrosslinkURL(cross, linkingCtx) {
+chapterCrosslinkURL(cross?, linkingCtx) {
 	return: (
 		name: cross.name
 		url: strings.Join(LinkingCtxPageURL(linkingCtx))
