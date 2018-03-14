@@ -22,10 +22,6 @@ Return(pass?) {
 	return: pass
 }
 
-HaveTrue(opt?) {
-	return: And(Have(opt), opt)
-}
-
 Branch(if, then, else) {
 	return: Yield(
 		if: if
