@@ -10,8 +10,10 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+// XXX: Hash and Equal ignore empty fields
+
 func MakeStructSymbol(fields FieldSymbols) *StructSymbol {
-	fields = FilterEmptyFieldSymbols(fields)
+	// fields = FilterEmptyFieldSymbols(fields) //XXX: necessary????
 	return &StructSymbol{
 		Type_: &StructType{Field: FieldSymbolTypes(fields)},
 		Field: fields,
@@ -67,6 +69,7 @@ func (ss *StructSymbol) Equal(sym Symbol) bool {
 }
 
 func FieldSymbolsEqual(x, y FieldSymbols) bool {
+	x, y = FilterEmptyFieldSymbols(x), FilterEmptyFieldSymbols(y)
 	if len(x) != len(y) {
 		return false
 	}
@@ -86,6 +89,7 @@ func (ss *StructSymbol) Hash() string {
 }
 
 func FieldSymbolsHash(fields FieldSymbols) string {
+	fields = FilterEmptyFieldSymbols(fields)
 	h := make([]string, 2*len(fields))
 	for i, field := range fields {
 		h[2*i] = field.Name

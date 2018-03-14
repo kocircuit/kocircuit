@@ -463,6 +463,31 @@ var testEval = []struct {
 			Ko_b: 5,
 		},
 	},
+	{ // test all
+		Enabled: false,
+		File: `
+		Pass(pass) { return: pass }
+		HaveBoth(x, y) {
+			return: When(
+				have: All(x: x, y: y)
+				then: Pass[pass: true]
+				else: Return[false]
+			)
+		}
+		Main(x) {
+			return: And(
+				HaveBoth(x: x, y: "abc")
+				Not(HaveBoth(y: "abc"))
+			)
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: true,
+	},
 }
 
 type testNamedGate struct {
