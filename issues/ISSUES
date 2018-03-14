@@ -1,2 +1,10 @@
+PROTO
+* add fast BytesSymbol for []byte, and make equivalent to string and []byte
 
+CLEANUP
+* remove Have macro
+
+USABILITY
+* step by step tutorial covering all macros
+* doc When and All macros
 * produce error messages if GOPATH not set
