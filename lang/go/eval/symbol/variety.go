@@ -38,6 +38,10 @@ func (vty *VarietySymbol) Hash() string {
 	return Mix(vty.Macro.MacroID(), FieldSymbolsHash(vty.Arg))
 }
 
+func (vty *VarietySymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return singletonSeries(vty)
+}
+
 func (vty *VarietySymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return vty, nil, nil

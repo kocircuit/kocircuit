@@ -51,6 +51,10 @@ func (blob *BlobSymbol) Type() Type {
 	return BlobType{}
 }
 
+func (blob *BlobSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	panic("XXX")
+}
+
 func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return blob, nil, nil

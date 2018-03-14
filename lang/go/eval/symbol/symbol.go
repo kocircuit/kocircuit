@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
+	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -19,6 +20,7 @@ type Symbol interface {
 	Type() Type
 	Hash() string
 	Equal(Symbol) bool
+	LiftToSeries(*Span) *SeriesSymbol
 }
 
 var (

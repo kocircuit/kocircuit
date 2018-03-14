@@ -81,6 +81,10 @@ func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error
 	}
 }
 
+func (basic BasicSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return singletonSeries(basic)
+}
+
 func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return basic, nil, nil

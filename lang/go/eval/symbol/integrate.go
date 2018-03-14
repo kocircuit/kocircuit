@@ -177,7 +177,7 @@ func (ctx *typingCtx) IntegrateInterface(s Symbol, t reflect.Type) (reflect.Valu
 }
 
 func (ctx *typingCtx) IntegrateSlice(s Symbol, t reflect.Type) (reflect.Value, error) {
-	ss := LiftToSeries(ctx.Span, s)
+	ss := s.LiftToSeries(ctx.Span)
 	elems := make([]reflect.Value, len(ss.Elem))
 	ctx2 := ctx.Refine("()")
 	for i, symElem := range ss.Elem {

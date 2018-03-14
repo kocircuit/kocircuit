@@ -23,6 +23,6 @@ func (m EvalLenMacro) MacroSheathString() *string { return PtrString("Len") }
 func (m EvalLenMacro) Help() string { return "Len" }
 
 func (EvalLenMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	series := LiftToSeries(span, arg.(*StructSymbol).SelectMonadic())
+	series := arg.(*StructSymbol).SelectMonadic().LiftToSeries(span)
 	return BasicInt64Symbol(int64(series.Len())), nil, nil
 }

@@ -48,6 +48,17 @@ func (ss *SeriesSymbol) Hash() string {
 	return Mix(h...)
 }
 
+func singletonSeries(e Symbol) *SeriesSymbol {
+	return &SeriesSymbol{
+		Type_: &SeriesType{Elem: e.Type()},
+		Elem:  Symbols{e},
+	}
+}
+
+func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return ss
+}
+
 func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return ss, nil, nil

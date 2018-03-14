@@ -5,7 +5,7 @@ import (
 )
 
 func ExtractMonadicNonEmptyIntegerSeries(span *Span, from *StructSymbol) (_ Symbols, signed bool, _ error) {
-	series := LiftToSeries(span, from.SelectMonadic())
+	series := from.SelectMonadic().LiftToSeries(span)
 	if series.IsEmpty() {
 		return nil, false, span.Errorf(nil, "series is empty")
 	}

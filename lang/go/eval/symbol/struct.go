@@ -98,6 +98,10 @@ func FieldSymbolsHash(fields FieldSymbols) string {
 	return Mix(h...)
 }
 
+func (ss *StructSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+	return singletonSeries(ss)
+}
+
 func (ss *StructSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "structure %v cannot be augmented", ss)
 }
