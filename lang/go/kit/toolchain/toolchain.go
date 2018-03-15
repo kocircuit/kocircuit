@@ -2,6 +2,7 @@ package toolchain
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -19,11 +20,15 @@ type GoToolchain struct {
 func NewGoToolchain() *GoToolchain {
 	binary, err := exec.LookPath("go")
 	if err != nil {
-		panic("err")
+		log.Fatalf("go binary not found (%v)", err)
+	}
+	goPath := os.Getenv("GOPATH")
+	if goPath == "" {
+		log.Fatal("GOPATH is not set")
 	}
 	return &GoToolchain{
 		GOROOT: os.Getenv("GOROOT"),
-		GOPATH: os.Getenv("GOPATH"),
+		GOPATH: goPath,
 		Binary: binary,
 	}
 }
