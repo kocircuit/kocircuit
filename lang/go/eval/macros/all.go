@@ -22,7 +22,6 @@ func (m EvalAllMacro) MacroSheathString() *string { return PtrString("All") }
 
 func (m EvalAllMacro) Help() string { return "All" }
 
-// All(have:█, then:█, else:█)
 func (EvalAllMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	all := true

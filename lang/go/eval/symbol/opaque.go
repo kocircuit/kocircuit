@@ -13,6 +13,10 @@ type OpaqueSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
+func (opaque *OpaqueSymbol) Interface() interface{} {
+	return opaque.Value.Interface()
+}
+
 func (opaque *OpaqueSymbol) String() string {
 	return Sprint(opaque)
 }

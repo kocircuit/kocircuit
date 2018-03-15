@@ -1,4 +1,4 @@
-package sys
+package lib
 
 import (
 	// Register weave macros
