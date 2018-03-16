@@ -124,7 +124,7 @@ func (ctx *typingCtx) DeconstructStruct(v reflect.Value) (Symbol, error) {
 	fields := make(FieldSymbols, 0, v.NumField())
 	t := v.Type()
 	for i := 0; i < v.NumField(); i++ {
-		name, hasKoName := gate.StructFieldKoName(t.Field(i))
+		name, hasKoName := gate.StructFieldKoProtoGoName(t.Field(i))
 		if !hasKoName {
 			continue // skip
 		}

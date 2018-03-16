@@ -1,5 +1,5 @@
 PROTO
-* deconstruct/integrate maps into opaque
+* ability to create empty structs?
 
 USABILITY
 * step by step tutorial covering all macros
