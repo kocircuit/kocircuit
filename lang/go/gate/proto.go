@@ -5,6 +5,16 @@ import (
 	"strings"
 )
 
+func StructFieldIsProtoOptOrRep(sf reflect.StructField) bool {
+	tag := sf.Tag.Get("protobuf")
+	for _, kv := range strings.Split(tag, ",") {
+		if kv == "opt" || kv == "rep" {
+			return true
+		}
+	}
+	return false
+}
+
 func StructFieldIsProtoOpt(sf reflect.StructField) bool {
 	tag := sf.Tag.Get("protobuf")
 	for _, kv := range strings.Split(tag, ",") {

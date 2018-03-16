@@ -10,6 +10,16 @@ type KoGoName struct {
 	Go string `ko:"name=go"`
 }
 
+func StructFieldWithNoKoOrProtoName(sf reflect.StructField) bool {
+	if _, hasProto := structFieldProtoName(sf); hasProto {
+		return false
+	} else if _, hasKo := structFieldProtoName(sf); hasKo {
+		return false
+	} else {
+		return true
+	}
+}
+
 func StructFieldKoProtoGoName(sf reflect.StructField) (string, bool) {
 	if koName, ok := structFieldKoName(sf); ok {
 		return koName, true

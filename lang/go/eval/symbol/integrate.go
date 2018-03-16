@@ -206,7 +206,8 @@ func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, 
 				case reflect.Ptr, reflect.Slice: // to field is optional
 				default:
 					switch {
-					case gate.StructFieldIsProtoOpt(toField):
+					case gate.StructFieldIsProtoOptOrRep(toField):
+					case gate.StructFieldWithNoKoOrProtoName(toField):
 					default:
 						return reflect.Value{},
 							ctx.Errorf(nil, "go field %s in %v is required, not found in %v", toField.Name, t, ss)
