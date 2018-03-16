@@ -205,7 +205,11 @@ func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, 
 				switch toField.Type.Kind() {
 				case reflect.Ptr, reflect.Slice: // to field is optional
 				default:
-					return reflect.Value{}, ctx.Errorf(nil, "go field %s in %v is required", toField.Name, t)
+					switch {
+					case gate.StructFieldIsProtoOpt(toField):
+					default:
+						return reflect.Value{}, ctx.Errorf(nil, "go field %s in %v is required", toField.Name, t)
+					}
 				}
 			} else {
 				if u, err := ctx.Refine(toField.Name).Integrate(from.Value, toField.Type); err != nil {

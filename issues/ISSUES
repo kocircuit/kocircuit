@@ -1,5 +1,5 @@
 PROTO
-* add fast BytesSymbol for []byte, and make equivalent to string and []byte
+* deconstruct/integrate maps into opaque
 
 USABILITY
 * step by step tutorial covering all macros
