@@ -15,7 +15,7 @@ func Deconstruct(span *Span, v reflect.Value) (Symbol, error) {
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 	if v.IsValid() {
-		if typeName := TypeName(v.Type()); typeName != "" {
+		if typeName := TypeName(v.Type()); typeName != "" && v.Kind() != reflect.Interface {
 			return &NamedSymbol{Value: v}, nil
 		}
 	}
