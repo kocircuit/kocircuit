@@ -231,7 +231,10 @@ DoSomeWorkInParallel(name) {
 
 panicMacroSection() {
 	return: (
-		wiki.Head(cross: PanicMacroLink(), nodes: wiki.Text(`Panic and recover: type-safe exceptions`))
+		wiki.Head(
+			cross: PanicMacroLink()
+			nodes: wiki.Text(`Panic and recover: type-safe exceptions`)
+		)
 		Q(t: `Panicking is a mechanism for {{p}}`
 			a: (p: C(`Yield`))
 		)

@@ -142,6 +142,7 @@ func bracketCloseIndices(src string) (closeIndex []int) {
 }
 
 func parseSelectorPath(span *Span, src string) (sel Path, err error) {
+	src = strings.TrimSpace(src)
 	pp := strings.Split(src, ".")
 	for _, p := range pp {
 		if !isIdentifier(p) || len(p) == 0 {
