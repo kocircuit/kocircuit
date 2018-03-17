@@ -1,5 +1,9 @@
 import "github.com/kocircuit/kocircuit/lib/web/wiki"
 
+Q(t?, a) {
+	return: wiki.PlatePar(t: t, a: a)
+}
+
 P(f?, a) {
 	return: wiki.FormPar(f: f, a: a)
 }

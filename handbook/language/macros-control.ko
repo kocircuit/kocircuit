@@ -232,18 +232,12 @@ DoSomeWorkInParallel(name) {
 panicMacroSection() {
 	return: (
 		wiki.Head(cross: PanicMacroLink(), nodes: wiki.Text(`Panic and recover: type-safe exceptions`))
-		P(f: `Panicking {{p}} is a mechanism for %%`
-			a: C(`Yield`)
+		Q(t: `Panicking is a mechanism for {{p}}`
+			a: (p: C(`Yield`))
 		)
 		CB(
 `Say(hello) {
-	return: Show(
-		Yield(
-			if: hello   // hello must be boolean
-			then: "hello"
-			else: "good-bye"
-		)
-	)
+	return: Show()
 }
 `
 		)
