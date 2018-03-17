@@ -1,10 +1,10 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-FormatPar(f?, a) {
-	return: Par(Fmt(f: f, a: a))
+FormPar(f?, a) {
+	return: Par(Form(f: f, a: a))
 }
 
-Fmt(f?, a) {
+Form(f?, a) {
 	return: Format(
 		format: f
 		args: a
@@ -18,7 +18,7 @@ Fmt(f?, a) {
 	)
 }
 
-FormatString(f?, a) {
+FormString(f?, a) {
 	return: strings.Join(
 		Format(format: f, args: a, withString: Return, withArg: Return)
 	)

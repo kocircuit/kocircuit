@@ -34,29 +34,29 @@ compilerContent() {
 		speed optimizations are inessencial:`)
 		wiki.List(
 			wiki.Item(
-				wiki.Fmt(f: `Implementing build flows, for instance, as an alternative to %%.`
+				wiki.Form(f: `Implementing build flows, for instance, as an alternative to %%.`
 					a: wiki.URL(href: "https://bazel.build/", nodes: wiki.Text(`Bazel`))
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing code-generation flows targeting generation
+				wiki.Form(f: `Implementing code-generation flows targeting generation
 					of interdependent configuration files, for instance, as an alternative to %%.`
 					a: wiki.URL(href: "http://jsonnet.org/", nodes: wiki.Text(`Jsonnet`))
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing content management systems.
+				wiki.Form(f: `Implementing content management systems.
 					(This simple wiki site is implemented in Ko.)`
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Safely implementing (stateful) control-plane logic for 
+				wiki.Form(f: `Safely implementing (stateful) control-plane logic for 
 					cloud systems, like %%.`
 					a: wiki.URL(href: "https://kubernetes.io/", nodes: wiki.Text(`Kubernetes`))
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing complex, modular, concurrent and synchronized scripts
+				wiki.Form(f: `Implementing complex, modular, concurrent and synchronized scripts
 					for operations, in place of writing low-level Go code.
 					For instance, Ko programs utilizng basic stateless Kubernets primitives
 					can implement stateful control loops. Thus Ko provides an alternative to
@@ -64,14 +64,14 @@ compilerContent() {
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing application logic for programmable technologies,
+				wiki.Form(f: `Implementing application logic for programmable technologies,
 					like %% mappers and reducers, where the cross-worker network latencies
 					may far exceed the per-worker computation times.`
 					a: wiki.URL(href: "https://en.wikipedia.org/wiki/MapReduce", nodes: wiki.Text(`MapReduce`))
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing database transactions at both high-level (using custom schemas
+				wiki.Form(f: `Implementing database transactions at both high-level (using custom schemas
 					definable in Ko) or low-level (by programming at a service request/response level).`
 				)
 			) //---
@@ -81,7 +81,7 @@ compilerContent() {
 		P(`The weaver is more appropriate in the following areas:`)
 		wiki.List(
 			wiki.Item(
-				wiki.Fmt(f: `Implementing application logic in a technology-independent manner
+				wiki.Form(f: `Implementing application logic in a technology-independent manner
 					in situations where highly-performant (i.e. technology-dependent) execution is required.
 					Exаmples include implementing various types of network middleware software
 					where the “application logic” is on the critical path. Some specific examples
@@ -91,7 +91,7 @@ compilerContent() {
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing technology-independent application logic, which can
+				wiki.Form(f: `Implementing technology-independent application logic, which can
 					be automatically translated to any target language (and hardware) technology.
 					Protocols, which add temporal behavior constraints on top of API definitions,
 					continue to be implemented in the form of client libraries for multiple languages
@@ -99,7 +99,7 @@ compilerContent() {
 				)
 			) //---
 			wiki.Item(
-				wiki.Fmt(f: `Implementing encapsulated application logic which can be
+				wiki.Form(f: `Implementing encapsulated application logic which can be
 				run, paused and resumed on a different (if need be) platform, generically.`
 				)
 			) //---

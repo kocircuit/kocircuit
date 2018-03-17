@@ -17,7 +17,7 @@ Root() {
 }
 
 rootContent() {
-	return: wiki.FormatPar(
+	return: wiki.FormPar(
 		f:		`Ko is a programming language based on a new, simple
 				and general model of computation, called %%.`
 		a:	wiki.Def(wiki.Text(`Recursive Circuits`))

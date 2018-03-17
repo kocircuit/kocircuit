@@ -1,14 +1,14 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-FmtDIV(f?, a) {
-	return: DIV(Fmt(f: f, a: a))
+FormDIV(f?, a) {
+	return: DIV(Form(f: f, a: a))
 }
 
-FmtP(f?, a) {
-	return: P(Fmt(f: f, a: a))
+FormP(f?, a) {
+	return: P(Form(f: f, a: a))
 }
 
-Fmt(f?, a) {
+Form(f?, a) {
 	return: Format(
 		format: f
 		args: a

@@ -124,7 +124,7 @@ util.GoMaxInt64(int64s: (1, 2, 3))
 
 example1() {
 	return: CB(
-		wiki.FormatString(
+		wiki.FormString(
 f: `package integer
 
 import (
@@ -172,7 +172,7 @@ Max3(x, y, z) {
 
 example2() {
 	return: CB(
-		wiki.FormatString(
+		wiki.FormString(
 f: `type GoMaxInt64 struct {
 	Int64s []int64 %%
 	Otherwise *int64 %%
