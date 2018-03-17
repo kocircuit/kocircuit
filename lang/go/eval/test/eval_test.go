@@ -380,6 +380,25 @@ var testEval = []struct {
 		},
 		Result: []string{"abc ", "X", " def ", "Y", " hij ", "Z", ""},
 	},
+	{ // template macro
+		Enabled: true,
+		File: `
+		Main(x) {
+			return: Template(
+				template: "abc {{a}} def {{b.c}} hij {{b.d}}"
+				args: (a: x, b: (c: "Y", d: "Z"))
+				withString: Return
+				withArg: Return
+			)
+		}
+		`,
+		Arg: struct {
+			Ko_x string `ko:"name=x"`
+		}{
+			Ko_x: "X",
+		},
+		Result: []string{"abc ", "X", " def ", "Y", " hij ", "Z"},
+	},
 	{ // recover/panic macro
 		Enabled: true,
 		File: `
