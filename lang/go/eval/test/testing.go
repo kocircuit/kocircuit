@@ -66,7 +66,7 @@ func (test *EvalTest) Play(ctx *runtime.Context) error {
 	}
 	// test result values
 	if !IsSubset(test.Result, result.Interface()) {
-		return fmt.Errorf("expecting %s, got %v", Sprint(test.Result), result.Interface())
+		return fmt.Errorf("expecting %s, got %s", Sprint(test.Result), Sprint(result.Interface()))
 	}
 	return nil
 }
