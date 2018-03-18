@@ -1,66 +1,21 @@
 package test
 
 import (
-	"reflect"
 	"testing"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/compile"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/subset"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
 func TestEval(t *testing.T) {
 	RegisterEvalGateAt("test", "Gate", new(testNamedGate))
-	for i, test := range testEval {
-		if !test.Enabled {
-			continue
-		}
-		repo, err := CompileString("test", "test.ko", test.File)
-		if err != nil {
-			t.Errorf("test %d: compile (%v)", i, err)
-			continue
-		}
-		// fmt.Println(repo["test"].BodyString())
-		eval := NewEvaluator(EvalFaculty(), repo)
-		span := NewSpan()
-		span = RefineChamber(span, "testEval")
-		span = RefineOutline(span, "Main")
-		// deconstruct test arguments
-		arg, err := Deconstruct(span, reflect.ValueOf(test.Arg))
-		if err != nil {
-			t.Errorf("test %d: argument deconstruction (%v)", i, err)
-			continue
-		}
-		returned, _, err := eval.Eval(span, repo["test"]["Main"], arg)
-		if err != nil {
-			t.Errorf("test %d: eval (%v)", i, err)
-			continue
-		}
-		// integrate test results
-		result, err := Integrate(span, returned, reflect.TypeOf(test.Result))
-		if err != nil {
-			t.Errorf("test %d: result integration (%v)", i, err)
-			continue
-		}
-		// test result values
-		if !IsSubset(test.Result, result.Interface()) {
-			t.Errorf("test %d: expecting %s, got %v", i, Sprint(test.Result), result.Interface())
-		}
-	}
+	tests := &EvalTests{T: t, Test: evalTests}
+	tests.Play(runtime.NewContext())
 }
 
-var testEval = []struct {
-	Enabled bool
-	File    string      // compile the test file into a repo
-	Arg     interface{} // arg for main
-	Result  interface{} // weave main function, expecting result
-}{
+var evalTests = []*EvalTest{
 	{ // select, repeat
 		Enabled: true,
 		File: `
