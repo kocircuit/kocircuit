@@ -14,6 +14,8 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 	. "github.com/kocircuit/kocircuit/lang/go/weave"
 
+	_ "github.com/kocircuit/kocircuit/lang/go/sys/lib"
+
 	kos "github.com/kocircuit/kocircuit/lib/os"
 )
 

@@ -1,24 +1,39 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-FormatPar(f?, a) {
-	return: Par(Fmt(f: f, a: a))
+FormPar(f?, a) {
+	return: Par(Form(f: f, a: a))
 }
 
-Fmt(f?, a) {
+PlatePar(t?, a) {
+	return: Par(Plate(t: t, a: a))
+}
+
+Form(f?, a) {
 	return: Format(
 		format: f
 		args: a
-		withString: formatString(string?) {
-			return: Yield(
-				if: Not(strings.Equal(string, ""))
-				then: Text(string)
-			)
-		}
+		withString: formString
 		withArg: Return
 	)
 }
 
-FormatString(f?, a) {
+Plate(t?, a) {
+	return: Template(
+		template: t
+		args: a
+		withString: formString
+		withArg: Return
+	)
+}
+
+formString(string?) {
+	return: Yield(
+		if: Not(strings.Equal(string, ""))
+		then: Text(string)
+	)
+}
+
+FormString(f?, a) {
 	return: strings.Join(
 		Format(format: f, args: a, withString: Return, withArg: Return)
 	)

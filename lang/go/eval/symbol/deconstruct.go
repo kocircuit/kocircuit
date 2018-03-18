@@ -15,7 +15,7 @@ func Deconstruct(span *Span, v reflect.Value) (Symbol, error) {
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 	if v.IsValid() {
-		if typeName := TypeName(v.Type()); typeName != "" {
+		if typeName := TypeName(v.Type()); typeName != "" && v.Kind() != reflect.Interface {
 			return &NamedSymbol{Value: v}, nil
 		}
 	}
@@ -57,21 +57,21 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 	case reflect.Uintptr:
 		return nil, ctx.Errorf(nil, "go uintptr type not supported")
 	case reflect.Complex64:
-		return nil, ctx.Errorf(nil, "go complex64 type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Complex128:
-		return nil, ctx.Errorf(nil, "go complex128 type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Array:
-		return nil, ctx.Errorf(nil, "go array type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Chan:
-		return nil, ctx.Errorf(nil, "go chan type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.UnsafePointer:
-		return nil, ctx.Errorf(nil, "go unsafe pointer type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Func:
-		return nil, ctx.Errorf(nil, "go func type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Map:
-		return nil, ctx.Errorf(nil, "go map type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Interface:
-		return ctx.DeconstructInterface(v)
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Ptr:
 		if v.IsNil() {
 			return EmptySymbol{}, nil
@@ -91,10 +91,6 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 }
 
 var byteSliceType = reflect.TypeOf([]byte{1})
-
-func (ctx *typingCtx) DeconstructInterface(v reflect.Value) (Symbol, error) {
-	return &OpaqueSymbol{Value: v}, nil
-}
 
 func (ctx *typingCtx) DeconstructSlice(v reflect.Value) (Symbol, error) {
 	ds := make(Symbols, 0, v.Len())
@@ -128,7 +124,7 @@ func (ctx *typingCtx) DeconstructStruct(v reflect.Value) (Symbol, error) {
 	fields := make(FieldSymbols, 0, v.NumField())
 	t := v.Type()
 	for i := 0; i < v.NumField(); i++ {
-		name, hasKoName := gate.StructFieldKoName(t.Field(i))
+		name, hasKoName := gate.StructFieldKoProtoGoName(t.Field(i))
 		if !hasKoName {
 			continue // skip
 		}

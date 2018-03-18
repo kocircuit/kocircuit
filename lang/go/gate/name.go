@@ -10,17 +10,27 @@ type KoGoName struct {
 	Go string `ko:"name=go"`
 }
 
-func StructFieldKoProtoGoName(sf reflect.StructField) (string, bool) {
-	if koName, ok := StructFieldKoName(sf); ok {
-		return koName, true
+func StructFieldWithNoKoOrProtoName(sf reflect.StructField) bool {
+	if _, hasProto := structFieldProtoName(sf); hasProto {
+		return false
+	} else if _, hasKo := structFieldProtoName(sf); hasKo {
+		return false
+	} else {
+		return true
 	}
-	if protoName, ok := StructFieldProtoName(sf); ok {
-		return protoName, true
-	}
-	return StructFieldGoName(sf)
 }
 
-func StructFieldKoName(sf reflect.StructField) (string, bool) {
+func StructFieldKoProtoGoName(sf reflect.StructField) (string, bool) {
+	if koName, ok := structFieldKoName(sf); ok {
+		return koName, true
+	}
+	if protoName, ok := structFieldProtoName(sf); ok {
+		return protoName, true
+	}
+	return structFieldGoName(sf)
+}
+
+func structFieldKoName(sf reflect.StructField) (string, bool) {
 	tag := sf.Tag.Get("ko")
 	for _, kv := range strings.Split(tag, ",") {
 		x := strings.SplitN(kv, "=", 2)
@@ -34,7 +44,7 @@ func StructFieldKoName(sf reflect.StructField) (string, bool) {
 	return "", false
 }
 
-func StructFieldGoName(sf reflect.StructField) (string, bool) {
+func structFieldGoName(sf reflect.StructField) (string, bool) {
 	if sf.PkgPath != "" { // unexported field
 		return "", false
 	} else {

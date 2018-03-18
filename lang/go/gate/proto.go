@@ -5,7 +5,27 @@ import (
 	"strings"
 )
 
-func StructFieldProtoName(sf reflect.StructField) (string, bool) {
+func StructFieldIsProtoOptOrRep(sf reflect.StructField) bool {
+	tag := sf.Tag.Get("protobuf")
+	for _, kv := range strings.Split(tag, ",") {
+		if kv == "opt" || kv == "rep" {
+			return true
+		}
+	}
+	return false
+}
+
+func StructFieldIsProtoOpt(sf reflect.StructField) bool {
+	tag := sf.Tag.Get("protobuf")
+	for _, kv := range strings.Split(tag, ",") {
+		if kv == "opt" {
+			return true
+		}
+	}
+	return false
+}
+
+func structFieldProtoName(sf reflect.StructField) (string, bool) {
 	tag := sf.Tag.Get("protobuf")
 	for _, kv := range strings.Split(tag, ",") {
 		x := strings.SplitN(kv, "=", 2)

@@ -45,6 +45,10 @@ func (call *EvalCallMacro) Invoke(span *Span, arg Arg) (returns Return, effect E
 		}()
 		ctx := NewEvalRuntimeContext(span)
 		result := receiver.MethodByName("Play").Call([]reflect.Value{reflect.ValueOf(ctx)})
+		// lift result to declared return value
+		m, _ := call.Gate.Receiver.MethodByName("Play")
+		result[0] = result[0].Convert(m.Type.Out(0))
+		//
 		if returned, err := Deconstruct(span, result[0]); err != nil {
 			return nil, nil, span.Errorf(err, "deconstructing gate return value")
 		} else {

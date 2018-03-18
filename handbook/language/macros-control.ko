@@ -23,10 +23,23 @@ ParallelMacroLink() {
 	return: wiki.Crosslink("language/macro/control/parallel")
 }
 
+PanicMacroLink() {
+	return: wiki.Crosslink("language/macro/control/panic")
+}
+
 controlMacrosContent() {
+	return: Merge(
+		yieldMacroSection()
+		loopMacroSection()
+		spinMacroSection()
+		parallelMacroSection()
+		panicMacroSection()
+	)
+}
+
+yieldMacroSection() {
 	return: (
-		// yield
-		wiki.Head(cross: YieldMacroLink(), nodes: C(`Yield`))
+		wiki.Head(cross: YieldMacroLink(), nodes: wiki.Text(`Yield: branching on a boolean`))
 		P(f: `%% recognizes three arguments: %% (boolean), %% and %%.
 			If %% is %%, %% returns the value of %%, otherwise it returns the
 			value of %%. If either of %% or %% is omitted, an empty value is
@@ -55,8 +68,12 @@ controlMacrosContent() {
 }
 `
 		)
-		// loop
-		H(`Loop`)
+	)
+}
+
+loopMacroSection() {
+	return: (
+		H(`Loop: iteration with a carry and a stop condition`)
 		P(f: `%% recognizes three arguments: %%, %% and %%, of which only %% is required.`
 			a: C(`Loop`)
 			a: C(`start`)
@@ -119,8 +136,12 @@ ListIntegersUpTo(limit) {
 }
 `
 		)
-		// spin
-		H(`Spin and Wait`)
+	)
+}
+
+spinMacroSection() {
+	return: (
+		H(`Spin and Wait: forking co-routines and synchronizing`)
 		P(f: `%% recognizes a monadic (unnamed) argument which must be a variety.
 			It executes the variety (a function lambda) in a new
 			process (co-routine) and immediately returns a handle to the executing process.`
@@ -159,7 +180,12 @@ ListIntegersUpTo(limit) {
 	)
 }`
 		)
-		wiki.Head(cross: ParallelMacroLink(), nodes: wiki.Text(`Parallel`))
+	)
+}
+
+parallelMacroSection() {
+	return: (
+		wiki.Head(cross: ParallelMacroLink(), nodes: wiki.Text(`Parallel execution`))
 		P(f: `By default, circuit functions are executed sequentially (in %% with respect
 			to its directed acyclic structure). The %% macro, when applied to a circuit
 			function variety, executes that circuit in parallel.`
@@ -199,6 +225,24 @@ DoSomeWorkInParallel(name) {
 			a: C(`job1`)
 			a: C(`job2`)
 			a: C(`job3`)
+		)
+	)
+}
+
+panicMacroSection() {
+	return: (
+		wiki.Head(
+			cross: PanicMacroLink()
+			nodes: wiki.Text(`Panic and recover: type-safe exceptions`)
+		)
+		Q(t: `Panicking is a mechanism for {{p}}`
+			a: (p: C(`Yield`))
+		)
+		CB(
+`Say(hello) {
+	return: Show()
+}
+`
 		)
 	)
 }

@@ -1,7 +1,7 @@
 import "github.com/kocircuit/kocircuit/lib/web/wiki"
 
 P(f?, a) {
-	return: wiki.FormatPar(f: f, a: a)
+	return: wiki.FormPar(f: f, a: a)
 }
 
 H(t?) {

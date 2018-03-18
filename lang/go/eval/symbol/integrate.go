@@ -205,7 +205,13 @@ func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, 
 				switch toField.Type.Kind() {
 				case reflect.Ptr, reflect.Slice: // to field is optional
 				default:
-					return reflect.Value{}, ctx.Errorf(nil, "go field %s in %v is required", toField.Name, t)
+					switch {
+					case gate.StructFieldIsProtoOptOrRep(toField):
+					case gate.StructFieldWithNoKoOrProtoName(toField):
+					default:
+						return reflect.Value{},
+							ctx.Errorf(nil, "go field %s in %v is required, not found in %v", toField.Name, t, ss)
+					}
 				}
 			} else {
 				if u, err := ctx.Refine(toField.Name).Integrate(from.Value, toField.Type); err != nil {
@@ -220,7 +226,7 @@ func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, 
 }
 
 func FindIntegrationField(from *StructSymbol, to reflect.StructField) *FieldSymbol {
-	name, hasKoName := gate.StructFieldKoName(to)
+	name, hasKoName := gate.StructFieldKoProtoGoName(to)
 	if !hasKoName {
 		return nil
 	}

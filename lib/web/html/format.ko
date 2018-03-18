@@ -1,23 +1,42 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-FmtDIV(f?, a) {
-	return: DIV(Fmt(f: f, a: a))
+FormDIV(f?, a) {
+	return: DIV(Form(f: f, a: a))
 }
 
-FmtP(f?, a) {
-	return: P(Fmt(f: f, a: a))
+FormP(f?, a) {
+	return: P(Form(f: f, a: a))
 }
 
-Fmt(f?, a) {
+Form(f?, a) {
 	return: Format(
 		format: f
 		args: a
-		withString: formatString(string?) {
-			return: Yield(
-				if: Not(strings.Equal(string, ""))
-				then: T(string)
-			)
-		}
+		withString: formString
 		withArg: Return
+	)
+}
+
+PlateDIV(t?, a) {
+	return: DIV(Plate(t: t, a: a))
+}
+
+PlateP(t?, a) {
+	return: P(Plate(t: t, a: a))
+}
+
+Plate(t?, a) {
+	return: Template(
+		template: t
+		args: a
+		withString: formString
+		withArg: Return
+	)
+}
+
+formString(string?) {
+	return: Yield(
+		if: Not(strings.Equal(string, ""))
+		then: T(string)
 	)
 }
