@@ -1,0 +1,100 @@
+syntax = "proto2";
+
+package ko.circuit;
+
+option go_package = "proto";
+
+message Func {
+	required ID id = 1;
+	required string pkgPath = 2;
+	required string name = 3;
+	repeated Step step = 4;
+	required string enter = 5;
+	repeated Arg arg = 6;
+	optional string monadic = 7;
+	required string leave = 8;
+	optional Source source = 9;
+}
+
+message ID {
+	required uint64 data = 1;
+}
+
+message Step {
+	required ID id = 1;
+	required string label = 2;
+	repeated Gather gather = 3;
+	required Logic logic = 4;
+	optional Source source = 5;
+	optional string pkgPath = 6;
+	optional string func = 7;
+}
+
+message Arg {
+	required string name = 1;
+	required string step = 2;
+}
+
+message Gather {
+	required string arg = 1;
+	required string step = 2;
+}
+
+// Circuit step logic types
+
+message Logic {
+	oneof logic {
+		LogicEnter enter = 1;
+		LogicLeave leave = 2;
+		LogicNumber number = 3;
+		LogicSelect select = 4;
+		LogicAugment augment = 5;
+		LogicInvoke invoke = 6;
+		LogicOperator operator = 7;
+		LogicPkgFunc pkgFunc = 8;
+	}
+}
+
+message LogicEnter {}
+
+message LogicLeave {}
+
+message LogicNumber {
+	oneof number {
+		bool bool = 1;
+		string string = 2;
+		int64 int64 = 3;
+		double float64 = 4;
+	}
+}
+
+message LogicSelect {
+	repeated string path = 1;
+}
+
+message LogicAugment {}
+
+message LogicInvoke {}
+
+message LogicOperator {
+	repeated string path = 1;
+}
+
+message LogicPkgFunc {
+	required string pkg = 1;
+	required string func = 2;
+}
+
+// Source info
+
+message Source {
+	required string file = 1;
+	required Position start = 2;
+	required Position end = 3;
+}
+
+message Position {
+	required int64 offset = 1;
+	required int64 line = 2;
+	required int64 column = 3;
+}
