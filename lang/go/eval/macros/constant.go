@@ -11,24 +11,42 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
-type EvalConstantMacro struct {
+type EvalGoValueMacro struct {
 	Value interface{} `ko:"name=value"`
 }
 
-func (m EvalConstantMacro) MacroID() string { return m.Help() }
+func (m EvalGoValueMacro) MacroID() string { return m.Help() }
 
-func (m EvalConstantMacro) Label() string { return "constant" }
+func (m EvalGoValueMacro) Label() string { return "constant" }
 
-func (m EvalConstantMacro) MacroSheathString() *string { return PtrString(m.Help()) }
+func (m EvalGoValueMacro) MacroSheathString() *string { return PtrString(m.Help()) }
 
-func (m EvalConstantMacro) Help() string {
+func (m EvalGoValueMacro) Help() string {
 	return fmt.Sprintf("Constant(%s)", Sprint(m.Value))
 }
 
-func (m EvalConstantMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+func (m EvalGoValueMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if sym, err := Deconstruct(span, reflect.ValueOf(m.Value)); err != nil {
 		return nil, nil, err
 	} else {
 		return sym, nil, nil
 	}
+}
+
+type EvalSymbolMacro struct {
+	Symbol Symbol `ko:"name=symbol"`
+}
+
+func (m EvalSymbolMacro) MacroID() string { return m.Help() }
+
+func (m EvalSymbolMacro) Label() string { return "symbol" }
+
+func (m EvalSymbolMacro) MacroSheathString() *string { return PtrString(m.Help()) }
+
+func (m EvalSymbolMacro) Help() string {
+	return fmt.Sprintf("Symbol(%v)", m.Symbol)
+}
+
+func (m EvalSymbolMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+	return m.Symbol, nil, nil
 }

@@ -29,7 +29,7 @@ type CompilePlay struct {
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	faculty := MergeFaculty(
 		Faculty{
-			Ideal{Pkg: "repo", Name: "Path"}: &EvalConstantMacro{Value: arg.Repo},
+			Ideal{Pkg: "repo", Name: "Path"}: &EvalGoValueMacro{Value: arg.Repo},
 		},
 		arg.Faculty,
 	)
