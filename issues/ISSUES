@@ -1,7 +1,30 @@
+CI
+* travis integration with ko tests
+
+LANG
+* Memoize macro
+* integrate into map[string]interface{} or []interface{} or interface{} (yaml, json, etc)
+* hash macros type-safety checks on Remember and Recall (on both keys and values)
+
 PROTO
 * ability to create empty structs?
+* proto service integration
 
 USABILITY
 * step by step tutorial covering all macros
 * doc When and All macros
 * produce error messages if GOPATH not set
+
+DOC
+* Panic and Recover macros
+* When and All macros
+* programming patterns (tests, etc)
+* circuit assembly level (Circuit IR)
+* svg illustrations for Range and Loop
+* circuit function svg visualizer
+* protobuf integration doc
+
+INSTRUMENTATION
+* recursive profiling aggregated in step effects, carrying:
+	unification cost, deconstruction cost, integration cost,
+	# varieties invoked = # gates invoked + # circuits invoked + # macros invoked
