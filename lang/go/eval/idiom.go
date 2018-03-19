@@ -22,8 +22,20 @@ Return(pass?) {
 	return: pass
 }
 
+Expect(value?) {
+	return: When(
+		have: value
+		then: Return
+		else: Panic[expect: "expecting a value"]
+	)
+}
+
 Pick(either, or) {
-	return: When(have: either, then: Return, else: Return[or])
+	return: When(
+		have: either
+		then: Return
+		else: Return[or]
+	)
 }
 
 Invoke(variety?) {
