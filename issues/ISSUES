@@ -7,7 +7,7 @@ LANG
 * hash macros type-safety checks on Remember and Recall (on both keys and values)
 
 PROTO
-* ability to create empty structs?
+* ability to create zero-value proto messages?
 * proto service integration
 
 USABILITY
