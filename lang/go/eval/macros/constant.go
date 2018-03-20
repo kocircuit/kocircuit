@@ -44,7 +44,7 @@ func (m EvalSymbolMacro) Label() string { return "symbol" }
 func (m EvalSymbolMacro) MacroSheathString() *string { return PtrString(m.Help()) }
 
 func (m EvalSymbolMacro) Help() string {
-	return fmt.Sprintf("Symbol(%v)", m.Symbol)
+	return fmt.Sprintf("Symbol(%s)", Sprint(m.Symbol))
 }
 
 func (m EvalSymbolMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
