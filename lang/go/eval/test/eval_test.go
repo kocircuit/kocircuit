@@ -394,12 +394,17 @@ var evalTests = []*EvalTest{
 		},
 		Result: "msg",
 	},
-	{ // test named values
+	{ // test named values and map extraction
 		Enabled: true,
 		File: `
 		import "test"
 		Main(x) {
-			return: test.Gate(int64: x, same: test.Gate(int64: 2))
+			return: test.Gate(
+				int64: x
+				same: test.Gate(int64: 2)
+				ss: (key: "k1", value: "v1")
+				ss: (key: "k2", value: "v2")
+			)
 		}
 		`,
 		Arg: struct {
@@ -411,6 +416,10 @@ var evalTests = []*EvalTest{
 			Int64: 3,
 			Same: &testNamedGate{
 				Int64: 2,
+			},
+			SS: map[string]string{
+				"k1": "v1",
+				"k2": "v2",
 			},
 		},
 	},
@@ -465,8 +474,9 @@ var evalTests = []*EvalTest{
 }
 
 type testNamedGate struct {
-	Int64 int64          `ko:"name=int64"`
-	Same  *testNamedGate `ko:"name=same"`
+	Int64 int64             `ko:"name=int64"`
+	Same  *testNamedGate    `ko:"name=same"`
+	SS    map[string]string `ko:"name=ss"`
 }
 
 func (g *testNamedGate) Play(ctx *runtime.Context) *testNamedGate {
