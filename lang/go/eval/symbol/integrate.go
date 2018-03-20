@@ -195,6 +195,9 @@ func (ctx *typingCtx) IntegrateSlice(s Symbol, t reflect.Type) (reflect.Value, e
 }
 
 func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if IsEmptySymbol(s) {
+		s = MakeStructSymbol(nil) // empty struct
+	}
 	if ss, ok := s.(*StructSymbol); !ok {
 		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate non-struct %s into struct %v", Sprint(s), t)
 	} else {

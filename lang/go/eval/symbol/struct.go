@@ -10,10 +10,7 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-// XXX: Hash and Equal ignore empty fields
-
 func MakeStructSymbol(fields FieldSymbols) *StructSymbol {
-	// fields = FilterEmptyFieldSymbols(fields) //XXX: necessary????
 	return &StructSymbol{
 		Type_: &StructType{Field: FieldSymbolTypes(fields)},
 		Field: fields,
