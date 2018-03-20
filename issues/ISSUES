@@ -1,5 +1,3 @@
-* integrate empty into structs with no required fields
-
 CI
 * travis integration with ko tests
 
