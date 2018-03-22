@@ -4,6 +4,15 @@ package ko.circuit;
 
 option go_package = "proto";
 
+message Repo {
+	repeated Package package = 1;
+}
+
+message Package {
+	required string path = 1;
+	repeated Func func = 2;
+}
+
 message Func {
 	required ID id = 1;
 	required string pkgPath = 2;

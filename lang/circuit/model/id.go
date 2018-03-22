@@ -16,6 +16,10 @@ type ID struct {
 	Data uint64 `ko:"name=data"`
 }
 
+func (id ID) ProtoData() uint64 {
+	return id.Data
+}
+
 func (id ID) String() string {
 	return id.Format(7)
 }
