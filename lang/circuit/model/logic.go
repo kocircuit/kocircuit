@@ -155,8 +155,9 @@ func (x Leave) String() string {
 }
 
 type Number struct {
+	// Value is one of: bool, LexString, LexInteger or LexFloat.
 	Value interface{} `ko:"name=value"`
-} // bool, int64, string, float64
+}
 
 func (x Number) String() string {
 	switch t := x.Value.(type) {

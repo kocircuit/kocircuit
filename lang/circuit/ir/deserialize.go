@@ -151,11 +151,11 @@ func DeserializeLogic(pbLogic *pb.Logic) Logic {
 		case *pb.LogicNumber_Bool:
 			return Number{Value: w.Bool}
 		case *pb.LogicNumber_String_:
-			return Number{Value: w.String_}
+			return Number{Value: LexString{String: w.String_}}
 		case *pb.LogicNumber_Int64:
-			return Number{Value: w.Int64}
+			return Number{Value: LexInteger{Int64: w.Int64}}
 		case *pb.LogicNumber_Float64:
-			return Number{Value: w.Float64}
+			return Number{Value: LexFloat{Float64: w.Float64}}
 		}
 	}
 	panic("o")

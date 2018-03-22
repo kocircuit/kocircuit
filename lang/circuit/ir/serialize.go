@@ -10,55 +10,48 @@ import (
 )
 
 func SerializeRepo(repo Repo) *pb.Repo {
-	ctx := &serializingCtx{}
-	return ctx.serializeRepo(repo)
-}
-
-type serializingCtx struct{}
-
-func (ctx *serializingCtx) serializeRepo(repo Repo) *pb.Repo {
 	pbRepo := &pb.Repo{
 		Package: make([]*pb.Package, 0, len(repo)),
 	}
 	for pkgPath, pkg := range repo {
-		pbRepo.Package = append(pbRepo.Package, ctx.serializePackage(pkgPath, pkg))
+		pbRepo.Package = append(pbRepo.Package, serializePackage(pkgPath, pkg))
 	}
 	return pbRepo
 }
 
-func (ctx *serializingCtx) serializePackage(pkgPath string, pkg Package) *pb.Package {
+func serializePackage(pkgPath string, pkg Package) *pb.Package {
 	pbPackage := &pb.Package{
 		Path: proto.String(pkgPath),
 		Func: make([]*pb.Func, 0, len(pkg)),
 	}
 	for _, fu := range pkg {
-		pbPackage.Func = append(pbPackage.Func, ctx.serializeFunc(fu))
+		pbPackage.Func = append(pbPackage.Func, serializeFunc(fu))
 	}
 	return pbPackage
 }
 
-func (ctx *serializingCtx) serializeFunc(fu *Func) *pb.Func {
+func serializeFunc(fu *Func) *pb.Func {
 	pbFunc := &pb.Func{
 		Id:      SerializeID(fu.ID),
 		Name:    proto.String(fu.Name),
 		PkgPath: proto.String(fu.Pkg),
-		Step:    ctx.serializeSteps(fu.Step),
+		Step:    serializeSteps(fu.Step),
 		Enter:   proto.String(fu.Enter.Label),
 		Leave:   proto.String(fu.Leave.Label),
-		Arg:     ctx.serializeArg(fu.Field),
+		Arg:     serializeArg(fu.Field),
 		Monadic: proto.String(fu.Monadic),
 		Source:  SerializeSyntax(fu.Syntax),
 	}
 	return pbFunc
 }
 
-func (ctx *serializingCtx) serializeSteps(steps []*Step) []*pb.Step {
+func serializeSteps(steps []*Step) []*pb.Step {
 	pbSteps := make([]*pb.Step, len(steps))
 	for i, step := range steps {
 		pbSteps[i] = &pb.Step{
 			Id:      SerializeID(step.ID),
 			Label:   proto.String(step.Label),
-			Gather:  ctx.serializeGather(step.Gather),
+			Gather:  serializeGather(step.Gather),
 			Logic:   SerializeLogic(step.Logic),
 			Source:  SerializeSyntax(step.Syntax),
 			PkgPath: proto.String(step.Func.Pkg),
@@ -68,7 +61,7 @@ func (ctx *serializingCtx) serializeSteps(steps []*Step) []*pb.Step {
 	return pbSteps
 }
 
-func (ctx *serializingCtx) serializeGather(gather []*Gather) []*pb.Gather {
+func serializeGather(gather []*Gather) []*pb.Gather {
 	pbGather := make([]*pb.Gather, len(gather))
 	for i, g := range gather {
 		pbGather[i] = &pb.Gather{Arg: proto.String(g.Field), Step: proto.String(g.Step.Label)}
@@ -76,7 +69,7 @@ func (ctx *serializingCtx) serializeGather(gather []*Gather) []*pb.Gather {
 	return pbGather
 }
 
-func (ctx *serializingCtx) serializeArg(arg map[string]*Step) []*pb.Arg {
+func serializeArg(arg map[string]*Step) []*pb.Arg {
 	pbArg := make([]*pb.Arg, 0, len(arg))
 	for name, step := range arg {
 		pbArg = append(pbArg, &pb.Arg{Name: proto.String(name), Step: proto.String(step.Label)})
@@ -171,27 +164,27 @@ func SerializeNumberLogic(n Number) *pb.Logic {
 				},
 			},
 		}
-	case int64:
+	case LexInteger:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{
-					Number: &pb.LogicNumber_Int64{Int64: u},
+					Number: &pb.LogicNumber_Int64{Int64: u.Int64},
 				},
 			},
 		}
-	case string:
+	case LexString:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{
-					Number: &pb.LogicNumber_String_{String_: u},
+					Number: &pb.LogicNumber_String_{String_: u.String},
 				},
 			},
 		}
-	case float64:
+	case LexFloat:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{
-					Number: &pb.LogicNumber_Float64{Float64: u},
+					Number: &pb.LogicNumber_Float64{Float64: u.Float64},
 				},
 			},
 		}

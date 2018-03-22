@@ -45,18 +45,27 @@ func (repo Repo) StringTable(header string) [][]string {
 	return SortStringTable(ss)
 }
 
+func (repo Repo) SortedPackagePaths() []string {
+	pkgPath := make([]string, 0, len(repo))
+	for p := range repo {
+		pkgPath = append(pkgPath, p)
+	}
+	sort.Strings(pkgPath)
+	return pkgPath
+}
+
 func (repo Repo) String() string {
 	var w bytes.Buffer
-	for _, pkg := range repo {
-		fmt.Fprintln(&w, pkg.String())
+	for _, pkgPath := range repo.SortedPackagePaths() {
+		fmt.Fprintln(&w, repo[pkgPath].String())
 	}
 	return w.String()
 }
 
 func (repo Repo) BodyString() string {
 	var w bytes.Buffer
-	for _, pkg := range repo {
-		fmt.Fprintln(&w, pkg.BodyString())
+	for _, pkgPath := range repo.SortedPackagePaths() {
+		fmt.Fprintln(&w, repo[pkgPath].BodyString())
 	}
 	return w.String()
 }
@@ -74,28 +83,27 @@ func (repo Repo) Lookup(pkg string, fu string) *Func {
 
 type Package map[string]*Func
 
+func (pkg Package) SortedFuncNames() []string {
+	names := make([]string, 0, len(pkg))
+	for n := range pkg {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	return names
+}
+
 func (pkg Package) String() string {
 	var w bytes.Buffer
-	path := make([]string, 0, len(pkg)) // sort functions
-	for p := range pkg {
-		path = append(path, p)
-	}
-	sort.Strings(path)
-	for _, p := range path {
-		fmt.Fprintln(&w, pkg[p].String())
+	for _, fuName := range pkg.SortedFuncNames() {
+		fmt.Fprintln(&w, pkg[fuName].String())
 	}
 	return w.String()
 }
 
 func (pkg Package) BodyString() string {
 	var w bytes.Buffer
-	path := make([]string, 0, len(pkg)) // sort functions
-	for p := range pkg {
-		path = append(path, p)
-	}
-	sort.Strings(path)
-	for _, p := range path {
-		fmt.Fprintln(&w, pkg[p].BodyString())
+	for _, fuName := range pkg.SortedFuncNames() {
+		fmt.Fprintln(&w, pkg[fuName].BodyString())
 	}
 	return w.String()
 }

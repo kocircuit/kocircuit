@@ -3,6 +3,7 @@ package model
 import (
 	"bytes"
 	"fmt"
+	"sort"
 )
 
 const KoIndent = "\t" // used to be 3 spaces
@@ -11,14 +12,24 @@ func (f *Func) String() string {
 	return fmt.Sprintf("%s.%s", f.Pkg, f.Name)
 }
 
+func (f *Func) SortedFieldNames() []string {
+	fieldNames := make([]string, 0, len(f.Field))
+	for p := range f.Field {
+		fieldNames = append(fieldNames, p)
+	}
+	sort.Strings(fieldNames)
+	return fieldNames
+}
+
 func (f *Func) BodyString() string {
 	var w bytes.Buffer
 	fmt.Fprintf(&w, "%s(", fmt.Sprintf("%s.%s", f.Pkg, f.Name))
 	var numField int
-	for field := range f.Field {
-		fmt.Fprint(&w, field)
+	sortedFieldNames := f.SortedFieldNames()
+	for _, fieldName := range sortedFieldNames {
+		fmt.Fprint(&w, f.Field[fieldName])
 		numField++
-		if numField < len(f.Field) {
+		if numField < len(sortedFieldNames) {
 			fmt.Fprint(&w, ", ")
 		}
 	}
