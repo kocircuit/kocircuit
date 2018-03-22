@@ -16,6 +16,10 @@ type ID struct {
 	Data uint64 `ko:"name=data"`
 }
 
+func IDFromProtoData(d uint64) ID {
+	return ID{Data: d}
+}
+
 func (id ID) ProtoData() uint64 {
 	return id.Data
 }

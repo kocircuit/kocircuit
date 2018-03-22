@@ -38,19 +38,24 @@ func graftFunc(pkg string, parsed Design) (f *Func, err error) {
 		Monadic: g.monadic,
 		Leave:   g.add(Step{Label: "0_leave", Gather: gatherReturned, Logic: Leave{}, Syntax: parsed}),
 		Step:    sortStep(g.all),
-		Spread:  map[*Step][]*Step{},
+		Spread:  nil, // filled later
 		Syntax:  parsed,
 	}
 	if err = computeStepIDs(f); err != nil {
 		return nil, err
 	}
-	for _, s := range f.Step {
-		s.Func = f // add backlink to the func
+	BacklinkFunc(f)
+	return f, nil
+}
+
+func BacklinkFunc(fu *Func) {
+	fu.Spread = map[*Step][]*Step{}
+	for _, s := range fu.Step {
+		s.Func = fu // add backlink to the func
 		for _, g := range s.Gather {
-			f.Spread[g.Step] = append(f.Spread[g.Step], s)
+			fu.Spread[g.Step] = append(fu.Spread[g.Step], s)
 		}
 	}
-	return f, nil
 }
 
 func computeStepIDs(f *Func) error {
