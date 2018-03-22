@@ -5,6 +5,7 @@ import (
 	"path"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
+	. "github.com/kocircuit/kocircuit/lang/circuit/ir"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/macros"
@@ -27,16 +28,18 @@ type CompilePlay struct {
 }
 
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
-	faculty := MergeFaculty(
+	preCompileFaculty := MergeFaculty(
 		Faculty{
-			Ideal{Pkg: "repo", Name: "Path"}: &EvalGoValueMacro{Value: arg.Repo},
+			Ideal{Pkg: "repo", Name: "Path"}:       &EvalGoValueMacro{Value: arg.Repo},
+			Ideal{Pkg: "repo", Name: "Proto"}:      &EvalPlaceholderMacro{},
+			Ideal{Pkg: "repo", Name: "ProtoBytes"}: &EvalPlaceholderMacro{},
 		},
 		arg.Faculty,
 	)
 	c := &Compile{
 		RepoDir: arg.Repo,
 		PkgPath: arg.Pkg,
-		Faculty: faculty,
+		Faculty: preCompileFaculty,
 		Idiom:   arg.Idiom,
 		Show:    arg.Show,
 	}
@@ -44,11 +47,23 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	if compiled.Error != nil {
 		return &PlayResult{Error: compiled.Error}
 	}
+	repoProto, repoProtoBytes, err := SerializeEncodeRepo(compiled.Repo)
+	if err != nil {
+		panic(err)
+	}
+	postCompileFaculty := MergeFaculty(
+		Faculty{
+			Ideal{Pkg: "repo", Name: "Path"}:       &EvalGoValueMacro{Value: arg.Repo},
+			Ideal{Pkg: "repo", Name: "Proto"}:      &EvalGoValueMacro{Value: repoProto},
+			Ideal{Pkg: "repo", Name: "ProtoBytes"}: &EvalGoValueMacro{Value: repoProtoBytes},
+		},
+		arg.Faculty,
+	)
 	w := &Play{
 		Pkg:     arg.Pkg,
 		Func:    arg.Func,
 		Repo:    compiled.Repo,
-		Faculty: faculty,
+		Faculty: postCompileFaculty,
 		Idiom:   arg.Idiom,
 	}
 	return w.Play(ctx)
