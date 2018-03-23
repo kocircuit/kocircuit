@@ -8,6 +8,8 @@ import (
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros/circuit"
 	// Packages with side-effect of registering go gate implementations
+	_ "github.com/kocircuit/kocircuit/lib/encoding/json"
+	_ "github.com/kocircuit/kocircuit/lib/encoding/yaml"
 	_ "github.com/kocircuit/kocircuit/lib/file"
 	_ "github.com/kocircuit/kocircuit/lib/file/path"
 	_ "github.com/kocircuit/kocircuit/lib/integer"

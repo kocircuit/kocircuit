@@ -11,6 +11,7 @@ import (
 
 func TestEval(t *testing.T) {
 	RegisterEvalGateAt("test", "Gate", new(testNamedGate))
+	RegisterEvalGateAt("test", "Disassemble", new(testDisassembleGate))
 	tests := &EvalTests{T: t, Test: evalTests}
 	tests.Play(runtime.NewContext())
 }
@@ -447,7 +448,7 @@ var evalTests = []*EvalTest{
 		},
 	},
 	{ // test all
-		Enabled: false,
+		Enabled: true,
 		File: `
 		Pass(pass) { return: pass }
 		HaveBoth(x, y) {
@@ -471,6 +472,33 @@ var evalTests = []*EvalTest{
 		},
 		Result: true,
 	},
+	{ // test disassembly
+		Enabled: true,
+		File: `
+		import "test"
+		Main(x) {
+			return: test.Disassemble(
+				value: (
+					a: "abc"
+					b: 123
+					c: x
+				)
+			)
+		}
+		`,
+		Arg: struct {
+			Ko_x int64 `ko:"name=x"`
+		}{
+			Ko_x: 3,
+		},
+		Result: (interface{})(&testDisassembleGate{
+			Value: map[string]interface{}{
+				"a": "abc",
+				"b": int64(123),
+				"c": int64(3),
+			},
+		}),
+	},
 }
 
 type testNamedGate struct {
@@ -480,5 +508,13 @@ type testNamedGate struct {
 }
 
 func (g *testNamedGate) Play(ctx *runtime.Context) *testNamedGate {
+	return g
+}
+
+type testDisassembleGate struct {
+	Value interface{} `ko:"name=value"`
+}
+
+func (g *testDisassembleGate) Play(ctx *runtime.Context) *testDisassembleGate {
 	return g
 }

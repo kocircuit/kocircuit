@@ -102,8 +102,11 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 		return ctx.IntegrateFromNamedOrOpaque(s, t)
 	case reflect.Interface:
 		if t == typeOfInterface {
-			dis := s.Disassemble(ctx.Span)
-			return reflect.ValueOf(dis).Convert(typeOfInterface), nil
+			if dis := reflect.ValueOf(s.Disassemble(ctx.Span)); dis.IsValid() {
+				return dis.Convert(typeOfInterface), nil
+			} else {
+				return reflect.Zero(typeOfInterface), nil
+			}
 		} else {
 			return ctx.IntegrateFromNamedOrOpaque(s, t)
 		}
