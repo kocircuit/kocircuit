@@ -13,6 +13,21 @@ func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 	return ctx.Integrate(s, t)
 }
 
+func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if r, err := ctx.integrateNamed(s, t); err == nil { // try
+		return r, nil
+	}
+	// if s is named, deconstruct its go value
+	if named, ok := s.(*NamedSymbol); ok {
+		if dec, err := ctx.DeconstructKind(named.Value); err != nil {
+			return reflect.Value{}, err
+		} else {
+			s = dec
+		}
+	}
+	return ctx.IntegrateKind(s, t)
+}
+
 func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
 	tName := TypeName(t)
 	if tName == "" {
@@ -35,21 +50,6 @@ func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, e
 			TypeName(sGoType), TypeName(t),
 		)
 	}
-}
-
-func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if r, err := ctx.integrateNamed(s, t); err == nil { // try
-		return r, nil
-	}
-	// if s is named, deconstruct its go value
-	if named, ok := s.(*NamedSymbol); ok {
-		if dec, err := ctx.DeconstructKind(named.Value); err != nil {
-			return reflect.Value{}, err
-		} else {
-			s = dec
-		}
-	}
-	return ctx.IntegrateKind(s, t)
 }
 
 func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, error) {
@@ -86,20 +86,13 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 		if IsBasicKind(s, t.Kind()) {
 			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
 		}
-	case reflect.Uintptr:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.Complex64:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.Complex128:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.Array:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.Chan:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.UnsafePointer:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
-	case reflect.Func:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
+	case reflect.Uintptr: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Complex64: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Complex128: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Array: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Chan: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.UnsafePointer: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Func: // defer to IntegrateFrom Named/Opaque/Map
 	case reflect.Interface:
 		if t == typeOfInterface {
 			if dis := reflect.ValueOf(s.Disassemble(ctx.Span)); dis.IsValid() {
@@ -108,15 +101,15 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 				return reflect.Zero(typeOfInterface), nil
 			}
 		} else {
-			return ctx.IntegrateFromNamedOrOpaque(s, t)
+			// defer to IntegrateFrom Named/Opaque/Map
 		}
 	case reflect.Map:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
-		} else if w, err := ctx.IntegrateFromNamedOrOpaque(s, t); err == nil {
-			return w, nil
 		} else if mapSymbol, err := ExtractMap(ctx.Span, s, t); err == nil {
-			return ctx.IntegrateFromNamedOrOpaque(mapSymbol, t)
+			return ctx.IntegrateKind(mapSymbol, t) // try again
+		} else {
+			// defer to IntegrateFrom Named/Opaque/Map
 		}
 	case reflect.Ptr:
 		if IsEmptySymbol(s) {
@@ -151,57 +144,65 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Struct: // catch missing fields
 		return ctx.IntegrateStruct(s, t)
 	}
+	//
+	switch u := s.(type) {
+	case *OpaqueSymbol:
+		return ctx.IntegrateFromOpaque(u, t)
+	case *MapSymbol:
+		return ctx.IntegrateFromMap(u, t)
+	case *NamedSymbol:
+		return ctx.IntegrateFromNamed(u, t)
+	}
 	return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %s into %v", Sprint(s), t)
 }
 
 var typeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()
 
-func (ctx *typingCtx) IntegrateFromNamedOrOpaque(s Symbol, t reflect.Type) (reflect.Value, error) {
-	switch u := s.(type) {
-	case *OpaqueSymbol:
-		if u.GoType().AssignableTo(t) {
-			if u.Value.CanAddr() {
-				return u.Value, nil
-			} else {
-				w := reflect.New(t).Elem()
-				w.Set(u.Value)
-				return w, nil
-			}
-		} else {
-			return reflect.Value{},
-				ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", u.Type(), t)
-		}
-	case *MapSymbol:
-		if u.GoType().AssignableTo(t) {
-			if u.Value.CanAddr() {
-				return u.Value, nil
-			} else {
-				w := reflect.New(t).Elem()
-				w.Set(u.Value)
-				return w, nil
-			}
-		} else {
-			return reflect.Value{},
-				ctx.Errorf(nil, "cannot integrate map type %v into go type %v", u.Type(), t)
-		}
-	case *NamedSymbol: // matches logic in UnifyOpaqueNamed
-		goType := u.GoType()
-		if goType.AssignableTo(t) { // T -> interface
+func (ctx *typingCtx) IntegrateFromOpaque(u *OpaqueSymbol, t reflect.Type) (reflect.Value, error) {
+	if u.GoType().AssignableTo(t) {
+		if u.Value.CanAddr() {
 			return u.Value, nil
-		} else if reflect.PtrTo(goType).AssignableTo(t) { // *T -> interface
-			if u.Value.CanAddr() {
-				return u.Value.Addr(), nil
-			} else {
-				w := reflect.New(goType)
-				w.Elem().Set(u.Value)
-				return w, nil
-			}
 		} else {
-			return reflect.Value{},
-				ctx.Errorf(nil, "cannot integrate named type %v into go type %v", u.GoType(), t)
+			w := reflect.New(t).Elem()
+			w.Set(u.Value)
+			return w, nil
 		}
-	default:
-		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %v into go type %v", s, t)
+	} else {
+		return reflect.Value{},
+			ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", u.Type(), t)
+	}
+}
+
+func (ctx *typingCtx) IntegrateFromMap(u *MapSymbol, t reflect.Type) (reflect.Value, error) {
+	if u.GoType().AssignableTo(t) {
+		if u.Value.CanAddr() {
+			return u.Value, nil
+		} else {
+			w := reflect.New(t).Elem()
+			w.Set(u.Value)
+			return w, nil
+		}
+	} else {
+		return reflect.Value{},
+			ctx.Errorf(nil, "cannot integrate map type %v into go type %v", u.Type(), t)
+	}
+}
+
+func (ctx *typingCtx) IntegrateFromNamed(u *NamedSymbol, t reflect.Type) (reflect.Value, error) {
+	goType := u.GoType()
+	if goType.AssignableTo(t) { // T -> interface
+		return u.Value, nil
+	} else if reflect.PtrTo(goType).AssignableTo(t) { // *T -> interface
+		if u.Value.CanAddr() {
+			return u.Value.Addr(), nil
+		} else {
+			w := reflect.New(goType)
+			w.Elem().Set(u.Value)
+			return w, nil
+		}
+	} else {
+		return reflect.Value{},
+			ctx.Errorf(nil, "cannot integrate named type %v into go type %v", u.GoType(), t)
 	}
 }
 
