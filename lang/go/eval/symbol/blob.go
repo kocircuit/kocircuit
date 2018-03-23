@@ -13,6 +13,10 @@ type BlobSymbol struct {
 	Value reflect.Value `ko:"name=value"` // []byte
 }
 
+func (blob *BlobSymbol) Disassemble(span *Span) interface{} {
+	return blob.Bytes()
+}
+
 func (blob *BlobSymbol) Bytes() []byte {
 	return blob.Value.Bytes()
 }

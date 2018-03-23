@@ -14,6 +14,10 @@ type NamedSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
+func (named *NamedSymbol) Disassemble(span *Span) interface{} {
+	return MustDeconstructKind(span, named.Value).Disassemble(span)
+}
+
 func (named *NamedSymbol) String() string {
 	return Sprint(named.Value.Interface())
 }

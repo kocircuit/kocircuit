@@ -18,6 +18,10 @@ func IsEmptyType(t Type) bool {
 
 type EmptySymbol struct{}
 
+func (empty EmptySymbol) Disassemble(span *Span) interface{} {
+	return nil
+}
+
 func (empty EmptySymbol) String() string {
 	return Sprint(empty)
 }

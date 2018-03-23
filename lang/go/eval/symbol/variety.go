@@ -22,6 +22,10 @@ type VarietySymbol struct {
 	Arg   FieldSymbols `ko:"name=arg"`
 }
 
+func (vty *VarietySymbol) Disassemble(span *Span) interface{} {
+	return nil
+}
+
 func (vty *VarietySymbol) String() string {
 	return Sprint(vty)
 }

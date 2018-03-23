@@ -21,6 +21,7 @@ type Symbol interface {
 	Hash() string
 	Equal(Symbol) bool
 	LiftToSeries(*Span) *SeriesSymbol
+	Disassemble(*Span) interface{}
 }
 
 var (

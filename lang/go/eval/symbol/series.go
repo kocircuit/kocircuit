@@ -12,6 +12,14 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
+func (ss *SeriesSymbol) Disassemble(span *Span) interface{} {
+	dis := make([]interface{}, len(ss.Elem))
+	for i, elem := range ss.Elem {
+		dis[i] = elem.Disassemble(span)
+	}
+	return dis
+}
+
 func (ss *SeriesSymbol) IsEmpty() bool {
 	return ss.Len() == 0
 }

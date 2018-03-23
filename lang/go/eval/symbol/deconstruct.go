@@ -8,9 +8,30 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+func MustDeconstruct(span *Span, v reflect.Value) Symbol {
+	sym, err := Deconstruct(span, v)
+	if err != nil {
+		panic(err)
+	}
+	return sym
+}
+
+func MustDeconstructKind(span *Span, v reflect.Value) Symbol {
+	sym, err := DeconstructKind(span, v)
+	if err != nil {
+		panic(err)
+	}
+	return sym
+}
+
 func Deconstruct(span *Span, v reflect.Value) (Symbol, error) {
 	ctx := &typingCtx{Span: span}
 	return ctx.Deconstruct(v)
+}
+
+func DeconstructKind(span *Span, v reflect.Value) (Symbol, error) {
+	ctx := &typingCtx{Span: span}
+	return ctx.DeconstructKind(v)
 }
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
@@ -55,18 +76,18 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 	case reflect.Float64:
 		return BasicSymbol{float64(v.Float())}, nil
 	case reflect.Uintptr:
-		return nil, ctx.Errorf(nil, "go uintptr type not supported")
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Complex64:
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Complex128:
 		return &OpaqueSymbol{Value: v}, nil
-	case reflect.Array:
+	case reflect.Array: // non-protocol type, go-specific
 		return &OpaqueSymbol{Value: v}, nil
-	case reflect.Chan:
+	case reflect.Chan: // go-specific
 		return &OpaqueSymbol{Value: v}, nil
-	case reflect.UnsafePointer:
+	case reflect.UnsafePointer: // go-specific
 		return &OpaqueSymbol{Value: v}, nil
-	case reflect.Func:
+	case reflect.Func: // go-specific
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Map:
 		return &OpaqueSymbol{Value: v}, nil

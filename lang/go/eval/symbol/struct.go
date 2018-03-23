@@ -49,6 +49,14 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
+func (ss *StructSymbol) Disassemble(span *Span) interface{} {
+	dis := map[string]interface{}{}
+	for _, field := range ss.Field {
+		dis[field.Name] = field.Value.Disassemble(span)
+	}
+	return dis
+}
+
 func (ss *StructSymbol) IsEmpty() bool {
 	return len(ss.Field) == 0
 }

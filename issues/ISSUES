@@ -2,8 +2,9 @@ CI
 * travis integration with ko tests
 
 LANG
-* Memoize macro
+* Deconstruct without error return
 * integrate into map[string]interface{} or []interface{} or interface{} (yaml, json, etc)
+* Memoize macro
 * hash macros type-safety checks on Remember and Recall (on both keys and values)
 
 PROTO

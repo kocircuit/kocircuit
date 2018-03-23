@@ -60,6 +60,10 @@ type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
 
+func (basic BasicSymbol) Disassemble(span *Span) interface{} {
+	return basic.Value
+}
+
 func (basic BasicSymbol) GoValue() reflect.Value {
 	return reflect.ValueOf(basic.Value)
 }
