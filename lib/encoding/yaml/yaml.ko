@@ -1,0 +1,5 @@
+import "github.com/kocircuit/kocircuit/lib/encoding/yaml"
+
+Marshal(value?) {
+	return: yaml.GoMarshal(value: value)
+}
