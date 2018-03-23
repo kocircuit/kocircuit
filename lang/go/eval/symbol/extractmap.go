@@ -6,11 +6,11 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 )
 
-func ExtractMapOpaque(span *Span, s Symbol, mapType reflect.Type) (*OpaqueSymbol, error) {
+func ExtractMap(span *Span, s Symbol, mapType reflect.Type) (*MapSymbol, error) {
 	if mapValue, err := extractMapValue(span, s, mapType); err != nil {
 		return nil, err
 	} else {
-		return &OpaqueSymbol{Value: mapValue}, nil
+		return &MapSymbol{Value: mapValue}, nil
 	}
 }
 
