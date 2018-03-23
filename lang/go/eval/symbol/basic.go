@@ -15,11 +15,7 @@ var (
 )
 
 func MakeBasicSymbol(span *Span, v interface{}) BasicSymbol {
-	if s, err := Deconstruct(span, reflect.ValueOf(v)); err != nil {
-		panic(err)
-	} else {
-		return s.(BasicSymbol)
-	}
+	return MustDeconstruct(span, reflect.ValueOf(v)).(BasicSymbol)
 }
 
 func BasicByteSymbol(i byte) Symbol {

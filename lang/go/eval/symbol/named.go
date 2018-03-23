@@ -76,7 +76,7 @@ func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
 		return nil, span.Errorf(nil, "cannot select %s into %v", field, named)
 	}
 	if fieldIndex, ok := gate.StripFields(v.Type()).FieldByKoName(field); ok {
-		return Deconstruct(span, v.Field(fieldIndex))
+		return MustDeconstruct(span, v.Field(fieldIndex)), nil
 	} else {
 		return EmptySymbol{}, nil
 	}

@@ -26,11 +26,7 @@ func (m EvalGoValueMacro) Help() string {
 }
 
 func (m EvalGoValueMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	if sym, err := Deconstruct(span, reflect.ValueOf(m.Value)); err != nil {
-		return nil, nil, err
-	} else {
-		return sym, nil, nil
-	}
+	return MustDeconstruct(span, reflect.ValueOf(m.Value)), nil, nil
 }
 
 type EvalSymbolMacro struct {

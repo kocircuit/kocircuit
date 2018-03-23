@@ -31,9 +31,5 @@ func (m *EvalProtoMessageMacro) Invoke(span *Span, arg Arg) (returns Return, eff
 	if err != nil {
 		return nil, nil, err
 	}
-	msgSym, err := Deconstruct(span, msgValue)
-	if err != nil {
-		return nil, nil, err
-	}
-	return msgSym, nil, nil
+	return MustDeconstruct(span, msgValue), nil, nil
 }

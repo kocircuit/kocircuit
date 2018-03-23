@@ -51,10 +51,7 @@ func (test *EvalTest) Play(ctx *runtime.Context) error {
 	span = RefineChamber(span, "testEval")
 	span = RefineOutline(span, "Main")
 	// deconstruct test arguments
-	arg, err := Deconstruct(span, reflect.ValueOf(test.Arg))
-	if err != nil {
-		return fmt.Errorf("argument deconstruction (%v)", err)
-	}
+	arg := MustDeconstruct(span, reflect.ValueOf(test.Arg))
 	returned, _, err := eval.Eval(span, repo["test"]["Main"], arg)
 	if err != nil {
 		return fmt.Errorf("eval (%v)", err)

@@ -55,10 +55,5 @@ func (m *EvalUnmarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, e
 			),
 		)
 	}
-	result, err := Deconstruct(span, reflect.ValueOf(msg))
-	if err != nil {
-		panic("o")
-		return nil, nil, span.Errorf(err, "deconstructing proto")
-	}
-	return result, nil, nil
+	return MustDeconstruct(span, reflect.ValueOf(msg)), nil, nil
 }

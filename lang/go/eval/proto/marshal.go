@@ -50,9 +50,5 @@ func (m *EvalMarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, eff
 			),
 		)
 	}
-	bytesSym, err := Deconstruct(span, reflect.ValueOf(buf))
-	if err != nil {
-		panic("o")
-	}
-	return bytesSym, nil, nil
+	return MustDeconstruct(span, reflect.ValueOf(buf)), nil, nil
 }
