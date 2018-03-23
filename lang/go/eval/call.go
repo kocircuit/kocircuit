@@ -48,7 +48,7 @@ func (call *EvalCallMacro) Invoke(span *Span, arg Arg) (returns Return, effect E
 		// lift result to declared return value
 		m, _ := call.Gate.Receiver.MethodByName("Play")
 		result[0] = result[0].Convert(m.Type.Out(0))
-		return MustDeconstruct(span, result[0]), nil, nil
+		return Deconstruct(span, result[0]), nil, nil
 	}
 }
 

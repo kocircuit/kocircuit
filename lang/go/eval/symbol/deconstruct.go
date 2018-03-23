@@ -8,30 +8,22 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func MustDeconstruct(span *Span, v reflect.Value) Symbol {
-	sym, err := Deconstruct(span, v)
-	if err != nil {
-		panic(err)
-	}
-	return sym
-}
-
-func MustDeconstructKind(span *Span, v reflect.Value) Symbol {
-	sym, err := DeconstructKind(span, v)
-	if err != nil {
-		panic(err)
-	}
-	return sym
-}
-
-func Deconstruct(span *Span, v reflect.Value) (Symbol, error) {
+func Deconstruct(span *Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
-	return ctx.Deconstruct(v)
+	if symbol, err := ctx.Deconstruct(v); err != nil {
+		panic(err)
+	} else {
+		return symbol
+	}
 }
 
-func DeconstructKind(span *Span, v reflect.Value) (Symbol, error) {
+func DeconstructKind(span *Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
-	return ctx.DeconstructKind(v)
+	if symbol, err := ctx.DeconstructKind(v); err != nil {
+		panic(err)
+	} else {
+		return symbol
+	}
 }
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {

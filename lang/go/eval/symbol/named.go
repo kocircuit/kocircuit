@@ -15,7 +15,7 @@ type NamedSymbol struct {
 }
 
 func (named *NamedSymbol) Disassemble(span *Span) interface{} {
-	return MustDeconstructKind(span, named.Value).Disassemble(span)
+	return DeconstructKind(span, named.Value).Disassemble(span)
 }
 
 func (named *NamedSymbol) String() string {
@@ -76,7 +76,7 @@ func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
 		return nil, span.Errorf(nil, "cannot select %s into %v", field, named)
 	}
 	if fieldIndex, ok := gate.StripFields(v.Type()).FieldByKoName(field); ok {
-		return MustDeconstruct(span, v.Field(fieldIndex)), nil
+		return Deconstruct(span, v.Field(fieldIndex)), nil
 	} else {
 		return EmptySymbol{}, nil
 	}

@@ -55,5 +55,5 @@ func (m *EvalUnmarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, e
 			),
 		)
 	}
-	return MustDeconstruct(span, reflect.ValueOf(msg)), nil, nil
+	return Deconstruct(span, reflect.ValueOf(msg)), nil, nil
 }

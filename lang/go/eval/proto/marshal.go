@@ -50,5 +50,5 @@ func (m *EvalMarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, eff
 			),
 		)
 	}
-	return MustDeconstruct(span, reflect.ValueOf(buf)), nil, nil
+	return Deconstruct(span, reflect.ValueOf(buf)), nil, nil
 }

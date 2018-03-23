@@ -19,7 +19,7 @@ func (opaque *OpaqueSymbol) Interface() interface{} {
 
 func (opaque *OpaqueSymbol) Disassemble(span *Span) interface{} {
 	if opaque.Value.Kind() == reflect.Interface {
-		return MustDeconstruct(span, opaque.Value.Elem()).Disassemble(span)
+		return Deconstruct(span, opaque.Value.Elem()).Disassemble(span)
 	} else {
 		return opaque.Interface()
 	}
