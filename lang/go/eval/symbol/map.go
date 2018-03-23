@@ -13,8 +13,6 @@ type MapSymbol struct {
 	Value reflect.Value `ko:"name=value"` // go map value
 }
 
-var typeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()
-
 func (ms *MapSymbol) GoType() reflect.Type {
 	return ms.Value.Type()
 }

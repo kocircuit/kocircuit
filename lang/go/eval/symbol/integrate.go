@@ -101,7 +101,12 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Func:
 		return ctx.IntegrateFromNamedOrOpaque(s, t)
 	case reflect.Interface:
-		return ctx.IntegrateFromNamedOrOpaque(s, t)
+		if t == typeOfInterface {
+			dis := s.Disassemble(ctx.Span)
+			return reflect.ValueOf(dis).Convert(typeOfInterface), nil
+		} else {
+			return ctx.IntegrateFromNamedOrOpaque(s, t)
+		}
 	case reflect.Map:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
@@ -145,6 +150,8 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	}
 	return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %s into %v", Sprint(s), t)
 }
+
+var typeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()
 
 func (ctx *typingCtx) IntegrateFromNamedOrOpaque(s Symbol, t reflect.Type) (reflect.Value, error) {
 	switch u := s.(type) {
