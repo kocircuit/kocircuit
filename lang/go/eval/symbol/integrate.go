@@ -161,6 +161,19 @@ func (ctx *typingCtx) IntegrateFromNamedOrOpaque(s Symbol, t reflect.Type) (refl
 			return reflect.Value{},
 				ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", u.Type(), t)
 		}
+	case *MapSymbol:
+		if u.GoType().AssignableTo(t) {
+			if u.Value.CanAddr() {
+				return u.Value, nil
+			} else {
+				w := reflect.New(t).Elem()
+				w.Set(u.Value)
+				return w, nil
+			}
+		} else {
+			return reflect.Value{},
+				ctx.Errorf(nil, "cannot integrate map type %v into go type %v", u.Type(), t)
+		}
 	case *NamedSymbol: // matches logic in UnifyOpaqueNamed
 		goType := u.GoType()
 		if goType.AssignableTo(t) { // T -> interface

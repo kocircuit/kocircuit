@@ -8,7 +8,7 @@ import (
 // *OptionalType
 //	BasicType, EmptyType,
 // *SeriesType, *StructType
-// NamedType, *OpaqueType
+// NamedType, *OpaqueType, *MapType
 // VarietyType
 // BlobType
 type Type interface {

@@ -11,7 +11,7 @@ import (
 // Symbol implementations:
 //	BasicSymbol, EmptySymbol,
 // *SeriesSymbol, *StructSymbol
-// *NamedSymbol, *OpaqueSymbol
+// *NamedSymbol, *OpaqueSymbol, *MapSymbol
 // *VarietySymbol,
 // *BlobSymbol
 type Symbol interface {

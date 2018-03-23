@@ -54,7 +54,7 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case *SeriesType:
 			return ctx.UnifySeries(xt, yt)
-		case BasicType, *OpaqueType, *StructType, VarietyType, NamedType:
+		case BasicType, *OpaqueType, *MapType, *StructType, VarietyType, NamedType:
 			if elem, err := ctx.Unify(xt.Elem, y); err != nil {
 				return nil, err
 			} else {
@@ -77,23 +77,32 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 		case NamedType:
 			return ctx.UnifyOpaqueNamed(xt, yt)
 		}
-	case *StructType:
+	case *MapType:
 		switch yt := y.(type) {
 		case *OptionalType, *SeriesType, BasicType, *OpaqueType:
+			return ctx.Unify(y, x) // symmetry
+		case *MapType:
+			return ctx.UnifyMap(xt, yt)
+		case NamedType:
+			return ctx.UnifyMapNamed(xt, yt)
+		}
+	case *StructType:
+		switch yt := y.(type) {
+		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *MapType:
 			return ctx.Unify(y, x) // symmetry
 		case *StructType:
 			return ctx.UnifyStruct(xt, yt)
 		}
 	case VarietyType:
 		switch y.(type) {
-		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *StructType:
+		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *MapType, *StructType:
 			return ctx.Unify(y, x) // symmetry
 		case VarietyType:
 			return VarietyType{}, nil
 		}
 	case NamedType:
 		switch yt := y.(type) {
-		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *StructType, VarietyType:
+		case *OptionalType, *SeriesType, BasicType, *OpaqueType, *MapType, *StructType, VarietyType:
 			return ctx.Unify(y, x) // symmetry
 		case NamedType:
 			return ctx.UnifyNamed(xt, yt)
@@ -115,6 +124,14 @@ func (ctx *typingCtx) UnifyOpaque(x, y *OpaqueType) (Type, error) {
 		return x, nil
 	} else {
 		return nil, ctx.Errorf(nil, "opaque types %s and %s cannot be unified", Sprint(x), Sprint(y))
+	}
+}
+
+func (ctx *typingCtx) UnifyMap(x, y *MapType) (Type, error) {
+	if x.Type == y.Type {
+		return x, nil
+	} else {
+		return nil, ctx.Errorf(nil, "map types %s and %s cannot be unified", Sprint(x), Sprint(y))
 	}
 }
 
@@ -141,5 +158,13 @@ func (ctx *typingCtx) UnifyOpaqueNamed(x *OpaqueType, y NamedType) (Type, error)
 		return x, nil
 	} else {
 		return nil, ctx.Errorf(nil, "opaque and named types %s and %s cannot be unified", Sprint(x), Sprint(y))
+	}
+}
+
+func (ctx *typingCtx) UnifyMapNamed(x *MapType, y NamedType) (Type, error) {
+	if y.Type.AssignableTo(x.Type) {
+		return x, nil
+	} else {
+		return nil, ctx.Errorf(nil, "map and named types %s and %s cannot be unified", Sprint(x), Sprint(y))
 	}
 }

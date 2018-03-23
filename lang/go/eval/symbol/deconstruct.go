@@ -82,7 +82,7 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 	case reflect.Func: // go-specific
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Map:
-		return &OpaqueSymbol{Value: v}, nil
+		return &MapSymbol{Value: v}, nil
 	case reflect.Interface:
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Ptr:
