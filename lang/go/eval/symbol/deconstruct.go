@@ -82,7 +82,11 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 	case reflect.Func: // go-specific
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Map:
-		return &MapSymbol{Value: v}, nil
+		if t.Key() == typeOfString {
+			return ctx.DeconstructMap(v)
+		} else {
+			return &OpaqueSymbol{Value: v}, nil
+		}
 	case reflect.Interface:
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Ptr:
@@ -151,4 +155,19 @@ func (ctx *typingCtx) DeconstructStruct(v reflect.Value) (Symbol, error) {
 		}
 	}
 	return MakeStructSymbol(fields), nil
+}
+
+// v must be map[string]T
+func (ctx *typingCtx) DeconstructMap(v reflect.Value) (Symbol, error) {
+	m := map[string]Symbol{}
+	for _, key := range v.MapKeys() {
+		if dvalue := ctx.Deconstruct(v.MapIndex(key)); !IsEmptySymbol(dvalue) {
+			m[key.String()] = dvalue
+		}
+	}
+	if len(m) == 0 {
+		return EmptySymbol{}, nil
+	} else {
+		XXX // unify map value types
+	}
 }

@@ -106,8 +106,8 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Map:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
-		} else if mapSymbol, err := ExtractMap(ctx.Span, s, t); err == nil {
-			return ctx.IntegrateKind(mapSymbol, t) // try again
+		} else if extracted, err := ExtractMap(ctx.Span, s, t); err == nil {
+			return ctx.IntegrateKind(extracted, t) // try again
 		} else {
 			// defer to IntegrateFrom Named/Opaque/Map
 		}

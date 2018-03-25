@@ -6,11 +6,11 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 )
 
-func ExtractMap(span *Span, s Symbol, mapType reflect.Type) (*MapSymbol, error) {
+func ExtractMap(span *Span, s Symbol, mapType reflect.Type) (Symbol, error) {
 	if mapValue, err := extractMapValue(span, s, mapType); err != nil {
 		return nil, err
 	} else {
-		return &MapSymbol{Value: mapValue}, nil
+		return Deconstruct(span, mapValue), nil
 	}
 }
 
