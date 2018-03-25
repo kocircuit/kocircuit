@@ -64,13 +64,15 @@ func (ctx *typingCtx) Adapt(s reflect.Value, t reflect.Type) (reflect.Value, err
 				if w, err := ctx.adaptConvertible(s, t); err == nil { // directly convertible,
 					return w, nil
 				} else {
-					return ctx.adaptSliceSlice(s, t) // XXX: or element by element
+					return ctx.adaptSliceSlice(s, t)
 				}
 			} else { // P->[]Q
 				if elem, err := ctx.Adapt(s, t.Elem()); err != nil {
 					return reflect.Value{}, err
 				} else {
-					XXX //XXX: build singleton slice
+					w := reflect.MakeSlice(t, 1, 1)
+					w.Index(0).Set(elem)
+					return w, nil
 				}
 			}
 		} else {
@@ -79,9 +81,9 @@ func (ctx *typingCtx) Adapt(s reflect.Value, t reflect.Type) (reflect.Value, err
 	case reflect.Struct:
 		if s.IsValid() {
 			if s.Kind() == reflect.Struct {
-				return ctx.adaptStructStruct(s, t) // XXX: struct->struct
+				return ctx.adaptStructStruct(s, t)
 			} else if s.Kind() == reflect.Map && s.Type().Key().Kind() == reflect.String {
-				return ctx.adaptMapStruct(s, t) // XXX: map[string]T->struct
+				return ctx.adaptMapStruct(s, t)
 			}
 		}
 	}
