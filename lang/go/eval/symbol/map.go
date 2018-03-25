@@ -11,8 +11,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-// XXX: unification, integration
-
 // MapSymbol captures map[string]Q types.
 type MapSymbol struct {
 	Type_ *MapType          `ko:"name=type"`

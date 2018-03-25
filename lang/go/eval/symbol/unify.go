@@ -1,8 +1,6 @@
 package symbol
 
 import (
-	"reflect"
-
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
@@ -74,8 +72,6 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case *OpaqueType:
 			return ctx.UnifyOpaque(xt, yt)
-		case NamedType:
-			return ctx.UnifyOpaqueNamed(xt, yt)
 		}
 	case *MapType:
 		switch yt := y.(type) {
@@ -83,8 +79,6 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.Unify(y, x) // symmetry
 		case *MapType:
 			return ctx.UnifyMap(xt, yt)
-		case NamedType:
-			return ctx.UnifyMapNamed(xt, yt)
 		}
 	case *StructType:
 		switch yt := y.(type) {
@@ -127,14 +121,6 @@ func (ctx *typingCtx) UnifyOpaque(x, y *OpaqueType) (Type, error) {
 	}
 }
 
-func (ctx *typingCtx) UnifyMap(x, y *MapType) (Type, error) {
-	if x.Type == y.Type {
-		return x, nil
-	} else {
-		return nil, ctx.Errorf(nil, "map types %s and %s cannot be unified", Sprint(x), Sprint(y))
-	}
-}
-
 func (ctx *typingCtx) UnifySeries(x, y *SeriesType) (*SeriesType, error) {
 	if xyElem, err := ctx.Refine("()").Unify(x.Elem, y.Elem); err != nil {
 		return nil, ctx.Errorf(nil, "cannot unify sequences %s and %s", Sprint(x), Sprint(y))
@@ -151,20 +137,10 @@ func (ctx *typingCtx) UnifyNamed(x, y NamedType) (Type, error) {
 	}
 }
 
-func (ctx *typingCtx) UnifyOpaqueNamed(x *OpaqueType, y NamedType) (Type, error) {
-	if y.Type.AssignableTo(x.Type) {
-		return x, nil
-	} else if reflect.PtrTo(y.Type).AssignableTo(x.Type) {
-		return x, nil
+func (ctx *typingCtx) UnifyMap(x, y *MapType) (Type, error) {
+	if unified, err := ctx.Unify(x.Value, y.Value); err == nil {
+		return &MapType{Value: unified}, nil
 	} else {
-		return nil, ctx.Errorf(nil, "opaque and named types %s and %s cannot be unified", Sprint(x), Sprint(y))
-	}
-}
-
-func (ctx *typingCtx) UnifyMapNamed(x *MapType, y NamedType) (Type, error) {
-	if y.Type.AssignableTo(x.Type) {
-		return x, nil
-	} else {
-		return nil, ctx.Errorf(nil, "map and named types %s and %s cannot be unified", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "map types %s and %s cannot be unified", Sprint(x), Sprint(y))
 	}
 }
