@@ -3,6 +3,7 @@ package symbol
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
@@ -22,7 +23,7 @@ type VarietySymbol struct {
 	Arg   FieldSymbols `ko:"name=arg"`
 }
 
-func (vty *VarietySymbol) Disassemble(span *Span) interface{} {
+func (vty *VarietySymbol) Disassemble(span *Span) *pb.Symbol {
 	return nil
 }
 

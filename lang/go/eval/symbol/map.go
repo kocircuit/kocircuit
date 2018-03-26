@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/golang/protobuf/proto"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
@@ -24,14 +26,22 @@ func (ms *MapSymbol) Disassemble(span *Span) *pb.Symbol {
 		KeyValue: make([]*pb.SymbolKeyValue, 0, len(filtered)),
 	}
 	for _, key := range sortedMapKeys(filtered) {
-		dis.KeyValue = append(dis.KeyValue,
-			&pb.SymbolKeyValue{
-				Key:   proto.String(key),
-				Value: filtered[key].Disassemble(span),
-			},
-		)
+		if value := filtered[key].Disassemble(span); value != nil {
+			dis.KeyValue = append(dis.KeyValue,
+				&pb.SymbolKeyValue{
+					Key:   proto.String(key),
+					Value: value,
+				},
+			)
+		}
 	}
-	return &pb.Symbol{Symbol: dis}
+	if len(dis.KeyValue) == 0 {
+		return nil
+	} else {
+		return &pb.Symbol{
+			Symbol: &pb.Symbol_Map{Map: dis},
+		}
+	}
 }
 
 func (ms *MapSymbol) String() string {
