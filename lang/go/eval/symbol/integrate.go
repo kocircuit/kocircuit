@@ -153,7 +153,7 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %s into %v", Sprint(s), t)
 }
 
-var typeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()
+var TypeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()
 
 func (ctx *typingCtx) IntegrateFromOpaque(u *OpaqueSymbol, t reflect.Type) (reflect.Value, error) {
 	if u.GoType().AssignableTo(t) {
