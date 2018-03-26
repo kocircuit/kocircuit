@@ -6,6 +6,7 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -17,12 +18,8 @@ func (opaque *OpaqueSymbol) Interface() interface{} {
 	return opaque.Value.Interface()
 }
 
-func (opaque *OpaqueSymbol) Disassemble(span *Span) interface{} {
-	if opaque.Value.Kind() == reflect.Interface {
-		return Deconstruct(span, opaque.Value.Elem()).Disassemble(span)
-	} else {
-		return opaque.Interface()
-	}
+func (opaque *OpaqueSymbol) Disassemble(span *Span) *pb.Symbol {
+	return nil
 }
 
 func (opaque *OpaqueSymbol) String() string {

@@ -6,6 +6,7 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
@@ -14,7 +15,7 @@ type NamedSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
-func (named *NamedSymbol) Disassemble(span *Span) interface{} {
+func (named *NamedSymbol) Disassemble(span *Span) *pb.Symbol {
 	return DeconstructKind(span, named.Value).Disassemble(span)
 }
 
