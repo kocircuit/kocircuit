@@ -6,6 +6,7 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
@@ -17,12 +18,20 @@ type MapSymbol struct {
 	Map   map[string]Symbol `ko:"name=map"`
 }
 
-func (ms *MapSymbol) Disassemble(span *Span) interface{} {
-	dis := map[string]interface{}{}
-	for k, v := range filterMap(ms.Map) {
-		dis[k] = v.Disassemble(span)
+func (ms *MapSymbol) Disassemble(span *Span) *pb.Symbol {
+	filtered := filterMap(ms.Map)
+	dis := &pb.SymbolMap{
+		KeyValue: make([]*pb.SymbolKeyValue, 0, len(filtered)),
 	}
-	return dis
+	for _, key := range sortedMapKeys(filtered) {
+		dis.KeyValue = append(dis.KeyValue,
+			&pb.SymbolKeyValue{
+				Key:   proto.String(key),
+				Value: filtered[key].Disassemble(span),
+			},
+		)
+	}
+	return &pb.Symbol{Symbol: dis}
 }
 
 func (ms *MapSymbol) String() string {

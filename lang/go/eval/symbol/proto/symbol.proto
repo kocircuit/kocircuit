@@ -6,13 +6,16 @@ option go_package = "proto";
 
 message Symbol {
 	oneof symbol {
-		SymbolBasic basic = 1;
-		SymbolSeries series = 2;
-		SymbolStruct struct = 3;
-		SymbolMap map = 4;
-		SymbolBlob blob = 5;
+		SymbolEmpty empty = 1;
+		SymbolBasic basic = 2;
+		SymbolSeries series = 3;
+		SymbolStruct struct = 4;
+		SymbolMap map = 5;
+		SymbolBlob blob = 6;
 	}
 }
+
+message SymbolEmpty{}
 
 message SymbolBasic {
 	oneof basic {

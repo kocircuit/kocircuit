@@ -5,6 +5,7 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -21,7 +22,7 @@ type Symbol interface {
 	Hash() string
 	Equal(Symbol) bool
 	LiftToSeries(*Span) *SeriesSymbol
-	Disassemble(*Span) interface{}
+	Disassemble(*Span) *pb.Symbol
 }
 
 var (
