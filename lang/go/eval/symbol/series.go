@@ -3,6 +3,7 @@ package symbol
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
@@ -12,12 +13,23 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-func (ss *SeriesSymbol) Disassemble(span *Span) interface{} {
-	dis := make([]interface{}, len(ss.Elem))
-	for i, elem := range ss.Elem {
-		dis[i] = elem.Disassemble(span)
+func (ss *SeriesSymbol) Disassemble(span *Span) *pb.Symbol {
+	filtered = FilterEmptySymbols(ss.Elem)
+	dis := &pb.SymbolSeries{
+		Element: make([]*pb.Symbol, 0, len(filtered)),
 	}
-	return dis
+	for _, elem := range filtered {
+		if value := elem.Disassemble(span); value != nil {
+			dis.Element = append(dis.Element, value)
+		}
+	}
+	if len(dis.Element) == 0 {
+		return nil
+	} else {
+		return &pb.Symbol{
+			Symbol: &pb.Symbol_Series{Series: dis},
+		}
+	}
 }
 
 func (ss *SeriesSymbol) IsEmpty() bool {
