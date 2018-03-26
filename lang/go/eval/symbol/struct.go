@@ -3,8 +3,11 @@ package symbol
 import (
 	"sort"
 
+	"github.com/golang/protobuf/proto"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
@@ -49,12 +52,25 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
-func (ss *StructSymbol) Disassemble(span *Span) interface{} {
-	dis := map[string]interface{}{}
-	for _, field := range ss.Field {
-		dis[field.Name] = field.Value.Disassemble(span)
+func (ss *StructSymbol) Disassemble(span *Span) *pb.Symbol {
+	filtered := FilterEmptyFieldSymbols(ss.Field)
+	dis := &pb.SymbolStruct{
+		Field: make([]*pb.SymbolField, 0, len(filtered)),
 	}
-	return dis
+	for _, field := range filtered {
+		if value := field.Value.Disassemble(span); value != nil {
+			dis.Field = append(dis.Field,
+				&pb.SymbolField{
+					Name:    proto.String(field.Name),
+					Monadic: proto.Bool(field.Monadic),
+					Value:   value,
+				},
+			)
+		}
+	}
+	return &pb.Symbol{
+		Symbol: &pb.Symbol_Struct{Struct: dis},
+	}
 }
 
 func (ss *StructSymbol) IsEmpty() bool {

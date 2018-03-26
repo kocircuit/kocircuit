@@ -14,7 +14,7 @@ type SeriesSymbol struct {
 }
 
 func (ss *SeriesSymbol) Disassemble(span *Span) *pb.Symbol {
-	filtered = FilterEmptySymbols(ss.Elem)
+	filtered := FilterEmptySymbols(ss.Elem)
 	dis := &pb.SymbolSeries{
 		Element: make([]*pb.Symbol, 0, len(filtered)),
 	}

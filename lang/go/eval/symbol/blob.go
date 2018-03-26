@@ -17,7 +17,7 @@ type BlobSymbol struct {
 func (blob *BlobSymbol) Disassemble(span *Span) *pb.Symbol {
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Blob{
-			Blob: &SymbolBlob{Bytes: blob.Bytes()},
+			Blob: &pb.SymbolBlob{Bytes: blob.Bytes()},
 		},
 	}
 }

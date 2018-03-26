@@ -5,6 +5,7 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
@@ -56,8 +57,39 @@ type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
 
-func (basic BasicSymbol) Disassemble(span *Span) interface{} {
-	return basic.Value
+func (basic BasicSymbol) Disassemble(span *Span) *pb.Symbol {
+	dis := &pb.SymbolBasic{}
+	switch u := basic.Value.(type) {
+	case bool:
+		dis.Basic = &pb.SymbolBasic_Bool{Bool: u}
+	case string:
+		dis.Basic = &pb.SymbolBasic_String_{String_: u}
+	case int8:
+		dis.Basic = &pb.SymbolBasic_Int8{Int8: int32(u)}
+	case int16:
+		dis.Basic = &pb.SymbolBasic_Int16{Int16: int32(u)}
+	case int32:
+		dis.Basic = &pb.SymbolBasic_Int32{Int32: u}
+	case int64:
+		dis.Basic = &pb.SymbolBasic_Int64{Int64: u}
+	case uint8:
+		dis.Basic = &pb.SymbolBasic_Uint8{Uint8: uint32(u)}
+	case uint16:
+		dis.Basic = &pb.SymbolBasic_Uint16{Uint16: uint32(u)}
+	case uint32:
+		dis.Basic = &pb.SymbolBasic_Uint32{Uint32: u}
+	case uint64:
+		dis.Basic = &pb.SymbolBasic_Uint64{Uint64: u}
+	case float32:
+		dis.Basic = &pb.SymbolBasic_Float32{Float32: u}
+	case float64:
+		dis.Basic = &pb.SymbolBasic_Float64{Float64: u}
+	default:
+		panic("o")
+	}
+	return &pb.Symbol{
+		Symbol: &pb.Symbol_Basic{Basic: dis},
+	}
 }
 
 func (basic BasicSymbol) GoValue() reflect.Value {

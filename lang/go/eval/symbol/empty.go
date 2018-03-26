@@ -3,6 +3,7 @@ package symbol
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -18,7 +19,7 @@ func IsEmptyType(t Type) bool {
 
 type EmptySymbol struct{}
 
-func (empty EmptySymbol) Disassemble(span *Span) interface{} {
+func (empty EmptySymbol) Disassemble(span *Span) *pb.Symbol {
 	return nil
 }
 
