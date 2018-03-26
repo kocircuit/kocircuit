@@ -106,7 +106,26 @@ func (ctx *typingCtx) AssembleStruct(pbStruct *pb.SymbolStruct) Symbol {
 }
 
 func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
-	panic("XXX")
+	if pbMap == nil {
+		return EmptySymbol{}
+	}
+	asmKeyValues := make(KeyValueSymbols, 0, len(pbMap.KeyValue))
+	for _, keyValue := range pbMap.KeyValue {
+		ctx2 := ctx.Refine(keyValue.GetKey())
+		if asmValue := ctx2.Assemble(keyValue.GetValue()); !IsEmptySymbol(asmValue) {
+			asmKeyValues = append(asmKeyValues,
+				&KeyValueSymbol{
+					Key:   keyValue.GetKey(),
+					Value: asmValue,
+				},
+			)
+		}
+	}
+	if ms, err := MakeMapSymbol(ctx.Span, asmKeyValues); err != nil {
+		panic(err)
+	} else {
+		return ms
+	}
 }
 
 func (ctx *typingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {

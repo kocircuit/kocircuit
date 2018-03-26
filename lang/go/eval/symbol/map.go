@@ -14,6 +14,17 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+type KeyValueSymbol struct {
+	Key   string `ko:"name=key"`
+	Value Symbol `ko:"name=value"`
+}
+
+type KeyValueSymbols []*KeyValueSymbol
+
+func MakeMapSymbol(span *Span, kvs KeyValueSymbols) (*MapSymbol, error) {
+	panic("XXX")
+}
+
 // MapSymbol captures map[string]Q types.
 type MapSymbol struct {
 	Type_ *MapType          `ko:"name=type"`
