@@ -1,0 +1,63 @@
+syntax = "proto2";
+
+package ko.symbol;
+
+option go_package = "proto";
+
+message Symbol {
+	oneof symbol {
+		SymbolBasic basic = 1;
+		SymbolSeries series = 2;
+		SymbolStruct struct = 3;
+		SymbolMap map = 4;
+		SymbolBlob blob = 5;
+	}
+}
+
+message SymbolBasic {
+	oneof basic {
+		// bool and string
+		bool bool = 1;
+		string string = 2;
+		// signed integers
+		int32 int8 = 10;
+		int32 int16 = 11;
+		int32 int32 = 12;
+		int64 int64 = 13;
+		// unsigned integers
+		uint32 uint8 = 20;
+		uint32 uint16 = 21;
+		uint32 uint32 = 22;
+		uint64 uint64 = 23;
+		// floating-point
+		float float32 = 30;
+		double float64 = 31;
+	}
+}
+
+message SymbolSeries {
+	repeated Symbol element = 1;
+}
+
+message SymbolStruct {
+	repeated SymbolField field = 1;
+}
+
+message SymbolField {
+	required string name = 1;
+	required bool monadic = 2;
+	optional Symbol value = 3;
+}
+
+message SymbolMap {
+	repeated SymbolKeyValue key_value = 1;
+}
+
+message SymbolKeyValue {
+	required string key = 1;
+	required Symbol value = 2;
+}
+
+message SymbolBlob {
+	required bytes bytes = 1;
+}
