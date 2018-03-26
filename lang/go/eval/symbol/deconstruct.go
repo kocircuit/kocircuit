@@ -83,7 +83,7 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Map:
 		if v.Type().Key() == typeOfString {
-			return ctx.DeconstructMap(v)
+			return ctx.DeconstructMap(v) //XXX
 		} else {
 			return &OpaqueSymbol{Value: v}, nil
 		}
@@ -113,9 +113,10 @@ var typeOfString = reflect.TypeOf(string(""))
 func (ctx *typingCtx) DeconstructSlice(v reflect.Value) (Symbol, error) {
 	ds := make(Symbols, 0, v.Len())
 	dt := make(Types, 0, v.Len())
+	valueType := v.Type().Elem()
 	ctx2 := ctx.Refine("()")
 	for i := 0; i < v.Len(); i++ {
-		if elem, err := ctx2.Deconstruct(v.Index(i)); err != nil {
+		if elem, err := ctx2.Deconstruct(v.Index(i).Convert(valueType)); err != nil {
 			return nil, err
 		} else {
 			if !IsEmptySymbol(elem) {
@@ -163,8 +164,9 @@ func (ctx *typingCtx) DeconstructMap(v reflect.Value) (Symbol, error) {
 	mapKeys := v.MapKeys()
 	dv := map[string]Symbol{}
 	dt := make([]Type, 0, len(mapKeys))
+	valueType := v.Type().Elem()
 	for _, key := range mapKeys {
-		if dvalue, err := ctx.Deconstruct(v.MapIndex(key)); !IsEmptySymbol(dvalue) {
+		if dvalue, err := ctx.Deconstruct(v.MapIndex(key).Convert(valueType)); !IsEmptySymbol(dvalue) {
 			if err != nil {
 				panic("o")
 			}
@@ -177,7 +179,7 @@ func (ctx *typingCtx) DeconstructMap(v reflect.Value) (Symbol, error) {
 		return EmptySymbol{}, nil
 	} else {
 		if unified, err := ctx.UnifyTypes(dt); err != nil {
-			panic("o")
+			panic(err)
 		} else {
 			return &MapSymbol{
 				Type_: &MapType{Value: unified},

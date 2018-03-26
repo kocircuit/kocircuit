@@ -473,12 +473,12 @@ var evalTests = []*EvalTest{
 		Result: true,
 	},
 	{ // test disassembly
-		Enabled: true,
+		Enabled: true, //XXX
 		File: `
 		import "test"
 		Main(x) {
 			return: test.Disassemble(
-				value: (
+				value: Disassemble(
 					a: "abc"
 					b: 123
 					c: x

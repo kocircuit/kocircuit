@@ -93,16 +93,7 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Chan: // defer to IntegrateFrom Named/Opaque
 	case reflect.UnsafePointer: // defer to IntegrateFrom Named/Opaque
 	case reflect.Func: // defer to IntegrateFrom Named/Opaque
-	case reflect.Interface:
-		if t == typeOfInterface {
-			if dis := reflect.ValueOf(s.Disassemble(ctx.Span)); dis.IsValid() {
-				return dis.Convert(typeOfInterface), nil
-			} else {
-				return reflect.Zero(typeOfInterface), nil
-			}
-		} else {
-			// defer to IntegrateFrom Named/Opaque
-		}
+	case reflect.Interface: // defer to IntegrateFrom Named/Opaque
 	case reflect.Map:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
