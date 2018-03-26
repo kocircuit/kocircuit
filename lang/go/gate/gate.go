@@ -163,13 +163,23 @@ func (f Field) KoName() string {
 }
 
 func (f Field) IsOptional() bool {
-	switch f.StructField.Type.Kind() {
-	case reflect.Ptr, reflect.Slice:
+	return StructFieldIsOptional(f.StructField)
+}
+
+func StructFieldIsOptional(toField reflect.StructField) bool {
+	switch toField.Type.Kind() {
+	case reflect.Ptr, reflect.Slice: // to field is optional
 		return true
-	case reflect.Interface, reflect.Map:
-		return true
+	default:
+		switch {
+		case StructFieldIsProtoOptOrRep(toField):
+			return true
+		case StructFieldWithNoKoOrProtoName(toField):
+			return true
+		default:
+			return false
+		}
 	}
-	return false
 }
 
 const Monadic = "monadic"

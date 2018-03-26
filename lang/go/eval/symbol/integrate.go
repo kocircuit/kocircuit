@@ -86,13 +86,13 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 		if IsBasicKind(s, t.Kind()) {
 			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
 		}
-	case reflect.Uintptr: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.Complex64: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.Complex128: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.Array: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.Chan: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.UnsafePointer: // defer to IntegrateFrom Named/Opaque/Map
-	case reflect.Func: // defer to IntegrateFrom Named/Opaque/Map
+	case reflect.Uintptr: // defer to IntegrateFrom Named/Opaque
+	case reflect.Complex64: // defer to IntegrateFrom Named/Opaque
+	case reflect.Complex128: // defer to IntegrateFrom Named/Opaque
+	case reflect.Array: // defer to IntegrateFrom Named/Opaque
+	case reflect.Chan: // defer to IntegrateFrom Named/Opaque
+	case reflect.UnsafePointer: // defer to IntegrateFrom Named/Opaque
+	case reflect.Func: // defer to IntegrateFrom Named/Opaque
 	case reflect.Interface:
 		if t == typeOfInterface {
 			if dis := reflect.ValueOf(s.Disassemble(ctx.Span)); dis.IsValid() {
@@ -101,15 +101,17 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 				return reflect.Zero(typeOfInterface), nil
 			}
 		} else {
-			// defer to IntegrateFrom Named/Opaque/Map
+			// defer to IntegrateFrom Named/Opaque
 		}
 	case reflect.Map:
 		if IsEmptySymbol(s) {
 			return reflect.Zero(t), nil
 		} else if extracted, err := ExtractMap(ctx.Span, s, t); err == nil {
 			return ctx.IntegrateKind(extracted, t) // try again
+		} else if ms, ok := s.(*MapSymbol); ok {
+			return ctx.IntegrateMapMap(ms, t)
 		} else {
-			// defer to IntegrateFrom Named/Opaque/Map
+			// defer to IntegrateFrom Named/Opaque
 		}
 	case reflect.Ptr:
 		if IsEmptySymbol(s) {
@@ -142,14 +144,18 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 		}
 		return ctx.IntegrateSlice(s, t)
 	case reflect.Struct: // catch missing fields
-		return ctx.IntegrateStruct(s, t)
+		if IsEmptySymbol(s) {
+			return ctx.IntegrateStruct(MakeStructSymbol(nil), t)
+		} else if ss, ok := s.(*StructSymbol); ok {
+			return ctx.IntegrateStruct(ss, t)
+		} else if ms, ok := s.(*MapSymbol); ok {
+			return ctx.IntegrateMapStruct(ms, t)
+		}
 	}
 	//
 	switch u := s.(type) {
 	case *OpaqueSymbol:
 		return ctx.IntegrateFromOpaque(u, t)
-	case *MapSymbol:
-		return ctx.IntegrateFromMap(u, t)
 	case *NamedSymbol:
 		return ctx.IntegrateFromNamed(u, t)
 	}
@@ -170,21 +176,6 @@ func (ctx *typingCtx) IntegrateFromOpaque(u *OpaqueSymbol, t reflect.Type) (refl
 	} else {
 		return reflect.Value{},
 			ctx.Errorf(nil, "cannot integrate opaque type %v into go type %v", u.Type(), t)
-	}
-}
-
-func (ctx *typingCtx) IntegrateFromMap(u *MapSymbol, t reflect.Type) (reflect.Value, error) {
-	if u.GoType().AssignableTo(t) {
-		if u.Value.CanAddr() {
-			return u.Value, nil
-		} else {
-			w := reflect.New(t).Elem()
-			w.Set(u.Value)
-			return w, nil
-		}
-	} else {
-		return reflect.Value{},
-			ctx.Errorf(nil, "cannot integrate map type %v into go type %v", u.Type(), t)
 	}
 }
 
@@ -224,38 +215,24 @@ func (ctx *typingCtx) IntegrateSlice(s Symbol, t reflect.Type) (reflect.Value, e
 	return w, nil
 }
 
-func (ctx *typingCtx) IntegrateStruct(s Symbol, t reflect.Type) (reflect.Value, error) {
-	if IsEmptySymbol(s) {
-		s = MakeStructSymbol(nil) // empty struct
-	}
-	if ss, ok := s.(*StructSymbol); !ok {
-		return reflect.Value{}, ctx.Errorf(nil, "cannot integrate non-struct %s into struct %v", Sprint(s), t)
-	} else {
-		w := reflect.New(t).Elem()
-		for i := 0; i < t.NumField(); i++ {
-			toField := t.Field(i)
-			if from := FindIntegrationField(ss, toField); from == nil {
-				switch toField.Type.Kind() {
-				case reflect.Ptr, reflect.Slice: // to field is optional
-				default:
-					switch {
-					case gate.StructFieldIsProtoOptOrRep(toField):
-					case gate.StructFieldWithNoKoOrProtoName(toField):
-					default:
-						return reflect.Value{},
-							ctx.Errorf(nil, "go field %s in %v is required, not found in %v", toField.Name, t, ss)
-					}
-				}
+func (ctx *typingCtx) IntegrateStruct(ss *StructSymbol, t reflect.Type) (reflect.Value, error) {
+	w := reflect.New(t).Elem()
+	for i := 0; i < t.NumField(); i++ {
+		toField := t.Field(i)
+		if from := FindIntegrationField(ss, toField); from == nil {
+			if !gate.StructFieldIsOptional(toField) {
+				return reflect.Value{},
+					ctx.Errorf(nil, "go field %s in %v is required, not found in %v", toField.Name, t, ss)
+			}
+		} else {
+			if u, err := ctx.Refine(toField.Name).Integrate(from.Value, toField.Type); err != nil {
+				return reflect.Value{}, err
 			} else {
-				if u, err := ctx.Refine(toField.Name).Integrate(from.Value, toField.Type); err != nil {
-					return reflect.Value{}, err
-				} else {
-					w.Field(i).Set(u)
-				}
+				w.Field(i).Set(u)
 			}
 		}
-		return w, nil
 	}
+	return w, nil
 }
 
 func FindIntegrationField(from *StructSymbol, to reflect.StructField) *FieldSymbol {
@@ -269,4 +246,53 @@ func FindIntegrationField(from *StructSymbol, to reflect.StructField) *FieldSymb
 		}
 	}
 	return from.FindName(name)
+}
+
+func (ctx *typingCtx) IntegrateMapMap(ms *MapSymbol, t reflect.Type) (reflect.Value, error) {
+	if t.Key() != typeOfString {
+		return reflect.Value{}, ctx.Errorf(nil, "map %v cannot integrate into go map %v", ms, t)
+	}
+	w := reflect.MakeMap(t)
+	for k, vsym := range ms.Map {
+		if wsym, err := ctx.Refine(k).Integrate(vsym, t.Elem()); err != nil {
+			return reflect.Value{},
+				ctx.Errorf(err, "map value %v cannot integrate into go map value %v", vsym, t.Elem())
+		} else {
+			w.SetMapIndex(reflect.ValueOf(k), wsym)
+		}
+	}
+	return w, nil
+}
+
+func (ctx *typingCtx) IntegrateMapStruct(ms *MapSymbol, t reflect.Type) (reflect.Value, error) {
+	w := reflect.New(t).Elem()
+	for i := 0; i < t.NumField(); i++ {
+		toField := t.Field(i)
+		if fromValue := FindIntegrationKey(ms, toField); fromValue == nil {
+			if !gate.StructFieldIsOptional(toField) {
+				return reflect.Value{},
+					ctx.Errorf(nil, "go field %s in %v is required, not found in %v", toField.Name, t, ms)
+			}
+		} else {
+			if u, err := ctx.Refine(toField.Name).Integrate(fromValue, toField.Type); err != nil {
+				return reflect.Value{}, err
+			} else {
+				w.Field(i).Set(u)
+			}
+		}
+	}
+	return w, nil
+}
+
+func FindIntegrationKey(from *MapSymbol, to reflect.StructField) Symbol {
+	name, hasKoName := gate.StructFieldKoProtoGoName(to)
+	if !hasKoName {
+		return nil
+	}
+	if gate.IsStructFieldMonadic(to) {
+		if monadic, ok := from.Map[""]; ok {
+			return monadic
+		}
+	}
+	return from.Map[name]
 }
