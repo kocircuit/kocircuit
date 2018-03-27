@@ -57,35 +57,19 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case reflect.Invalid:
 		panic("o")
 	case reflect.String:
-		if IsBasicKind(s, t.Kind()) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
+		if g, err := ctx.IntegrateBasic(s, t); err == nil {
+			return g, nil
 		} else if blob, ok := s.(*BlobSymbol); ok { // blob -> string
 			return blob.Value.Convert(t), nil
 		}
 	case reflect.Bool:
-		if IsBasicKind(s, t.Kind()) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
-	case reflect.Int: // int(go) can be assigned from int64(ko)
-		if IsBasicKind(s, reflect.Int64) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
-	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		if IsBasicKind(s, t.Kind()) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
-	case reflect.Uint: // uint(go) can be assigned from uint64(ko)
-		if IsBasicKind(s, reflect.Uint64) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
-	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		if IsBasicKind(s, t.Kind()) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
+		return ctx.IntegrateBasic(s, t)
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return ctx.IntegrateBasicBits(s, t)
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return ctx.IntegrateBasicBits(s, t)
 	case reflect.Float32, reflect.Float64:
-		if IsBasicKind(s, t.Kind()) {
-			return reflect.ValueOf(s.(BasicSymbol).Value).Convert(t), nil
-		}
+		return ctx.IntegrateBasicBits(s, t)
 	case reflect.Uintptr: // defer to IntegrateFrom Named/Opaque
 	case reflect.Complex64: // defer to IntegrateFrom Named/Opaque
 	case reflect.Complex128: // defer to IntegrateFrom Named/Opaque
@@ -188,6 +172,32 @@ func (ctx *typingCtx) IntegrateFromNamed(u *NamedSymbol, t reflect.Type) (reflec
 	}
 }
 
+func (ctx *typingCtx) IntegrateBasic(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if basic, ok := s.(BasicSymbol); !ok {
+		return reflect.Value{}, ctx.Errorf(nil, "value %v is not basic, cannot integrate to %v", s, t)
+	} else {
+		stype := reflect.TypeOf(basic.Value)
+		if stype.ConvertibleTo(t) {
+			return reflect.ValueOf(basic.Value).Convert(t), nil
+		} else {
+			return reflect.Value{}, ctx.Errorf(nil, "value %v (of type %v) is not convertible to %v", s, s.Type(), t)
+		}
+	}
+}
+
+func (ctx *typingCtx) IntegrateBasicBits(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if basic, ok := s.(BasicSymbol); !ok {
+		return reflect.Value{}, ctx.Errorf(nil, "value %v is not basic, cannot integrate to %v", s, t)
+	} else {
+		stype := reflect.TypeOf(basic.Value)
+		if stype.ConvertibleTo(t) && stype.Bits() <= t.Bits() {
+			return reflect.ValueOf(basic.Value).Convert(t), nil
+		} else {
+			return reflect.Value{}, ctx.Errorf(nil, "value %v (of type %v) is not convertible to %v", s, s.Type(), t)
+		}
+	}
+}
+
 func (ctx *typingCtx) IntegrateSlice(s Symbol, t reflect.Type) (reflect.Value, error) {
 	ss := s.LiftToSeries(ctx.Span)
 	elems := make([]reflect.Value, len(ss.Elem))
@@ -247,7 +257,10 @@ func (ctx *typingCtx) IntegrateMapMap(ms *MapSymbol, t reflect.Type) (reflect.Va
 	for k, vsym := range ms.Map {
 		if wsym, err := ctx.Refine(k).Integrate(vsym, t.Elem()); err != nil {
 			return reflect.Value{},
-				ctx.Errorf(err, "map value %v cannot integrate into go map value %v", vsym, t.Elem())
+				ctx.Errorf(err,
+					"map value %v (type %v) cannot integrate into go map value %v",
+					vsym, vsym.Type(), t.Elem(),
+				)
 		} else {
 			w.SetMapIndex(reflect.ValueOf(k), wsym)
 		}
