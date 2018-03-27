@@ -1,17 +1,25 @@
 package symbol
 
 import (
+	"fmt"
+	"strconv"
+
+	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 )
 
+type VarietyAssembler interface {
+	AssembleMacro(pkgPath, funcName string) (Macro, error)
+}
+
 // Assemble panics on invalid protocol structure.
-func Assemble(span *Span, pbSymbol *pb.Symbol) Symbol {
-	ctx := &typingCtx{Span: span}
+func Assemble(span *Span, asm VarietyAssembler, pbSymbol *pb.Symbol) Symbol {
+	ctx := &assemblingCtx{Span: span, Asm: asm}
 	return ctx.Assemble(pbSymbol)
 }
 
-func (ctx *typingCtx) Assemble(pbSymbol *pb.Symbol) Symbol {
+func (ctx *assemblingCtx) Assemble(pbSymbol *pb.Symbol) Symbol {
 	if pbSymbol == nil {
 		return EmptySymbol{}
 	} else {
@@ -34,7 +42,7 @@ func (ctx *typingCtx) Assemble(pbSymbol *pb.Symbol) Symbol {
 	}
 }
 
-func (ctx *typingCtx) AssembleBasic(pbBasic *pb.SymbolBasic) Symbol {
+func (ctx *assemblingCtx) AssembleBasic(pbBasic *pb.SymbolBasic) Symbol {
 	if pbBasic == nil {
 		return EmptySymbol{}
 	} else {
@@ -69,7 +77,7 @@ func (ctx *typingCtx) AssembleBasic(pbBasic *pb.SymbolBasic) Symbol {
 	}
 }
 
-func (ctx *typingCtx) AssembleSeries(pbSeries *pb.SymbolSeries) Symbol {
+func (ctx *assemblingCtx) AssembleSeries(pbSeries *pb.SymbolSeries) Symbol {
 	if pbSeries == nil {
 		return EmptySymbol{}
 	}
@@ -87,12 +95,16 @@ func (ctx *typingCtx) AssembleSeries(pbSeries *pb.SymbolSeries) Symbol {
 	}
 }
 
-func (ctx *typingCtx) AssembleStruct(pbStruct *pb.SymbolStruct) Symbol {
+func (ctx *assemblingCtx) AssembleStruct(pbStruct *pb.SymbolStruct) Symbol {
 	if pbStruct == nil {
 		return EmptySymbol{}
 	}
-	asmFields := make(FieldSymbols, 0, len(pbStruct.Field))
-	for _, field := range pbStruct.Field {
+	return MakeStructSymbol(ctx.AssembleFields(pbStruct.GetField()))
+}
+
+func (ctx *assemblingCtx) AssembleFields(pbFields []*pb.SymbolField) FieldSymbols {
+	asmFields := make(FieldSymbols, 0, len(pbFields))
+	for _, field := range pbFields {
 		ctx2 := ctx.Refine(field.GetName())
 		if asmFieldValue := ctx2.Assemble(field.GetValue()); !IsEmptySymbol(asmFieldValue) {
 			asmFields = append(asmFields,
@@ -104,10 +116,10 @@ func (ctx *typingCtx) AssembleStruct(pbStruct *pb.SymbolStruct) Symbol {
 			)
 		}
 	}
-	return MakeStructSymbol(asmFields)
+	return asmFields
 }
 
-func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
+func (ctx *assemblingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
 	if pbMap == nil {
 		return EmptySymbol{}
 	}
@@ -125,10 +137,53 @@ func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
 	}
 }
 
-func (ctx *typingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {
+func (ctx *assemblingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {
 	return MakeBlobSymbol(pbBlob.GetBytes())
 }
 
-func (ctx *typingCtx) AssembleVariety(pbVariety *pb.SymbolVariety) Symbol {
-	panic("XXX")
+func (ctx *assemblingCtx) AssembleVariety(pbVariety *pb.SymbolVariety) Symbol {
+	if m, err := ctx.Asm.AssembleMacro(pbVariety.GetPkgPath(), pbVariety.GetFuncName()); err != nil {
+		panic(err)
+	} else {
+		return MakeVarietySymbol(m, ctx.AssembleFields(pbVariety.GetArg()))
+	}
+}
+
+// context
+
+type assemblingCtx struct {
+	Parent *assemblingCtx   `ko:"name=parent"`
+	Span   *Span            `ko:"name=span"`
+	Walk   string           `ko:"name=walk"`
+	Asm    VarietyAssembler `ko:"name=asm"`
+}
+
+func (ctx *assemblingCtx) Refine(walk string) *assemblingCtx {
+	return &assemblingCtx{
+		Parent: ctx,
+		Span:   ctx.Span,
+		Walk:   walk,
+		Asm:    ctx.Asm,
+	}
+}
+
+func (ctx *assemblingCtx) RefineIndex(i int) *assemblingCtx {
+	return ctx.Refine(strconv.Itoa(i))
+}
+
+func (ctx *assemblingCtx) Path() Path {
+	if ctx == nil {
+		return nil
+	} else if ctx.Parent == nil {
+		return Path{ctx.Walk}
+	} else {
+		return append(ctx.Parent.Path(), ctx.Walk)
+	}
+}
+
+func (ctx *assemblingCtx) Errorf(cause error, format string, arg ...interface{}) error {
+	return ctx.Span.ErrorfSkip(
+		2, cause,
+		fmt.Sprintf("%v: %s", ctx.Path(), fmt.Sprintf(format, arg...)),
+	)
 }
