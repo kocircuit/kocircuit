@@ -11,6 +11,7 @@ PROTO
 * proto service integration
 
 DOC
+* Next/Prev buttons on wiki
 * Panic and Recover macros
 * When and All macros
 * programming patterns (tests, etc)

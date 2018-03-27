@@ -11,33 +11,52 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
-func init() {
-	RegisterEvalGateAt("ko", "Play", &Play{})
-}
-
 type Play struct {
-	Pkg     string  `ko:"name=pkg"`  // e.g. github.com/kocircuit/kocircuit/codelab
-	Func    string  `ko:"name=func"` // e.g. HelloWorld
-	Repo    Repo    `ko:"name=repo"` // compiled ko repo
-	Faculty Faculty `ko:"name=faculty"`
-	Idiom   Repo    `ko:"name=idiom"`
-}
-
-type PlayResult struct {
-	Play     *Play       `ko:"name=play"`
-	Returned interface{} `ko:"name=returned"`
-	Error    error       `ko:"name=error"`
+	Pkg     string        `ko:"name=pkg"`  // e.g. github.com/kocircuit/kocircuit/codelab
+	Func    string        `ko:"name=func"` // e.g. HelloWorld
+	Repo    Repo          `ko:"name=repo"` // compiled ko repo
+	Faculty Faculty       `ko:"name=faculty"`
+	Idiom   Repo          `ko:"name=idiom"`
+	Arg     *StructSymbol `ko:"name=arg"` // arg can be nil
 }
 
 func (w *Play) Play(ctx *runtime.Context) *PlayResult {
-	r := &PlayResult{Play: w}
-	fu := w.Repo[w.Pkg][w.Func]
-	if fu == nil {
-		r.Error = fmt.Errorf("cannot find main circuit %s", path.Join(w.Pkg, w.Func))
-		return r
+	pfe := &PlayFuncEval{
+		Func: w.Repo[w.Pkg][w.Func],
+		Eval: NewEvaluator(w.Faculty, w.Repo), //XXX: idiom?
+		Arg:  w.Arg,
 	}
+	if pfe.Func == nil {
+		return &PlayResult{
+			Play:  w,
+			Error: fmt.Errorf("cannot find main circuit %s", path.Join(w.Pkg, w.Func)),
+		}
+	}
+	return pfe.Play(ctx)
+}
+
+type PlayFuncEval struct {
+	Func *Func         `ko:"name=func"`
+	Eval *Evaluate     `ko:"name=eval"`
+	Arg  *StructSymbol `ko:"name=arg"` // arg can be nil
+}
+
+func (w *PlayFuncEval) Play(ctx *runtime.Context) *PlayResult {
+	r := &PlayResult{PlayFuncEval: w}
 	span := NewSpan()
-	ev := NewEvaluator(w.Faculty, w.Repo)
-	r.Returned, _, r.Error = ev.Eval(span, fu, MakeStructSymbol(nil))
+	var arg Symbol
+	if w.Arg == nil {
+		arg = MakeStructSymbol(nil)
+	} else {
+		arg = w.Arg
+	}
+	r.Returned, _, r.Error = w.Eval.Eval(span, w.Func, arg)
 	return r
+}
+
+type PlayResult struct {
+	Play         *Play         `ko:"name=play"`
+	PlayFuncEval *PlayFuncEval `ko:"name=playFuncEval"`
+	Returned     Symbol        `ko:"name=returned"`
+	Error        error         `ko:"name=error"`
 }
