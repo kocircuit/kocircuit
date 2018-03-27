@@ -39,6 +39,14 @@ func NewEvalPanic(origin *Span, panik Symbol) *EvalPanic {
 	return &EvalPanic{Origin: origin, Panic: panik}
 }
 
+func (eval *Evaluate) AssembleMacro(span *Span, pkgPath, funcName string) (Macro, error) {
+	if fu := eval.Repo.Lookup(pkgPath, funcName); fu == nil {
+		return nil, span.Errorf(nil, "function %s.%s not found", pkgPath, funcName)
+	} else {
+		return EvalCombiner{}.Interpret(eval.Program, fu), nil
+	}
+}
+
 func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, eff Effect, err error) {
 	// catch unrecovered evaluator panics
 	defer func() {

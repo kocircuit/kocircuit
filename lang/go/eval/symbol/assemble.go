@@ -10,7 +10,16 @@ import (
 )
 
 type VarietyAssembler interface {
-	AssembleMacro(pkgPath, funcName string) (Macro, error)
+	AssembleMacro(span *Span, pkgPath, funcName string) (Macro, error)
+}
+
+func AssembleWithError(span *Span, asm VarietyAssembler, pbSymbol *pb.Symbol) (res Symbol, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			res, err = nil, r.(error)
+		}
+	}()
+	return Assemble(span, asm, pbSymbol), nil
 }
 
 // Assemble panics on invalid protocol structure.
@@ -142,7 +151,11 @@ func (ctx *assemblingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {
 }
 
 func (ctx *assemblingCtx) AssembleVariety(pbVariety *pb.SymbolVariety) Symbol {
-	if m, err := ctx.Asm.AssembleMacro(pbVariety.GetPkgPath(), pbVariety.GetFuncName()); err != nil {
+	if m, err := ctx.Asm.AssembleMacro(
+		ctx.Span,
+		pbVariety.GetPkgPath(),
+		pbVariety.GetFuncName(),
+	); err != nil {
 		panic(err)
 	} else {
 		return MakeVarietySymbol(m, ctx.AssembleFields(pbVariety.GetArg()))
