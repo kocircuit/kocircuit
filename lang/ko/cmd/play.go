@@ -43,7 +43,6 @@ var playCmd = &cobra.Command{
 			Pkg:     koPkg,
 			Func:    koFunc,
 			Faculty: EvalFaculty(),
-			Idiom:   EvalIdiomRepo,
 			Show:    false, // show compiled ko functions
 		}
 		if result := b.Play(runtime.CompilerContext()); result.Error != nil {

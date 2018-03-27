@@ -4,6 +4,7 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/ir"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
@@ -14,7 +15,6 @@ type CompilePlay struct {
 	Pkg     string        `ko:"name=pkg"`
 	Func    string        `ko:"name=func"`
 	Faculty Faculty       `ko:"name=faculty"`
-	Idiom   Repo          `ko:"name=idiom"`
 	Arg     *StructSymbol `ko:"name=arg"` // arg can be nil
 	Show    bool          `ko:"name=show"`
 }
@@ -24,7 +24,7 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 		RepoDir: arg.Repo,
 		PkgPath: arg.Pkg,
 		Faculty: PreCompileFaculty(arg.Faculty),
-		Idiom:   arg.Idiom,
+		Idiom:   EvalIdiomRepo,
 		Show:    arg.Show,
 	}
 	compiled := c.Play(ctx)
@@ -36,7 +36,6 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 		Func:    arg.Func,
 		Repo:    compiled.Repo,
 		Faculty: PostCompileFaculty(arg.Faculty, arg.Repo, compiled.Repo),
-		Idiom:   arg.Idiom,
 		Arg:     arg.Arg,
 	}
 	return w.Play(ctx)

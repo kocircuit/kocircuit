@@ -5,18 +5,13 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
-
-func init() {
-	RegisterGoGateAt("ko", "Compile", &Compile{})
-}
 
 type Compile struct {
 	RepoDir string  `ko:"name=repoDir"`
 	PkgPath string  `ko:"name=pkgPath"`
-	Faculty Faculty `ko:"name=faculty"`
-	Idiom   Repo    `ko:"name=idiom"`
+	Faculty Faculty `ko:"name=faculty"` // needed purely for the package names
+	Idiom   Repo    `ko:"name=idiom"`   // needed purely for the package names
 	Show    bool    `ko:"name=show"`
 }
 

@@ -16,14 +16,13 @@ type Play struct {
 	Func    string        `ko:"name=func"` // e.g. HelloWorld
 	Repo    Repo          `ko:"name=repo"` // compiled ko repo
 	Faculty Faculty       `ko:"name=faculty"`
-	Idiom   Repo          `ko:"name=idiom"`
 	Arg     *StructSymbol `ko:"name=arg"` // arg can be nil
 }
 
 func (w *Play) Play(ctx *runtime.Context) *PlayResult {
 	pfe := &PlayFuncEval{
 		Func: w.Repo[w.Pkg][w.Func],
-		Eval: NewEvaluator(w.Faculty, w.Repo), //XXX: idiom?
+		Eval: NewEvaluator(w.Faculty, w.Repo),
 		Arg:  w.Arg,
 	}
 	if pfe.Func == nil {
