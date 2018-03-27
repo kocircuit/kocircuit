@@ -1,6 +1,8 @@
 package symbol
 
 import (
+	"github.com/golang/protobuf/proto"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
@@ -23,8 +25,24 @@ type VarietySymbol struct {
 	Arg   FieldSymbols `ko:"name=arg"`
 }
 
+type InterpretMacro interface {
+	InterpretFunc() (pkgPath, funcName string)
+}
+
 func (vty *VarietySymbol) Disassemble(span *Span) *pb.Symbol {
-	return nil
+	if interpretFu, ok := vty.Macro.(InterpretMacro); ok { // if vty points to a circuit
+		pkgPath, funcName := interpretFu.InterpretFunc()
+		dis := &pb.SymbolVariety{
+			PkgPath:  proto.String(pkgPath),
+			FuncName: proto.String(funcName),
+			Arg:      DisassembleFieldSymbols(span, vty.Arg),
+		}
+		return &pb.Symbol{
+			Symbol: &pb.Symbol_Variety{Variety: dis},
+		}
+	} else {
+		return nil // non-function macros are not disassembled
+	}
 }
 
 func (vty *VarietySymbol) String() string {

@@ -108,6 +108,11 @@ type EvalInterpretMacro struct {
 	Func      *Func     `ko:"name=func"`
 }
 
+// InterpretFunc communicates to Variety.Disassemble the underlying function identity.
+func (m *EvalInterpretMacro) InterpretFunc() (pkgPath, funcName string) {
+	return m.Func.Pkg, m.Func.Name
+}
+
 func (m *EvalInterpretMacro) Splay() Tree {
 	return Quote{m.Help()}
 }

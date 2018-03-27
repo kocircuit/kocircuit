@@ -26,6 +26,8 @@ func (ctx *typingCtx) Assemble(pbSymbol *pb.Symbol) Symbol {
 			return ctx.AssembleMap(pbSymbol.GetMap())
 		case *pb.Symbol_Blob:
 			return ctx.AssembleBlob(pbSymbol.GetBlob())
+		case *pb.Symbol_Variety:
+			return ctx.AssembleVariety(pbSymbol.GetVariety())
 		default:
 			panic(ctx.Errorf(nil, "unknown symbol"))
 		}
@@ -125,4 +127,8 @@ func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
 
 func (ctx *typingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {
 	return MakeBlobSymbol(pbBlob.GetBytes())
+}
+
+func (ctx *typingCtx) AssembleVariety(pbVariety *pb.SymbolVariety) Symbol {
+	panic("XXX")
 }
