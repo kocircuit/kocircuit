@@ -163,28 +163,14 @@ func (ctx *typingCtx) DeconstructStruct(v reflect.Value) (Symbol, error) {
 func (ctx *typingCtx) DeconstructMap(v reflect.Value) (Symbol, error) {
 	mapKeys := v.MapKeys()
 	dv := map[string]Symbol{}
-	dt := make([]Type, 0, len(mapKeys))
 	valueType := v.Type().Elem()
 	for _, key := range mapKeys {
 		if dvalue, err := ctx.Deconstruct(v.MapIndex(key).Convert(valueType)); !IsEmptySymbol(dvalue) {
 			if err != nil {
 				panic("o")
 			}
-			kstr := key.String()
-			dv[kstr] = dvalue
-			dt = append(dt, dvalue.Type())
+			dv[key.String()] = dvalue
 		}
 	}
-	if len(dv) == 0 {
-		return EmptySymbol{}, nil
-	} else {
-		if unified, err := ctx.UnifyTypes(dt); err != nil {
-			panic(err)
-		} else {
-			return &MapSymbol{
-				Type_: &MapType{Value: unified},
-				Map:   dv,
-			}, nil
-		}
-	}
+	return MakeMapSymbol(ctx.Span, dv)
 }

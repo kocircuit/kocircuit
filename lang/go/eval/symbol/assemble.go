@@ -109,19 +109,14 @@ func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
 	if pbMap == nil {
 		return EmptySymbol{}
 	}
-	asmKeyValues := make(KeyValueSymbols, 0, len(pbMap.KeyValue))
+	asmMap := map[string]Symbol{}
 	for _, keyValue := range pbMap.KeyValue {
 		ctx2 := ctx.Refine(keyValue.GetKey())
 		if asmValue := ctx2.Assemble(keyValue.GetValue()); !IsEmptySymbol(asmValue) {
-			asmKeyValues = append(asmKeyValues,
-				&KeyValueSymbol{
-					Key:   keyValue.GetKey(),
-					Value: asmValue,
-				},
-			)
+			asmMap[keyValue.GetKey()] = asmValue
 		}
 	}
-	if ms, err := MakeMapSymbol(ctx.Span, asmKeyValues); err != nil {
+	if ms, err := MakeMapSymbol(ctx.Span, asmMap); err != nil {
 		panic(err)
 	} else {
 		return ms
@@ -129,5 +124,5 @@ func (ctx *typingCtx) AssembleMap(pbMap *pb.SymbolMap) Symbol {
 }
 
 func (ctx *typingCtx) AssembleBlob(pbBlob *pb.SymbolBlob) Symbol {
-	panic("XXX")
+	return MakeBlobSymbol(pbBlob.GetBytes())
 }

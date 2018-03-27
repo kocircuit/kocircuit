@@ -10,6 +10,10 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+func MakeBlobSymbol(b []byte) *BlobSymbol {
+	return &BlobSymbol{Value: reflect.ValueOf(b)}
+}
+
 type BlobSymbol struct {
 	Value reflect.Value `ko:"name=value"` // []byte
 }

@@ -19,10 +19,22 @@ type KeyValueSymbol struct {
 	Value Symbol `ko:"name=value"`
 }
 
-type KeyValueSymbols []*KeyValueSymbol
-
-func MakeMapSymbol(span *Span, kvs KeyValueSymbols) (*MapSymbol, error) {
-	panic("XXX")
+func MakeMapSymbol(span *Span, m map[string]Symbol) (Symbol, error) {
+	if len(m) == 0 {
+		return EmptySymbol{}, nil
+	}
+	vtypes := make([]Type, 0, len(m))
+	for _, s := range m {
+		vtypes = append(vtypes, s.Type())
+	}
+	if unified, err := UnifyTypes(span, vtypes); err != nil {
+		return nil, err
+	} else {
+		return &MapSymbol{
+			Type_: &MapType{Value: unified},
+			Map:   m,
+		}, nil
+	}
 }
 
 // MapSymbol captures map[string]Q types.
