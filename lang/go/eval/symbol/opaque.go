@@ -18,8 +18,8 @@ func (opaque *OpaqueSymbol) Interface() interface{} {
 	return opaque.Value.Interface()
 }
 
-func (opaque *OpaqueSymbol) Disassemble(span *Span) *pb.Symbol {
-	return nil
+func (opaque *OpaqueSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+	return nil, span.Errorf(nil, "cannot disassemble opaque symbol %v", opaque)
 }
 
 func (opaque *OpaqueSymbol) String() string {

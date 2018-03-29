@@ -57,7 +57,7 @@ type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
 
-func (basic BasicSymbol) Disassemble(span *Span) *pb.Symbol {
+func (basic BasicSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 	dis := &pb.SymbolBasic{}
 	switch u := basic.Value.(type) {
 	case bool:
@@ -89,7 +89,7 @@ func (basic BasicSymbol) Disassemble(span *Span) *pb.Symbol {
 	}
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Basic{Basic: dis},
-	}
+	}, nil
 }
 
 func (basic BasicSymbol) GoValue() reflect.Value {

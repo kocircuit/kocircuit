@@ -43,13 +43,17 @@ type MapSymbol struct {
 	Map   map[string]Symbol `ko:"name=map"`
 }
 
-func (ms *MapSymbol) Disassemble(span *Span) *pb.Symbol {
+func (ms *MapSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 	filtered := filterMap(ms.Map)
 	dis := &pb.SymbolMap{
 		KeyValue: make([]*pb.SymbolKeyValue, 0, len(filtered)),
 	}
 	for _, key := range sortedMapKeys(filtered) {
-		if value := filtered[key].Disassemble(span); value != nil {
+		value, err := filtered[key].Disassemble(span)
+		if err != nil {
+			return nil, err
+		}
+		if value != nil {
 			dis.KeyValue = append(dis.KeyValue,
 				&pb.SymbolKeyValue{
 					Key:   proto.String(key),
@@ -59,11 +63,11 @@ func (ms *MapSymbol) Disassemble(span *Span) *pb.Symbol {
 		}
 	}
 	if len(dis.KeyValue) == 0 {
-		return nil
+		return nil, nil
 	} else {
 		return &pb.Symbol{
 			Symbol: &pb.Symbol_Map{Map: dis},
-		}
+		}, nil
 	}
 }
 

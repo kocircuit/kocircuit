@@ -19,8 +19,8 @@ func IsEmptyType(t Type) bool {
 
 type EmptySymbol struct{}
 
-func (empty EmptySymbol) Disassemble(span *Span) *pb.Symbol {
-	return nil
+func (empty EmptySymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+	return nil, nil
 }
 
 func (empty EmptySymbol) String() string {

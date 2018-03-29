@@ -13,22 +13,26 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-func (ss *SeriesSymbol) Disassemble(span *Span) *pb.Symbol {
+func (ss *SeriesSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
 	dis := &pb.SymbolSeries{
 		Element: make([]*pb.Symbol, 0, len(filtered)),
 	}
 	for _, elem := range filtered {
-		if value := elem.Disassemble(span); value != nil {
+		value, err := elem.Disassemble(span)
+		if err != nil {
+			return nil, err
+		}
+		if value != nil {
 			dis.Element = append(dis.Element, value)
 		}
 	}
 	if len(dis.Element) == 0 {
-		return nil
+		return nil, nil
 	} else {
 		return &pb.Symbol{
 			Symbol: &pb.Symbol_Series{Series: dis},
-		}
+		}, nil
 	}
 }
 

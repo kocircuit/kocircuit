@@ -22,7 +22,7 @@ type Symbol interface {
 	Hash() string
 	Equal(Symbol) bool
 	LiftToSeries(*Span) *SeriesSymbol
-	Disassemble(*Span) *pb.Symbol
+	Disassemble(*Span) (*pb.Symbol, error)
 }
 
 var (

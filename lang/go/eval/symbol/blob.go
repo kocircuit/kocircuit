@@ -18,12 +18,12 @@ type BlobSymbol struct {
 	Value reflect.Value `ko:"name=value"` // []byte
 }
 
-func (blob *BlobSymbol) Disassemble(span *Span) *pb.Symbol {
+func (blob *BlobSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Blob{
 			Blob: &pb.SymbolBlob{Bytes: blob.Bytes()},
 		},
-	}
+	}, nil
 }
 
 func (blob *BlobSymbol) Bytes() []byte {

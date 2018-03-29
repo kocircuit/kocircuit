@@ -52,11 +52,15 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
-func DisassembleFieldSymbols(span *Span, fields FieldSymbols) []*pb.SymbolField {
+func DisassembleFieldSymbols(span *Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
 	filtered := FilterEmptyFieldSymbols(fields)
 	dis := make([]*pb.SymbolField, 0, len(filtered))
 	for _, field := range filtered {
-		if value := field.Value.Disassemble(span); value != nil {
+		value, err := field.Value.Disassemble(span)
+		if err != nil {
+			return nil, err
+		}
+		if value != nil {
 			dis = append(dis,
 				&pb.SymbolField{
 					Name:    proto.String(field.Name),
@@ -66,16 +70,18 @@ func DisassembleFieldSymbols(span *Span, fields FieldSymbols) []*pb.SymbolField 
 			)
 		}
 	}
-	return dis
+	return dis, nil
 }
 
-func (ss *StructSymbol) Disassemble(span *Span) *pb.Symbol {
-	dis := &pb.SymbolStruct{
-		Field: DisassembleFieldSymbols(span, ss.Field),
+func (ss *StructSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+	fields, err := DisassembleFieldSymbols(span, ss.Field)
+	if err != nil {
+		return nil, err
 	}
+	dis := &pb.SymbolStruct{Field: fields}
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Struct{Struct: dis},
-	}
+	}, nil
 }
 
 func (ss *StructSymbol) IsEmpty() bool {

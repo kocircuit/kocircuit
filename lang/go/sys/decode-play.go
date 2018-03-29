@@ -13,7 +13,7 @@ import (
 
 type Decode struct {
 	Repo    []byte  `ko:"name=repo"`
-	Arg     []byte  `ko:"name=arg"`
+	Arg     []byte  `ko:"name=arg"` // nil value indicates no arguments
 	Pkg     string  `ko:"name=pkg"`
 	Func    string  `ko:"name=func"`
 	Faculty Faculty `ko:"name=faculty"`
@@ -37,10 +37,14 @@ func (in *Decode) Play(ctx *runtime.Context) (result *DecodeResult, err error) {
 	}
 	result.Eval = NewEvaluator(in.Faculty, result.Repo)
 	var sym Symbol
-	if sym, err = DecodeSymbol(NewSpan(), result.Eval, in.Arg); err != nil {
-		return nil, fmt.Errorf("decoding arg (%v)", err)
+	if in.Arg != nil {
+		if sym, err = DecodeSymbol(NewSpan(), result.Eval, in.Arg); err != nil {
+			return nil, fmt.Errorf("decoding arg (%v)", err)
+		}
 	}
 	switch u := sym.(type) {
+	case nil:
+		result.Arg = nil
 	case EmptySymbol:
 		result.Arg = nil
 	case *StructSymbol:

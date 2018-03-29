@@ -12,7 +12,10 @@ import (
 )
 
 func EncodeSymbol(span *Span, symbol Symbol) ([]byte, error) {
-	pbDisassembled := symbol.Disassemble(span)
+	pbDisassembled, err := symbol.Disassemble(span)
+	if err != nil {
+		return nil, span.Errorf(err, "disassemble symbol")
+	}
 	buf, err := proto.Marshal(pbDisassembled)
 	if err != nil {
 		return nil, span.Errorf(err, "marshal proto")

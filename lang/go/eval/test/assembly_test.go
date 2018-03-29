@@ -25,11 +25,14 @@ func TestReassembly(t *testing.T) {
 		t.Fatalf("eval pre-disassembly (%v)", err)
 	}
 	// disassemble
-	pbDisassembled := preReturned.Disassemble(span)
+	pbDisassembled, err := preReturned.Disassemble(span)
+	if err != nil {
+		t.Fatalf("disassembly (%v)", err)
+	}
 	// re-assemble
 	reassembled, err := AssembleWithError(span, eval, pbDisassembled)
 	if err != nil {
-		t.Fatalf("eval pre-disassembly (%v)", err)
+		t.Fatalf("re-assembly (%v)", err)
 	}
 	// eval post-reassembly
 	postArg := MakeStructSymbol(

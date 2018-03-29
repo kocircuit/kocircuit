@@ -15,7 +15,7 @@ type NamedSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
-func (named *NamedSymbol) Disassemble(span *Span) *pb.Symbol {
+func (named *NamedSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 	return DeconstructKind(span, named.Value).Disassemble(span)
 }
 
