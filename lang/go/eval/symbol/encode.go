@@ -50,3 +50,23 @@ func DecodeSymbol(span *Span, asm VarietyAssembler, gzipped []byte) (Symbol, err
 	}
 	return AssembleWithError(span, asm, pbSymbol)
 }
+
+func DecodeArg(span *Span, asm VarietyAssembler, argBytes []byte) (*StructSymbol, error) {
+	if argBytes == nil {
+		return MakeStructSymbol(nil), nil
+	}
+	sym, err := DecodeSymbol(span, asm, argBytes)
+	if err != nil {
+		return nil, span.Errorf(err, "decoding arg (%v)")
+	}
+	switch u := sym.(type) {
+	case nil:
+		return MakeStructSymbol(nil), nil
+	case EmptySymbol:
+		return MakeStructSymbol(nil), nil
+	case *StructSymbol:
+		return u, nil
+	default:
+		return nil, span.Errorf(nil, "arg must be structure or empty, got %v", u)
+	}
+}
