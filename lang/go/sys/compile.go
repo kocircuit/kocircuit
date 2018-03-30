@@ -2,17 +2,14 @@ package sys
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/compile"
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
 type Compile struct {
-	RepoDir string  `ko:"name=repoDir"`
-	PkgPath string  `ko:"name=pkgPath"`
-	Faculty Faculty `ko:"name=faculty"` // needed purely for the package names
-	Idiom   Repo    `ko:"name=idiom"`   // needed purely for the package names
-	Show    bool    `ko:"name=show"`
+	RepoDir string `ko:"name=repoDir"`
+	PkgPath string `ko:"name=pkgPath"`
+	Show    bool   `ko:"name=show"`
 }
 
 type CompileResult struct {
@@ -27,10 +24,6 @@ func (c *Compile) Play(ctx *runtime.Context) *CompileResult {
 	if r.Repo, r.Error = CompileRepo(
 		c.RepoDir,
 		c.PkgPath,
-		append(
-			c.Faculty.PkgNames(),
-			c.Idiom.PkgNames()...,
-		),
 	); r.Error != nil {
 		return r
 	}

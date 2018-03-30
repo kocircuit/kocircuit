@@ -39,8 +39,6 @@ func (arg *CompileWeave) Play(ctx *runtime.Context) *WeaveResult {
 	c := &Compile{
 		RepoDir: arg.Repo,
 		PkgPath: arg.Pkg,
-		Faculty: arg.Faculty,
-		Idiom:   arg.Idiom,
 		Show:    arg.Show,
 	}
 	compiled := c.Play(ctx)

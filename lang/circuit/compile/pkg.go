@@ -7,21 +7,11 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 )
 
-func CompileRepo(repoDir, pkgPath string, backup []string) (repo Repo, err error) {
+func CompileRepo(repoDir, pkgPath string) (repo Repo, err error) {
 	local := NewLocalRepository(repoDir)
 	parsedPkgFiles, err := ParseRepo(local, pkgPath)
 	if err != nil {
 		return nil, err
-	}
-	// verify every missing import package is backed up
-	backedUp := map[string]bool{}
-	for _, s := range backup {
-		backedUp[s] = true
-	}
-	for _, pkgNotFound := range local.NotFound() {
-		if !backedUp[pkgNotFound] {
-			return nil, fmt.Errorf("package %q not found", pkgNotFound)
-		}
 	}
 	return GraftRepo(parsedPkgFiles)
 }

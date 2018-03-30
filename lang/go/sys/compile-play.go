@@ -4,7 +4,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/ir"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
@@ -23,8 +22,6 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
 		RepoDir: arg.Repo,
 		PkgPath: arg.Pkg,
-		Faculty: PreCompileFaculty(arg.Faculty),
-		Idiom:   EvalIdiomRepo,
 		Show:    arg.Show,
 	}
 	compiled := c.Play(ctx)
@@ -39,17 +36,6 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 		Arg:     arg.Arg,
 	}
 	return w.Play(ctx)
-}
-
-func PreCompileFaculty(baseFaculty Faculty) Faculty {
-	return MergeFaculty(
-		Faculty{
-			Ideal{Pkg: "repo", Name: "Path"}:       &EvalPlaceholderMacro{},
-			Ideal{Pkg: "repo", Name: "Proto"}:      &EvalPlaceholderMacro{},
-			Ideal{Pkg: "repo", Name: "ProtoBytes"}: &EvalPlaceholderMacro{},
-		},
-		baseFaculty,
-	)
 }
 
 func PostCompileFaculty(baseFaculty Faculty, repoPath string, repo Repo) Faculty {

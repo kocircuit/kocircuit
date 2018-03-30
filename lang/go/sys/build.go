@@ -109,8 +109,6 @@ func (b *Build) Compile() *Compile {
 	return &Compile{
 		RepoDir: b.KoRepo,
 		PkgPath: b.KoPkg,
-		Faculty: b.Faculty,
-		Idiom:   b.Idiom,
 	}
 }
 
