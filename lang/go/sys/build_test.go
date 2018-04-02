@@ -179,7 +179,7 @@ var testBuild = []struct {
 		Result: nil,
 	},
 	{
-		Enabled: false,
+		Enabled: false, // Take, needed by Switch, is not implemented
 		Name:    "SwitchCut",
 		File: `
 		Main(x, y, z) {
@@ -267,7 +267,7 @@ var testBuild = []struct {
 		Result: nil,
 	},
 	{
-		Enabled: false,
+		Enabled: true, //XXX
 		Name:    "Fib",
 		File: `
 		import "boolean"

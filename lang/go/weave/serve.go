@@ -73,12 +73,12 @@ func sanitizeServiceName(n string) error {
 }
 
 func ServeDirective(valve *GoValve, fullName string) *GoDirective {
-	registerEvalGate := &GoAddress{
+	registerEvalGateAt := &GoAddress{
 		GroupPath: GoGroupPath{
 			Group: GoHereditaryPkgGroup,
 			Path:  "github.com/kocircuit/kocircuit/lang/go/eval",
 		},
-		Name: "RegisterEvalGate",
+		Name: "RegisterEvalGateAt",
 	}
 	return &GoDirective{
 		Label:     fmt.Sprintf("serve_%s", fullName),
@@ -86,7 +86,7 @@ func ServeDirective(valve *GoValve, fullName string) *GoDirective {
 		Inject: &GoInitExpr{
 			Line: []GoExpr{
 				&GoCallExpr{
-					Func: registerEvalGate,
+					Func: registerEvalGateAt,
 					Arg: []GoExpr{
 						&GoQuoteExpr{String: ""},
 						&GoQuoteExpr{String: strings.Join([]string{"service", fullName}, ".")},
