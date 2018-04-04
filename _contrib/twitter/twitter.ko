@@ -1,0 +1,32 @@
+// Package twitter provides a grammar for authenticating and interacting with Twitter.
+
+import "github.com/aljabrio/aljabrio/web/twitter"
+
+Dial(consumerKey, consumerSecret, accessToken, accessSecret) {
+	return: twitter.GoDialTwitter(
+		consumerKey: consumerKey
+		consumerSecret: consumerSecret
+		accessToken: accessToken
+		accessSecret: accessSecret
+	)
+}
+
+HomeTimeline(conn, count, sinceID, maxID) {
+	return: twitter.GoHomeTimelineTwitter(
+		conn: conn // returned by Dial
+		count: count
+		sinceID: sinceID
+		maxID: maxID
+	)
+}
+
+UserTimeline(conn, userID, screen, count, sinceID, maxID) {
+	return: twitter.GoUserTimelineTwitter(
+		conn: conn // returned by Dial
+		userID: userID
+		screen: screen
+		count: count
+		sinceID: sinceID
+		maxID: maxID
+	)
+}

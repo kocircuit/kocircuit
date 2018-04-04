@@ -1,0 +1,19 @@
+
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/number"
+
+LatestTweet(tweets?) {
+	return: number.Max(
+		series: tweets
+		smallest: (id: SmallestTweetID())
+		less: LessTweetID
+	)
+}
+
+SmallestTweetID() {
+	return: Int64(0)
+}
+
+LessTweetID(p, q) {
+	return: integer.Less(p.id, q.id)
+}
