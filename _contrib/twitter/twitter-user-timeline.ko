@@ -1,0 +1,60 @@
+// Twitter example apps
+
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/os"
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/_contrib/twitter"
+
+// Get your twitter credentials at https://apps.twitter.com/
+// declare -x TWITTER_CONSUMER_KEY=...
+// declare -x TWITTER_CONSUMER_SECRET=...
+// declare -x TWITTER_ACCESS_TOKEN=...
+// declare -x TWITTER_ACCESS_SECRET=...
+DialFromEnv() {
+	return: twitter.Dial(
+		consumerKey: os.Env("TWITTER_CONSUMER_KEY")
+		consumerSecret: os.Env("TWITTER_CONSUMER_SECRET")
+		accessToken: os.Env("TWITTER_ACCESS_TOKEN")
+		accessSecret: os.Env("TWITTER_ACCESS_SECRET")
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/_contrib/twitter/PeekIntoHomeTimelineApp
+PeekIntoHomeTimelineApp() {
+	return: Loop(
+		start: (n: 0, lastID: 0, conn: DialFromEnv())
+		step: archiveStep(carry?) {
+			show: Peek(
+				twitter.HomeTimeline(
+					conn: carry.conn
+					count: 3
+					sinceID: carry.lastID
+					maxID: 0 // ok?
+				)
+			)
+			return: (n: integer.Sum(carry.n, 1), lastID: integer.Sum(carry.lastID, 3), conn: carry.conn)
+		}
+		stop: archiveStop(carry?) { 
+			return: integer.Less(5, carry.n) // download 6 pages
+		}
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/_contrib/twitter/MonitorUserTimelineApp
+MonitorUserTimelineApp() {
+	return: twitter.PollUserTimeline(
+		conn: DialFromEnv()
+		screen: "maymounkov"
+		sinceID: 0
+		with: monitorTweets(tweets?) {
+			return: Peek(
+				Range(
+					over: tweets
+					with: summarizeTweet(elem) {
+						return: (emit: elem)
+					}
+				).image
+			)
+		}
+	)
+}
