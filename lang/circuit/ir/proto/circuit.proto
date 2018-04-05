@@ -14,15 +14,16 @@ message Package {
 }
 
 message Func {
-	required ID id = 1;
-	required string pkgPath = 2;
-	required string name = 3;
-	repeated Step step = 4;
-	required string enter = 5;
-	repeated Arg arg = 6;
-	optional string monadic = 7;
-	required string leave = 8;
-	optional Source source = 9;
+	optional string doc = 1;
+	required ID id = 11;
+	required string pkgPath = 12;
+	required string name = 13;
+	repeated Step step = 14;
+	required string enter = 15;
+	repeated Arg arg = 16;
+	optional string monadic = 17;
+	required string leave = 18;
+	optional Source source = 19;
 }
 
 message ID {

@@ -37,6 +37,7 @@ func deserializePackage(pbPkg *pb.Package) (pkgPath string, pkg Package) {
 
 func deserializeFunc(pbFu *pb.Func) (fu *Func) {
 	fu = &Func{
+		Doc:     pbFu.GetDoc(),
 		ID:      DeserializeID(pbFu.Id),
 		Name:    pbFu.GetName(),
 		Pkg:     pbFu.GetPkgPath(),

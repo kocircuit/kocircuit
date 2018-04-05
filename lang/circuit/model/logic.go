@@ -11,6 +11,7 @@ import (
 
 // Func describes a circuit.
 type Func struct {
+	Doc  string `ko:"name=doc"`
 	ID   ID     `ko:"name=id"`
 	Name string `ko:"name=name"`
 	Pkg  string `ko:"name=pkg"`

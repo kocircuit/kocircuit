@@ -32,6 +32,7 @@ func serializePackage(pkgPath string, pkg Package) *pb.Package {
 
 func serializeFunc(fu *Func) *pb.Func {
 	pbFunc := &pb.Func{
+		Doc:     proto.String(fu.Doc),
 		Id:      SerializeID(fu.ID),
 		Name:    proto.String(fu.Name),
 		PkgPath: proto.String(fu.Pkg),
