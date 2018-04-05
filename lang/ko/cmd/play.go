@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"path"
 
@@ -47,6 +48,8 @@ var playCmd = &cobra.Command{
 		}
 		if result := b.Play(runtime.CompilerContext()); result.Error != nil {
 			log.Fatalln(result.Error)
+		} else {
+			fmt.Printf("%v\n", result.Returned)
 		}
 	},
 }
