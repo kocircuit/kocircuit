@@ -23,10 +23,20 @@ func RegisterEvalProtoFile(protoFile string) {
 }
 
 func registerEvalProtoFile(protoFile string) error {
-	fileDesc, err := decodeFileDescriptor(protoFile)
+	fileDesc, err := decodeRegisteredProtoFile(protoFile)
 	if err != nil {
 		return err
 	}
+	return registerEvalFileDescriptor(fileDesc)
+}
+
+func RegisterEvalFileDescriptor(fileDesc *descriptor.FileDescriptorProto) {
+	if err := registerEvalFileDescriptor(fileDesc); err != nil {
+		log.Fatalf("registering file descriptor with runtime (%v)", err)
+	}
+}
+
+func registerEvalFileDescriptor(fileDesc *descriptor.FileDescriptorProto) error {
 	ctx := &registerCtx{
 		ProtoPkg:   fileDesc.GetPackage(),
 		KoProtoPkg: path.Join("proto", fileDesc.GetPackage()),
@@ -138,11 +148,15 @@ func (ctx *registerCtx) registerMessage(msgDesc *descriptor.DescriptorProto) err
 	return nil
 }
 
-func decodeFileDescriptor(protoFile string) (*descriptor.FileDescriptorProto, error) {
+func decodeRegisteredProtoFile(protoFile string) (*descriptor.FileDescriptorProto, error) {
 	gzippedFileDescBuf := proto.FileDescriptor(protoFile)
 	if len(gzippedFileDescBuf) == 0 {
 		return nil, fmt.Errorf("no registration for %q with proto package", protoFile)
 	}
+	return decodeFileDescriptorBytes(gzippedFileDescBuf)
+}
+
+func decodeFileDescriptorBytes(gzippedFileDescBuf []byte) (*descriptor.FileDescriptorProto, error) {
 	fileDescBuf, err := UngzipBytes(gzippedFileDescBuf)
 	if err != nil {
 		return nil, err
