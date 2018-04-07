@@ -27,16 +27,30 @@ func registerEvalProtoFile(protoFile string) error {
 	if err != nil {
 		return err
 	}
-	return registerEvalFileDescriptor(fileDesc)
+	return registerEvalProtoFileDesc(fileDesc)
 }
 
-func RegisterEvalFileDescriptor(fileDesc *descriptor.FileDescriptorProto) {
-	if err := registerEvalFileDescriptor(fileDesc); err != nil {
+func RegisterEvalProtoFileBytes(gzipped []byte) {
+	if err := registerEvalProtoFileBytes(gzipped); err != nil {
+		log.Fatalf("registering gzipped proto file with runtime (%v)", err)
+	}
+}
+
+func registerEvalProtoFileBytes(gzipped []byte) error {
+	fileDesc, err := decodeFileDescriptorBytes(gzipped)
+	if err != nil {
+		return err
+	}
+	return registerEvalProtoFileDesc(fileDesc)
+}
+
+func RegisterEvalProtoFileDesc(fileDesc *descriptor.FileDescriptorProto) {
+	if err := registerEvalProtoFileDesc(fileDesc); err != nil {
 		log.Fatalf("registering file descriptor with runtime (%v)", err)
 	}
 }
 
-func registerEvalFileDescriptor(fileDesc *descriptor.FileDescriptorProto) error {
+func registerEvalProtoFileDesc(fileDesc *descriptor.FileDescriptorProto) error {
 	ctx := &registerCtx{
 		ProtoPkg:   fileDesc.GetPackage(),
 		KoProtoPkg: path.Join("proto", fileDesc.GetPackage()),
