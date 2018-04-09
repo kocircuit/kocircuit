@@ -6,12 +6,12 @@ for computing the final return value of a function.
 
 The Ko interpreter guarantees two conditions:
 
-	(a) Every step in a function definition is executed before the function returns.
-	This includes steps whose values are not used to compute the final return value
-	of the function.
+(a) Every step in a function definition is executed before the function returns.
+This includes steps whose values are not used to compute the final return value
+of the function.
 
-	(b) If the formula for computing step B refers to the value computed by step A,
-	then step A will be executed before step B.
+(b) If the formula for computing step B refers to the value computed by step A,
+then step A will be executed before step B.
 
 We already saw an example before:
 
