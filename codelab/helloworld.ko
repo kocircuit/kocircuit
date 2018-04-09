@@ -1,3 +1,5 @@
+// Run with:
+//	ko play github.com/kocircuit/kocircuit/codelab/HelloWorld
 HelloWorld() {
-	return: Println("Hello, world!")
+	return: "Hello, world!"
 }

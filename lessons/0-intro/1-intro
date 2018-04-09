@@ -1,0 +1,4 @@
+
+The Ko language targets type-safe manipulation of protocol data structures (cycle-free data structures).
+
+Ko is generic, type-safe and immutable.

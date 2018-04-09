@@ -1,0 +1,31 @@
+`ko doc` for accessing documentation (functions, macros, packages)
+-------
+Join
+Equal, Hash
+Yield
+When, All
+---
+Bug
+Peek, PeekType, Show, ShowType
+---
+(Timeout)
+---
+Spin
+Panic, Recover
+---
+String, Bool, Int8, Int16, Int32, Int64, Uint8, Uint16, Uint32, Uint64, Float32, Float64
+Hang
+bool: And, Or, Xor, Not
+integer: Equal, Less, Prod, Ratio, Sum, Moduli, Negative
+---
+Len, Merge, Take
+Loop
+Range
+---
+Memory, Remember, Recall
+---
+Parallel
+=========
+workflow
+FAQ
+	Why use Ko instead of Go?

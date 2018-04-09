@@ -1,0 +1,49 @@
+
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// Run with:
+// alj play github.com/aljabrio/aljabrio/handbook/examples/Greeting
+Greeting() {
+	return: "Hello, there."
+}
+
+CustomGreeting(name) {
+	return: strings.Join(
+		string: ("Hello", name)
+		delimiter: " "
+	)
+}
+
+// Run with:
+// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohn
+GreetJohn() {
+	return: CustomGreeting(name: "John")
+}
+
+CustomFormalGreeting(firstName, familyName) {
+	return: strings.Join(
+		string: ("Hello", firstName, familyName)
+		delimiter: " "
+	)
+}
+
+// Run with:
+// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohnFormally
+GreetJohnFormally() {
+	return: CustomFormalGreeting(firstName: "John", familyName: "Jovi")
+}
+
+DoubleGreeting(name1, name2) {
+	firstGreeting: CustomFormalGreeting(firstName: name1)
+	secondGreeting: CustomFormalGreeting(firstName: name2)
+	return: strings.Join(
+		string: (firstGreeting, "and", secondGreeting)
+		delimiter: " "
+	)
+}
+
+// Run with:
+// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohnAndMary
+GreetJohnAndMary() {
+	return: DoubleGreeting(name1: "John", name2: "Mary")
+}
