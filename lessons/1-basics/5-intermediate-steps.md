@@ -45,8 +45,13 @@ the curly braces):
 
 	<label>: <formula>
 
+The step's `<label>` determines a name for the step and a way of referring to its
+computed value within the function body. The step's `<formula>` describes
+how the step value is computed.
+
 Step `<label>`s need to be unique and different from the 
-label `return`, reserved for the function's return value.
+label `return`, which is a reserved name for the step that produces the
+function's return value.
 
 ## EXERCISE
 
