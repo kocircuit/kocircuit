@@ -37,3 +37,5 @@ A _formula_ can be one of the following:
 4. Invocation of a function (or a functional value)
 5. Augmentation of a function (or a functional value), which is Ko's nomenclature for closure
 6. Selection of a field into a value of a structure type
+
+The following articles cover each of these types of formulas.
