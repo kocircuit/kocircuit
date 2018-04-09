@@ -66,6 +66,9 @@ argument called `_after` which uses the value `firstGreeting`.
 
 This change will tell the Ko interpreter that the value of `firstGreeting`
 must be computed before the formula for `secondGreeting` can be executed.
-Yet it will not change the value computed by `secondGreeting` in any way
+Yet it will not affect the value computed by `secondGreeting` in any way
 because the function `CustomFormalGreeting` does not recognize an argument
 called `_after` and it will simply ignore it.
+
+The argument label `_after` is arbitrary. One can use any argument name
+not used by the function being called.
