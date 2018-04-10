@@ -2,7 +2,6 @@
 -------
 Join
 Equal, Hash
-Yield
 -------
 String, Bool, Int8, Int16, Int32, Int64, Uint8, Uint16, Uint32, Uint64, Float32, Float64
 bool: And, Or, Xor, Not
@@ -14,6 +13,7 @@ Bug, Peek, PeekType, Show, ShowType
 ---
 (Timeout)
 ---
+Yield
 Panic, Recover
 ---
 Spin
