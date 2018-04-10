@@ -15,14 +15,15 @@ invocation with a default (aka monadic) argument.
 
 An invocation formula with named arguments is expressed in the form:
 
-	<function_reference>(
+	<function_formula>(
 		<arg_name_1>: <formula_1>
 		...
 		<arg_name_n>: <formula_n>
 	)
 
-Here `<function_reference>` is either a functional reference literal (described in
-an earlier section) or it can be any formula that evaluates to a functional value.
+Here `<function_formula>` is any formula that evaluates to a functional value.
+Typically it is simply a functional reference literal (described in an earlier section).
+
 The arguments `<arg_name_x>` are argument name identifiers which will be passed
 to the function being called. The values assigned to the arguments, i.e.
 `<formula_x>`, are recursively formulas themselves.
@@ -47,7 +48,7 @@ User-defined functions that have a default argument were covered in an earlier c
 Such functions can be invoked using named argument invocation (as above), while
 they can also be called using the shorthand form:
 
-	<function_reference>(<formula>)
+	<function_formula>(<default_arg_formula>)
 
 For instance, the function `Join` from package `"github.com/kocircuit/kocircuit/lib/strings"`
 has the signature
@@ -57,12 +58,12 @@ has the signature
 Argument `string` is marked as default, and the documentation of the function
 reveals that it can be a single string or a sequence of strings.
 
-Consider the following example of calling `Join` with a default argument invocation syntax:
+Consider the following example of calling `Join` with default argument invocation syntax:
 
 	import "github.com/kocircuit/kocircuit/lib/strings"
 
 	Greet(name) {
-		returns: strings.Join(("Hello ", name))
+		returns: strings.Join(("Hello ", name)) // pass ("Hello ", name) to argument "string" of Join
 	}
 
 This example calls `strings.Join`, passing the string sequence value `("Hello ", name)`

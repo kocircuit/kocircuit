@@ -1,0 +1,22 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// MakeGreeter returns a functional value, which
+// when invoked will return a greeting string, customized to the 
+// given name argument.
+MakeGreeter(name) {
+	return: strings.Join[ // augment the function Join
+		string: ("Hello", name)
+		delimiter: " "
+	]
+}
+
+Greet(name) {
+	greeter: MakeGreeter(name: name) // create a function that returns greetings to name
+	return: greeter() // call the function from step greeter to return the actual greeting string
+}
+
+// Run this with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/GreetTom
+GreetTom() {
+	return: Greet(name: "Tom") // this will return "Hello Tom"
+}
