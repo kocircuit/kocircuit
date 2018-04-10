@@ -1,6 +1,6 @@
 # LITERALS
 
-A _literal_ is a _formula_ which describes an arithmetic constant.
+A _literal_ is a _formula_ which describes an arithmetic or functional constant.
 
 Ko supports four types of constants: boolean, string, integral, floating-point and functional.
 
@@ -25,8 +25,8 @@ verbatim (ASCII escape sequences are not interpreted). For example:
 
 	ExampleBackQuoted() {
 		return: `
-This is a longer text,
-which spans multiple lines.`
+	This is a longer text,
+	which spans multiple lines.`
 	}
 
 ## Integer literals
@@ -82,7 +82,7 @@ For instance,
 	}
 
 3. A functional literal which refers to a builtin function is the name identifier of the function.
-For context, Ko supplies a number of builtin functions (like, `Yield`, `Range`, etc.)
+For context, Ko supplies a number of builtin functions (like, `Print`, `Yield`, `Range`, etc.)
 which can be referred to from any source file (without importing any packages).
 
 For instance,
