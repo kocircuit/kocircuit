@@ -70,8 +70,8 @@ to the default argument of `strings.Join` (which happens to be called `string`).
 
 ### DEFAULT SEQUENCE-TYPE ARGUMENTS
 
-In cases when a sequence construction, like `("Hello", name)` in the previous example,
-is passed one can use single round brackes, instead of double:
+In cases when a sequence construction (like `("Hello", name)` in the previous example)
+is passed as a default invocation argument, one can use single round brackes instead of double:
 
 	Greet(name) {
 		returns: strings.Join("Hello ", name) // single brackets used here
