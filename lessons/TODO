@@ -3,14 +3,11 @@
 Equal, Hash
 Join
 -------
-Negative
-
 String
 Float32, Float64
 Bool, And, Or, Xor, Not
+Empty: When, All
 -------
-When, All
----
 Bug, Peek, PeekType, Show, ShowType
 ---
 (Timeout)

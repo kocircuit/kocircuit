@@ -10,9 +10,7 @@ Supported integer types are:
 Integer values can be converted to other integral types using the builtin
 conversion functions: `Int8`, `Int16`, `Int32`, `Int64`, `Uint8`, `Uint16`, `Uint32`, `Uint64`.
 
-All integral conversion functions are called with a formula of the form:
-
-	<conversion_function_name>(<formula>)
+All integral conversion functions are called with a single unnamed integral argument.
 
 For instance:
 
