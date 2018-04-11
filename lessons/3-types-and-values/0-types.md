@@ -2,7 +2,7 @@
 
 This chapter covers the _types_ of values used by the Ko language.
 
-* Primitive types: string, boolean, integers and floats
+* Arithmetic types: string, boolean, integers and floats
 * Sequence type: an ordered list of values of the same type
 * Structure type: a set of named fields, each associated with a value of any type
 * Variety type: a functional value that can be augmented (closure) or invoked

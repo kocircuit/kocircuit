@@ -1,11 +1,13 @@
 `ko doc` for accessing documentation (functions, macros, packages)
 -------
-Join
 Equal, Hash
+Join
 -------
-String, Bool, Int8, Int16, Int32, Int64, Uint8, Uint16, Uint32, Uint64, Float32, Float64
-bool: And, Or, Xor, Not
-integer: Equal, Less, Prod, Ratio, Sum, Moduli, Negative
+Negative
+
+String
+Float32, Float64
+Bool, And, Or, Xor, Not
 -------
 When, All
 ---
