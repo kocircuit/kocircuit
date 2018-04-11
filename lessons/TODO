@@ -3,7 +3,6 @@
 Join
 -------
 String
-Float32, Float64
 Empty: When, All
 ---
 Len, Merge, Take
