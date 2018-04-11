@@ -5,8 +5,11 @@ Join
 -------
 String
 Float32, Float64
-Bool, And, Or, Xor, Not
 Empty: When, All
+---
+Len, Merge, Take
+Loop
+Range
 -------
 Bug, Peek, PeekType, Show, ShowType
 ---
@@ -17,10 +20,6 @@ Panic, Recover
 ---
 Spin
 Hang
----
-Len, Merge, Take
-Loop
-Range
 ---
 Memory, Remember, Recall
 ---
