@@ -15,7 +15,7 @@ All integral conversion functions are called with a single unnamed integral argu
 For instance:
 
 	ConvertToInt32(x) {
-		return: Int32(x) // if the value of x is not integral, a compiler error will be issued
+		return: Int32(x) // if the value of x is not integral, a type panic will be issued
 	}
 
 ## INTEGER ARITHMETIC
