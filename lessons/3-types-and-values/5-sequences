@@ -100,3 +100,23 @@ with the builtin function `Merge`.
 
 Note that singleton values, like `"a"` above, are lifted to a sequence, in this case `("a")`,
 before merging.
+
+## TAKING AN ELEMENT FROM THE FRONT
+
+The builtin function `Take` will split an input sequence into its first element and the remainder.
+
+`Take` expects a single unnamed sequence argument.
+It returns a structure with two fields `first` and `remainder`.
+Field `first` holds the value of the first element in the input sequence;
+if the sequence is empty, it holds the empty value.
+Field `remainder` holds the remainder of the input sequence, after the first
+element.
+
+For instance,
+
+	Take("a", "b", "c") // returns (first: "a", remainder: ("b", "c"))
+	Take("a") // returns (first: "a", remainder: ())
+	Take() // returns (first: (), remainder: ())
+
+## RANGING OVER A SEQUENCE
+
