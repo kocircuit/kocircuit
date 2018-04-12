@@ -4,9 +4,7 @@ Join
 -------
 Empty: When, All
 ---
-Bug, Peek, PeekType, Show, ShowType
----
-(Timeout)
+Peek, PeekType, Show, ShowType
 ---
 Loop
 Yield
@@ -18,3 +16,4 @@ Hang
 Memory, Remember, Recall
 ---
 Parallel
+Timeout
