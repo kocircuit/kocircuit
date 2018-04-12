@@ -41,7 +41,10 @@ func InterfaceID(v interface{}) ID {
 }
 
 func ValueID(v reflect.Value) ID {
-	return StringID(v.String())
+	return Blend(
+		StringID(v.Type().String()),
+		StringID(v.String()),
+	)
 }
 
 func StringID(s string) ID {

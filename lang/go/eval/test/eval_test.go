@@ -194,6 +194,12 @@ var evalTests = []*EvalTest{
 		}
 		Main() {
 			return: And(
+				Equal((a: ()), ())
+				Equal(Hash(a: ()), Hash(Merge()))
+				Equal(Hash("foo"), Hash(Merge("foo")))
+				Equal(Hash(), Hash(()))
+				Equal(Hash(), Hash(Merge()))
+				NotEqual(Hash(Int64(1)), Hash(Int32(1)))
 				NotEqual(Hash(1, 2), Hash(1, 2, 3))
 				Equal(Hash(a: "a", b: 1), Hash(a: "a", b: 1))
 				Equal(Hash(a: "a", b: ()), Hash(a: "a"))

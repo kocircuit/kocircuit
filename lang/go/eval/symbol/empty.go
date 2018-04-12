@@ -33,7 +33,7 @@ func (empty EmptySymbol) Equal(span *Span, sym Symbol) bool {
 }
 
 func (empty EmptySymbol) Hash() string {
-	return "" //XXX
+	return ""
 }
 
 func (empty EmptySymbol) LiftToSeries(span *Span) *SeriesSymbol {

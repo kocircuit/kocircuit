@@ -23,14 +23,16 @@ func (m EvalJoinMacro) MacroSheathString() *string { return PtrString("Join") }
 func (m EvalJoinMacro) Help() string { return "Join" }
 
 func (EvalJoinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	a := arg.(*StructSymbol)
-	if monadic := a.SelectMonadic(); !IsEmptySymbol(monadic) {
-		return monadic, nil, nil
+	return Construct(arg.(*StructSymbol)), nil, nil
+}
+
+func Construct(a *StructSymbol) Symbol {
+	a = FilterEmptyStructFields(a)
+	if a.IsEmpty() {
+		return EmptySymbol{}
+	} else if monadic := a.SelectMonadic(); !IsEmptySymbol(monadic) {
+		return monadic
 	} else {
-		if a.IsEmpty() {
-			return EmptySymbol{}, nil, nil
-		} else {
-			return a, nil, nil
-		}
+		return a
 	}
 }

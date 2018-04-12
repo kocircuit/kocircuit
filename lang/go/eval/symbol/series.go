@@ -61,12 +61,19 @@ func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
 	return true
 }
 
-func (ss *SeriesSymbol) Hash() string { //XXX
-	h := make([]string, len(ss.Elem))
-	for i, e := range ss.Elem {
-		h[i] = e.Hash()
+func (ss *SeriesSymbol) Hash() string {
+	h := make([]string, 0, len(ss.Elem))
+	for _, e := range ss.Elem {
+		h = append(h, e.Hash())
 	}
-	return Mix(h...)
+	switch len(h) {
+	case 0:
+		return EmptySymbol{}.Hash()
+	case 1:
+		return h[0]
+	default:
+		return Mix(h...)
+	}
 }
 
 func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {

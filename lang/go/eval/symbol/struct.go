@@ -20,6 +20,10 @@ func MakeStructSymbol(fields FieldSymbols) *StructSymbol {
 	}
 }
 
+func FilterEmptyStructFields(ss *StructSymbol) *StructSymbol {
+	return MakeStructSymbol(FilterEmptyFieldSymbols(ss.Field))
+}
+
 func FilterEmptyFieldSymbols(fields FieldSymbols) (filtered FieldSymbols) {
 	filtered = make(FieldSymbols, 0, len(fields))
 	for _, field := range fields {
