@@ -3,14 +3,11 @@ CI
 
 LANG
 * Memoize macro
-* hash macros type-safety checks on Remember and Recall (on both keys and values)
 
 PROTO
-* ability to create zero-value proto messages?
 * proto service integration
 
 DOC
-* Next/Prev buttons on wiki
 * Panic and Recover macros
 * When and All macros
 * programming patterns (tests, etc)

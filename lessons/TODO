@@ -2,17 +2,16 @@
 -------
 Join
 -------
-String
 Empty: When, All
 ---
-Len, Merge, Take
-Loop
+Take
 Range
 -------
 Bug, Peek, PeekType, Show, ShowType
 ---
 (Timeout)
 ---
+Loop
 Yield
 Panic, Recover
 ---

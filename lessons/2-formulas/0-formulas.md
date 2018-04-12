@@ -26,7 +26,7 @@ and conforms to the syntax rule:
 
 	<label>: <formula>
 
-The expression `<label>` holds the unique idenitifier of the step (and its computed value),
+The expression `<label>` is the unique idenitifier of the step,
 whereas the expression `<formula>` describes how the step value is computed.
 
 A _formula_ can be one of the following:
