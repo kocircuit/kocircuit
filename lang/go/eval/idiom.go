@@ -14,14 +14,17 @@ func compileIdiomRepo() Repo {
 }
 
 const EvalIdiomSrc = `
+// Nothing returns an empty value.
 Nothing() {
 	return: ()
 }
 
+// Return returns its default argument.
 Return(pass?) {
 	return: pass
 }
 
+// Expect panics if its default argument is empty.
 Expect(value?) {
 	return: When(
 		have: value
@@ -47,18 +50,6 @@ Branch(if, then, else) {
 		have: Yield(if: if, then: then, else: else)
 		then: Invoke
 		else: Nothing
-	)
-}
-
-Switch(case, otherwise) {
-	return: Take(
-		from: Range(
-			over: case
-			with: switchCase(elem) {
-				return: (emit: Yield(if: elem.if, then: elem.yield))
-			}
-		).image
-		otherwise: otherwise
 	)
 }
 `

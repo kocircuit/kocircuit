@@ -279,18 +279,13 @@ var evalTests = []*EvalTest{
 			Ko_success:  true,
 		},
 	},
-	{ // switch, take
+	{ // take
 		Enabled: true,
 		File: `
 		Main() {
-			s: (1, 2, 3, 4, 5)
-			return: Equal(
-				Switch(
-					case: (if: false, yield: "abc")
-					case: (if: Equal(Len(s), 5), yield: "def")
-					otherwise: "ghi"
-				)
-				"def"
+			return: And(
+				Equal(Take(1, 2, 3).first, 1)
+				Equal(Take("a", "b").remainder, Merge("b"))
 			)
 		}
 		`,

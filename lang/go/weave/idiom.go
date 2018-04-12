@@ -16,19 +16,6 @@ func compileIdiomRepo() Repo {
 const IdiomSrc = `
 Return(pass?) { return: pass }
 
-// XXX: implement Take
-Switch(case, otherwise) {
-	return: Take(
-		from: Range(
-			over: case
-			with: switchCase(elem) {
-				return: (emit: Yield(if: elem.if, then: elem.yield))
-			}
-		).image
-		otherwise: otherwise
-	)
-}
-
 Branch(if, then, else) {
 	return: Yield(if: if, then: then, else: else)()
 }

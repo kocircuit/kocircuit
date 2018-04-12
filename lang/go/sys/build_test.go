@@ -180,26 +180,6 @@ var testBuild = []struct {
 	},
 	{
 		Enabled: false,
-		Name:    "SwitchCut",
-		File: `
-		Main(x, y, z) {
-			return: Switch(
-				case: (if: z, yield: x)
-				case: (if: true, yield: x)
-				case: (if: false, yield: y)
-				otherwise: 77
-			)
-		}
-		`,
-		Arg: NewGoStruct(
-			&GoField{Name: "X", Type: GoInt8, Tag: KoTags("x", false)},
-			&GoField{Name: "Y", Type: GoInt16, Tag: KoTags("y", false)},
-			&GoField{Name: "Z", Type: GoBool, Tag: KoTags("z", false)},
-		),
-		Result: nil,
-	},
-	{
-		Enabled: false,
 		Name:    "NotAndOrHave",
 		File: `
 		Main(x) {

@@ -23,10 +23,32 @@ func (m EvalTakeMacro) MacroSheathString() *string { return PtrString("Take") }
 func (m EvalTakeMacro) Help() string { return "Take" }
 
 func (EvalTakeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	a := arg.(*StructSymbol)
-	if fromSeries := a.Walk("from").LiftToSeries(span); fromSeries.Len() > 0 {
-		return fromSeries.Elem[0], nil, nil
+	if fromSeries := ExtractMonadicOrNamed(arg, "from").LiftToSeries(span); fromSeries.Len() > 0 {
+		if remainder, err := MakeSeriesSymbol(span, fromSeries.Elem[1:]); err != nil {
+			panic(err)
+		} else {
+			return MakeStructSymbol(
+				FieldSymbols{
+					{Name: "first", Value: fromSeries.Elem[0]},
+					{Name: "remainder", Value: remainder},
+				},
+			), nil, nil
+		}
 	} else {
-		return a.Walk("otherwise"), nil, nil
+		return EmptySymbol{}, nil, nil
+	}
+}
+
+func ExtractNamed(arg Arg, name string) Symbol {
+	a := arg.(*StructSymbol)
+	return a.Walk(name)
+}
+
+func ExtractMonadicOrNamed(arg Arg, name string) Symbol {
+	a := arg.(*StructSymbol)
+	if v := a.SelectMonadic(); !IsEmptySymbol(v) {
+		return v
+	} else {
+		return a.Walk("name")
 	}
 }
