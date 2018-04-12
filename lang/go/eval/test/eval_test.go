@@ -285,7 +285,7 @@ var evalTests = []*EvalTest{
 		Main() {
 			return: And(
 				Equal(Take(1, 2, 3).first, 1)
-				Equal(Take("a", "b").remainder, Merge("b"))
+				Equal(Take("a", "b").remainder, "b")
 			)
 		}
 		`,

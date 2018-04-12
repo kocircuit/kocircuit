@@ -27,21 +27,17 @@ func (empty EmptySymbol) String() string {
 	return Sprint(empty)
 }
 
-func (empty EmptySymbol) Equal(sym Symbol) bool {
+func (empty EmptySymbol) Equal(span *Span, sym Symbol) bool {
 	_, ok := sym.(EmptySymbol)
 	return ok
 }
 
 func (empty EmptySymbol) Hash() string {
-	return ""
+	return "" //XXX
 }
 
 func (empty EmptySymbol) LiftToSeries(span *Span) *SeriesSymbol {
-	if emptySeries, err := MakeSeriesSymbol(span, nil); err != nil {
-		panic(err)
-	} else {
-		return emptySeries
-	}
+	return EmptySeries
 }
 
 func (empty EmptySymbol) Select(span *Span, path Path) (Shape, Effect, error) {

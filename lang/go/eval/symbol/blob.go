@@ -34,7 +34,7 @@ func (blob *BlobSymbol) String() string {
 	return fmt.Sprintf("Blob<%d>", blob.Value.Len())
 }
 
-func (blob *BlobSymbol) Equal(sym Symbol) bool {
+func (blob *BlobSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*BlobSymbol); ok {
 		left, right := blob.Bytes(), other.Bytes()
 		if len(left) != len(right) {

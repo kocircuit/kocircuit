@@ -20,7 +20,7 @@ type Symbol interface {
 	Splayer // Splay
 	Type() Type
 	Hash() string
-	Equal(Symbol) bool
+	Equal(*Span, Symbol) bool
 	LiftToSeries(*Span) *SeriesSymbol
 	Disassemble(*Span) (*pb.Symbol, error)
 }

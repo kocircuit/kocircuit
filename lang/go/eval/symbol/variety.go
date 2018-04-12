@@ -62,9 +62,10 @@ func (vty *VarietySymbol) String() string {
 	return Sprint(vty)
 }
 
-func (vty *VarietySymbol) Equal(sym Symbol) bool {
+func (vty *VarietySymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*VarietySymbol); ok {
-		return vty.Macro.MacroID() == other.Macro.MacroID() && FieldSymbolsEqual(vty.Arg, other.Arg)
+		return vty.Macro.MacroID() == other.Macro.MacroID() &&
+			FieldSymbolsEqual(span, vty.Arg, other.Arg)
 	} else {
 		return false
 	}

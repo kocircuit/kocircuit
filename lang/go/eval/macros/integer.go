@@ -33,7 +33,7 @@ func (m EvalIntegerEqualMacro) Invoke(span *Span, arg Arg) (returns Return, effe
 		return nil, nil, span.Errorf(err, "integer equal")
 	} else {
 		for i := 1; i < len(symbols); i++ {
-			if !symbols[i-1].Equal(symbols[i]) {
+			if !symbols[i-1].Equal(span, symbols[i]) {
 				return BasicFalse, nil, nil
 			}
 		}

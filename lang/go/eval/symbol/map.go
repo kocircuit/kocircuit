@@ -75,12 +75,12 @@ func (ms *MapSymbol) String() string {
 	return Sprint(ms)
 }
 
-func (ms *MapSymbol) Equal(sym Symbol) bool {
+func (ms *MapSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*MapSymbol); ok {
 		filteredThis, filtedOther := filterMap(ms.Map), filterMap(other.Map)
 		if len(filteredThis) == len(filtedOther) {
 			for k := range filteredThis {
-				if !filteredThis[k].Equal(filtedOther[k]) {
+				if !filteredThis[k].Equal(span, filtedOther[k]) {
 					return false
 				}
 			}

@@ -92,15 +92,15 @@ func (ss *StructSymbol) String() string {
 	return Sprint(ss)
 }
 
-func (ss *StructSymbol) Equal(sym Symbol) bool {
+func (ss *StructSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*StructSymbol); ok {
-		return FieldSymbolsEqual(ss.Field, other.Field)
+		return FieldSymbolsEqual(span, ss.Field, other.Field)
 	} else {
 		return false
 	}
 }
 
-func FieldSymbolsEqual(x, y FieldSymbols) bool {
+func FieldSymbolsEqual(span *Span, x, y FieldSymbols) bool {
 	x, y = FilterEmptyFieldSymbols(x), FilterEmptyFieldSymbols(y)
 	if len(x) != len(y) {
 		return false
@@ -109,7 +109,7 @@ func FieldSymbolsEqual(x, y FieldSymbols) bool {
 	u.Sort()
 	v.Sort()
 	for i := range u {
-		if u[i].Name != v[i].Name || !u[i].Value.Equal(v[i].Value) {
+		if u[i].Name != v[i].Name || !u[i].Value.Equal(span, v[i].Value) {
 			return false
 		}
 	}

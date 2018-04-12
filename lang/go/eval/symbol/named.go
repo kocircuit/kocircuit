@@ -23,7 +23,7 @@ func (named *NamedSymbol) String() string {
 	return Sprint(named.Value.Interface())
 }
 
-func (named *NamedSymbol) Equal(sym Symbol) bool {
+func (named *NamedSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*NamedSymbol); ok {
 		return reflect.DeepEqual(named.Value.Interface(), other.Value.Interface())
 	} else {

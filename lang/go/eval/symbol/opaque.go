@@ -26,7 +26,7 @@ func (opaque *OpaqueSymbol) String() string {
 	return Sprint(opaque)
 }
 
-func (opaque *OpaqueSymbol) Equal(sym Symbol) bool {
+func (opaque *OpaqueSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(*OpaqueSymbol); ok {
 		return opaque.Value.Interface() == other.Value.Interface()
 	} else {

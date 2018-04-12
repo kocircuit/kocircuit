@@ -48,23 +48,20 @@ func (ss *SeriesSymbol) String() string {
 	return Sprint(ss)
 }
 
-func (ss *SeriesSymbol) Equal(sym Symbol) bool {
-	if other, ok := sym.(*SeriesSymbol); ok {
-		if len(ss.Elem) != len(other.Elem) {
-			return false
-		}
-		for i := range ss.Elem {
-			if !ss.Elem[i].Equal(other.Elem[i]) {
-				return false
-			}
-		}
-		return true
-	} else {
+func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
+	other := sym.LiftToSeries(span)
+	if len(ss.Elem) != len(other.Elem) {
 		return false
 	}
+	for i := range ss.Elem {
+		if !ss.Elem[i].Equal(span, other.Elem[i]) {
+			return false
+		}
+	}
+	return true
 }
 
-func (ss *SeriesSymbol) Hash() string {
+func (ss *SeriesSymbol) Hash() string { //XXX
 	h := make([]string, len(ss.Elem))
 	for i, e := range ss.Elem {
 		h[i] = e.Hash()

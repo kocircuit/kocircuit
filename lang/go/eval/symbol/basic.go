@@ -100,7 +100,7 @@ func (basic BasicSymbol) String() string {
 	return Sprint(basic)
 }
 
-func (basic BasicSymbol) Equal(sym Symbol) bool {
+func (basic BasicSymbol) Equal(span *Span, sym Symbol) bool {
 	if other, ok := sym.(BasicSymbol); ok {
 		return basic.Value == other.Value
 	} else {
