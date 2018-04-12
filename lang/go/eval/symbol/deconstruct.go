@@ -125,17 +125,10 @@ func (ctx *typingCtx) DeconstructSlice(v reflect.Value) (Symbol, error) {
 			}
 		}
 	}
-	if len(ds) == 0 {
-		return EmptySymbol{}, nil
+	if ss, err := MakeSeriesSymbol(ctx.Span, ds); err != nil {
+		panic(err)
 	} else {
-		if unified, err := ctx.UnifyTypes(dt); err != nil {
-			panic("o")
-		} else {
-			return &SeriesSymbol{ // XXX: use MakeSeriesSymbol
-				Type_: &SeriesType{unified},
-				Elem:  ds,
-			}, nil
-		}
+		return ss, nil
 	}
 }
 
