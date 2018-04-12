@@ -1,0 +1,30 @@
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/DemoCountWordLengths
+DemoCountWordLengths() {
+	return: CountWordLengths(stringSeq: ("a", "b", "foo", "bar"))
+}
+
+CountWordLengths(stringSeq) {
+	ranged: Range(
+		over: stringSeq   // sequence of strings to range over
+		with: stringLenIterator   // iterator function
+		start: (totalLength: 0)   // initial carry
+	)
+	return: (
+		stringLengthsSeqeunce: ranged.image
+		totalLength: ranged.residue.totalLength
+	)
+}
+
+stringLenIterator(carry, elem) {
+	elemLen: strings.Len(elem)
+	return: (
+		emit: elemLen
+		carry: (
+			totalLength: integer.Sum(carry.totalLength, elemLen)
+		)
+	)
+}

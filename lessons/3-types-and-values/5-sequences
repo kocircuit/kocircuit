@@ -120,3 +120,78 @@ For instance,
 
 ## RANGING OVER A SEQUENCE
 
+Ko provides the builtin `Range` function for ranging over the elements of a sequence.
+
+`Range` iterates sequentially over the elements of an input sequence.
+
+A user-supplied iterator function is invoked for each sequence element.
+The iterator function is expected to return a structure with two fields: `emit` and `carry`.
+
+Values stored in `emit` are collected across all invocations of the user
+function and merged into a new sequence and returned by `Range`.
+
+The value stored in `carry` is passed to the next invocation of the iterator function.
+The `carry` returned by the last invocation of the iterator is returned by `Range`.
+
+`Range` expects three input arguments:
+* `over` holds the sequence value to be ranged over,
+* `with` holds the user-supplied iterator function,
+* `start` holds the carry value to be passed to the first invocation of the iterator.
+
+`Range` passes two arguments to the user-supplied iterator:
+* `elem` holds the element currently being iterated over
+* `carry` holds the carry value from the previous invocation of the iterator,
+or in the case of the first iteration, it holds the value of `start`
+
+`Range` returns a structure with two fields: `image` and `residue`.
+* `image` holds a merged sequence of all values emitted by the per-element
+invocations to the iterator,
+* `residue` holds the value of the carry returned by the last iterator invocation;
+if the input sequence is empty, `residue` holds the value of `start`.
+
+### EXAMPLE: WORD LENGTH AND AGGREGATE LENGTH
+
+The following example function traverses a sequence of strings.
+
+It returns a new sequence of integers representing the length of each string in the input sequence,
+as well as the total length of all strings.
+
+	import "integer"
+	import "github.com/kocircuit/kocircuit/lib/strings"
+
+	// Run with:
+	// ko play github.com/kocircuit/kocircuit/lessons/examples/DemoCountWordLengths
+	// You should get the output:
+	// (stringLengthsSeqeunce: (1, 1, 3, 3), totalLength: 8)
+	DemoCountWordLengths() {
+		return: CountWordLengths(stringSeq: ("a", "b", "foo", "bar"))
+	}
+
+	CountWordLengths(stringSeq) {
+		ranged: Range(
+			over: stringSeq   // sequence of strings to range over
+			with: stringLenIterator   // iterator function
+			start: (totalLength: 0)   // initial carry
+		)
+		return: (
+			stringLengthsSeqeunce: ranged.image
+			totalLength: ranged.residue.totalLength
+		)
+	}
+
+	stringLenIterator(carry, elem) {
+		elemLen: strings.Len(elem)
+		return: (
+			emit: elemLen
+			carry: (
+				totalLength: integer.Sum(carry.totalLength, elemLen)
+			)
+		)
+	}
+
+This example can be found in:
+
+	github.com/kocircuit/kocircuit/lessons/examples/count.ko
+
+More advanced usage of `Range` can be found in the standard library, e.g.
+function `Map` in package `"github.com/kocircuit/kocircuit/lib/series"`.

@@ -2,7 +2,7 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
 // Run with:
-// alj play github.com/aljabrio/aljabrio/handbook/examples/Greeting
+// ko play github.com/kocircuit/kocircuit/lessons/examples/Greeting
 Greeting() {
 	return: "Hello, there."
 }
@@ -15,7 +15,7 @@ CustomGreeting(name) {
 }
 
 // Run with:
-// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohn
+// ko play github.com/kocircuit/kocircuit/lessons/examples/GreetJohn
 GreetJohn() {
 	return: CustomGreeting(name: "John")
 }
@@ -28,7 +28,7 @@ CustomFormalGreeting(firstName, familyName) {
 }
 
 // Run with:
-// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohnFormally
+// ko play github.com/kocircuit/kocircuit/lessons/examples/GreetJohnFormally
 GreetJohnFormally() {
 	return: CustomFormalGreeting(firstName: "John", familyName: "Jovi")
 }
@@ -43,7 +43,7 @@ DoubleGreeting(name1, name2) {
 }
 
 // Run with:
-// alj play github.com/aljabrio/aljabrio/handbook/examples/GreetJohnAndMary
+// ko play github.com/kocircuit/kocircuit/lessons/examples/GreetJohnAndMary
 GreetJohnAndMary() {
 	return: DoubleGreeting(name1: "John", name2: "Mary")
 }
