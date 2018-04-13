@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -29,7 +30,7 @@ import (
 var evalCmd = &cobra.Command{
 	Use:   "eval",
 	Short: "Evaluate a Ko expression",
-	Long: `Evaluate a Ko expression again the circuits compiled into this binary.
+	Long: `Evaluate a Ko expression against builtin functions.
 
 For example,
 	ko eval -e'And(true, Xor(true, false))'
@@ -46,6 +47,8 @@ For example,
 		e := &sys.Eval{KoExpr: expr}
 		if result := e.Play(runtime.CompilerContext()); result.Error != nil {
 			log.Fatalln(result.Error)
+		} else {
+			fmt.Printf("%v\n", result.Returned)
 		}
 	},
 }

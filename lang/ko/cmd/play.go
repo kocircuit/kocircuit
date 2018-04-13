@@ -30,9 +30,8 @@ import (
 // playCmd represents the play command
 var playCmd = &cobra.Command{
 	Use:   "play",
-	Short: "Play evaluates a Ko program",
-	Long: `Play compiles a Ko program to its intermediate circuit representation (IR),
-	and then executes the IR.`,
+	Short: "Play executes a Ko program",
+	Long:  `Play compiles a Ko program and then executes it.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		tools := newToolchain()
 		if len(args) != 1 {

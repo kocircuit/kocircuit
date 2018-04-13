@@ -21,8 +21,9 @@ type Eval struct {
 }
 
 type EvalResult struct {
-	Eval  *Eval `ko:"name=eval"`
-	Error error `ko:"name=error"`
+	Eval     *Eval  `ko:"name=eval"`
+	Error    error  `ko:"name=error"`
+	Returned Symbol `ko:"name=returned"`
 }
 
 func (e *Eval) Play(ctx *runtime.Context) *EvalResult {
@@ -35,6 +36,6 @@ func (e *Eval) Play(ctx *runtime.Context) *EvalResult {
 	}
 	ev := NewEvaluator(EvalFaculty(), repo)
 	span := NewSpan()
-	_, _, r.Error = ev.Eval(span, repo["jail"]["Cell"], MakeStructSymbol(nil))
+	r.Returned, _, r.Error = ev.Eval(span, repo["jail"]["Cell"], MakeStructSymbol(nil))
 	return r
 }

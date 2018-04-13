@@ -28,9 +28,8 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List Ko circuits compiled into this binary",
-	Long: `Ko binaries provide a namespace of compiled circuits.
-The list command lists all compiled circuits and their namespace paths.
+	Short: "List builtin functions",
+	Long: `List builtin functions.
 
 Usage:
 	ko list
