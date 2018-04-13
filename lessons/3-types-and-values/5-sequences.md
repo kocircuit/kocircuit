@@ -157,7 +157,6 @@ The following example function traverses a sequence of strings.
 It returns a new sequence of integers representing the length of each string in the input sequence,
 as well as the total length of all strings.
 
-	import "integer"
 	import "github.com/kocircuit/kocircuit/lib/strings"
 
 	// Run with:
@@ -185,7 +184,7 @@ as well as the total length of all strings.
 		return: (
 			emit: elemLen
 			carry: (
-				totalLength: integer.Sum(carry.totalLength, elemLen)
+				totalLength: Sum(carry.totalLength, elemLen)
 			)
 		)
 	}

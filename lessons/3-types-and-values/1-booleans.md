@@ -35,12 +35,10 @@ It returns the conjunction of their values. If the sequence is empty, `And` retu
 The following examples returns `true` if the integral argument `y` is strictly between
 the integral arguments `x` and `z`:
 
-	import "integer"
-
 	IsBetween(x, y, z) {
 		return: And(
-			integer.Less(x, y)
-			integer.Less(y, z)
+			Less(x, y)
+			Less(y, z)
 		)
 	}
 
@@ -51,9 +49,7 @@ It returns the disjunction of their values. If the sequence is empty, `Or` retur
 
 The following example returns `true` if any two of its three arguments, `x`, `y` and `z`, are equal:
 
-	import "integer"
-
-	AnyIsNonZero(x, y, z) {
+	HasEqualPair(x, y, z) {
 		return: Or(
 			Equal(x, y)
 			Equal(y, z)

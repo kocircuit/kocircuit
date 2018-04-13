@@ -20,8 +20,7 @@ For instance:
 
 ## INTEGER ARITHMETIC
 
-Ko includes a builtin package called "integer" which provides a few generic
-arithmetic functions for manipulating integral types conveniently.
+Ko provides a few generic arithmetic functions for manipulating integral types conveniently.
 
 The functions are generic in the sense that they work with all integral types:
 
@@ -32,10 +31,8 @@ negation of its argument as the same integral type.
 
 An example usage:
 
-	import "integer"
-
 	Negate(x) {
-		return: integer.Negative(x)
+		return: Negative(x)
 	}
 
 ### COMPARISON
@@ -45,17 +42,15 @@ It returns `true` if the first is strictly smaller than the second argument.
 
 An example usage:
 
-	import "integer"
-
 	IsXSmallerThan3(x) {
-		return: integer.Less(x, 3)
+		return: Less(x, 3)
 	}
 
 Alternatively, one could also pass a sequence value as an argument to `Less`:
 
 	IsXSmallerThan3(x) {
 		pair: (x, 3)
-		return: integer.Less(pair)
+		return: Less(pair)
 	}
 
 ### SUMMATION
@@ -66,10 +61,8 @@ as the elements themselves.
 
 An example usage:
 
-	import "integer"
-	
 	SumXY(x, y) {
-		return: integer.Sum(x, y)
+		return: Sum(x, y)
 	}
 
 The following more advanced example shows a function for summing three
@@ -77,7 +70,7 @@ arguments. This function handles also the cases when the user does not
 supply some or all of the arguments:
 
 	SumXYZ(x, y, z) {
-		return: integer.Sum(0, x, y, z)
+		return: Sum(0, x, y, z)
 	}
 
 The first element `0` ensures that the sequence of integers, `(0, x, y, z)`, passed to
@@ -92,10 +85,8 @@ as the elements themselves.
 
 An example usage:
 
-	import "integer"
-	
 	ProdXY(x, y) {
-		return: integer.Prod(x, y)
+		return: Prod(x, y)
 	}
 
 ### DIVISION
@@ -106,10 +97,8 @@ as the elements themselves.
 
 An example usage:
 
-	import "integer"
-	
 	RatioXYZ(x, y, z) {
-		return: integer.Ratio(x, y, z) // returns x divided by y divided by z
+		return: Ratio(x, y, z) // returns x divided by y divided by z
 	}
 
 ### MODULI
@@ -119,8 +108,6 @@ An example usage:
 
 An example usage:
 
-	import "integer"
-
 	Mod3(x) {
-		return: integer.Moduli(x, 3) // returns the value of "x modulus 3"
+		return: Moduli(x, 3) // returns the value of "x modulus 3"
 	}

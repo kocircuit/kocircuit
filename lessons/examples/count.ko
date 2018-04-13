@@ -1,4 +1,3 @@
-import "integer"
 import "github.com/kocircuit/kocircuit/lib/strings"
 
 // Run with:
@@ -24,7 +23,7 @@ stringLenIterator(carry, elem) {
 	return: (
 		emit: elemLen
 		carry: (
-			totalLength: integer.Sum(carry.totalLength, elemLen)
+			totalLength: Sum(carry.totalLength, elemLen)
 		)
 	)
 }

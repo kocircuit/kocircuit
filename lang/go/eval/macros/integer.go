@@ -10,12 +10,20 @@ import (
 
 func init() {
 	RegisterEvalPkgMacro("integer", "Equal", new(EvalIntegerEqualMacro))
+	//
 	RegisterEvalPkgMacro("integer", "Less", new(EvalIntegerLessMacro))
 	RegisterEvalPkgMacro("integer", "Prod", new(EvalIntegerProdMacro))
 	RegisterEvalPkgMacro("integer", "Ratio", new(EvalIntegerRatioMacro))
 	RegisterEvalPkgMacro("integer", "Sum", new(EvalIntegerSumMacro))
 	RegisterEvalPkgMacro("integer", "Moduli", new(EvalIntegerModuliMacro))
 	RegisterEvalPkgMacro("integer", "Negative", new(EvalIntegerNegativeMacro))
+	//
+	RegisterEvalMacro("Less", new(EvalIntegerLessMacro))
+	RegisterEvalMacro("Prod", new(EvalIntegerProdMacro))
+	RegisterEvalMacro("Ratio", new(EvalIntegerRatioMacro))
+	RegisterEvalMacro("Sum", new(EvalIntegerSumMacro))
+	RegisterEvalMacro("Moduli", new(EvalIntegerModuliMacro))
+	RegisterEvalMacro("Negative", new(EvalIntegerNegativeMacro))
 }
 
 type EvalIntegerEqualMacro struct{}

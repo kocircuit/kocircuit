@@ -63,9 +63,8 @@ Function `JoinAliceAndBob` is equivalent to:
 Using varieties and Ko's generic function semantics, one can
 recreate the semantic offered by Go's interfaces, for instance.
 
-	import "integer"
 	import "github.com/kocircuit/kocircuit/lib/strings"
-	import "github.com/kocircuit/kocircuit/lib/integer" as lib // for FormatInt64
+	import "github.com/kocircuit/kocircuit/lib/integer" // for FormatInt64
 
 	// Returns returns its default argument.
 	Return(pass?) {
@@ -74,7 +73,7 @@ recreate the semantic offered by Go's interfaces, for instance.
 
 	// Age returns the difference between currentYear and bornYear.
 	Age(bornYear, currentYear) {
-		return: integer.Sum(currentYear, integer.Negative(bornYear))
+		return: Sum(currentYear, Negative(bornYear))
 	}
 
 	// AliceInfo returns a structure with two "methods", Name and Age.
@@ -99,7 +98,7 @@ recreate the semantic offered by Go's interfaces, for instance.
 		return: strings.Join(
 			string: personInfo.Name()
 			string: "is"
-			string: lib.FormatInt64(
+			string: integer.FormatInt64(
 				int64: personInfo.Age(currentYear: currentYear)
 				base: 10
 			)
