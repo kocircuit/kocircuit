@@ -7,7 +7,7 @@ import "integer"
 import "github.com/kocircuit/kocircuit/lib/integer" as gointeger
 
 FormatInt64(int64?, base) {
-	return: gointeger.FormatInt64(int64: int64, base: base)
+	return: gointeger.GoFormatInt64(int64: int64, base: base)
 }
 
 IsEven(num?) {

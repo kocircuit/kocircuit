@@ -1,0 +1,56 @@
+import "integer"
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/lib/integer" as lib // for FormatInt64
+
+// Returns returns its default argument.
+Return(pass?) {
+	return: pass
+}
+
+// Age returns the difference between currentYear and bornYear.
+Age(bornYear, currentYear) {
+	return: integer.Sum(currentYear, integer.Negative(bornYear))
+}
+
+// AliceInfo returns a structure with two "methods", Name and Age.
+AliceInfo() {
+	return: (
+		Name: Return["Alice"]
+		Age: Age[bornYear: 1901]
+	)
+}
+
+// BobInfo returns a structure with two "methods", Name and Age.
+BobInfo() {
+	return: (
+		Name: Return["Bob"]
+		Age: Age[bornYear: 1930]
+	)
+}
+
+// PersonAge returns a message of the form "NAME is AGE years old."
+// NAME and AGE are extracted from the corresponding methods of personInfo.
+PersonAge(personInfo, currentYear) {
+	return: strings.Join(
+		string: personInfo.Name()
+		string: "is"
+		string: lib.FormatInt64(
+			int64: personInfo.Age(currentYear: currentYear)
+			base: 10
+		)
+		string: "years old."
+		delimiter: " "
+	)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/AliceAge
+AliceAge() {
+	return: PersonAge(personInfo: AliceInfo(), currentYear: 2018)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/BobAge
+BobAge() {
+	return: PersonAge(personInfo: BobInfo(), currentYear: 2018)
+}
