@@ -2,7 +2,7 @@
 
 A _sequence_ type holds an ordered sequence of values of the same type.
 
-Sequences can be constructed using a formulas with the following syntax:
+Sequences can be constructed using a formula with the following syntax:
 
 	(
 		<formula_1>
@@ -56,7 +56,8 @@ arguments on invocation, as in this example:
 		)
 	}
 
-Ko supports an alternative syntax for constructing sequences that are passed
+Ko supports an alternative syntax, called _repeated assignment_,
+for constructing sequences that are passed
 to a function argument. This syntax is inspired by an analog in the textual
 syntax for Protocol Buffer values.
 
