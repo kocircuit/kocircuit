@@ -1,7 +1,5 @@
 `ko doc` for accessing documentation (functions, macros, packages)
 -------
-Join
--------
 Empty / When, All
 ---
 Peek, PeekType, Show, ShowType

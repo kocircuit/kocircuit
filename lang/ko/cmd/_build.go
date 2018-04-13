@@ -69,40 +69,9 @@ For example,
 	},
 }
 
-func parsePkgFunc(s string) (pkgPath, funcName string) {
-	return path.Dir(s), path.Base(s)
-}
-
-var (
-	flagGoBinary string // go binary path
-	flagGOROOT   string // GOROOT
-	flagGOPATH   string // GOPATH
-	flagKOGO     string // generate Go code at this path
-)
-
-func newToolchain() *toolchain.GoToolchain {
-	return &toolchain.GoToolchain{
-		GOROOT: flagGOROOT,
-		GOPATH: flagGOPATH,
-		Binary: flagGoBinary,
-	}
-}
-
 func init() {
 	RootCmd.AddCommand(buildCmd)
 	initGoBasedCmd(buildCmd)
 	// Cobra supports local flags which will only run when this command is called directly, e.g.:
 	// buildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-func initGoBasedCmd(cmd *cobra.Command) {
-	gobinary, err := exec.LookPath("go")
-	if err != nil {
-		panic("err")
-	}
-	goroot, gopath := os.Getenv("GOROOT"), os.Getenv("GOPATH")
-	cmd.PersistentFlags().StringVarP(&flagGoBinary, "gobinary", "", gobinary, "Path to Go binary")
-	cmd.PersistentFlags().StringVarP(&flagGOROOT, "goroot", "", goroot, "GOROOT setting")
-	cmd.PersistentFlags().StringVarP(&flagGOPATH, "gopath", "", gopath, "GOPATH setting")
-	cmd.PersistentFlags().StringVarP(&flagKOGO, "kogo", "", "kogo", "Path for generated Go code, relative to GOPATH/src")
 }
