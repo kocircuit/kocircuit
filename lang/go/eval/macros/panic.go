@@ -29,9 +29,12 @@ func (m EvalPanicMacro) Help() string {
 }
 
 func (EvalPanicMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	panic(
-		NewEvalPanic(span, arg.(*StructSymbol).SelectMonadic()),
-	)
+	join := EvalJoinMacro{}
+	if returns, effect, err = join.Invoke(span, arg); err != nil {
+		return nil, nil, err
+	} else {
+		panic(NewEvalPanic(span, returns.(Symbol)))
+	}
 }
 
 type EvalRecoverMacro struct{}
