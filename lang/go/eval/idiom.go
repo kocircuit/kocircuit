@@ -33,6 +33,14 @@ Expect(value?) {
 	)
 }
 
+Have(value?) {
+	return: When(
+		have: value
+		then: Return[pass: true]
+		else: Return[pass: false]
+	)
+}
+
 Pick(either, or) {
 	return: When(
 		have: either

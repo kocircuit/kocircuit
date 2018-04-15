@@ -32,6 +32,12 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 	}
 	over := a.Walk("over")
 	carry := a.Walk("start")
+	stopArg := a.Walk("stop")
+	stop, stopIsVty := stopArg.(*VarietySymbol) // with returns (emit: X, carry: Y) values
+	if !IsEmptySymbol(stopArg) && !stopIsVty {
+		return nil, nil, span.Errorf(nil, "range stop is not a variety")
+	}
+	//
 	image := Symbols{}
 	for i, elem := range over.LiftToSeries(span).Elem {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", i))
@@ -56,7 +62,22 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 				return nil, nil, iterSpan.Errorf(nil, "range iterator must return a structure or nothing")
 			}
 		}
-	}
+		// stop
+		if stop != nil {
+			stopKnot := Knot{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+			if stopReturns, _, err := stop.Evoke(iterSpan, stopKnot); err != nil {
+				return nil, nil, err
+			} else {
+				if stopFlag, ok := AsBasicBool(stopReturns.(Symbol)); !ok {
+					return nil, nil, iterSpan.Errorf(nil, "range stop must return boolean, got %v", stopReturns)
+				} else {
+					if stopFlag {
+						break // for loop
+					}
+				}
+			}
+		}
+	} // for loop
 	if imageSeries, err := MakeSeriesSymbol(span, image); err != nil {
 		return nil, nil, span.Errorf(err, "range unifying image elements")
 	} else {
