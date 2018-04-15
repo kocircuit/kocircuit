@@ -35,7 +35,11 @@ func (m *memory) Remember(key, value Symbol) Symbol {
 	defer m.Unlock()
 	keyHash := key.Hash()
 	old := m.seen[keyHash]
-	m.seen[keyHash] = &keyValue{key: key, value: value}
+	if IsEmptySymbol(value) {
+		delete(m.seen, keyHash)
+	} else {
+		m.seen[keyHash] = &keyValue{key: key, value: value}
+	}
 	if old == nil {
 		return EmptySymbol{}
 	} else {
@@ -43,13 +47,13 @@ func (m *memory) Remember(key, value Symbol) Symbol {
 	}
 }
 
-func (m *memory) Recall(key Symbol) (Symbol, bool) {
+func (m *memory) Recall(key Symbol) Symbol {
 	m.Lock()
 	defer m.Unlock()
 	if keyValue, found := m.seen[key.Hash()]; found {
-		return keyValue.value, true
+		return keyValue.value
 	} else {
-		return nil, false
+		return EmptySymbol{}
 	}
 }
 
@@ -141,10 +145,10 @@ func (m evalRecallMacro) Help() string {
 
 func (m evalRecallMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	if value, found := m.memory.Recall(a.Walk("key")); found {
-		return value, nil, nil
-	} else {
+	if recalled := m.memory.Recall(a.Walk("key")); IsEmptySymbol(recalled) {
 		return a.Walk("otherwise"), nil, nil
+	} else {
+		return recalled, nil, nil
 	}
 }
 
