@@ -1,0 +1,35 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAlice
+SmartGreetAlice() {
+	return: SmartGreeting(firstName: "Alice")
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetBob
+SmartGreetBob() {
+	return: SmartGreeting(firstName: "Bob", lastName: "Thurston")
+}
+
+SmartGreeting(firstName, lastName) {
+	return: When(
+		have: lastName   // if lastName is not empty
+		then: FormalGreeting[firstName: firstName]   // then call FormalGreeting passing lastName to its default argument
+		else: InformalGreeting[firstName: firstName]   // otherwise call InformalGreeting
+	)
+}
+
+FormalGreeting(firstName, lastName?) {
+	return: strings.Join(
+		string: ("Dear", firstName, lastName)
+		delimiter: " "
+	)
+}
+
+InformalGreeting(firstName) {
+	return: strings.Join(
+		string: ("Hi", firstName)
+		delimiter: " "
+	)
+}

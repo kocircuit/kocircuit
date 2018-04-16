@@ -2,6 +2,9 @@ CI
 * travis integration with ko tests
 
 LANG
+* Range with argument:
+	* rename to step
+	* pass carry-and-elem to a default argument of step (for consistency with other macros)
 * Memoize macro
 
 PROTO

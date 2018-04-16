@@ -19,7 +19,7 @@ Varieties can be constructed by using a functional literal formula. For example:
 	import "github.com/kocircuit/kocircuit/lib/strings"
 
 	Joiner() {
-		return: strings.Join // returns a variety of strings.Join
+		return: strings.Join // returns a variety refering to function strings.Join
 	}
 
 Here `Joiner` returns a variety referencing `string.Join`, with no argument assignments.

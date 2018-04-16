@@ -1,2 +1,71 @@
 # EMPTY VALUES
 
+An _empty_ value represents "no value". 
+
+Empty values arise when a functional argument is not passed, resulting
+in the argument carrying the empty value.
+
+Ko provides two builtin functions for taking action depending on whether
+a value is empty or not.
+
+## WHEN: BRANCHING ON EMPTY
+
+The builtin function `When` provides mechanism for branching based
+on whether a value is empty or not.
+
+`When` expects three arguments: `have`, `then` and `else`.
+
+* When `have` is not empty, `When` returns the result of invoking (the variety) `then`,
+passing to its default argument the non-empty value of `have`.
+
+* When `have` is empty, `When` returns the result of invoking (the variety) `else`.
+
+For instance, in the following example the function `SmartGreeting` returns a different greeting
+string depending on whether `lastName` was passed or not.
+
+	import "github.com/kocircuit/kocircuit/lib/strings"
+
+	SmartGreeting(firstName, lastName) {
+		return: When(
+			have: lastName   // if lastName is not empty
+			then: FormalGreeting[firstName: firstName]   // then call FormalGreeting passing lastName to its default argument
+			else: InformalGreeting[firstName: firstName]   // otherwise call InformalGreeting
+		)
+	}
+
+	FormalGreeting(firstName, lastName?) {
+		return: strings.Join(
+			string: ("Dear", firstName, lastName)
+			delimiter: " "
+		)
+	}
+
+	InformalGreeting(firstName) {
+		return: strings.Join(
+			string: ("Hi", firstName)
+			delimiter: " "
+		)
+	}
+
+	SmartGreetAlice() {
+		return: SmartGreeting(firstName: "Alice")
+	}
+
+	SmartGreetBob() {
+		return: SmartGreeting(firstName: "Bob", lastName: "Thurston")
+	}
+
+You can run this example with:
+
+	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAlice
+	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetBob
+
+## ALL OR NOTHING
+
+The builtin function `All` is designed to facilitate branching on
+the condition that a few given values are all non-empty.
+
+`All` accepts any number of named arguments.
+If all arguments are non-empty, `All` returns a structure containing all named arguments as fields.
+If any one of the arguments is empty, `All` returns the empty value.
+
