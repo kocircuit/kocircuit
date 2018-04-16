@@ -1,22 +1,13 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-// Run with:
-// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAlice
-SmartGreetAlice() {
-	return: SmartGreeting(firstName: "Alice")
-}
-
-// Run with:
-// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetBob
-SmartGreetBob() {
-	return: SmartGreeting(firstName: "Bob", lastName: "Thurston")
-}
+// Examples of using When.
 
 SmartGreeting(firstName, lastName) {
+	first: String(firstName) // enforce that firstName is a string (and hence not an empty value)
 	return: When(
 		have: lastName   // if lastName is not empty
-		then: FormalGreeting[firstName: firstName]   // then call FormalGreeting passing lastName to its default argument
-		else: InformalGreeting[firstName: firstName]   // otherwise call InformalGreeting
+		then: FormalGreeting[firstName: first]   // then call FormalGreeting passing lastName to its default argument
+		else: InformalGreeting[firstName: first]   // otherwise call InformalGreeting
 	)
 }
 
@@ -32,4 +23,47 @@ InformalGreeting(firstName) {
 		string: ("Hi", firstName)
 		delimiter: " "
 	)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAlice
+SmartGreetAlice() {
+	return: SmartGreeting(firstName: "Alice")   // returns "Hi Alice"
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetBob
+SmartGreetBob() {
+	return: SmartGreeting(firstName: "Bob", lastName: "Thurston")   // returns "Dear Bob Thurston"
+}
+
+// Examples of using All and When.
+
+SmartGreeting2(firstName, middleName, lastName) {
+	middleLast: When(
+		have: All(middle: middleName, last: lastName)
+		then: dashedMiddleLast
+		else: Return[lastName]
+	)
+	return: SmartGreeting(firstName: firstName, lastName: middleLast)
+}
+
+dashedMiddleLast(value?) {
+	return: strings.Join(
+		string: value.middle
+		string: value.last
+		delimiter: "-"
+	)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAda
+SmartGreetAda() {
+	return: SmartGreeting2(firstName: "Ada", middleName: "Lee")   // returns "Hi Ada"
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetEarl
+SmartGreetEarl() {
+	return: SmartGreeting2(firstName: "Earl", middleName: "Lee", lastName: "Chu")   // returns "Dear Earl Lee-Chu"
 }

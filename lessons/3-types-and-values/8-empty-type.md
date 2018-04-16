@@ -26,10 +26,11 @@ string depending on whether `lastName` was passed or not.
 	import "github.com/kocircuit/kocircuit/lib/strings"
 
 	SmartGreeting(firstName, lastName) {
+		first: String(firstName) // enforce that firstName is a string (and hence non-empty)
 		return: When(
 			have: lastName   // if lastName is not empty
-			then: FormalGreeting[firstName: firstName]   // then call FormalGreeting passing lastName to its default argument
-			else: InformalGreeting[firstName: firstName]   // otherwise call InformalGreeting
+			then: FormalGreeting[firstName: first]   // then call FormalGreeting passing lastName to its default argument
+			else: InformalGreeting[firstName: first]   // otherwise call InformalGreeting
 		)
 	}
 
@@ -47,25 +48,61 @@ string depending on whether `lastName` was passed or not.
 		)
 	}
 
+You can try `SmartGreeting` by running the functions below:
+
 	SmartGreetAlice() {
-		return: SmartGreeting(firstName: "Alice")
+		return: SmartGreeting(firstName: "Alice")   // returns "Hi Alice"
 	}
 
 	SmartGreetBob() {
-		return: SmartGreeting(firstName: "Bob", lastName: "Thurston")
+		return: SmartGreeting(firstName: "Bob", lastName: "Thurston")   // returns "Dear Bob Thurston"
 	}
 
-You can run this example with:
+You can run those with:
 
 	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAlice
 	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetBob
 
-## ALL OR NOTHING
+## ALL: ALL OR NOTHING
 
 The builtin function `All` is designed to facilitate branching on
-the condition that a few given values are all non-empty.
+the condition that a few values are all non-empty.
 
 `All` accepts any number of named arguments.
 If all arguments are non-empty, `All` returns a structure containing all named arguments as fields.
 If any one of the arguments is empty, `All` returns the empty value.
 
+For instance, in the following example function `SmartGreeting2` adds onto the
+logic of `SmartGreeting`. If XXX
+
+	SmartGreeting2(firstName, middleName, lastName) {
+		middleLast: When(
+			have: All(middle: middleName, last: lastName)
+			then: dashedMiddleLast
+			else: Return[lastName]
+		)
+		return: SmartGreeting(firstName: firstName, lastName: middleLast)
+	}
+
+	dashedMiddleLast(value?) {
+		return: strings.Join(
+			string: value.middle
+			string: value.last
+			delimiter: "-"
+		)
+	}
+
+You can try `SmartGreeting2` by running the functions below:
+
+	SmartGreetAda() {
+		return: SmartGreeting2(firstName: "Ada", middleName: "Lee")   // returns "Hi Ada"
+	}
+
+	SmartGreetEarl() {
+		return: SmartGreeting2(firstName: "Earl", middleName: "Lee", lastName: "Chu")   // returns "Dear Earl Lee-Chu"
+	}
+
+You can run those with:
+
+	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetAda
+	ko play github.com/kocircuit/kocircuit/lessons/examples/SmartGreetEarl

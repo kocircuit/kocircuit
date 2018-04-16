@@ -102,7 +102,7 @@ with the builtin function `Merge`.
 Note that singleton values, like `"a"` above, are lifted to a sequence, in this case `("a")`,
 before merging.
 
-## TAKING AN ELEMENT FROM THE FRONT
+## TAKE: TAKING AN ELEMENT FROM THE FRONT
 
 The builtin function `Take` will split an input sequence into its first element and the remainder.
 
@@ -119,7 +119,7 @@ For instance,
 	Take("a") // returns (first: "a", remainder: ())
 	Take() // returns (first: (), remainder: ())
 
-## RANGING OVER A SEQUENCE
+## RANGE: RANGING OVER A SEQUENCE
 
 Ko provides the builtin `Range` function for ranging over the elements of a sequence.
 

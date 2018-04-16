@@ -30,7 +30,7 @@ import (
 // playCmd represents the play command
 var playCmd = &cobra.Command{
 	Use:   "play",
-	Short: "Play executes a Ko program",
+	Short: "Execute a Ko program",
 	Long:  `Play compiles a Ko program and then executes it.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		tools := newToolchain()
