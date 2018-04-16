@@ -1,18 +1,19 @@
 `ko doc` for accessing documentation (functions, macros, packages)
--------
-Empty / When, All
 ---
-Peek, PeekType, Show, ShowType
+Peek, PeekType
+---
+Yield
 ---
 Loop
-Yield
 Panic, Recover
 ---
 Spin
 Hang
 ---
-Sort?
 Memory, Remember, Recall
 ---
 Parallel
 Timeout?
+---
+Template
+Sort?

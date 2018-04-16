@@ -1,0 +1,38 @@
+
+VerboseSum(x, y) {
+	return: Sum(Show(x), Show(y))
+}
+
+VerboseSum2(x, y) {
+	ignore: Show(
+		message_by: "VerboseSum2"
+		arg_x: x
+		arg_y: y
+	)
+	return: Sum(x, y)
+}
+
+// ko play github.com/kocircuit/kocircuit/lessons/examples/VerboseSumOneAndTwo
+VerboseSumOneAndTwo() {
+	return: VerboseSum(x: 1, y: 2)
+}
+
+// ko play github.com/kocircuit/kocircuit/lessons/examples/VerboseSum2OneAndTwo
+VerboseSum2OneAndTwo() {
+	return: VerboseSum2(x: 1, y: 2)
+}
+
+// ko play github.com/kocircuit/kocircuit/lessons/examples/ShowTypeExample
+ShowTypeExample() {
+	return: ShowType(
+		arg0: -3.14e-11   // 64-bit floating-point
+		arg1: -7   // 64-bit integer
+		arg2: "abc"   // string
+		arg3: true   // boolean
+		arg4: ("foo", "bar")   // sequence of strings
+		arg5: (   // structure
+			subarg1: "def"   // string
+			subarg2: ShowTypeExample   // variety (aka functional type, aka lambda)
+		)
+	)
+}

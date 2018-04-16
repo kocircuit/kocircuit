@@ -48,7 +48,7 @@ string depending on whether `lastName` was passed or not.
 		)
 	}
 
-You can try `SmartGreeting` by running the functions below:
+You can try `SmartGreeting` by running the functions:
 
 	SmartGreetAlice() {
 		return: SmartGreeting(firstName: "Alice")   // returns "Hi Alice"
@@ -92,7 +92,7 @@ logic of `SmartGreeting`. If XXX
 		)
 	}
 
-You can try `SmartGreeting2` by running the functions below:
+You can try `SmartGreeting2` by running the functions:
 
 	SmartGreetAda() {
 		return: SmartGreeting2(firstName: "Ada", middleName: "Lee")   // returns "Hi Ada"
