@@ -73,7 +73,11 @@ If all arguments are non-empty, `All` returns a structure containing all named a
 If any one of the arguments is empty, `All` returns the empty value.
 
 For instance, in the following example function `SmartGreeting2` adds onto the
-logic of `SmartGreeting`. If XXX
+logic of `SmartGreeting`.
+* If both `middleName` and `lastName` are given, `SmartGreeting2` will concatenate
+them with a dash, `"-"`, and pass them to `SmartGreeting` as a last name.
+* Otherwise, it will use the value of its argument `lastName` as the argument passed
+to `SmartGreeting` for last name.
 
 	SmartGreeting2(firstName, middleName, lastName) {
 		middleLast: When(
