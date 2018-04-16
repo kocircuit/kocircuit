@@ -36,3 +36,12 @@ ShowTypeExample() {
 		)
 	)
 }
+
+// ko play github.com/kocircuit/kocircuit/lessons/examples/PeekTypeExample
+PeekTypeExample() {
+	return: peekTypeSubroutine(arg: 3.14)
+}
+
+peekTypeSubroutine(arg) {
+	return: PeekType(arg)
+}
