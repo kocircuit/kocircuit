@@ -49,6 +49,6 @@ func ExtractMonadicOrNamed(arg Arg, name string) Symbol {
 	if v := a.SelectMonadic(); !IsEmptySymbol(v) {
 		return v
 	} else {
-		return a.Walk("name")
+		return a.Walk(name)
 	}
 }

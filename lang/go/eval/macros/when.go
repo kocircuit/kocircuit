@@ -25,7 +25,7 @@ func (m EvalWhenMacro) Help() string { return "When" }
 // When(have:█, then:█, else:█)
 func (EvalWhenMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	have := a.Walk("have")
+	have := ExtractMonadicOrNamed(a, "have")
 	if IsEmptySymbol(have) {
 		els := a.Walk("else")
 		if IsEmptySymbol(els) {

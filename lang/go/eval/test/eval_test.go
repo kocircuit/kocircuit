@@ -215,6 +215,7 @@ var evalTests = []*EvalTest{
 		import "integer"
 		Main() {
 			return: And(
+				// test range without stop
 				Equal(
 					Range(
 						start: 0
@@ -227,6 +228,18 @@ var evalTests = []*EvalTest{
 						}
 					)
 					(image: (-1, -2, -3, -4, -5), residue: 15)
+				)
+				// test range with stop
+				Equal(
+					Range(
+						start: 0
+						over: (1, 2, 3, 4, 5)
+						with: sum
+						stop: stopPredicate(carry?) {
+							return: Less(3, carry)
+						}
+					)
+					(image: (-1, -2, -3), residue: 6)
 				)
 			)
 		}
