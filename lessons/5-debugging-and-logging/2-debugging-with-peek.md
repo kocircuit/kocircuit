@@ -23,9 +23,11 @@ reflect in the print out.
 	}
 
 You can run this example from the repo with:
+
 	ko play github.com/kocircuit/kocircuit/lessons/examples/PeekTypeExample
 
 It will produce an output like this:
+
 	[0] span:37a4j2u, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:42:10, PeekTypeExample:return
 	[1] span:276hkds, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, peekTypeSubroutine:return
 	[2] span:33y9q36, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, PeekType

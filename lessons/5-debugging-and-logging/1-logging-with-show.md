@@ -28,10 +28,12 @@ You can try `VerboseSum` by running the function:
 	}
 
 This will produce the log output:
+
 	1
 	2
 
 You can run this with:
+
 	ko play github.com/kocircuit/kocircuit/lessons/examples/VerboseSumOneAndTwo
 
 ## SHOWING CUSTOM MESSAGES
@@ -59,9 +61,11 @@ You can try `VerboseSum2` by running the function:
 	}
 
 This will produce the log output:
+
 	(message_by: "VerboseSum2", arg_x: 1, arg_y: 2)
 
 You can run this with:
+
 	ko play github.com/kocircuit/kocircuit/lessons/examples/VerboseSum2OneAndTwo
 
 ## SHOWING TYPES
@@ -86,6 +90,7 @@ The following example demonstrates pretty-printing various types:
 	}
 
 Running `ShowTypeExample` will produce the following log output:
+
 	(
 		arg0: Float64
 		arg1: Int64
@@ -96,4 +101,5 @@ Running `ShowTypeExample` will produce the following log output:
 	)
 
 You can run this example with:
+
 	ko play github.com/kocircuit/kocircuit/lessons/examples/ShowTypeExample
