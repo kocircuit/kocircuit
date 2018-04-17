@@ -10,7 +10,7 @@ IterativeFib(n?) {
 	return: Loop(
 		// n = Fibonacci number to compute on the next call to step
 		// prev = the value of the (n-1)-st Fibonacci number
-		// prevPrev = the value of the (n-2)-st Fibonacci number
+		// prevPrev = the value of the (n-2)-nd Fibonacci number
 		start: (n: 2, prev: 1, prevPrev: 1) // prepare the initial iterative state
 		step: iterativeFibStep
 		stop: iterativeFibStop[n: n]

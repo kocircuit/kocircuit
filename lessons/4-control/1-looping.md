@@ -26,9 +26,33 @@ it the value returned by the immediately preceding `step` invocation.
 
 If `stop` is not provided, looping will never end.
 
-## EXAMPLE: COMPUTING FIBONACCI ITERATIVELY
+## EXAMPLE: COMPUTING FIBONACCI NUMBERS ITERATIVELY
 
-XXX
+In the example below, function `IterativeFib` computes Fibonacci numbers
+using an iterative algorithm. 
+
+The state of the algorithm between iterations is captured by a structure
+with three fields:
+
+* Field `n` is an integer, holding the index of the Fibonacci number to be
+computed on the next iteration,
+* Field `prev` is an integer, holding the value of the `(n-1)`-st Fibonacci number, and
+* Field `prevPrev` is an integer, holding the value of the `(n-2)`-nd Fibonacci number.
+
+The starting state is `(n: 2, prev: 1, prevPrev: 1)`, reflecting the fact 
+the `0`-th and `1`-st Fibonacci numbers both equal `1` and the index of
+the next Fibonacci number to be computed is `2`.
+
+Given a state structure, say `state`, each iteration of the algorithm
+proceeds as follows:
+
+* Compute the `state.n`-th Fibonacci number as the sum of `state.prev` and `state.prevPrev`,
+* Return a new state object with:
+	* Field `n` set to `state.n` plus `1`,
+	* Field `prev` set to the `state.n`-th Fibonacci number (computed above),
+	* Field `prevPrev` set to the `state.prev`
+
+The implementation follows:
 
 	// IterativeFib computes the n-th Fibonacci number, using an iterative algorithm.
 	// n must be a number bigger than 1.
@@ -36,19 +60,19 @@ XXX
 		return: Loop(
 			// n = Fibonacci number to compute on the next call to step
 			// prev = the value of the (n-1)-st Fibonacci number
-			// prevPrev = the value of the (n-2)-st Fibonacci number
-			start: (n: 2, prev: 1, prevPrev: 1) // prepare the initial iterative state
+			// prevPrev = the value of the (n-2)-nd Fibonacci number
+			start: (n: 2, prev: 1, prevPrev: 1)   // prepare the initial iterative state
 			step: iterativeFibStep
 			stop: iterativeFibStop[n: n]
 		).prev
 	}
 
 	iterativeFibStep(state?) {
-		fibN: Sum(state.prev, state.prevPrev) // compute the state.n-th Fibonacci number
-		return: ( // return the updated state
-			n: Sum(state.n, 1) // n <- n+1
-			prev: fibN // prev <- state.n-th Fibonacci number
-			prevPrev: state.prev // prevPrev <- (state.n-1)-st Fibonacci number
+		fibN: Sum(state.prev, state.prevPrev)   // compute the state.n-th Fibonacci number
+		return: (   // return the updated state
+			n: Sum(state.n, 1)   // n <- n+1
+			prev: fibN   // prev <- state.n-th Fibonacci number
+			prevPrev: state.prev   // prevPrev <- (state.n-1)-st Fibonacci number
 		)
 	}
 
