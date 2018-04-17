@@ -72,4 +72,107 @@ if either both of its arguments are `true` or both are `false`.
 
 ## YIELD: BRANCHING ON A BOOLEAN VALUE
 
-XXX
+The builtin function `Yield` provides a mechanism for branching on a boolean value.
+
+`Yield` expects three arguments: `if`, `then` and `else`.
+If the boolean argument `if` is `true`, then `Yield` returns the value of `then`.
+If the boolean argument `if` is `false`, then `Yield` returns the value of `else`.
+
+For instance, the function `GreetAsRequested` below will taylor
+a different greeting message based on the value of the boolean
+argument `beFormal`.
+
+	import "github.com/kocircuit/kocircuit/lib/strings"
+
+	GreetAsRequested(beFormal, firstName, lastName) {
+		return: Yield(
+			if: beFormal
+			then: strings.Join(
+				string: ("Dear", firstName, lastName)
+				delimiter: " "
+			)
+			else: strings.Join(
+				string: ("Hi", firstName)
+				delimiter: " "
+			)
+		)
+	}
+
+Try this example by running:
+
+	GreetAliceFormally() {
+		return: GreetAsRequested(beFormal: true, firstName: "Alice")
+	}
+
+You can run this with:
+
+	ko play github.com/kocircuit/kocircuit/lessons/examples/GreetAliceFormally
+
+### YIELD VARIETIES TO BUILD RECURSIVE FUNCTIONS
+
+Suppose you want to compute the n-th Fibonacci number `F(n)`,
+which is defined recursively: `F(0) = 1`, `F(1) = 2` and
+`F(n) = F(n-1) + F(n-2)` for `n > 1`.
+
+The following function `Fib` demonstrates an implementation 
+computing the n-th Fibonacci number.
+
+It demonstrates how to implement self-referential recursion
+using `Yield` in conjunction with variety (functional) values.
+
+The `Yield` statement in `Fib` first determines which 
+case we are in: the "base" cases `n == 0` or `n == 1` or
+the "recursive" case `n > 1`.
+
+* In the "base" case, `Yield` returns a variety (functional value)
+that will return `1` when invoked.
+
+* In the "recursive" case, `Yield` returns a variety that will
+compute and return the sum of the previous two Fibonacci
+numbers when invoked.
+
+After `Yield` returns the chosen variety it is invoked,
+which is accomplished with the invocation formula `()`
+appended after the `Yield` formula.
+
+	Fib(n?) {
+		return: Yield(
+			if: Or(Equal(n, 0), Equal(n, 1))   // if n == 0 or n == 1,
+			then: fibBase   // then return a variety that returns 1
+			else: fibRecurse[n]   // otherwise return a variety that calls Fib recursively
+		)()   // invoke whichever variety was returned by Yield
+	}
+
+	fibBase() {
+		return: 1
+	}
+
+	fibRecurse(m?) {
+		return: Sum(
+			Fib(Sum(m, -1))
+			Fib(Sum(m, -2))
+		)
+	}
+
+Note that if we had implemented `Fib` to invoke `fibBase` and `fibRecurse`,
+instead of passing them as varieties, both of them would be invoked before
+the execution of `Yield` and this would result in a non-halting exection.
+The erroneous implementation is shown below:
+
+	FibNonHalting(n?) {
+		return: Yield(
+			if: Or(Equal(n, 0), Equal(n, 1))
+			then: fibBase()
+			else: fibRecurse(n)   // fibRecurse would be invoked before Yield, resulting in infinite recursion
+		)
+	}
+
+Try the above example by running:
+
+	Fib13() {
+		return: Fib(13)
+	}
+
+You can run this with:
+
+	ko play github.com/kocircuit/kocircuit/lessons/examples/Fib13

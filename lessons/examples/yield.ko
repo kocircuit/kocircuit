@@ -1,0 +1,48 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+GreetAsRequested(beFormal, firstName, lastName) {
+	return: Yield(
+		if: beFormal
+		then: strings.Join(
+			string: ("Dear", firstName, lastName)
+			delimiter: " "
+		)
+		else: strings.Join(
+			string: ("Hi", firstName)
+			delimiter: " "
+		)
+	)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/GreetAliceFormally
+GreetAliceFormally() {
+	return: GreetAsRequested(beFormal: true, firstName: "Alice")
+}
+
+// Fib returns the n-th Fibonacci number.
+// Fibonacci numbers are defined here: https://en.wikipedia.org/wiki/Fibonacci_number
+Fib(n?) {
+	return: Yield(
+		if: Or(Equal(n, 0), Equal(n, 1))   // if n == 0 or n == 1,
+		then: fibBase   // then return a variety that returns 1
+		else: fibRecurse[n]   // otherwise return a variety that calls Fib recursively
+	)()   // invoke whichever variety was returned by Yield, and store the value in result
+}
+
+fibBase() {
+	return: 1
+}
+
+fibRecurse(m?) {
+	return: Sum(
+		Fib(Sum(m, -1))
+		Fib(Sum(m, -2))
+	)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/Fib13
+Fib13() {
+	return: Fib(13)
+}

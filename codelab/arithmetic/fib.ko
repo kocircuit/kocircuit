@@ -1,5 +1,3 @@
-import "integer"
-
 // ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabFib
 // 21
 CodelabFib() {
@@ -11,8 +9,8 @@ CodelabFib() {
 Fib(n?) {
 	result: Yield(
 		if: Or(
-			integer.Equal(n, 0)
-			integer.Equal(n, 1)
+			Equal(n, 0)
+			Equal(n, 1)
 		)
 		then: Return[1]
 		else: fibSum[n]
@@ -21,8 +19,8 @@ Fib(n?) {
 }
 
 fibSum(m?) {
-	return: integer.Sum(
-		Fib(integer.Sum(m, -1))
-		Fib(integer.Sum(m, -2))
+	return: Sum(
+		Fib(Sum(m, -1))
+		Fib(Sum(m, -2))
 	)
 }
