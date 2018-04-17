@@ -14,14 +14,19 @@ func compileIdiomRepo() Repo {
 }
 
 const EvalIdiomSrc = `
-// Nothing returns an empty value.
-Nothing() {
-	return: ()
-}
-
 // Return returns its default argument.
 Return(pass?) {
 	return: pass
+}
+
+// Nothing returns an empty value.
+Nothing() {
+	return: Return()
+}
+
+// Empty returns an empty value.
+Empty() {
+	return: Return()
 }
 
 // Expect panics if its default argument is empty.

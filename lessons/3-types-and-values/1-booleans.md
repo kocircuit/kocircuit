@@ -16,7 +16,7 @@ PassBool(x) {
 
 Ko provides a few builtin functions for common arithmetic manipulations over booleans.
 
-### NEGATION
+### NOT: BOOLEAN NEGATION
 
 The builtin function `Not` expects a single unnamed boolean argument.
 It returns its boolean neagation.
@@ -27,7 +27,7 @@ Example usage:
 		return: Not(Equal(personName, "John"))
 	}
 
-### CONJUNCTION
+### AND: BOOLEAN CONJUNCTION
 
 The builtin function `And` expects a single unnamed argument, which is a sequence of booleans.
 It returns the conjunction of their values. If the sequence is empty, `And` returns `true`.
@@ -42,7 +42,7 @@ the integral arguments `x` and `z`:
 		)
 	}
 
-### DISJUNCTION
+### OR: BOOLEAN DISJUNCTION
 
 The builtin function `Or` expects a single unnamed argument, which is a sequence of booleans.
 It returns the disjunction of their values. If the sequence is empty, `Or` returns `false`.
@@ -57,7 +57,7 @@ The following example returns `true` if any two of its three arguments, `x`, `y`
 		)
 	}
 
-### EXCLISIVE DISJUNCTION
+### XOR: BOOLEAN EXCLISIVE-OR
 
 The builtin function `Xor` expects a single unnamed argument, which is a sequence of booleans.
 It returns the exclusive-or of their values: `true` if an odd number of booleans are `true`,
@@ -69,3 +69,7 @@ if either both of its arguments are `true` or both are `false`.
 	BothOrNone(x, y) {
 		return: Xor(true, x, y)
 	}
+
+## YIELD: BRANCHING ON A BOOLEAN VALUE
+
+XXX
