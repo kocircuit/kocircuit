@@ -1,11 +1,12 @@
 `ko doc` for accessing documentation (functions, macros, packages)
+overview and why-ko
 ---
-Yield
+Range example create numbers 1,...,n
 ---
 Loop
 Panic, Recover
 ---
-Spin
+Spin->Spawn
 Hang
 ---
 Memory, Remember, Recall

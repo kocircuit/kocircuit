@@ -1,0 +1,26 @@
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/IterativeFib40
+IterativeFib40() {
+	return: IterativeFib(40)
+}
+
+IterativeFib(n?) {
+	return: Loop(
+		start: (n: 2, prev: 1, prevPrev: 1)
+		step: iterativeFibStep
+		stop: iterativeFibStop[n: n]
+	).prev
+}
+
+iterativeFibStep(state?) {
+	fibN: Sum(state.prev, state.prevPrev)
+	return: (
+		n: Sum(state.n, 1)
+		prev: fibN
+		prevPrev: state.prev
+	)
+}
+
+iterativeFibStop(n, state?) {
+	return: Less(n, state.n)
+}
