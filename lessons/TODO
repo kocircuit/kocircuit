@@ -2,13 +2,9 @@
 overview and why-ko
 ---
 Range example create numbers 1,...,n
-Sort
+Sort, implement
 ---
-Loop
-Panic, Recover
----
-Spin->Spawn
-Hang
+Spin, Wait forwards panics
 ---
 Memory, Remember, Recall
 ---
