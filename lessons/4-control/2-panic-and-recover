@@ -1,1 +1,5 @@
 # PANIC AND RECOVER
+
+Ko provides a mechanism for throwing runtime panics (aka exceptions),
+which is analogous to its counterparts in languages like Go, Java, Python, etc.
+

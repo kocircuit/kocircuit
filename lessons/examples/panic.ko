@@ -1,0 +1,32 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+// AgeDifference returns the age difference between a father and his child,
+// whose ages are given as arguments.
+// AgeDifference panics if the father is not older than the child.
+AgeDifference(childAge, fatherAge) {
+	check: Yield(
+		if: Not(Less(childAge, fatherAge))
+		then: Panic[ageDifferenceError: "a father cannot be older than his child"]
+		else: []
+	) () // invoke whichever variety was yielded
+	return: Sum(fatherAge, Negative(childAge))
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/InvalidAgeDifference
+InvalidAgeDifference() {
+	return: AgeDifference(childAge: 21, fatherAge: 19)
+}
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/RecoverInvalidAgeDifference
+RecoverInvalidAgeDifference() {
+	return: Recover(
+		invoke: AgeDifference[childAge: 21, fatherAge: 19]
+		panic: recoverFromAgeDifferencePanic
+	)
+}
+
+recoverFromAgeDifferencePanic(panic?) {
+	return: (age_difference_failed_with_message: panic.ageDifferenceError)
+}
