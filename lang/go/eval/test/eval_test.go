@@ -311,7 +311,7 @@ var evalTests = []*EvalTest{
 		Arg:    struct{}{},
 		Result: true,
 	},
-	{ // switch, take
+	{ // parallel, sequential
 		Enabled: true,
 		File: `
 		import "integer"
@@ -483,6 +483,40 @@ var evalTests = []*EvalTest{
 		}{
 			Ko_x: 3,
 		},
+		Result: true,
+	},
+	// idiom
+	{ // test switch idiom
+		Enabled: true,
+		File: `
+		Main() {
+			return: And(test1, test2, test3)
+			test1: Equal(
+				Switch(
+					case: Return[]
+					case: Return[1]
+					case: Return[2]
+				)
+				1
+			)
+			test2: Equal(
+				Switch(
+					case: Return[]
+					case: Return[]
+					otherwise: Return[3]
+				)
+				3
+			)
+			test3: Equal(
+				Switch(
+					case: Return[]
+					case: Return[]
+				)
+				Empty()
+			)
+		}
+		`,
+		Arg:    nil,
 		Result: true,
 	},
 }

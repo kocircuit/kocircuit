@@ -65,4 +65,21 @@ Branch(if, then, else) {
 		else: Nothing
 	)
 }
+
+Switch(case, otherwise) {
+	branches: switchRangeCases(case)
+	took: Take(branches)
+	return: When(have: took.first, then: Return, else: otherwise)
+}
+
+switchRangeCases(case?) {
+	return: Range(
+		over: case
+		with: switchRangeCase(carry, elem) {
+			invoked: elem() // invoke case
+			return: (emit: invoked, carry: invoked)
+		}
+		stop: Have
+	).image
+}
 `
