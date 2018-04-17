@@ -4,20 +4,25 @@ IterativeFib40() {
 	return: IterativeFib(40)
 }
 
+// IterativeFib computes the n-th Fibonacci number, using an iterative algorithm.
+// n must be a number bigger than 1.
 IterativeFib(n?) {
 	return: Loop(
-		start: (n: 2, prev: 1, prevPrev: 1)
+		// n = Fibonacci number to compute on the next call to step
+		// prev = the value of the (n-1)-st Fibonacci number
+		// prevPrev = the value of the (n-2)-st Fibonacci number
+		start: (n: 2, prev: 1, prevPrev: 1) // prepare the initial iterative state
 		step: iterativeFibStep
 		stop: iterativeFibStop[n: n]
 	).prev
 }
 
 iterativeFibStep(state?) {
-	fibN: Sum(state.prev, state.prevPrev)
-	return: (
-		n: Sum(state.n, 1)
-		prev: fibN
-		prevPrev: state.prev
+	fibN: Sum(state.prev, state.prevPrev) // compute the state.n-th Fibonacci number
+	return: ( // return the updated state
+		n: Sum(state.n, 1) // n <- n+1
+		prev: fibN // prev <- state.n-th Fibonacci number
+		prevPrev: state.prev // prevPrev <- (state.n-1)-st Fibonacci number
 	)
 }
 

@@ -2,6 +2,7 @@
 overview and why-ko
 ---
 Range example create numbers 1,...,n
+Sort
 ---
 Loop
 Panic, Recover
@@ -15,4 +16,3 @@ Parallel
 Timeout?
 ---
 Template
-Sort?
