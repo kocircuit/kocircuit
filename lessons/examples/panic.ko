@@ -1,5 +1,3 @@
-import "github.com/kocircuit/kocircuit/lib/strings"
-
 // AgeDifference returns the age difference between a father and his child,
 // whose ages are given as arguments.
 // AgeDifference panics if the father is not older than the child.
