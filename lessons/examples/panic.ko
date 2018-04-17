@@ -25,6 +25,6 @@ RecoverInvalidAgeDifference() {
 	)
 }
 
-recoverFromAgeDifferencePanic(panic?) {
-	return: (age_difference_failed_with_message: panic.ageDifferenceError)
+recoverFromAgeDifferencePanic(panicValue?) {
+	return: (age_difference_failed_with_message: panicValue.ageDifferenceError)
 }

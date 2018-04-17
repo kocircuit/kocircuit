@@ -47,3 +47,35 @@ You can run this with:
 
 ## RECOVER: HANDLING PANICS
 
+The builtin function `Recover` provides a mechanism for handling panics,
+caused by runtime conditions.
+
+`Recover` expects two arguments, `invoke` and `panic`, both of which must be varieties (functional values).
+
+`Recover` starts by invoking the functional value `invoke` (without passing any arguments):
+
+* If the invocation succeeds in returning a value without panicking, `Recover` will return that value.
+
+* If the invocation panics, `Recover` will capture the panic and invoke
+the functional value of the `panic` argument, while alsp passing the panic value
+as a default (aka monadic) argument to `panic`. Whatever the call to `panic` returns,
+will be returned by `Recover`.
+
+For example, function `RecoverInvalidAgeDifference` below upgrades our
+previous example `InvalidAgeDifference` to handle the panic and return
+a message to the user.
+
+	RecoverInvalidAgeDifference() {
+		return: Recover(
+			invoke: AgeDifference[childAge: 21, fatherAge: 19]
+			panic: recoverFromAgeDifferencePanic
+		)
+	}
+
+	recoverFromAgeDifferencePanic(panicValue?) {
+		return: (age_difference_failed_with_message: panicValue.ageDifferenceError)
+	}
+
+You can run this with:
+
+	ko play github.com/kocircuit/kocircuit/lessons/examples/RecoverInvalidAgeDifference
