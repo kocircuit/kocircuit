@@ -130,8 +130,11 @@ func (st *SeriesType) Splay() Tree {
 	}
 }
 
-func MakeSeriesSymbol(span *Span, elem Symbols) (*SeriesSymbol, error) {
+func MakeSeriesSymbol(span *Span, elem Symbols) (Symbol, error) {
 	elem = FilterEmptySymbols(elem)
+	if len(elem) == 0 {
+		return EmptySymbol{}, nil
+	}
 	if unified, err := UnifyTypes(span, elem.Types()); err != nil {
 		return nil, err
 	} else {

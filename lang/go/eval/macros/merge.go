@@ -36,10 +36,6 @@ func (EvalMergeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 	if merged, err := MakeSeriesSymbol(span, ss); err != nil {
 		return nil, nil, span.Errorf(err, "merging sequences")
 	} else {
-		if merged.IsEmpty() {
-			return EmptySymbol{}, nil, nil
-		} else {
-			return merged, nil, nil
-		}
+		return merged, nil, nil
 	}
 }

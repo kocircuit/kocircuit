@@ -60,9 +60,9 @@ func (m *memory) Recall(key Symbol) Symbol {
 func (m *memory) Flush(span *Span) (Symbol, error) {
 	m.Lock()
 	defer m.Unlock()
-	elems := make(Symbols, 0, len(m.seen))
+	kvElems := make(Symbols, 0, len(m.seen))
 	for _, kv := range m.seen {
-		elems = append(elems,
+		kvElems = append(kvElems,
 			MakeStructSymbol(
 				FieldSymbols{
 					&FieldSymbol{Name: "key", Value: kv.key},
@@ -71,11 +71,7 @@ func (m *memory) Flush(span *Span) (Symbol, error) {
 			),
 		)
 	}
-	if kvSeries, err := MakeSeriesSymbol(span, elems); err != nil {
-		return nil, err
-	} else {
-		return kvSeries, nil
-	}
+	return MakeSeriesSymbol(span, kvElems)
 }
 
 func init() {
