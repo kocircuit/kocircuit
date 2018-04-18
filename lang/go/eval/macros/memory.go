@@ -57,17 +57,25 @@ func (m *memory) Recall(key Symbol) Symbol {
 	}
 }
 
-func (m *memory) Flush() *StructSymbol {
+func (m *memory) Flush(span *Span) (Symbol, error) {
 	m.Lock()
 	defer m.Unlock()
-	fields := make(FieldSymbols, 0, 2*len(m.seen))
+	elems := make(Symbols, 0, len(m.seen))
 	for _, kv := range m.seen {
-		fields = append(fields,
-			&FieldSymbol{Name: "key", Value: kv.key},
-			&FieldSymbol{Name: "value", Value: kv.value},
+		elems = append(elems,
+			MakeStructSymbol(
+				FieldSymbols{
+					&FieldSymbol{Name: "key", Value: kv.key},
+					&FieldSymbol{Name: "value", Value: kv.value},
+				},
+			),
 		)
 	}
-	return MakeStructSymbol(fields)
+	if kvSeries, err := MakeSeriesSymbol(span, elems); err != nil {
+		return nil, err
+	} else {
+		return kvSeries, nil
+	}
 }
 
 func init() {
@@ -168,5 +176,9 @@ func (m evalFlushMacro) Help() string {
 }
 
 func (m evalFlushMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	return m.memory.Flush(), nil, nil
+	if flushed, err := m.memory.Flush(span); err != nil {
+		return nil, nil, span.Errorf(err, "flushing key-value memory")
+	} else {
+		return flushed, nil, nil
+	}
 }

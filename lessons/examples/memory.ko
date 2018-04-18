@@ -1,0 +1,9 @@
+
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/FlushMemory
+FlushMemory() {
+	memory: Memory()
+	added1: memory.Remember(key: "a", value: 1)
+	added2: memory.Remember(key: "b", value: 2)
+	return: memory.Flush(after1: added1, after2: added2)
+}

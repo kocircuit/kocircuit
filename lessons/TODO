@@ -1,9 +1,7 @@
 `ko doc` for accessing documentation (functions, macros, packages)
 overview and why-ko
 ---
-Spin and Wait (example with fib)
----
-Memory, Remember, Recall (example with union computation)
+Memory, Remember, Recall, Flush (example with union computation)
 ---
 Range example create numbers 1,...,n
 Sort
