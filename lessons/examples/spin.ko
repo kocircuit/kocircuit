@@ -1,4 +1,15 @@
 
+// Run with:
+// ko play github.com/kocircuit/kocircuit/lessons/examples/ComputeFib17AndFib42
+ComputeFib17AndFib42() {
+	return: ComputeTwoFibonacciNumbers(n1: 17, n2: 42)
+}
+
 ComputeTwoFibonacciNumbers(n1, n2) {
-	return: XXX
+	handle1: Spin(IterativeFib[n1])
+	handle2: Spin(IterativeFib[n2])
+	return: (
+		fib1: handle1.Wait()
+		fib2: handle2.Wait()
+	)
 }
