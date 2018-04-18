@@ -27,7 +27,7 @@ func (m EvalSpinMacro) Help() string { return "Spin" }
 
 func (EvalSpinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if vty, ok := arg.(*StructSymbol).SelectMonadic().(*VarietySymbol); !ok {
-		return nil, nil, span.Errorf(nil, "spinning a non-variety %v", arg)
+		return nil, nil, span.Errorf(nil, "spin expects a variety, got %v", arg)
 	} else {
 		done := make(chan *waitResult, 1)
 		go func() {
@@ -35,17 +35,17 @@ func (EvalSpinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 				if r := recover(); r != nil {
 					evalPanic := r.(*EvalPanic)
 					log.Println(
-						evalPanic.Origin.Errorf(nil, "panic inside spin not recovered: %v", evalPanic.Panic),
+						evalPanic.Origin.Errorf(nil, "panic inside spin: %v", evalPanic.Panic),
 					)
-					done <- &waitResult{Success: false, Returned: EmptySymbol{}}
+					done <- &waitResult{Panic: evalPanic, Returned: EmptySymbol{}}
 					close(done)
 				}
 			}()
-			if returned, _, _err := vty.Invoke(span); _err != nil {
-				log.Printf("spinning (%v)", _err)
-				done <- &waitResult{Success: false, Returned: EmptySymbol{}}
+			if returned, _, invErr := vty.Invoke(span); invErr != nil {
+				log.Printf("spin error (%v)", invErr)
+				done <- &waitResult{Error: invErr, Returned: EmptySymbol{}}
 			} else {
-				done <- &waitResult{Success: true, Returned: returned.(Symbol)}
+				done <- &waitResult{Returned: returned.(Symbol)}
 			}
 			close(done)
 		}()
@@ -64,8 +64,9 @@ func (EvalSpinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 }
 
 type waitResult struct {
-	Success  bool   `ko:"name=success"`
-	Returned Symbol `ko:"name=returned"`
+	Panic    *EvalPanic `ko:"name=panic"`
+	Error    error      `ko:"name=error"`
+	Returned Symbol     `ko:"name=returned"`
 }
 
 type waiter struct {
@@ -97,10 +98,12 @@ func (m *evalWaitMacro) Help() string { return "Wait" }
 
 func (m *evalWaitMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	wr := m.waiter.Wait()
-	return MakeStructSymbol(
-		FieldSymbols{
-			{Name: "returned", Value: wr.Returned},
-			{Name: "success", Value: BasicSymbol{wr.Success}},
-		},
-	), nil, nil
+	switch {
+	case wr.Error != nil:
+		return nil, nil, span.Errorf(err, "spinned function error")
+	case wr.Panic != nil:
+		panic(wr.Panic)
+	default:
+		return wr.Returned, nil, nil
+	}
 }

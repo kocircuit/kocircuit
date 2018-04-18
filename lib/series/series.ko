@@ -40,7 +40,7 @@ ParMap(over, with) {
 	return: Map(
 		over: started
 		with: parMapWait(spinned?) {
-			return: spinned.Wait().returned
+			return: spinned.Wait()
 		}
 	)
 }

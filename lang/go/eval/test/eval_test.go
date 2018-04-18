@@ -289,14 +289,8 @@ var evalTests = []*EvalTest{
 			return: Spin(Peek["Hello, world!"]).Wait()
 		}
 		`,
-		Arg: struct{}{},
-		Result: struct {
-			Ko_returned string `ko:"name=returned"`
-			Ko_success  bool   `ko:"name=success"`
-		}{
-			Ko_returned: "Hello, world!",
-			Ko_success:  true,
-		},
+		Arg:    struct{}{},
+		Result: "Hello, world!",
 	},
 	{ // take
 		Enabled: true,
