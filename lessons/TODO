@@ -3,10 +3,11 @@ overview and why-ko
 ---
 Range example create numbers 1,...,n
 Sort, implement
+Group?
 ---
-Spin, Wait forwards panics
+Spin and Wait (example with fib)
 ---
-Memory, Remember, Recall
+Memory, Remember, Recall (example with union computation)
 ---
 Parallel
 Timeout?

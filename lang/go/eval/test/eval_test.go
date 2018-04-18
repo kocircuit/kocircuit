@@ -513,6 +513,27 @@ var evalTests = []*EvalTest{
 		Arg:    nil,
 		Result: true,
 	},
+	{ // test sort
+		Enabled: true,
+		File: `
+		less(left, right) {
+			return: Less(left.f2, right.f2)
+		}
+		Main(x) {
+			return: Equal(
+				Sort(
+					over: (f1: "abc", f2: 123)
+					over: (f1: "def", f2: 321)
+					over: (f1: "foo", f2: 213)
+					less: less
+				)
+				((f1: "abc", f2: 123), (f1: "foo", f2: 213), (f1: "def", f2: 321))
+			)
+		}
+		`,
+		Arg:    nil,
+		Result: true,
+	},
 }
 
 type testNamedGate struct {

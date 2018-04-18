@@ -2,6 +2,8 @@ CI
 * travis integration with ko tests
 
 LANG
+* extend Less to work on strings
+* extend arithmetic functions to work on floats
 * should "()" return an empty structure? should empty structure not be equivalent to empty?
 * Range with argument:
 	* rename to step
@@ -12,12 +14,9 @@ PROTO
 * proto service integration
 
 DOC
-* Panic and Recover macros
-* When and All macros
 * programming patterns (tests, etc)
 * circuit assembly level (Circuit IR)
 * svg illustrations for Range and Loop
-* circuit function svg visualizer
 * protobuf integration doc
 
 INSTRUMENTATION
