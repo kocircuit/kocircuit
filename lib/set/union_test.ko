@@ -1,0 +1,30 @@
+TestAll() {
+	return: TestUnion()
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/set/TestUnion
+TestUnion() {
+	test0: Equal(
+		Union(
+			leftObjects: ("a", "b", "c")
+			rightObjects: ("d", "b")
+			ObjectKey: Return
+			MergeObjects: mergeStringObjects
+		)
+		("a", "b", "c", "d")
+	)
+	test1: Equal(
+		Union(
+			leftObjects: ("a", "a", "c")
+			rightObjects: ("d", "b")
+			ObjectKey: Return
+			MergeObjects: mergeStringObjects
+		)
+		("a", "c", "d", "b")
+	)
+	return: And(test0, test1)
+}
+
+mergeStringObjects(leftObject, rightObject) {
+	return: leftObject
+}

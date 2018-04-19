@@ -1,10 +1,12 @@
 // This file automates testing of all packages within the lib category.
+import "github.com/kocircuit/kocircuit/lib/set"
 import "github.com/kocircuit/kocircuit/lib/sync"
 import "github.com/kocircuit/kocircuit/lib/web"
 
 // ko play github.com/kocircuit/kocircuit/lib/TestAll
 TestAll() {
 	return: (
+		set: set.TestAll()
 		sync: sync.TestAll()
 		web: web.TestAll()
 	)

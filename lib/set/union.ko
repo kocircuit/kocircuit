@@ -1,0 +1,50 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+
+// leftObjects and rightObjects are sequences of objects.
+// ObjectKey is a monadic variety that consumes an object and returns its key.
+// MergeObjects is a variety expecting a leftObject and a rightObject arguments, and returning an object.
+Union(leftObjects, rightObjects, ObjectKey, MergeObjects) {
+	return: Range(
+		over: Merge(leftObjects, rightObjects)
+		with: unionIterator[ObjectKey: ObjectKey, MergeObjects: MergeObjects]
+	).residue
+}
+
+// carry is a sequence of objects.
+// elem is an object.
+unionIterator(carry, elem, ObjectKey, MergeObjects) {
+	return: (
+		carry: UnionObjectWithObjects(
+			obj: elem, objs: carry
+			ObjectKey: ObjectKey, MergeObjects: MergeObjects
+		)
+	)
+}
+
+// UnionObjectWithObjects returns a sequence of objects, which is the union of obj and objs.
+UnionObjectWithObjects(obj, objs, ObjectKey, MergeObjects) {
+	sweep: Range(
+		start: false // placed flag
+		over: objs
+		with: unionObjectWithObject[obj: obj, ObjectKey: ObjectKey, MergeObjects: MergeObjects]
+	)
+	return: Yield(
+		if: sweep.residue // obj was placed
+		then: sweep.image
+		else: Merge(sweep.image, obj)
+	)
+}
+
+// carry is a boolean.
+// elem is an object.
+unionObjectWithObject(obj, carry, elem, ObjectKey, MergeObjects) {
+	match: Equal(ObjectKey(obj), ObjectKey(elem))
+	return: (
+		emit: Branch(
+			if: match
+			then: MergeObjects[leftObject: obj, rightObject: elem]
+			else: Return[elem]
+		)
+		carry: Or(carry, match)
+	)
+}
