@@ -89,7 +89,7 @@ var evalTests = []*EvalTest{
 		File: `
 		Pass(p?) { return: p }
 		Main(x) {
-			callMe: Peek(Pass[x])
+			callMe: Pass[x]
 			return: callMe()
 		}
 		`,
@@ -194,15 +194,16 @@ var evalTests = []*EvalTest{
 		}
 		Main() {
 			return: And(
-				Equal((a: ()), ())
-				Equal(Hash(a: ()), Hash(Merge()))
+				Equal((a: 1), (a: 1, b: Empty()))
+				Not(Equal((a: ()), ()))														// XXX
+				Not(Equal(Hash(a: ()), Hash(Merge())))					// XXX
 				Equal(Hash("foo"), Hash(Merge("foo")))
-				Equal(Hash(), Hash(()))
-				Equal(Hash(), Hash(Merge()))
+				Equal(Hash(), Hash(()))													// XXX: counter-intuitive?
+				Equal(Hash(Empty()), Hash(Merge()))
 				NotEqual(Hash(Int64(1)), Hash(Int32(1)))
 				NotEqual(Hash(1, 2), Hash(1, 2, 3))
 				Equal(Hash(a: "a", b: 1), Hash(a: "a", b: 1))
-				Equal(Hash(a: "a", b: ()), Hash(a: "a"))
+				Not(Equal(Hash(a: "a", b: ()), Hash(a: "a")))		// XXX
 			)
 		}
 		`,
@@ -286,7 +287,7 @@ var evalTests = []*EvalTest{
 		Enabled: true,
 		File: `
 		Main() {
-			return: Spin(Peek["Hello, world!"]).Wait()
+			return: Spin(["Hello, world!"]).Wait()
 		}
 		`,
 		Arg:    struct{}{},

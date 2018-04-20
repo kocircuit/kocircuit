@@ -5,6 +5,15 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 )
 
+func (ss *StructSymbol) GetMonadic() (Symbol, bool) {
+	for _, field := range ss.Field {
+		if field.Monadic {
+			return field.Value, true
+		}
+	}
+	return nil, false
+}
+
 func (ss *StructSymbol) SelectMonadic() Symbol {
 	for _, field := range ss.Field {
 		if field.Monadic {

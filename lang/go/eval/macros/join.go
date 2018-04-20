@@ -27,12 +27,9 @@ func (EvalJoinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 }
 
 func Construct(a *StructSymbol) Symbol {
-	a = FilterEmptyStructFields(a)
-	if a.IsEmpty() {
-		return EmptySymbol{}
-	} else if monadic := a.SelectMonadic(); !IsEmptySymbol(monadic) {
+	if monadic, hasMonadic := a.GetMonadic(); hasMonadic {
 		return monadic
 	} else {
-		return a
+		return FilterEmptyStructFields(a)
 	}
 }
