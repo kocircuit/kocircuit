@@ -22,7 +22,6 @@ import (
 	"github.com/spf13/cobra"
 
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
-	// . "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 // listCmd represents the list command
@@ -36,10 +35,8 @@ Usage:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		tables := [][]string{}
-		tables = append(tables, EvalFaculty().StringTable("Eval")...)
-		tables = append(tables, EvalIdiomRepo.StringTable("EvalIdiom")...)
-		// tables = append(tables, GoFaculty().StringTable("WeaveGo")...)
-		// tables = append(tables, GoIdiomRepo.StringTable("WeaveGoIdiom")...)
+		tables = append(tables, EvalFaculty().StringTable("Builtin")...)
+		tables = append(tables, EvalIdiomRepo.StringTable("Idiom")...)
 		printTable(os.Stdout, tables)
 	},
 }

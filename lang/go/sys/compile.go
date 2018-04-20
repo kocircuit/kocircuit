@@ -28,12 +28,12 @@ func (c *Compile) Play(ctx *runtime.Context) *CompileResult {
 		return r
 	}
 	r.Stats = r.Repo.Stats()
-	ctx.Printf(
-		"compiled functions=%d steps=%d steps-per-function=%0.2f",
-		r.Stats.TotalFunc, r.Stats.TotalStep, r.Stats.StepPerFunc,
-	)
 	if c.Show {
-		ctx.Printf("%s\n", r.Repo.BodyString())
+		ctx.Printf(
+			"compiled functions=%d steps=%d steps-per-function=%0.2f",
+			r.Stats.TotalFunc, r.Stats.TotalStep, r.Stats.StepPerFunc,
+		)
+		// ctx.Printf("%s\n", r.Repo.BodyString())
 	}
 	return r
 }

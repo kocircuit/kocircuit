@@ -45,6 +45,22 @@ func (repo Repo) StringTable(header string) [][]string {
 	return SortStringTable(ss)
 }
 
+func (repo Repo) DocPackage(pkgPath string) (string, bool) {
+	if pkg, ok := repo[pkgPath]; ok {
+		return pkg.DocPackage(), true
+	} else {
+		return "", false
+	}
+}
+
+func (repo Repo) DocFunc(pkgPath, funcName string) (string, bool) {
+	if pkg, ok := repo[pkgPath]; ok {
+		return pkg.DocFunc(funcName)
+	} else {
+		return "", false
+	}
+}
+
 func (repo Repo) SortedPackagePaths() []string {
 	pkgPath := make([]string, 0, len(repo))
 	for p := range repo {
@@ -82,6 +98,23 @@ func (repo Repo) Lookup(pkg string, fu string) *Func {
 }
 
 type Package map[string]*Func
+
+func (pkg Package) DocPackage() string {
+	var w bytes.Buffer
+	for _, name := range pkg.SortedFuncNames() {
+		w.WriteString(pkg[name].DocShort())
+		w.WriteString("\n")
+	}
+	return w.String()
+}
+
+func (pkg Package) DocFunc(name string) (string, bool) {
+	if fu := pkg[name]; fu == nil {
+		return "", false
+	} else {
+		return fu.DocLong(), true
+	}
+}
 
 func (pkg Package) SortedFuncNames() []string {
 	names := make([]string, 0, len(pkg))

@@ -221,7 +221,7 @@ var testGraftFile = []struct {
 		}`,
 		Pkg: Package{
 			"F": &Func{
-				Doc:   "inline functions + series composition",
+				Doc:   " inline functions + series composition\n",
 				ID:    FuncID("ko/test", "F"),
 				Name:  "F",
 				Pkg:   "ko/test",

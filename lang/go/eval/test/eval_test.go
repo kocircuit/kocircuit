@@ -195,15 +195,15 @@ var evalTests = []*EvalTest{
 		Main() {
 			return: And(
 				Equal((a: 1), (a: 1, b: Empty()))
-				Not(Equal((a: ()), ()))														// XXX
-				Not(Equal(Hash(a: ()), Hash(Merge())))					// XXX
+				Not(Equal((a: ()), ()))
+				Not(Equal(Hash(a: ()), Hash(Merge())))	
 				Equal(Hash("foo"), Hash(Merge("foo")))
-				Equal(Hash(), Hash(()))													// XXX: counter-intuitive?
+				Equal(Hash(), Hash(()))
 				Equal(Hash(Empty()), Hash(Merge()))
 				NotEqual(Hash(Int64(1)), Hash(Int32(1)))
 				NotEqual(Hash(1, 2), Hash(1, 2, 3))
 				Equal(Hash(a: "a", b: 1), Hash(a: "a", b: 1))
-				Not(Equal(Hash(a: "a", b: ()), Hash(a: "a")))		// XXX
+				Not(Equal(Hash(a: "a", b: ()), Hash(a: "a")))
 			)
 		}
 		`,

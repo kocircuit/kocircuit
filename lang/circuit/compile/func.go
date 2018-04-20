@@ -2,7 +2,6 @@ package compile
 
 import (
 	"fmt"
-	"strings"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
@@ -31,7 +30,7 @@ func graftFunc(pkg string, parsed Design) (f *Func, err error) {
 		gatherReturned = append(gatherReturned, &Gather{Field: MainFlowLabel, Step: s})
 	}
 	f = &Func{
-		Doc:     strings.Trim(parsed.Comment, " \t\n\r"),
+		Doc:     parsed.Comment,
 		ID:      FuncID(pkg, parsed.Name.Name()),
 		Name:    parsed.Name.Name(),
 		Pkg:     pkg,

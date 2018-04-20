@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/kocircuit/kocircuit/lang/circuit/kahnsort"
@@ -72,6 +73,15 @@ func (f *Func) SheathLabel() *string {
 
 func (f *Func) SheathString() *string {
 	return nil
+}
+
+func (f *Func) Args() []string {
+	args := make([]string, 0, len(f.Field))
+	for k := range f.Field {
+		args = append(args, k)
+	}
+	sort.Strings(args)
+	return args
 }
 
 // Step describes a step in a circuit.

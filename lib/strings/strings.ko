@@ -8,6 +8,8 @@ Len(string?) {
 	return: strings.GoLenStrings(string)
 }
 
+// Join concatenates a sequence of strings with a given delimiter inbetween.
+// string is a sequence of strings. delimiter is an optional string, equal to the empty string by default.
 Join(string?, delimiter) {
 	return: strings.GoJoinStrings(string: string, delimiter: delimiter)
 }

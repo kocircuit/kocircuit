@@ -39,15 +39,15 @@ Sum(x,y) {return: Add(x:x, y:y)}
 		Parsed: File{
 			Path: "test.ko",
 			Import: []Import{
-				{Path: "path/to/nowhere", As: Ref{Path: []string{"foo"}}, Comment: "\n"},
+				{Path: "path/to/nowhere", As: Ref{Path: []string{"foo"}}, Comment: ""},
 			},
 			Design: []Design{
 				{
-					Comment: "\n Comment for sum.\n\n",
+					Comment: " Comment for sum.\n",
 					Name:    Ref{Path: []string{"Sum"}},
 					Factor: []Factor{
 						{Comment: "", Name: Ref{Path: []string{"x"}}},
-						{Comment: "\n", Name: Ref{Path: []string{"y"}}},
+						{Comment: "", Name: Ref{Path: []string{"y"}}},
 					},
 					Returns: Assembly{
 						Type: "{}",
@@ -59,7 +59,7 @@ Sum(x,y) {return: Add(x:x, y:y)}
 									Type: "()",
 									Term: []Term{
 										{Comment: "", Label: Ref{Path: []string{"x"}}, Hitch: Ref{Path: []string{"x"}}},
-										{Comment: "\n", Label: Ref{Path: []string{"y"}}, Hitch: Ref{Path: []string{"y"}}},
+										{Comment: "", Label: Ref{Path: []string{"y"}}, Hitch: Ref{Path: []string{"y"}}},
 									},
 								},
 							},
@@ -78,16 +78,16 @@ Sum(x,y,etc?) {return: Add(x,etc,y)}
 		Parsed: File{
 			Path: "test.ko",
 			Import: []Import{
-				{Path: "path/to/nowhere", As: Ref{Path: []string{"foo"}}, Comment: "\n"},
+				{Path: "path/to/nowhere", As: Ref{Path: []string{"foo"}}, Comment: ""},
 			},
 			Design: []Design{
 				{
-					Comment: "\n Comment for sum.\n\n",
+					Comment: " Comment for sum.\n",
 					Name:    Ref{Path: []string{"Sum"}},
 					Factor: []Factor{
 						{Comment: "", Name: Ref{Path: []string{"x"}}},
-						{Comment: "\n", Name: Ref{Path: []string{"y"}}},
-						{Comment: "\n", Name: Ref{Path: []string{"etc"}}, Monadic: true},
+						{Comment: "", Name: Ref{Path: []string{"y"}}},
+						{Comment: "", Name: Ref{Path: []string{"etc"}}, Monadic: true},
 					},
 					Returns: Assembly{
 						Type: "{}",
@@ -99,8 +99,8 @@ Sum(x,y,etc?) {return: Add(x,etc,y)}
 									Type: "()",
 									Term: []Term{
 										{Comment: "", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"x"}}},
-										{Comment: "\n", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"etc"}}},
-										{Comment: "\n", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"y"}}},
+										{Comment: "", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"etc"}}},
+										{Comment: "", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"y"}}},
 									},
 								},
 							},
@@ -124,21 +124,21 @@ SumUp(etc) {
 			Path: "test.ko",
 			Design: []Design{
 				{
-					Comment: "\n",
+					Comment: "",
 					Name:    Ref{Path: []string{"SumUp"}},
 					Factor:  []Factor{{Comment: "", Name: Ref{Path: []string{"etc"}}}},
 					Returns: Assembly{
 						Type: "{}",
 						Term: []Term{
 							{
-								Comment: "\n",
+								Comment: "",
 								Label:   Ref{Path: []string{"return"}},
 								Hitch: Assembly{
 									Sign: Ref{Path: []string{"Reduce"}},
 									Type: "()",
 									Term: []Term{
-										{Comment: "\n", Label: Ref{Path: []string{"over"}}, Hitch: Ref{Path: []string{"etc"}}},
-										{Comment: "\n", Label: Ref{Path: []string{"with"}}, Hitch: Ref{Path: []string{"sumUpReducer"}}},
+										{Comment: "", Label: Ref{Path: []string{"over"}}, Hitch: Ref{Path: []string{"etc"}}},
+										{Comment: "", Label: Ref{Path: []string{"with"}}, Hitch: Ref{Path: []string{"sumUpReducer"}}},
 									},
 								},
 							},
@@ -147,18 +147,18 @@ SumUp(etc) {
 				},
 				{
 					Name:   Ref{Path: []string{"sumUpReducer"}},
-					Factor: []Factor{{Name: Ref{Path: []string{"tally"}}}, {Comment: "\n", Name: Ref{Path: []string{"elem"}}}},
+					Factor: []Factor{{Name: Ref{Path: []string{"tally"}}}, {Comment: "", Name: Ref{Path: []string{"elem"}}}},
 					Returns: Assembly{
 						Type: "{}",
 						Term: []Term{{
-							Comment: "\n",
+							Comment: "",
 							Label:   Ref{Path: []string{"return"}},
 							Hitch: Assembly{
 								Sign: Ref{Path: []string{"Sum"}},
 								Type: "()",
 								Term: []Term{
 									{Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"tally"}}},
-									{Comment: "\n", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"elem"}}},
+									{Comment: "", Label: Ref{Path: []string{NoLabel}}, Hitch: Ref{Path: []string{"elem"}}},
 								},
 							}},
 						},
@@ -176,14 +176,17 @@ Main(x, y) {
 			Path: "test.ko",
 			Design: []Design{
 				{
-					Comment: "\n",
+					Comment: "",
 					Name:    Ref{Path: []string{"Main"}},
-					Factor:  []Factor{{Comment: "", Name: Ref{Path: []string{"x"}}}, {Comment: "\n", Name: Ref{Path: []string{"y"}}}},
+					Factor: []Factor{
+						{Comment: "", Name: Ref{Path: []string{"x"}}},
+						{Comment: "", Name: Ref{Path: []string{"y"}}},
+					},
 					Returns: Assembly{
 						Type: "{}",
 						Term: []Term{
 							{
-								Comment: "\n",
+								Comment: "",
 								Label:   Ref{Path: []string{"return"}},
 								Hitch:   Ref{Path: []string{"0_inline_0_return_0_series_2"}},
 							},
@@ -221,7 +224,7 @@ Main(x, y) {
 									Type: "[]",
 									Term: []Term{
 										{Comment: "", Label: Ref{Path: []string{"a"}}, Hitch: Literal{Value: LexInteger{Int64: 1}}},
-										{Comment: "\n", Label: Ref{Path: []string{"b"}}, Hitch: Literal{Value: LexInteger{Int64: 2}}},
+										{Comment: "", Label: Ref{Path: []string{"b"}}, Hitch: Literal{Value: LexInteger{Int64: 2}}},
 									},
 								},
 							},

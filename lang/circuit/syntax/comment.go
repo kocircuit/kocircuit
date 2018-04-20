@@ -25,6 +25,7 @@ func parseComment(suffix []Lex) (comment string, remain []Lex) {
 func parseCommentBlock(suffix []Lex) (lines int, comment string, remain []Lex) {
 	var w bytes.Buffer
 	remain = suffix
+	linesInSeq := 2 // causes leading lines to be ignored (below)
 	for len(remain) > 0 {
 		tok, ok := remain[0].(Token)
 		if !ok {
@@ -32,10 +33,14 @@ func parseCommentBlock(suffix []Lex) (lines int, comment string, remain []Lex) {
 		}
 		switch t := tok.Char.(type) {
 		case Comment:
-			fmt.Fprintln(&w, t.String)
+			linesInSeq = 0
+			fmt.Fprint(&w, t.String)
 		case Line:
 			lines++
-			fmt.Fprintln(&w)
+			linesInSeq++
+			if linesInSeq < 2 {
+				fmt.Fprintln(&w)
+			}
 		default:
 			return lines, w.String(), remain
 		}
