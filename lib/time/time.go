@@ -6,16 +6,9 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
-	// weave
-	RegisterGoGate(new(GoSleep))
-	RegisterGoGate(new(GoSecond))
-	RegisterGoGate(new(GoMinute))
-	RegisterGoGate(new(GoHour))
-	// eval
 	RegisterEvalGate(new(GoSleep))
 	RegisterEvalGate(new(GoSecond))
 	RegisterEvalGate(new(GoMinute))

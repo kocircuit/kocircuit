@@ -8,18 +8,9 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
-	// weave
-	RegisterGoGate(new(GoEqualStrings))
-	RegisterGoGate(new(GoLenStrings))
-	RegisterGoGate(new(GoJoinStrings))
-	RegisterGoGate(new(GoStringTree))
-	RegisterGoGate(new(GoFlush))
-	RegisterGoGate(new(GoQuote))
-	// eval
 	RegisterEvalGate(new(GoEqualStrings))
 	RegisterEvalGate(new(GoLenStrings))
 	RegisterEvalGate(new(GoJoinStrings))

@@ -6,12 +6,9 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
-	RegisterGoGateAt("", "Print", new(GoPrint))
-	RegisterGoGateAt("", "Println", new(GoPrintln))
 	RegisterEvalGateAt("", "Print", new(GoPrint))
 	RegisterEvalGateAt("", "Println", new(GoPrintln))
 }

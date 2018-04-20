@@ -21,7 +21,6 @@ import (
 
 	. "github.com/kocircuit/kocircuit"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 // versionCmd represents the version command
@@ -32,7 +31,6 @@ var versionCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Version: %s\n", KoVersion)
-		fmt.Printf("GoFacultyID: %s\n", GoFaculty().ID())
 		fmt.Printf("EvalFacultyID: %s\n", EvalFaculty().ID())
 	},
 }

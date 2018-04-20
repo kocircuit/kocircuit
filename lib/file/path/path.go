@@ -5,16 +5,12 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
 	RegisterEvalGate(new(GoJoinPath))
 	RegisterEvalGate(new(GoBasePath))
 	RegisterEvalGate(new(GoDirPath))
-	RegisterGoGate(new(GoJoinPath))
-	RegisterGoGate(new(GoBasePath))
-	RegisterGoGate(new(GoDirPath))
 }
 
 type GoJoinPath struct {

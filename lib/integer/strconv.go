@@ -6,13 +6,9 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
-	// weave
-	RegisterGoGate(new(GoFormatInt64))
-	// eval
 	RegisterEvalGate(new(GoFormatInt64))
 }
 

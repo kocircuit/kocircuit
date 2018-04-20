@@ -8,12 +8,10 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
 	RegisterEvalGate(new(GoTask))
-	RegisterGoGate(new(GoTask))
 }
 
 type GoTask struct {

@@ -5,15 +5,9 @@ import (
 
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
-	// weave
-	RegisterGoGate(new(GoMkdir))
-	RegisterGoGate(new(GoEnv))
-	RegisterGoGate(new(GoTempDir))
-	// eval
 	RegisterEvalGate(new(GoMkdir))
 	RegisterEvalGate(new(GoEnv))
 	RegisterEvalGate(new(GoTempDir))

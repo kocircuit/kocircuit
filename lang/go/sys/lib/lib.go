@@ -1,9 +1,6 @@
 package lib
 
 import (
-	// Register weave macros
-	_ "github.com/kocircuit/kocircuit/lang/go/weave/boolean"
-	_ "github.com/kocircuit/kocircuit/lang/go/weave/integer"
 	// Register eval macros
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros/circuit"

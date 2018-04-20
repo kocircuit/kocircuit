@@ -8,12 +8,10 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
-	. "github.com/kocircuit/kocircuit/lang/go/weave"
 )
 
 func init() {
 	RegisterEvalGateAt("ko", "Eval", &Eval{})
-	RegisterGoGateAt("ko", "Eval", &Eval{})
 }
 
 type Eval struct {
