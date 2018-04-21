@@ -1,5 +1,8 @@
 TestAll() {
-	return: TestUnion()
+	return: And(
+		TestFind()
+		TestUnion()
+	)
 }
 
 // ko play github.com/kocircuit/kocircuit/lib/set/TestUnion

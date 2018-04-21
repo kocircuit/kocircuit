@@ -1,0 +1,16 @@
+Find(key, objects, ObjectKey) {
+	return: Range(
+		over: objects
+		with: findObject[key: key, ObjectKey: ObjectKey]
+		stop: Have
+	).residue
+}
+
+findObject(key, ObjectKey, carry, elem) {
+	return: (
+		carry: Yield(
+			if: Equal(key, ObjectKey(elem))
+			then: elem
+		)
+	)
+}

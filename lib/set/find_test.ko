@@ -1,0 +1,13 @@
+// ko play github.com/kocircuit/kocircuit/lib/set/TestFind
+TestFind() {
+	return: And(
+		Equal(
+			Find(key: "a", objects: ("b", "a", "c"), ObjectKey: Return)
+			"a"
+		)
+		Equal(
+			Find(key: "c", objects: ("b", "a", "c"), ObjectKey: Return)
+			Empty()
+		)
+	)
+}
