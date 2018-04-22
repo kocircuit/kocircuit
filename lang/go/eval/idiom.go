@@ -82,4 +82,8 @@ switchRangeCases(case?) {
 		stop: Have
 	).image
 }
+
+Inc(number?) {
+	return: Sum(number, 1)
+}
 `
