@@ -46,7 +46,11 @@ func parsePkg(s string) (pkgPath string, ok bool) {
 // parsePkgDotFunc parses a string of either form:
 //	"path/to/pkg/Func" or "Func".
 func parsePkgFunc(s string) (pkgPath, funcName string) {
-	return path.Dir(s), path.Base(s)
+	dir := path.Dir(s)
+	if dir == "." {
+		dir = ""
+	}
+	return dir, path.Base(s)
 }
 
 var (
