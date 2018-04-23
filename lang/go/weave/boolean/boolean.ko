@@ -1,7 +1,0 @@
-// Package boolean provides circuits for manipulating boolean logic.
-//
-// The circuits boolean.And(series?), boolean.Or(series?), and boolean.Xor(series?)
-// are implemented by GoAnd, GoOr, and GoXor.
-//
-// The macros And(?), Or(?), and Not(?)
-// are implemented by GoAndMacro, GoOrMacro, and GoNotMacro.

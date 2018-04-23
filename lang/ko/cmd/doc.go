@@ -54,19 +54,23 @@ Usage:
 		}
 		//
 		repo := CombineRepo(EvalIdiomRepo, compileResult.Repo)
-		// XXX: faculty := EvalFaculty()
+		faculty := EvalFaculty()
 		//
 		if pf.Func == nil { // package doc
-			if doc, ok := repo.DocPackage(pf.Pkg); !ok {
-				log.Fatalf("package %s not found", pf.Pkg)
-			} else {
+			if doc, ok := repo.DocPackage(pf.Pkg); ok {
 				fmt.Println(doc)
+			} else if doc, ok = faculty.DocPackage(pf.Pkg); ok {
+				fmt.Println(doc)
+			} else {
+				log.Fatalf("user or builtin package %s not found", pf.Pkg)
 			}
 		} else { // func doc
-			if doc, ok := repo.DocFunc(pf.Pkg, *pf.Func); !ok {
-				log.Fatalf("function %s.%s not found", pf.Pkg, *pf.Func)
-			} else {
+			if doc, ok := repo.DocFunc(pf.Pkg, *pf.Func); ok {
 				fmt.Println(doc)
+			} else if doc, ok = faculty.DocFunc(pf.Pkg, *pf.Func); ok {
+				fmt.Println(doc)
+			} else {
+				log.Fatalf("user or builtin function %s.%s not found", pf.Pkg, *pf.Func)
 			}
 		}
 	},

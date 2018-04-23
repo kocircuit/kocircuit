@@ -10,6 +10,26 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
+type Ideals []Ideal
+
+func (ss Ideals) Len() int { return len(ss) }
+
+func (ss Ideals) Swap(i, j int) {
+	ss[i], ss[j] = ss[j], ss[i]
+}
+
+func (ss Ideals) Less(i, j int) bool {
+	if ss[i].Pkg < ss[j].Pkg {
+		return true
+	} else {
+		return ss[i].Name < ss[j].Name
+	}
+}
+
+func (ss Ideals) Sort() {
+	sort.Sort(ss)
+}
+
 type Ideal struct {
 	Pkg  string `ko:"name=pkg"`
 	Name string `ko:"name=name"`
@@ -35,6 +55,14 @@ func (f Faculty) PkgNames() []string {
 		r = append(r, s)
 	}
 	return r
+}
+
+func (f Faculty) SortedIdeals() (ideals Ideals) {
+	for ideal := range f {
+		ideals = append(ideals, ideal)
+	}
+	ideals.Sort()
+	return
 }
 
 func (f Faculty) StringTable(header string) [][]string {
