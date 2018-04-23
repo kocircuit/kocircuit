@@ -6,7 +6,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -108,8 +107,8 @@ func (basic BasicSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (basic BasicSymbol) Hash() string {
-	return MixValue(reflect.ValueOf(basic.Value))
+func (basic BasicSymbol) Hash(span *Span) string {
+	return InterfaceID(basic.Value).String()
 }
 
 func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error) {

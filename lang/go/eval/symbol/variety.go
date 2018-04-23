@@ -7,7 +7,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -71,8 +70,8 @@ func (vty *VarietySymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (vty *VarietySymbol) Hash() string {
-	return Mix(vty.Macro.MacroID(), FieldSymbolsHash(vty.Arg))
+func (vty *VarietySymbol) Hash(span *Span) string {
+	return BlendStrings(vty.Macro.MacroID(), FieldSymbolsHash(span, vty.Arg)).String()
 }
 
 func (vty *VarietySymbol) LiftToSeries(span *Span) *SeriesSymbol {

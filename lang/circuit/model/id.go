@@ -67,6 +67,15 @@ func Blend(id ...ID) ID {
 	return ID{Data: h.Sum64()}
 }
 
+func BlendStrings(ss ...string) ID {
+	h := fnv.New64a() // alloc *uint64
+	for _, s := range ss {
+		h.Write([]byte(s))
+		h.Write([]byte{0})
+	}
+	return ID{Data: h.Sum64()}
+}
+
 func Uint64ToBytes(u uint64) []byte {
 	b := make([]byte, 8)
 	b[0] = byte((u >> 8 * 0) & 0xff)

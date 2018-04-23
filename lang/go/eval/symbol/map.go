@@ -10,7 +10,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -103,14 +102,14 @@ func filterMap(m map[string]Symbol) (filtered map[string]Symbol) {
 	return filtered
 }
 
-func (ms *MapSymbol) Hash() string {
+func (ms *MapSymbol) Hash(span *Span) string {
 	filtered := filterMap(ms.Map)
 	h := make([]string, 2*len(filtered))
 	for i, key := range sortedMapKeys(filtered) {
 		h[2*i] = key
-		h[2*i+1] = filtered[key].Hash()
+		h[2*i+1] = filtered[key].Hash(span)
 	}
-	return Mix(h...)
+	return BlendStrings(h...).String()
 }
 
 func sortedMapKeys(m map[string]Symbol) []string {

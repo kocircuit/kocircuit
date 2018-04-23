@@ -30,10 +30,10 @@ func (m *memory) ID() ID {
 	return m.origin.SpanID()
 }
 
-func (m *memory) Remember(key, value Symbol) Symbol {
+func (m *memory) Remember(span *Span, key, value Symbol) Symbol {
 	m.Lock()
 	defer m.Unlock()
-	keyHash := key.Hash()
+	keyHash := key.Hash(span)
 	old := m.seen[keyHash]
 	if IsEmptySymbol(value) {
 		delete(m.seen, keyHash)
@@ -47,10 +47,10 @@ func (m *memory) Remember(key, value Symbol) Symbol {
 	}
 }
 
-func (m *memory) Recall(key Symbol) Symbol {
+func (m *memory) Recall(span *Span, key Symbol) Symbol {
 	m.Lock()
 	defer m.Unlock()
-	if keyValue, found := m.seen[key.Hash()]; found {
+	if keyValue, found := m.seen[key.Hash(span)]; found {
 		return keyValue.value
 	} else {
 		return EmptySymbol{}
@@ -129,7 +129,7 @@ func (m evalRememberMacro) Help() string {
 
 func (m evalRememberMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	return m.memory.Remember(a.Walk("key"), a.Walk("value")), nil, nil
+	return m.memory.Remember(span, a.Walk("key"), a.Walk("value")), nil, nil
 }
 
 // Recall
@@ -149,7 +149,7 @@ func (m evalRecallMacro) Help() string {
 
 func (m evalRecallMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	if recalled := m.memory.Recall(a.Walk("key")); IsEmptySymbol(recalled) {
+	if recalled := m.memory.Recall(span, a.Walk("key")); IsEmptySymbol(recalled) {
 		return a.Walk("otherwise"), nil, nil
 	} else {
 		return recalled, nil, nil

@@ -27,6 +27,6 @@ func (EvalHashMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 	if returns, effect, err = join.Invoke(span, arg); err != nil {
 		return nil, nil, err
 	} else {
-		return BasicStringSymbol(returns.(Symbol).Hash()), nil, nil
+		return BasicStringSymbol(returns.(Symbol).Hash(span)), nil, nil
 	}
 }

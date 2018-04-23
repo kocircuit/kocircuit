@@ -56,7 +56,7 @@ func (blob *BlobSymbol) Splay() Tree {
 	return NoQuote{blob.String()}
 }
 
-func (blob *BlobSymbol) Hash() string {
+func (blob *BlobSymbol) Hash(span *Span) string {
 	return BytesID(blob.Bytes()).String()
 }
 

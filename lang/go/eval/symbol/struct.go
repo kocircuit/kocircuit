@@ -9,7 +9,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -120,18 +119,18 @@ func FieldSymbolsEqual(span *Span, x, y FieldSymbols) bool {
 	return true
 }
 
-func (ss *StructSymbol) Hash() string {
-	return FieldSymbolsHash(ss.Field)
+func (ss *StructSymbol) Hash(span *Span) string {
+	return FieldSymbolsHash(span, ss.Field)
 }
 
-func FieldSymbolsHash(fields FieldSymbols) string {
+func FieldSymbolsHash(span *Span, fields FieldSymbols) string {
 	fields = FilterEmptyFieldSymbols(fields)
 	h := make([]string, 2*len(fields))
 	for i, field := range fields {
 		h[2*i] = field.Name
-		h[2*i+1] = field.Value.Hash()
+		h[2*i+1] = field.Value.Hash(span)
 	}
-	return Mix(h...)
+	return BlendStrings(h...).String()
 }
 
 func (ss *StructSymbol) LiftToSeries(span *Span) *SeriesSymbol {

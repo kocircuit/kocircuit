@@ -32,8 +32,8 @@ func (empty EmptySymbol) Equal(span *Span, sym Symbol) bool {
 	return ok
 }
 
-func (empty EmptySymbol) Hash() string {
-	return ""
+func (empty EmptySymbol) Hash(span *Span) string {
+	return "#empty"
 }
 
 func (empty EmptySymbol) LiftToSeries(span *Span) *SeriesSymbol {

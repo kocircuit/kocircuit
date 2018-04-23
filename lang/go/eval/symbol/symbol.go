@@ -19,7 +19,7 @@ type Symbol interface {
 	Shape   // String, Select, Augment, Invoke
 	Splayer // Splay
 	Type() Type
-	Hash() string
+	Hash(*Span) string
 	Equal(*Span, Symbol) bool
 	LiftToSeries(*Span) *SeriesSymbol
 	Disassemble(*Span) (*pb.Symbol, error)

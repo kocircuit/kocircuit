@@ -159,7 +159,7 @@ a: "`ko:\"name=y\"`"
 
 example1a() { 
 	return: CB(
-`import "github.com/kocircuit/kocircuit/utils/integer" as util
+`import "github.com/kocircuit/kocircuit/lib/integer" as util
 
 Max3(x, y, z) {
 	return: util.GoMaxInt64(

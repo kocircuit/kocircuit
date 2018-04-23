@@ -4,7 +4,6 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -61,18 +60,18 @@ func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
 	return true
 }
 
-func (ss *SeriesSymbol) Hash() string {
+func (ss *SeriesSymbol) Hash(span *Span) string {
 	h := make([]string, 0, len(ss.Elem))
 	for _, e := range ss.Elem {
-		h = append(h, e.Hash())
+		h = append(h, e.Hash(span))
 	}
 	switch len(h) {
 	case 0:
-		return EmptySymbol{}.Hash()
+		return EmptySymbol{}.Hash(span)
 	case 1:
 		return h[0]
 	default:
-		return Mix(h...)
+		return BlendStrings(h...).String()
 	}
 }
 
