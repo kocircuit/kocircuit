@@ -119,18 +119,18 @@ func FieldSymbolsEqual(span *Span, x, y FieldSymbols) bool {
 	return true
 }
 
-func (ss *StructSymbol) Hash(span *Span) string {
+func (ss *StructSymbol) Hash(span *Span) ID {
 	return FieldSymbolsHash(span, ss.Field)
 }
 
-func FieldSymbolsHash(span *Span, fields FieldSymbols) string {
+func FieldSymbolsHash(span *Span, fields FieldSymbols) ID {
 	fields = FilterEmptyFieldSymbols(fields)
-	h := make([]string, 2*len(fields))
+	h := make([]ID, 2*len(fields))
 	for i, field := range fields {
-		h[2*i] = field.Name
+		h[2*i] = StringID(field.Name)
 		h[2*i+1] = field.Value.Hash(span)
 	}
-	return BlendStrings(h...).String()
+	return Blend(h...)
 }
 
 func (ss *StructSymbol) LiftToSeries(span *Span) *SeriesSymbol {

@@ -34,8 +34,8 @@ func (opaque *OpaqueSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (opaque *OpaqueSymbol) Hash(span *Span) string {
-	return "#█"
+func (opaque *OpaqueSymbol) Hash(span *Span) ID {
+	return StringID("#█")
 }
 
 func (opaque *OpaqueSymbol) LiftToSeries(span *Span) *SeriesSymbol {

@@ -60,8 +60,8 @@ func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
 	return true
 }
 
-func (ss *SeriesSymbol) Hash(span *Span) string {
-	h := make([]string, 0, len(ss.Elem))
+func (ss *SeriesSymbol) Hash(span *Span) ID {
+	h := make([]ID, 0, len(ss.Elem))
 	for _, e := range ss.Elem {
 		h = append(h, e.Hash(span))
 	}
@@ -71,7 +71,7 @@ func (ss *SeriesSymbol) Hash(span *Span) string {
 	case 1:
 		return h[0]
 	default:
-		return BlendStrings(h...).String()
+		return Blend(h...)
 	}
 }
 

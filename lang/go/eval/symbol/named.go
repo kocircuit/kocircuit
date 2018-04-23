@@ -35,7 +35,7 @@ func (named *NamedSymbol) Splay() Tree {
 	return Splay(named.Value.Interface())
 }
 
-func (named *NamedSymbol) Hash(span *Span) string {
+func (named *NamedSymbol) Hash(span *Span) ID {
 	return DeconstructKind(span, named.Value).Hash(span)
 }
 

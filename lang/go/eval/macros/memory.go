@@ -14,7 +14,7 @@ import (
 type memory struct {
 	origin *Span
 	sync.Mutex
-	seen map[string]*keyValue
+	seen map[ID]*keyValue
 }
 
 type keyValue struct {
@@ -23,7 +23,7 @@ type keyValue struct {
 }
 
 func newMemory(origin *Span) *memory {
-	return &memory{origin: origin, seen: map[string]*keyValue{}}
+	return &memory{origin: origin, seen: map[ID]*keyValue{}}
 }
 
 func (m *memory) ID() ID {

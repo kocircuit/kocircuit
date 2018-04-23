@@ -107,8 +107,8 @@ func (basic BasicSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (basic BasicSymbol) Hash(span *Span) string {
-	return InterfaceID(basic.Value).String()
+func (basic BasicSymbol) Hash(span *Span) ID {
+	return InterfaceID(basic.Value)
 }
 
 func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error) {

@@ -70,8 +70,8 @@ func (vty *VarietySymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (vty *VarietySymbol) Hash(span *Span) string {
-	return BlendStrings(vty.Macro.MacroID(), FieldSymbolsHash(span, vty.Arg)).String()
+func (vty *VarietySymbol) Hash(span *Span) ID {
+	return Blend(StringID(vty.Macro.MacroID()), FieldSymbolsHash(span, vty.Arg))
 }
 
 func (vty *VarietySymbol) LiftToSeries(span *Span) *SeriesSymbol {

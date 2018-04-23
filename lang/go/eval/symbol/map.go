@@ -102,14 +102,14 @@ func filterMap(m map[string]Symbol) (filtered map[string]Symbol) {
 	return filtered
 }
 
-func (ms *MapSymbol) Hash(span *Span) string {
+func (ms *MapSymbol) Hash(span *Span) ID {
 	filtered := filterMap(ms.Map)
-	h := make([]string, 2*len(filtered))
+	h := make([]ID, 2*len(filtered))
 	for i, key := range sortedMapKeys(filtered) {
-		h[2*i] = key
+		h[2*i] = StringID(key)
 		h[2*i+1] = filtered[key].Hash(span)
 	}
-	return BlendStrings(h...).String()
+	return Blend(h...)
 }
 
 func sortedMapKeys(m map[string]Symbol) []string {
