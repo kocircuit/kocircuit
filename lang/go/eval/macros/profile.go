@@ -27,6 +27,10 @@ func (m EvalProfileMacro) MacroSheathString() *string { return PtrString("Profil
 
 func (m EvalProfileMacro) Help() string { return "Profile" }
 
+func (m EvalProfileMacro) Doc() string {
+	return `Profile executes and profiles the variety passed to it.`
+}
+
 func (EvalProfileMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol).SelectMonadic()
 	if vty, ok := a.(*VarietySymbol); !ok {

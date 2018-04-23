@@ -29,6 +29,10 @@ func (m *EvalUnmarshalProtoMacro) Help() string {
 	return fmt.Sprintf("UnmarshalProto<%s.%s>", m.ProtoPkg, m.ProtoName)
 }
 
+func (m *EvalUnmarshalProtoMacro) Doc() string {
+	return m.Help()
+}
+
 var (
 	someBytes   = []byte{}
 	typeOfBytes = reflect.TypeOf(someBytes)

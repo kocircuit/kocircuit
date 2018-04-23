@@ -25,6 +25,10 @@ func (m EvalGoValueMacro) Help() string {
 	return fmt.Sprintf("Constant(%s)", Sprint(m.Value))
 }
 
+func (m EvalGoValueMacro) Doc() string {
+	return fmt.Sprintf("Returns the go value %v", m.Value)
+}
+
 func (m EvalGoValueMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	return Deconstruct(span, reflect.ValueOf(m.Value)), nil, nil
 }
@@ -41,6 +45,10 @@ func (m EvalSymbolMacro) MacroSheathString() *string { return PtrString(m.Help()
 
 func (m EvalSymbolMacro) Help() string {
 	return fmt.Sprintf("Symbol(%s)", Sprint(m.Symbol))
+}
+
+func (m EvalSymbolMacro) Doc() string {
+	return fmt.Sprintf("Returns the value %v", m.Symbol)
 }
 
 func (m EvalSymbolMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {

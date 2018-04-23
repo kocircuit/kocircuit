@@ -22,6 +22,10 @@ func (m EvalLenMacro) MacroSheathString() *string { return PtrString("Len") }
 
 func (m EvalLenMacro) Help() string { return "Len" }
 
+func (m EvalLenMacro) Doc() string {
+	return `Len returns the length of the sequence passed to it.`
+}
+
 func (EvalLenMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	series := arg.(*StructSymbol).SelectMonadic().LiftToSeries(span)
 	return BasicInt64Symbol(int64(series.Len())), nil, nil

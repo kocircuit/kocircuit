@@ -24,6 +24,33 @@ func (m EvalLoopMacro) MacroSheathString() *string { return PtrString("Loop") }
 
 func (m EvalLoopMacro) Help() string { return "Loop" }
 
+func (m EvalLoopMacro) Doc() string {
+	return `
+The builtin function Loop is a mechanism for running a user function in a loop, providing ways
+to carry values from one invocation to the next and an optional stopping condition.
+
+Loop expects three arguments named: start, step and stop.
+
+* start is the initial carry value,
+* step is a variety (functional value) which accepts a default (aka monadic) argument,
+* stop is an optional variety which accepts a default argument and returns a boolean.
+
+Loop invokes step in a loop. On the first invocation, Loop passes the value
+of start to the default argument of step. On following invocations, Loop passes
+the value returned by the previous invocation of step. We call the value returned 
+by step a carry value.
+
+If stop is provided, Loop will call stop after each invocation of step passing
+it the value returned by the immediately preceding step invocation.
+
+* If stop returns true, looping stops and Loop returns the last carry value
+(which triggered stop to return true.)
+
+* If stop returns false, looping continues.
+
+If stop is not provided, looping will never end.`
+}
+
 // Loop(start:█, step:█, stop:█)
 func (EvalLoopMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)

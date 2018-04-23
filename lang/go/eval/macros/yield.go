@@ -22,6 +22,13 @@ func (m EvalYieldMacro) MacroSheathString() *string { return PtrString("Yield") 
 
 func (m EvalYieldMacro) Help() string { return "Yield" }
 
+func (m EvalYieldMacro) Doc() string {
+	return `
+Yield expects three arguments: if, then and else.
+If the boolean argument if is true, then Yield returns the value of then.
+If the boolean argument if is false, then Yield returns the value of else.`
+}
+
 func (EvalYieldMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	ifArg, ifBool := AsBasicBool(a.Walk("if"))

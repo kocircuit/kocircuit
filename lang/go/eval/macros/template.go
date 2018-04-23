@@ -24,6 +24,10 @@ func (m EvalTemplateMacro) MacroSheathString() *string { return PtrString("Templ
 
 func (m EvalTemplateMacro) Help() string { return "Template" }
 
+func (m EvalTemplateMacro) Doc() string {
+	return `Template is undocumented.`
+}
+
 // Template(template:█, args:█, withString:█, withArg:█)
 func (EvalTemplateMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	// parse arguments

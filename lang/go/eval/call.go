@@ -30,6 +30,10 @@ func (m *EvalCallMacro) Help() string {
 	return fmt.Sprintf("%q.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
 }
 
+func (m *EvalCallMacro) Doc() string {
+	return fmt.Sprintf("Run: go doc %s.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
+}
+
 func (call *EvalCallMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	ss := arg.(*StructSymbol)
 	var receiver reflect.Value

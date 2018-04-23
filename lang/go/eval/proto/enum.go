@@ -26,6 +26,10 @@ func (m *EvalProtoEnumValueMacro) Help() string {
 	return fmt.Sprintf("ProtoEnumValue<%s.%s.%s>", m.ProtoPkg, m.EnumName, m.ValueName)
 }
 
+func (m *EvalProtoEnumValueMacro) Doc() string {
+	return m.Help()
+}
+
 func (m *EvalProtoEnumValueMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	return BasicInt32Symbol(m.Number), nil, nil
 }

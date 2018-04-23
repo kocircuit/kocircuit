@@ -88,6 +88,10 @@ func (m EvalMemoryMacro) MacroSheathString() *string { return PtrString("Memory"
 
 func (m EvalMemoryMacro) Help() string { return "Memory" }
 
+func (m EvalMemoryMacro) Doc() string {
+	return `Memory returns a new key-value memory.`
+}
+
 func (EvalMemoryMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	m := newMemory(span)
 	return MakeStructSymbol(
@@ -127,6 +131,10 @@ func (m evalRememberMacro) Help() string {
 	return fmt.Sprintf("%v_Remember", m.memory.ID())
 }
 
+func (m evalRememberMacro) Doc() string {
+	return `Remember(key, value) places the key-value pair in memory and returns the previously stored value for key.`
+}
+
 func (m evalRememberMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	return m.memory.Remember(span, a.Walk("key"), a.Walk("value")), nil, nil
@@ -145,6 +153,10 @@ func (m evalRecallMacro) MacroSheathString() *string { return PtrString("Recall"
 
 func (m evalRecallMacro) Help() string {
 	return fmt.Sprintf("%v_Recall", m.memory.ID())
+}
+
+func (m evalRecallMacro) Doc() string {
+	return `Recall(key, otherwise) returns the previously stored value for key or the value otherwise.`
 }
 
 func (m evalRecallMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
@@ -169,6 +181,10 @@ func (m evalFlushMacro) MacroSheathString() *string { return PtrString("Flush") 
 
 func (m evalFlushMacro) Help() string {
 	return fmt.Sprintf("%v_Flush", m.memory.ID())
+}
+
+func (m evalFlushMacro) Doc() string {
+	return `Flush returns the sequence of (key, value) pairs stored in memory.`
 }
 
 func (m evalFlushMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {

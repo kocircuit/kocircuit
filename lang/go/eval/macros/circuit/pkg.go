@@ -22,6 +22,10 @@ func (m EvalPkgPathMacro) MacroSheathString() *string { return PtrString("circui
 
 func (m EvalPkgPathMacro) Help() string { return "circuit.PkgPath" }
 
+func (m EvalPkgPathMacro) Doc() string {
+	return `The builtin PkgPath function returns the Ko package path of the function invoking PkgPath.`
+}
+
 func (EvalPkgPathMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	return BasicStringSymbol(NearestFunc(span).Pkg), nil, nil
 }

@@ -1,9 +1,7 @@
 # LOOPING
 
-The builtin function `Loop` is a mechanism for
-running a user function in a loop, providing ways
-to carry values from one invocation to the next
-and an optional stopping condition.
+The builtin function `Loop` is a mechanism for running a user function in a loop, providing ways
+to carry values from one invocation to the next and an optional stopping condition.
 
 `Loop` expects three arguments named: `start`, `step` and `stop`.
 

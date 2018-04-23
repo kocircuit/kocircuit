@@ -29,6 +29,10 @@ func (m *EvalMarshalProtoMacro) Help() string {
 	return fmt.Sprintf("MarshalProto<%s.%s>", m.ProtoPkg, m.ProtoName)
 }
 
+func (m *EvalMarshalProtoMacro) Doc() string {
+	return m.Help()
+}
+
 func (m *EvalMarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	protoArg := a.Walk("proto")

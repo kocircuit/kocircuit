@@ -22,6 +22,10 @@ func (m EvalEqualMacro) MacroSheathString() *string { return PtrString("Equal") 
 
 func (m EvalEqualMacro) Help() string { return "Equal" }
 
+func (m EvalEqualMacro) Doc() string {
+	return `Equal returns true if the sequence of values passed to it is empty or all values are equal.`
+}
+
 func (EvalEqualMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	series := arg.(*StructSymbol).SelectMonadic().LiftToSeries(span)
 	for i := 1; i < len(series.Elem); i++ {

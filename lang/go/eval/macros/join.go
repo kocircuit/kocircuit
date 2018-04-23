@@ -22,6 +22,11 @@ func (m EvalJoinMacro) MacroSheathString() *string { return PtrString("Join") }
 
 func (m EvalJoinMacro) Help() string { return "Join" }
 
+func (m EvalJoinMacro) Doc() string {
+	return `Join returns its argument if called with a default (unnamed argument).
+Otherwise Join returns a structure containing the named arguments passed to it.`
+}
+
 func (EvalJoinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	return Construct(arg.(*StructSymbol)), nil, nil
 }

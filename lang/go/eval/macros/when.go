@@ -22,6 +22,16 @@ func (m EvalWhenMacro) MacroSheathString() *string { return PtrString("When") }
 
 func (m EvalWhenMacro) Help() string { return "When" }
 
+func (m EvalWhenMacro) Doc() string {
+	return `
+When expects three arguments: have, then and else.
+
+* When have is not empty, When returns the result of invoking (the variety) then,
+passing to its default argument the non-empty value of have.
+
+* When have is empty, When returns the result of invoking (the variety) else.`
+}
+
 // When(have:█, then:█, else:█)
 func (EvalWhenMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)

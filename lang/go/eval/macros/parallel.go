@@ -26,8 +26,10 @@ func (m EvalSequentialMacro) Label() string { return "sequential" }
 
 func (m EvalSequentialMacro) MacroSheathString() *string { return PtrString("Sequential") }
 
-func (m EvalSequentialMacro) Help() string {
-	return "Sequential"
+func (m EvalSequentialMacro) Help() string { return "Sequential" }
+
+func (m EvalSequentialMacro) Doc() string {
+	return `Sequential(variety) executes the function in variety sequentially.`
 }
 
 func (EvalSequentialMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
@@ -59,6 +61,10 @@ func (m evalSequentialMacro) Help() string {
 	return fmt.Sprintf("Sequential[%s]", m.Macro.Help())
 }
 
+func (m evalSequentialMacro) Doc() string {
+	return fmt.Sprintf("Execute %s sequentially.", m.Macro.Help())
+}
+
 func (m evalSequentialMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	switch macro := m.Macro.(type) {
 	case *EvalInterpretMacro:
@@ -80,6 +86,10 @@ func (m EvalParallelMacro) MacroSheathString() *string { return PtrString("Paral
 
 func (m EvalParallelMacro) Help() string {
 	return "Parallel"
+}
+
+func (m EvalParallelMacro) Doc() string {
+	return `Parallel(variety) executes the function in variety in parallel.`
 }
 
 func (EvalParallelMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
@@ -109,6 +119,10 @@ func (m evalParallelMacro) MacroSheathString() *string { return nil }
 
 func (m evalParallelMacro) Help() string {
 	return fmt.Sprintf("Parallel[%s]", m.Macro.Help())
+}
+
+func (m evalParallelMacro) Doc() string {
+	return fmt.Sprintf("Execute %s in parallel.", m.Macro.Help())
 }
 
 func (m evalParallelMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {

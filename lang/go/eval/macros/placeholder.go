@@ -24,6 +24,8 @@ func (m EvalPlaceholderMacro) MacroSheathString() *string { return PtrString("Pl
 
 func (m EvalPlaceholderMacro) Help() string { return "Placeholder" }
 
+func (m EvalPlaceholderMacro) Doc() string { return "Placeholder." }
+
 func (EvalPlaceholderMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	panic("placeholder macro")
 }

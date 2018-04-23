@@ -21,6 +21,10 @@ func (m EvalHangMacro) MacroSheathString() *string { return PtrString("Hang") }
 
 func (m EvalHangMacro) Help() string { return "Hang" }
 
+func (m EvalHangMacro) Doc() string {
+	return `Hang hangs forever without returning.`
+}
+
 func (EvalHangMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	select {} // wait forever
 }

@@ -24,6 +24,10 @@ func (m EvalFormatMacro) MacroSheathString() *string { return PtrString("Format"
 
 func (m EvalFormatMacro) Help() string { return "Format" }
 
+func (m EvalFormatMacro) Doc() string {
+	return `Format is deprecated.`
+}
+
 // Format(format:█, args:█, withString:█, withArg:█)
 func (EvalFormatMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	// parse arguments

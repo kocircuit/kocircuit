@@ -135,6 +135,10 @@ func (m *EvalInterpretMacro) Help() string {
 	return fmt.Sprintf("%s", m.Func.FullPath())
 }
 
+func (m *EvalInterpretMacro) Doc() string {
+	return m.Func.DocLong()
+}
+
 func (m *EvalInterpretMacro) Invoke(span *Span, arg Arg) (Return, Effect, error) {
 	return m.InvokeSeq(span, arg) // default circuit execution mode
 }

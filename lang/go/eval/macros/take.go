@@ -22,6 +22,23 @@ func (m EvalTakeMacro) MacroSheathString() *string { return PtrString("Take") }
 
 func (m EvalTakeMacro) Help() string { return "Take" }
 
+func (m EvalTakeMacro) Doc() string {
+	return `
+Take expects a single unnamed sequence argument.
+It returns a structure with two fields first and remainder.
+Field first holds the value of the first element in the input sequence;
+if the sequence is empty, it holds the empty value.
+Field remainder holds the remainder of the input sequence, after the first
+element.
+
+For instance,
+
+	Take("a", "b", "c") // returns (first: "a", remainder: ("b", "c"))
+	Take("a") // returns (first: "a", remainder: ())
+	Take() // returns (first: (), remainder: ())
+`
+}
+
 func (EvalTakeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if fromSeries := ExtractMonadicOrNamed(arg, "from").LiftToSeries(span); fromSeries.Len() > 0 {
 		if remainder, err := MakeSeriesSymbol(span, fromSeries.Elem[1:]); err != nil {

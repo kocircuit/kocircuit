@@ -143,6 +143,8 @@ func (testMakeMacro) Label() string { return "testMake" }
 
 func (testMakeMacro) Help() string { return "testMake" }
 
+func (testMakeMacro) Doc() string { return "testMake" }
+
 func (testMakeMacro) Invoke(_ *Span, arg Arg) (returns Return, effect Effect, err error) {
 	return arg, nil, nil
 }
@@ -156,6 +158,8 @@ func (testUnknownMacro) MacroSheathString() *string { return PtrString("testUnkn
 func (testUnknownMacro) Label() string { return "testUnknown" }
 
 func (testUnknownMacro) Help() string { return "testUnknown" }
+
+func (testUnknownMacro) Doc() string { return "testUnknown" }
 
 func (testUnknownMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	pay, err := arg.(Knot).StringField("name")

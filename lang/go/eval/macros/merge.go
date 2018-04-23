@@ -22,6 +22,10 @@ func (m EvalMergeMacro) MacroSheathString() *string { return PtrString("Merge") 
 
 func (m EvalMergeMacro) Help() string { return "Merge" }
 
+func (m EvalMergeMacro) Doc() string {
+	return `Merge concatenates the sequences passed to it into a single sequence.`
+}
+
 func (EvalMergeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	// filter subseries that are not empty
 	ss := Symbols{}

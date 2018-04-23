@@ -14,6 +14,7 @@ type Macro interface {
 	Label() string              // string identifier
 	Help() string               // human-readable line of text, used in "ko list"
 	MacroSheathString() *string // human-readable line ot text show in debug frames (if not nil)
+	Doc() string
 }
 
 func RefineMacro(span *Span, macro Macro) *Span {

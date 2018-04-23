@@ -26,6 +26,10 @@ func (m *EvalProtoMessageMacro) Help() string {
 	return fmt.Sprintf("Proto<%s.%s>", m.ProtoPkg, m.ProtoName)
 }
 
+func (m *EvalProtoMessageMacro) Doc() string {
+	return m.Help()
+}
+
 func (m *EvalProtoMessageMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	msgValue, err := Integrate(span, arg.(*StructSymbol), m.MsgType)
 	if err != nil {

@@ -24,6 +24,10 @@ func (m EvalSortMacro) MacroSheathString() *string { return PtrString("Sort") }
 
 func (m EvalSortMacro) Help() string { return "Sort" }
 
+func (m EvalSortMacro) Doc() string {
+	return `Sort(over, less) sorts the sequence of values over, using the comparator less(left, right).`
+}
+
 // Sort(over, less)
 func (EvalSortMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)

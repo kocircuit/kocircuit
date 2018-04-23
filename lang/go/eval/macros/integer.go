@@ -36,6 +36,11 @@ func (m EvalIntegerEqualMacro) MacroSheathString() *string { return PtrString("i
 
 func (m EvalIntegerEqualMacro) Help() string { return "integer.Equal" }
 
+func (m EvalIntegerEqualMacro) Doc() string {
+	return `Equal returns true if the sequence of integer arguments passed to it is empty,
+or all integers are equal.`
+}
+
 func (m EvalIntegerEqualMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, _, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
 		return nil, nil, span.Errorf(err, "integer equal")
@@ -58,6 +63,10 @@ func (m EvalIntegerLessMacro) Label() string { return "less" }
 func (m EvalIntegerLessMacro) MacroSheathString() *string { return PtrString("integer.Less") }
 
 func (m EvalIntegerLessMacro) Help() string { return "integer.Less" }
+
+func (m EvalIntegerLessMacro) Doc() string {
+	return `Less returns true if the non-empty sequence of integer arguments passed to it is strictly increasing.`
+}
 
 func (m EvalIntegerLessMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
@@ -89,6 +98,10 @@ func (m EvalIntegerProdMacro) MacroSheathString() *string { return PtrString("in
 
 func (m EvalIntegerProdMacro) Help() string { return "integer.Prod" }
 
+func (m EvalIntegerProdMacro) Doc() string {
+	return `Prod returns the product of the integers passed to it.`
+}
+
 func (m EvalIntegerProdMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
 		return nil, nil, span.Errorf(err, "integer product")
@@ -116,6 +129,10 @@ func (m EvalIntegerRatioMacro) Label() string { return "ratio" }
 func (m EvalIntegerRatioMacro) MacroSheathString() *string { return PtrString("integer.Ratio") }
 
 func (m EvalIntegerRatioMacro) Help() string { return "integer.Ratio" }
+
+func (m EvalIntegerRatioMacro) Doc() string {
+	return `Ratio returns the ratio of the integers passed to it.`
+}
 
 func (m EvalIntegerRatioMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
@@ -145,6 +162,10 @@ func (m EvalIntegerSumMacro) MacroSheathString() *string { return PtrString("int
 
 func (m EvalIntegerSumMacro) Help() string { return "integer.Sum" }
 
+func (m EvalIntegerSumMacro) Doc() string {
+	return `Sum returns the sum of the integers passed to it.`
+}
+
 func (m EvalIntegerSumMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
 		return nil, nil, span.Errorf(err, "integer sum")
@@ -173,6 +194,10 @@ func (m EvalIntegerModuliMacro) MacroSheathString() *string { return PtrString("
 
 func (m EvalIntegerModuliMacro) Help() string { return "integer.Moduli" }
 
+func (m EvalIntegerModuliMacro) Doc() string {
+	return `Moduli(n1, n2) returns n1 modulus n2.`
+}
+
 func (m EvalIntegerModuliMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {
 		return nil, nil, span.Errorf(err, "integer moduli")
@@ -200,6 +225,10 @@ func (m EvalIntegerNegativeMacro) Label() string { return "negative" }
 func (m EvalIntegerNegativeMacro) MacroSheathString() *string { return PtrString("integer.Negative") }
 
 func (m EvalIntegerNegativeMacro) Help() string { return "integer.Negative" }
+
+func (m EvalIntegerNegativeMacro) Doc() string {
+	return `Negative(n) returns -n.`
+}
 
 func (m EvalIntegerNegativeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	if symbols, signed, err := ExtractMonadicNonEmptyIntegerSeries(span, arg.(*StructSymbol)); err != nil {

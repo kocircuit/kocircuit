@@ -55,6 +55,10 @@ func (m *evalFixedFuncMacro) Help() string {
 	return fmt.Sprintf("Eval(%s)", m.Func.FullPath())
 }
 
+func (m *evalFixedFuncMacro) Doc() string {
+	return m.Func.DocLong()
+}
+
 func (m *evalFixedFuncMacro) Invoke(span *Span, arg Arg) (Return, Effect, error) {
 	if arg == nil {
 		return m.Parent.EvalSeq(span, m.Func, nil)

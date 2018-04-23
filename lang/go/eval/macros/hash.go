@@ -22,6 +22,10 @@ func (m EvalHashMacro) MacroSheathString() *string { return PtrString("Hash") }
 
 func (m EvalHashMacro) Help() string { return "Hash" }
 
+func (m EvalHashMacro) Doc() string {
+	return `Hash returns the canonical string hash value of the argument passed to it.`
+}
+
 func (EvalHashMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	join := EvalJoinMacro{}
 	if returns, effect, err = join.Invoke(span, arg); err != nil {
