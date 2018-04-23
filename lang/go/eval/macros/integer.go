@@ -32,9 +32,9 @@ func (m EvalIntegerEqualMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerEqualMacro) Label() string { return "equal" }
 
-func (m EvalIntegerEqualMacro) MacroSheathString() *string { return PtrString("integer.Equal") }
+func (m EvalIntegerEqualMacro) MacroSheathString() *string { return PtrString("Equal") }
 
-func (m EvalIntegerEqualMacro) Help() string { return "integer.Equal" }
+func (m EvalIntegerEqualMacro) Help() string { return "Equal" }
 
 func (m EvalIntegerEqualMacro) Doc() string {
 	return `Equal returns true if the sequence of integer arguments passed to it is empty,
@@ -60,9 +60,9 @@ func (m EvalIntegerLessMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerLessMacro) Label() string { return "less" }
 
-func (m EvalIntegerLessMacro) MacroSheathString() *string { return PtrString("integer.Less") }
+func (m EvalIntegerLessMacro) MacroSheathString() *string { return PtrString("Less") }
 
-func (m EvalIntegerLessMacro) Help() string { return "integer.Less" }
+func (m EvalIntegerLessMacro) Help() string { return "Less" }
 
 func (m EvalIntegerLessMacro) Doc() string {
 	return `Less returns true if the non-empty sequence of integer arguments passed to it is strictly increasing.`
@@ -94,9 +94,9 @@ func (m EvalIntegerProdMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerProdMacro) Label() string { return "product" }
 
-func (m EvalIntegerProdMacro) MacroSheathString() *string { return PtrString("integer.Prod") }
+func (m EvalIntegerProdMacro) MacroSheathString() *string { return PtrString("Prod") }
 
-func (m EvalIntegerProdMacro) Help() string { return "integer.Prod" }
+func (m EvalIntegerProdMacro) Help() string { return "Prod" }
 
 func (m EvalIntegerProdMacro) Doc() string {
 	return `Prod returns the product of the integers passed to it.`
@@ -126,9 +126,9 @@ func (m EvalIntegerRatioMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerRatioMacro) Label() string { return "ratio" }
 
-func (m EvalIntegerRatioMacro) MacroSheathString() *string { return PtrString("integer.Ratio") }
+func (m EvalIntegerRatioMacro) MacroSheathString() *string { return PtrString("Ratio") }
 
-func (m EvalIntegerRatioMacro) Help() string { return "integer.Ratio" }
+func (m EvalIntegerRatioMacro) Help() string { return "Ratio" }
 
 func (m EvalIntegerRatioMacro) Doc() string {
 	return `Ratio returns the ratio of the integers passed to it.`
@@ -158,9 +158,9 @@ func (m EvalIntegerSumMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerSumMacro) Label() string { return "sum" }
 
-func (m EvalIntegerSumMacro) MacroSheathString() *string { return PtrString("integer.Sum") }
+func (m EvalIntegerSumMacro) MacroSheathString() *string { return PtrString("Sum") }
 
-func (m EvalIntegerSumMacro) Help() string { return "integer.Sum" }
+func (m EvalIntegerSumMacro) Help() string { return "Sum" }
 
 func (m EvalIntegerSumMacro) Doc() string {
 	return `Sum returns the sum of the integers passed to it.`
@@ -190,9 +190,9 @@ func (m EvalIntegerModuliMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerModuliMacro) Label() string { return "moduli" }
 
-func (m EvalIntegerModuliMacro) MacroSheathString() *string { return PtrString("integer.Moduli") }
+func (m EvalIntegerModuliMacro) MacroSheathString() *string { return PtrString("Moduli") }
 
-func (m EvalIntegerModuliMacro) Help() string { return "integer.Moduli" }
+func (m EvalIntegerModuliMacro) Help() string { return "Moduli" }
 
 func (m EvalIntegerModuliMacro) Doc() string {
 	return `Moduli(n1, n2) returns n1 modulus n2.`
@@ -222,9 +222,9 @@ func (m EvalIntegerNegativeMacro) MacroID() string { return m.Help() }
 
 func (m EvalIntegerNegativeMacro) Label() string { return "negative" }
 
-func (m EvalIntegerNegativeMacro) MacroSheathString() *string { return PtrString("integer.Negative") }
+func (m EvalIntegerNegativeMacro) MacroSheathString() *string { return PtrString("Negative") }
 
-func (m EvalIntegerNegativeMacro) Help() string { return "integer.Negative" }
+func (m EvalIntegerNegativeMacro) Help() string { return "Negative" }
 
 func (m EvalIntegerNegativeMacro) Doc() string {
 	return `Negative(n) returns -n.`

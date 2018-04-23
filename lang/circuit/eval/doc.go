@@ -2,6 +2,7 @@ package eval
 
 import (
 	"bytes"
+	"fmt"
 )
 
 func (f Faculty) DocPackage(pkgPath string) (string, bool) {
@@ -23,7 +24,7 @@ func (f Faculty) DocPackage(pkgPath string) (string, bool) {
 
 func (f Faculty) DocFunc(pkgPath, funcName string) (string, bool) {
 	if macro, ok := f[Ideal{Pkg: pkgPath, Name: funcName}]; ok {
-		return macro.Doc(), true
+		return fmt.Sprintf("%s\n\n%s", macro.Help(), macro.Doc()), true
 	} else {
 		return "", false
 	}
