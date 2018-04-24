@@ -22,11 +22,10 @@ func (m EvalRangeMacro) Label() string { return "range" }
 
 func (m EvalRangeMacro) MacroSheathString() *string { return PtrString("Range") }
 
-func (m EvalRangeMacro) Help() string { return "Range" }
+func (m EvalRangeMacro) Help() string { return "Range(start, over, with, stop)" }
 
 func (m EvalRangeMacro) Doc() string {
-	return `
-Range iterates sequentially over the elements of an input sequence.
+	return `Range iterates sequentially over the elements of an input sequence.
 
 A user-supplied iterator function is invoked for each sequence element.
 The iterator function is expected to return a structure with two fields: emit and carry.

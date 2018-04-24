@@ -4,11 +4,11 @@ CI
 LANG
 * extend Less to work on strings
 * extend arithmetic functions to work on floats
-* should "()" return an empty structure? should empty structure not be equivalent to empty?
 * Range with argument:
 	* rename to step
 	* pass carry-and-elem to a default argument of step (for consistency with other macros)
-* Memoize macro
+* disallow user functions named after macros (Panic, Range, etc)
+* Memoize(memory, key, variety) function
 
 PROTO
 * proto service integration

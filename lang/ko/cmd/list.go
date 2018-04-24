@@ -36,7 +36,7 @@ Usage:
 	Run: func(cmd *cobra.Command, args []string) {
 		tables := [][]string{}
 		tables = append(tables, EvalFaculty().StringTable("Builtin")...)
-		tables = append(tables, EvalIdiomRepo.StringTable("Idiom")...)
+		tables = append(tables, EvalIdiomRepo.StringTable("Idiomatic")...)
 		printTable(os.Stdout, tables)
 	},
 }
@@ -47,7 +47,7 @@ func init() {
 
 func printTable(w io.Writer, data [][]string) {
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Faculty", "Package", "Circuit", "Implemented by"})
+	table.SetHeader([]string{"Type", "Package", "Function", "Implemented by"})
 	table.SetAutoMergeCells(false)
 	table.SetRowLine(false)
 	table.AppendBulk(data)

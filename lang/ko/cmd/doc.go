@@ -57,7 +57,7 @@ Usage:
 		faculty := EvalFaculty()
 		//
 		if pf.Func == nil { // package doc
-			println("pkg", pf.Pkg)
+			fmt.Printf("package %q\n\n", pf.Pkg)
 			if doc, ok := repo.DocPackage(pf.Pkg); ok {
 				fmt.Println(doc)
 			} else if doc, ok = faculty.DocPackage(pf.Pkg); ok {
@@ -66,7 +66,7 @@ Usage:
 				log.Fatalf("user or builtin package %s not found", pf.Pkg)
 			}
 		} else { // func doc
-			println("pkg", pf.Pkg, "func", *pf.Func)
+			fmt.Printf("package %q, function %s\n\n", pf.Pkg, *pf.Func)
 			if doc, ok := repo.DocFunc(pf.Pkg, *pf.Func); ok {
 				fmt.Println(doc)
 			} else if doc, ok = faculty.DocFunc(pf.Pkg, *pf.Func); ok {
