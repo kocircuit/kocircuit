@@ -49,7 +49,7 @@ func (w *PlayFuncEval) Play(ctx *runtime.Context) *PlayResult {
 	} else {
 		arg = w.Arg
 	}
-	r.Returned, _, r.Error = w.Eval.Eval(span, w.Func, arg)
+	r.Returned, _, _, r.Error = w.Eval.Eval(span, w.Func, arg)
 	return r
 }
 

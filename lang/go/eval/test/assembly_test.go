@@ -20,7 +20,7 @@ func TestReassembly(t *testing.T) {
 	eval := NewEvaluator(EvalFaculty(), repo)
 	span := NewSpan()
 	// eval pre-disassembly
-	preReturned, _, err := eval.Eval(span, repo["test"]["Pre"], MakeStructSymbol(nil))
+	preReturned, _, _, err := eval.Eval(span, repo["test"]["Pre"], MakeStructSymbol(nil))
 	if err != nil {
 		t.Fatalf("eval pre-disassembly (%v)", err)
 	}
@@ -38,7 +38,7 @@ func TestReassembly(t *testing.T) {
 	postArg := MakeStructSymbol(
 		FieldSymbols{{Name: "reassembled", Value: reassembled}},
 	)
-	postReturned, _, err := eval.Eval(span, repo["test"]["Post"], postArg)
+	postReturned, _, _, err := eval.Eval(span, repo["test"]["Post"], postArg)
 	if err != nil {
 		t.Fatalf("eval post-reassembly (%v)", err)
 	}

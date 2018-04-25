@@ -8,16 +8,28 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+type Hypervisor interface{}
+
 type Span struct {
-	ID     ID     `ko:"name=id"`
-	Parent *Span  `ko:"name=parent"`
-	Sheath Sheath `ko:"name=sheath"`
+	Hypervisor Hypervisor `ko:"name=hypervisor"`
+	ID         ID         `ko:"name=id"`
+	Parent     *Span      `ko:"name=parent"`
+	Sheath     Sheath     `ko:"name=sheath"`
 }
 
 var rootSpanID = StringID("root")
 
 func NewSpan() *Span {
 	return &Span{ID: rootSpanID}
+}
+
+func (span *Span) Attach(h Hypervisor) *Span {
+	return &Span{
+		Hypervisor: h,
+		ID:         span.ID,
+		Parent:     span.Parent,
+		Sheath:     span.Sheath,
+	}
 }
 
 func (span *Span) Splay() Tree {
@@ -57,9 +69,10 @@ func (span *Span) Refine(sheath Sheath) *Span {
 		id = span.ID
 	}
 	return &Span{
-		ID:     id,
-		Parent: span,
-		Sheath: sheath,
+		Hypervisor: span.Hypervisor,
+		ID:         id,
+		Parent:     span,
+		Sheath:     sheath,
 	}
 }
 

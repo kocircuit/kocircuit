@@ -12,6 +12,10 @@ type Evaluator interface {
 	EvalSeq(*Span, *Func, Arg) (Return, Effect, error)
 }
 
+func SpanEvaluator(span *Span) Evaluator {
+	return span.Hypervisor.(Evaluator)
+}
+
 // Program is an Evaluator.
 type Program struct {
 	Idiom  Repo `ko:"name=idiom"`
@@ -21,8 +25,8 @@ type Program struct {
 
 type System struct {
 	Faculty  Faculty  `ko:"name=faculty"`  // operator logic
-	Boundary Boundary `ko:"name=boundary"` // circuit surgery
-	Combiner Combiner `ko:"name=combiner"` // circuit surgery
+	Boundary Boundary `ko:"name=boundary"` // interprets literals
+	Combiner Combiner `ko:"name=combiner"` // generates function effect/description
 }
 
 func (prog Program) String() string { return Sprint(prog) }
@@ -44,6 +48,7 @@ func FlowResidues(stepFlow []Flow) (stepResidue []*StepResidue) {
 // }
 
 func (prog Program) EvalSeq(span *Span, f *Func, arg Arg) (Return, Effect, error) {
+	span = span.Attach(prog)
 	envelope := evalEnvelope{Program: prog, Arg: arg, Span: span}
 	if returnFlow, stepFlow, err := PlaySeqFlow(span, f, envelope); err != nil {
 		return nil, nil, err
@@ -58,6 +63,7 @@ func (prog Program) EvalSeq(span *Span, f *Func, arg Arg) (Return, Effect, error
 }
 
 func (prog Program) EvalPar(span *Span, f *Func, arg Arg) (Return, Effect, error) {
+	span = span.Attach(prog)
 	envelope := evalEnvelope{Program: prog, Arg: arg, Span: span}
 	if returnFlow, stepFlow, err := PlayParFlow(span, f, envelope); err != nil {
 		return nil, nil, err

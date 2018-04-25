@@ -34,6 +34,6 @@ func (e *Eval) Play(ctx *runtime.Context) *EvalResult {
 	}
 	ev := NewEvaluator(EvalFaculty(), repo)
 	span := NewSpan()
-	r.Returned, _, r.Error = ev.Eval(span, repo["jail"]["Cell"], MakeStructSymbol(nil))
+	r.Returned, _, _, r.Error = ev.Eval(span, repo["jail"]["Cell"], MakeStructSymbol(nil))
 	return r
 }

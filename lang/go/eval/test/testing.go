@@ -52,7 +52,7 @@ func (test *EvalTest) Play(ctx *runtime.Context) error {
 	span = RefineOutline(span, "Main")
 	// deconstruct test arguments
 	arg := Deconstruct(span, reflect.ValueOf(test.Arg))
-	returned, _, err := eval.Eval(span, repo["test"]["Main"], arg)
+	returned, _, _, err := eval.Eval(span, repo["test"]["Main"], arg)
 	if err != nil {
 		return fmt.Errorf("eval (%v)", err)
 	}

@@ -21,7 +21,7 @@ func (m EvalTranslateMacro) Label() string { return "translate" }
 func (m EvalTranslateMacro) MacroSheathString() *string { return PtrString("Translate") }
 
 func (m EvalTranslateMacro) Help() string {
-	return "Translate(translator, func, ctx, arg)"
+	return "Translate(translator, func, ctx, arg) -> (returns, effect)"
 }
 
 func (m EvalTranslateMacro) Doc() string {
@@ -36,17 +36,18 @@ func (m EvalTranslateMacro) Doc() string {
 		Select(step, ctx, arg) -> (returns, effect)
 		Augment(step, ctx, arg, knot) -> (returns, effect)
 		Invoke(step, ctx, arg) -> (returns, effect)
-		Combine(ctx, arg, stepResidues) -> (returns, effect)
+		Combine(ctx, arg, stepResults) -> (returns, effect)
 	)
 
 * arg is a user object
 * ctx is a user object
+* returns is a user object
 * effect is a user object
-* step is (label, XXX)
+
+* step is (...)
 * knot is a sequence of (name, arg) pairs
 * literal is XXX
-* stepResidue is a sequence of (step, returned, effect, panic)
-
+* stepResults is a sequence of (step, returned, effect, panic)
 `
 }
 

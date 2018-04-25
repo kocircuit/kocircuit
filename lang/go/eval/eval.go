@@ -47,23 +47,24 @@ func (eval *Evaluate) AssembleMacro(span *Span, pkgPath, funcName string) (Macro
 	}
 }
 
-func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, eff Effect, err error) {
+func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, panicked Symbol, eff Effect, err error) {
 	// catch unrecovered evaluator panics
 	defer func() {
 		if r := recover(); r != nil {
 			evalPanic := r.(*EvalPanic)
-			returned, eff, err = nil, nil, evalPanic.Origin.Errorf(nil, "unrecovered panic: %v", evalPanic.Panic)
+			returned, panicked = nil, evalPanic.Panic
+			eff, err = nil, evalPanic.Origin.Errorf(nil, "unrecovered panic: %v", evalPanic.Panic)
 			return
 		}
 	}()
 	// top-level evaluation strategy is sequential
 	if shape, effect, err := eval.Program.EvalSeq(span, f, arg); err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	} else {
 		if sym, ok := shape.(Symbol); ok {
-			return sym, effect, nil
+			return sym, nil, effect, nil
 		} else {
-			return nil, effect, nil
+			return nil, nil, effect, nil
 		}
 	}
 }
