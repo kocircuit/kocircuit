@@ -146,26 +146,10 @@ func (m *EvalInterpretMacro) Invoke(span *Span, arg Arg) (Return, Effect, error)
 
 func (m *EvalInterpretMacro) InvokeSeq(span *Span, arg Arg) (Return, Effect, error) {
 	ss := arg.(*StructSymbol)
-	return m.Evaluator.EvalSeq(span, m.Func, RewriteMonadicField(ss, m.Func.Monadic))
+	return m.Evaluator.EvalSeq(span, m.Func, ss)
 }
 
 func (m *EvalInterpretMacro) InvokePar(span *Span, arg Arg) (Return, Effect, error) {
 	ss := arg.(*StructSymbol)
-	return m.Evaluator.EvalPar(span, m.Func, RewriteMonadicField(ss, m.Func.Monadic))
-}
-
-// RewriteMonadicField rewrites the struct so that its monadic field has Ko name asKoName.
-func RewriteMonadicField(ss *StructSymbol, asKoName string) *StructSymbol {
-	fields := make(FieldSymbols, len(ss.Field))
-	copy(fields, ss.Field)
-	for i, field := range fields {
-		if field.Monadic {
-			fields[i] = &FieldSymbol{
-				Name:  asKoName,
-				Value: field.Value,
-			}
-			break
-		}
-	}
-	return MakeStructSymbol(fields)
+	return m.Evaluator.EvalPar(span, m.Func, ss)
 }

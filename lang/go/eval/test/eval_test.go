@@ -481,7 +481,7 @@ var evalTests = []*EvalTest{
 		Result: true,
 	},
 	// idiom
-	{ // test switch idiom
+	{ // 24: test switch idiom
 		Enabled: true,
 		File: `
 		Main() {
@@ -520,7 +520,7 @@ var evalTests = []*EvalTest{
 		less(left, right) {
 			return: Less(left.f2, right.f2)
 		}
-		Main(x) {
+		Main() {
 			return: Equal(
 				Sort(
 					over: (f1: "abc", f2: 123)

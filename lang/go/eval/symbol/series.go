@@ -79,6 +79,10 @@ func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return ss
 }
 
+func (ss *SeriesSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into series")
+}
+
 func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return ss, nil, nil

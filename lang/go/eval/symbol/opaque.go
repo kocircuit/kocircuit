@@ -42,6 +42,10 @@ func (opaque *OpaqueSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(opaque)
 }
 
+func (opaque *OpaqueSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into opaque")
+}
+
 func (opaque *OpaqueSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return opaque, nil, nil

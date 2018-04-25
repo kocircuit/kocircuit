@@ -78,6 +78,10 @@ func (vty *VarietySymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(vty)
 }
 
+func (vty *VarietySymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into variety")
+}
+
 func (vty *VarietySymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return vty, nil, nil

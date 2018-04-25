@@ -23,6 +23,17 @@ func (ss *StructSymbol) SelectMonadic() Symbol {
 	return EmptySymbol{}
 }
 
+func (ss *StructSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	if found := ss.FindName(name); found != nil {
+		return found.Value, nil, nil
+	} else if monadic {
+		if found := ss.FindMonadic(); found != nil {
+			return found.Value, nil, nil
+		}
+	}
+	return EmptySymbol{}, nil, nil
+}
+
 func (ss *StructSymbol) Select(span *Span, path Path) (_ Shape, _ Effect, err error) {
 	if len(path) == 0 {
 		return ss, nil, nil
@@ -32,18 +43,9 @@ func (ss *StructSymbol) Select(span *Span, path Path) (_ Shape, _ Effect, err er
 }
 
 func (ss *StructSymbol) Walk(step string) Symbol {
-	if found := FindFieldSymbol(step, ss.Field); found != nil {
+	if found := ss.FindName(step); found != nil {
 		return found.Value
 	} else {
 		return EmptySymbol{}
 	}
-}
-
-func FindFieldSymbol(name string, fields FieldSymbols) *FieldSymbol {
-	for _, field := range fields {
-		if field.Name == name {
-			return field
-		}
-	}
-	return nil
 }
