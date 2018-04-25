@@ -30,12 +30,22 @@ func NewTranslation(faculty Faculty, repo Repo) *Translation {
 	}
 }
 
-func (eval *Translation) Translate(span *Span, f *Func, arg XXXSymbol) (returned XXXSymbol, eff XXXEffect, err error) {
+type TranslationPanic struct {
+	Origin *Span  `ko:"name=origin"`
+	Panic  Symbol `ko:"name=panic"`
+}
+
+func NewTranslationPanic(origin *Span, panik Symbol) *TranslationPanic {
+	return &TranslationPanic{Origin: origin, Panic: panik}
+}
+
+func (eval *Translation) Translate(span *Span, f *Func, arg Symbol) (returned, panicked, eff Symbol, err error) {
 	// catch unrecovered evaluator panics
 	defer func() {
 		if r := recover(); r != nil {
-			evalPanic := r.(*EvalPanic)
-			returned, eff, err = nil, nil, evalPanic.Origin.Errorf(nil, "unrecovered panic: %v", evalPanic.Panic)
+			translationPanic := r.(*TranslationPanic)
+			returned, panicked, eff = EmptySymbol{}, translationPanic.Panic, EmptySymbol{}
+			err = nil
 			return
 		}
 	}()

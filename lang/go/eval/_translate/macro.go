@@ -33,7 +33,7 @@ func (m EvalTranslateMacro) Doc() string {
 		Enter(step, ctx, arg) -> (returns, effect)
 		Leave(step, ctx, arg) -> (returns, effect)
 		Figure(step, ctx, literal) -> (returns, effect)
-		Select(step, ctx, arg) -> (returns, effect)
+		Select(step, ctx, arg, label, monadic) -> (returns, effect)
 		Augment(step, ctx, arg, knot) -> (returns, effect)
 		Invoke(step, ctx, arg) -> (returns, effect)
 		Combine(ctx, arg, stepResults) -> (returns, effect)
