@@ -57,11 +57,12 @@ message Logic {
 		LogicEnter enter = 1;
 		LogicLeave leave = 2;
 		LogicNumber number = 3;
-		LogicSelect select = 4;
-		LogicAugment augment = 5;
-		LogicInvoke invoke = 6;
-		LogicOperator operator = 7;
-		LogicPkgFunc pkgFunc = 8;
+		LogicSelectArg select_arg = 4;
+		LogicSelect select = 5;
+		LogicAugment augment = 6;
+		LogicInvoke invoke = 7;
+		LogicOperator operator = 8;
+		LogicPkgFunc pkgFunc = 9;
 	}
 }
 
@@ -76,6 +77,11 @@ message LogicNumber {
 		int64 int64 = 3;
 		double float64 = 4;
 	}
+}
+
+message LogicSelectArg {
+	required string name = 1;
+	optional bool monadic = 2;
 }
 
 message LogicSelect {

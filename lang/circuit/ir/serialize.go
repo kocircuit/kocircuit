@@ -129,6 +129,15 @@ func SerializeLogic(logic Logic) *pb.Logic {
 				Leave: &pb.LogicLeave{},
 			},
 		}
+	case SelectArg:
+		return &pb.Logic{
+			Logic: &pb.Logic_SelectArg{
+				SelectArg: &pb.LogicSelectArg{
+					Name:    proto.String(u.Name),
+					Monadic: proto.Bool(u.Monadic),
+				},
+			},
+		}
 	case Select:
 		return &pb.Logic{
 			Logic: &pb.Logic_Select{

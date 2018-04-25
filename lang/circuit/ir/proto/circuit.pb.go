@@ -19,6 +19,7 @@
 		LogicEnter
 		LogicLeave
 		LogicNumber
+		LogicSelectArg
 		LogicSelect
 		LogicAugment
 		LogicInvoke
@@ -316,6 +317,7 @@ type Logic struct {
 	//	*Logic_Enter
 	//	*Logic_Leave
 	//	*Logic_Number
+	//	*Logic_SelectArg
 	//	*Logic_Select
 	//	*Logic_Augment
 	//	*Logic_Invoke
@@ -345,30 +347,34 @@ type Logic_Leave struct {
 type Logic_Number struct {
 	Number *LogicNumber `protobuf:"bytes,3,opt,name=number,oneof"`
 }
+type Logic_SelectArg struct {
+	SelectArg *LogicSelectArg `protobuf:"bytes,4,opt,name=select_arg,json=selectArg,oneof"`
+}
 type Logic_Select struct {
-	Select *LogicSelect `protobuf:"bytes,4,opt,name=select,oneof"`
+	Select *LogicSelect `protobuf:"bytes,5,opt,name=select,oneof"`
 }
 type Logic_Augment struct {
-	Augment *LogicAugment `protobuf:"bytes,5,opt,name=augment,oneof"`
+	Augment *LogicAugment `protobuf:"bytes,6,opt,name=augment,oneof"`
 }
 type Logic_Invoke struct {
-	Invoke *LogicInvoke `protobuf:"bytes,6,opt,name=invoke,oneof"`
+	Invoke *LogicInvoke `protobuf:"bytes,7,opt,name=invoke,oneof"`
 }
 type Logic_Operator struct {
-	Operator *LogicOperator `protobuf:"bytes,7,opt,name=operator,oneof"`
+	Operator *LogicOperator `protobuf:"bytes,8,opt,name=operator,oneof"`
 }
 type Logic_PkgFunc struct {
-	PkgFunc *LogicPkgFunc `protobuf:"bytes,8,opt,name=pkgFunc,oneof"`
+	PkgFunc *LogicPkgFunc `protobuf:"bytes,9,opt,name=pkgFunc,oneof"`
 }
 
-func (*Logic_Enter) isLogic_Logic()    {}
-func (*Logic_Leave) isLogic_Logic()    {}
-func (*Logic_Number) isLogic_Logic()   {}
-func (*Logic_Select) isLogic_Logic()   {}
-func (*Logic_Augment) isLogic_Logic()  {}
-func (*Logic_Invoke) isLogic_Logic()   {}
-func (*Logic_Operator) isLogic_Logic() {}
-func (*Logic_PkgFunc) isLogic_Logic()  {}
+func (*Logic_Enter) isLogic_Logic()     {}
+func (*Logic_Leave) isLogic_Logic()     {}
+func (*Logic_Number) isLogic_Logic()    {}
+func (*Logic_SelectArg) isLogic_Logic() {}
+func (*Logic_Select) isLogic_Logic()    {}
+func (*Logic_Augment) isLogic_Logic()   {}
+func (*Logic_Invoke) isLogic_Logic()    {}
+func (*Logic_Operator) isLogic_Logic()  {}
+func (*Logic_PkgFunc) isLogic_Logic()   {}
 
 func (m *Logic) GetLogic() isLogic_Logic {
 	if m != nil {
@@ -394,6 +400,13 @@ func (m *Logic) GetLeave() *LogicLeave {
 func (m *Logic) GetNumber() *LogicNumber {
 	if x, ok := m.GetLogic().(*Logic_Number); ok {
 		return x.Number
+	}
+	return nil
+}
+
+func (m *Logic) GetSelectArg() *LogicSelectArg {
+	if x, ok := m.GetLogic().(*Logic_SelectArg); ok {
+		return x.SelectArg
 	}
 	return nil
 }
@@ -439,6 +452,7 @@ func (*Logic) XXX_OneofFuncs() (func(msg proto1.Message, b *proto1.Buffer) error
 		(*Logic_Enter)(nil),
 		(*Logic_Leave)(nil),
 		(*Logic_Number)(nil),
+		(*Logic_SelectArg)(nil),
 		(*Logic_Select)(nil),
 		(*Logic_Augment)(nil),
 		(*Logic_Invoke)(nil),
@@ -466,28 +480,33 @@ func _Logic_OneofMarshaler(msg proto1.Message, b *proto1.Buffer) error {
 		if err := b.EncodeMessage(x.Number); err != nil {
 			return err
 		}
-	case *Logic_Select:
+	case *Logic_SelectArg:
 		_ = b.EncodeVarint(4<<3 | proto1.WireBytes)
+		if err := b.EncodeMessage(x.SelectArg); err != nil {
+			return err
+		}
+	case *Logic_Select:
+		_ = b.EncodeVarint(5<<3 | proto1.WireBytes)
 		if err := b.EncodeMessage(x.Select); err != nil {
 			return err
 		}
 	case *Logic_Augment:
-		_ = b.EncodeVarint(5<<3 | proto1.WireBytes)
+		_ = b.EncodeVarint(6<<3 | proto1.WireBytes)
 		if err := b.EncodeMessage(x.Augment); err != nil {
 			return err
 		}
 	case *Logic_Invoke:
-		_ = b.EncodeVarint(6<<3 | proto1.WireBytes)
+		_ = b.EncodeVarint(7<<3 | proto1.WireBytes)
 		if err := b.EncodeMessage(x.Invoke); err != nil {
 			return err
 		}
 	case *Logic_Operator:
-		_ = b.EncodeVarint(7<<3 | proto1.WireBytes)
+		_ = b.EncodeVarint(8<<3 | proto1.WireBytes)
 		if err := b.EncodeMessage(x.Operator); err != nil {
 			return err
 		}
 	case *Logic_PkgFunc:
-		_ = b.EncodeVarint(8<<3 | proto1.WireBytes)
+		_ = b.EncodeVarint(9<<3 | proto1.WireBytes)
 		if err := b.EncodeMessage(x.PkgFunc); err != nil {
 			return err
 		}
@@ -525,7 +544,15 @@ func _Logic_OneofUnmarshaler(msg proto1.Message, tag, wire int, b *proto1.Buffer
 		err := b.DecodeMessage(msg)
 		m.Logic = &Logic_Number{msg}
 		return true, err
-	case 4: // logic.select
+	case 4: // logic.select_arg
+		if wire != proto1.WireBytes {
+			return true, proto1.ErrInternalBadWireType
+		}
+		msg := new(LogicSelectArg)
+		err := b.DecodeMessage(msg)
+		m.Logic = &Logic_SelectArg{msg}
+		return true, err
+	case 5: // logic.select
 		if wire != proto1.WireBytes {
 			return true, proto1.ErrInternalBadWireType
 		}
@@ -533,7 +560,7 @@ func _Logic_OneofUnmarshaler(msg proto1.Message, tag, wire int, b *proto1.Buffer
 		err := b.DecodeMessage(msg)
 		m.Logic = &Logic_Select{msg}
 		return true, err
-	case 5: // logic.augment
+	case 6: // logic.augment
 		if wire != proto1.WireBytes {
 			return true, proto1.ErrInternalBadWireType
 		}
@@ -541,7 +568,7 @@ func _Logic_OneofUnmarshaler(msg proto1.Message, tag, wire int, b *proto1.Buffer
 		err := b.DecodeMessage(msg)
 		m.Logic = &Logic_Augment{msg}
 		return true, err
-	case 6: // logic.invoke
+	case 7: // logic.invoke
 		if wire != proto1.WireBytes {
 			return true, proto1.ErrInternalBadWireType
 		}
@@ -549,7 +576,7 @@ func _Logic_OneofUnmarshaler(msg proto1.Message, tag, wire int, b *proto1.Buffer
 		err := b.DecodeMessage(msg)
 		m.Logic = &Logic_Invoke{msg}
 		return true, err
-	case 7: // logic.operator
+	case 8: // logic.operator
 		if wire != proto1.WireBytes {
 			return true, proto1.ErrInternalBadWireType
 		}
@@ -557,7 +584,7 @@ func _Logic_OneofUnmarshaler(msg proto1.Message, tag, wire int, b *proto1.Buffer
 		err := b.DecodeMessage(msg)
 		m.Logic = &Logic_Operator{msg}
 		return true, err
-	case 8: // logic.pkgFunc
+	case 9: // logic.pkgFunc
 		if wire != proto1.WireBytes {
 			return true, proto1.ErrInternalBadWireType
 		}
@@ -589,29 +616,34 @@ func _Logic_OneofSizer(msg proto1.Message) (n int) {
 		n += proto1.SizeVarint(3<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
+	case *Logic_SelectArg:
+		s := proto1.Size(x.SelectArg)
+		n += proto1.SizeVarint(4<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(uint64(s))
+		n += s
 	case *Logic_Select:
 		s := proto1.Size(x.Select)
-		n += proto1.SizeVarint(4<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(5<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
 	case *Logic_Augment:
 		s := proto1.Size(x.Augment)
-		n += proto1.SizeVarint(5<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(6<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
 	case *Logic_Invoke:
 		s := proto1.Size(x.Invoke)
-		n += proto1.SizeVarint(6<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(7<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
 	case *Logic_Operator:
 		s := proto1.Size(x.Operator)
-		n += proto1.SizeVarint(7<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(8<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
 	case *Logic_PkgFunc:
 		s := proto1.Size(x.PkgFunc)
-		n += proto1.SizeVarint(8<<3 | proto1.WireBytes)
+		n += proto1.SizeVarint(9<<3 | proto1.WireBytes)
 		n += proto1.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -810,6 +842,31 @@ func _LogicNumber_OneofSizer(msg proto1.Message) (n int) {
 	return n
 }
 
+type LogicSelectArg struct {
+	Name             *string `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	Monadic          *bool   `protobuf:"varint,2,opt,name=monadic" json:"monadic,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *LogicSelectArg) Reset()                    { *m = LogicSelectArg{} }
+func (m *LogicSelectArg) String() string            { return proto1.CompactTextString(m) }
+func (*LogicSelectArg) ProtoMessage()               {}
+func (*LogicSelectArg) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{11} }
+
+func (m *LogicSelectArg) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *LogicSelectArg) GetMonadic() bool {
+	if m != nil && m.Monadic != nil {
+		return *m.Monadic
+	}
+	return false
+}
+
 type LogicSelect struct {
 	Path             []string `protobuf:"bytes,1,rep,name=path" json:"path,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
@@ -818,7 +875,7 @@ type LogicSelect struct {
 func (m *LogicSelect) Reset()                    { *m = LogicSelect{} }
 func (m *LogicSelect) String() string            { return proto1.CompactTextString(m) }
 func (*LogicSelect) ProtoMessage()               {}
-func (*LogicSelect) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{11} }
+func (*LogicSelect) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{12} }
 
 func (m *LogicSelect) GetPath() []string {
 	if m != nil {
@@ -834,7 +891,7 @@ type LogicAugment struct {
 func (m *LogicAugment) Reset()                    { *m = LogicAugment{} }
 func (m *LogicAugment) String() string            { return proto1.CompactTextString(m) }
 func (*LogicAugment) ProtoMessage()               {}
-func (*LogicAugment) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{12} }
+func (*LogicAugment) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{13} }
 
 type LogicInvoke struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -843,7 +900,7 @@ type LogicInvoke struct {
 func (m *LogicInvoke) Reset()                    { *m = LogicInvoke{} }
 func (m *LogicInvoke) String() string            { return proto1.CompactTextString(m) }
 func (*LogicInvoke) ProtoMessage()               {}
-func (*LogicInvoke) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{13} }
+func (*LogicInvoke) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{14} }
 
 type LogicOperator struct {
 	Path             []string `protobuf:"bytes,1,rep,name=path" json:"path,omitempty"`
@@ -853,7 +910,7 @@ type LogicOperator struct {
 func (m *LogicOperator) Reset()                    { *m = LogicOperator{} }
 func (m *LogicOperator) String() string            { return proto1.CompactTextString(m) }
 func (*LogicOperator) ProtoMessage()               {}
-func (*LogicOperator) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{14} }
+func (*LogicOperator) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{15} }
 
 func (m *LogicOperator) GetPath() []string {
 	if m != nil {
@@ -871,7 +928,7 @@ type LogicPkgFunc struct {
 func (m *LogicPkgFunc) Reset()                    { *m = LogicPkgFunc{} }
 func (m *LogicPkgFunc) String() string            { return proto1.CompactTextString(m) }
 func (*LogicPkgFunc) ProtoMessage()               {}
-func (*LogicPkgFunc) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{15} }
+func (*LogicPkgFunc) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{16} }
 
 func (m *LogicPkgFunc) GetPkg() string {
 	if m != nil && m.Pkg != nil {
@@ -897,7 +954,7 @@ type Source struct {
 func (m *Source) Reset()                    { *m = Source{} }
 func (m *Source) String() string            { return proto1.CompactTextString(m) }
 func (*Source) ProtoMessage()               {}
-func (*Source) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{16} }
+func (*Source) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{17} }
 
 func (m *Source) GetFile() string {
 	if m != nil && m.File != nil {
@@ -930,7 +987,7 @@ type Position struct {
 func (m *Position) Reset()                    { *m = Position{} }
 func (m *Position) String() string            { return proto1.CompactTextString(m) }
 func (*Position) ProtoMessage()               {}
-func (*Position) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{17} }
+func (*Position) Descriptor() ([]byte, []int) { return fileDescriptorCircuit, []int{18} }
 
 func (m *Position) GetOffset() int64 {
 	if m != nil && m.Offset != nil {
@@ -965,6 +1022,7 @@ func init() {
 	proto1.RegisterType((*LogicEnter)(nil), "ko.circuit.LogicEnter")
 	proto1.RegisterType((*LogicLeave)(nil), "ko.circuit.LogicLeave")
 	proto1.RegisterType((*LogicNumber)(nil), "ko.circuit.LogicNumber")
+	proto1.RegisterType((*LogicSelectArg)(nil), "ko.circuit.LogicSelectArg")
 	proto1.RegisterType((*LogicSelect)(nil), "ko.circuit.LogicSelect")
 	proto1.RegisterType((*LogicAugment)(nil), "ko.circuit.LogicAugment")
 	proto1.RegisterType((*LogicInvoke)(nil), "ko.circuit.LogicInvoke")
@@ -1425,13 +1483,13 @@ func (m *Logic_Number) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *Logic_Select) MarshalTo(dAtA []byte) (int, error) {
+func (m *Logic_SelectArg) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.Select != nil {
+	if m.SelectArg != nil {
 		dAtA[i] = 0x22
 		i++
-		i = encodeVarintCircuit(dAtA, i, uint64(m.Select.Size()))
-		n10, err := m.Select.MarshalTo(dAtA[i:])
+		i = encodeVarintCircuit(dAtA, i, uint64(m.SelectArg.Size()))
+		n10, err := m.SelectArg.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1439,13 +1497,13 @@ func (m *Logic_Select) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *Logic_Augment) MarshalTo(dAtA []byte) (int, error) {
+func (m *Logic_Select) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.Augment != nil {
+	if m.Select != nil {
 		dAtA[i] = 0x2a
 		i++
-		i = encodeVarintCircuit(dAtA, i, uint64(m.Augment.Size()))
-		n11, err := m.Augment.MarshalTo(dAtA[i:])
+		i = encodeVarintCircuit(dAtA, i, uint64(m.Select.Size()))
+		n11, err := m.Select.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1453,13 +1511,13 @@ func (m *Logic_Augment) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *Logic_Invoke) MarshalTo(dAtA []byte) (int, error) {
+func (m *Logic_Augment) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.Invoke != nil {
+	if m.Augment != nil {
 		dAtA[i] = 0x32
 		i++
-		i = encodeVarintCircuit(dAtA, i, uint64(m.Invoke.Size()))
-		n12, err := m.Invoke.MarshalTo(dAtA[i:])
+		i = encodeVarintCircuit(dAtA, i, uint64(m.Augment.Size()))
+		n12, err := m.Augment.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1467,13 +1525,13 @@ func (m *Logic_Invoke) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *Logic_Operator) MarshalTo(dAtA []byte) (int, error) {
+func (m *Logic_Invoke) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.Operator != nil {
+	if m.Invoke != nil {
 		dAtA[i] = 0x3a
 		i++
-		i = encodeVarintCircuit(dAtA, i, uint64(m.Operator.Size()))
-		n13, err := m.Operator.MarshalTo(dAtA[i:])
+		i = encodeVarintCircuit(dAtA, i, uint64(m.Invoke.Size()))
+		n13, err := m.Invoke.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1481,17 +1539,31 @@ func (m *Logic_Operator) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *Logic_PkgFunc) MarshalTo(dAtA []byte) (int, error) {
+func (m *Logic_Operator) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.PkgFunc != nil {
+	if m.Operator != nil {
 		dAtA[i] = 0x42
 		i++
-		i = encodeVarintCircuit(dAtA, i, uint64(m.PkgFunc.Size()))
-		n14, err := m.PkgFunc.MarshalTo(dAtA[i:])
+		i = encodeVarintCircuit(dAtA, i, uint64(m.Operator.Size()))
+		n14, err := m.Operator.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n14
+	}
+	return i, nil
+}
+func (m *Logic_PkgFunc) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.PkgFunc != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintCircuit(dAtA, i, uint64(m.PkgFunc.Size()))
+		n15, err := m.PkgFunc.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
 	}
 	return i, nil
 }
@@ -1553,11 +1625,11 @@ func (m *LogicNumber) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Number != nil {
-		nn15, err := m.Number.MarshalTo(dAtA[i:])
+		nn16, err := m.Number.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn15
+		i += nn16
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1600,6 +1672,45 @@ func (m *LogicNumber_Float64) MarshalTo(dAtA []byte) (int, error) {
 	i += 8
 	return i, nil
 }
+func (m *LogicSelectArg) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LogicSelectArg) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Name == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintCircuit(dAtA, i, uint64(len(*m.Name)))
+		i += copy(dAtA[i:], *m.Name)
+	}
+	if m.Monadic != nil {
+		dAtA[i] = 0x10
+		i++
+		if *m.Monadic {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *LogicSelect) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1780,11 +1891,11 @@ func (m *Source) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintCircuit(dAtA, i, uint64(m.Start.Size()))
-		n16, err := m.Start.MarshalTo(dAtA[i:])
+		n17, err := m.Start.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n17
 	}
 	if m.End == nil {
 		return 0, new(proto1.RequiredNotSetError)
@@ -1792,11 +1903,11 @@ func (m *Source) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintCircuit(dAtA, i, uint64(m.End.Size()))
-		n17, err := m.End.MarshalTo(dAtA[i:])
+		n18, err := m.End.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
+		i += n18
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -2066,6 +2177,15 @@ func (m *Logic_Number) Size() (n int) {
 	}
 	return n
 }
+func (m *Logic_SelectArg) Size() (n int) {
+	var l int
+	_ = l
+	if m.SelectArg != nil {
+		l = m.SelectArg.Size()
+		n += 1 + l + sovCircuit(uint64(l))
+	}
+	return n
+}
 func (m *Logic_Select) Size() (n int) {
 	var l int
 	_ = l
@@ -2166,6 +2286,22 @@ func (m *LogicNumber_Float64) Size() (n int) {
 	n += 9
 	return n
 }
+func (m *LogicSelectArg) Size() (n int) {
+	var l int
+	_ = l
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovCircuit(uint64(l))
+	}
+	if m.Monadic != nil {
+		n += 2
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func (m *LogicSelect) Size() (n int) {
 	var l int
 	_ = l
@@ -3589,6 +3725,38 @@ func (m *Logic) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SelectArg", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCircuit
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCircuit
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &LogicSelectArg{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Logic = &Logic_SelectArg{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Select", wireType)
 			}
 			var msglen int
@@ -3619,7 +3787,7 @@ func (m *Logic) Unmarshal(dAtA []byte) error {
 			}
 			m.Logic = &Logic_Select{v}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Augment", wireType)
 			}
@@ -3651,7 +3819,7 @@ func (m *Logic) Unmarshal(dAtA []byte) error {
 			}
 			m.Logic = &Logic_Augment{v}
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Invoke", wireType)
 			}
@@ -3683,7 +3851,7 @@ func (m *Logic) Unmarshal(dAtA []byte) error {
 			}
 			m.Logic = &Logic_Invoke{v}
 			iNdEx = postIndex
-		case 7:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operator", wireType)
 			}
@@ -3715,7 +3883,7 @@ func (m *Logic) Unmarshal(dAtA []byte) error {
 			}
 			m.Logic = &Logic_Operator{v}
 			iNdEx = postIndex
-		case 8:
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PkgFunc", wireType)
 			}
@@ -3996,6 +4164,113 @@ func (m *LogicNumber) Unmarshal(dAtA []byte) error {
 			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LogicSelectArg) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCircuit
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LogicSelectArg: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LogicSelectArg: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCircuit
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCircuit
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(dAtA[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Monadic", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCircuit
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Monadic = &b
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCircuit(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCircuit
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
 	}
 
 	if iNdEx > l {
@@ -4777,55 +5052,58 @@ var (
 func init() { proto1.RegisterFile("circuit.proto", fileDescriptorCircuit) }
 
 var fileDescriptorCircuit = []byte{
-	// 798 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x55, 0xcd, 0x4e, 0x23, 0x47,
-	0x10, 0xf6, 0xfc, 0xf8, 0x87, 0x32, 0xe6, 0xa7, 0x41, 0xd0, 0xc9, 0xc1, 0x32, 0x93, 0x28, 0xb1,
-	0x90, 0xb0, 0x14, 0x8b, 0x24, 0x67, 0x08, 0x49, 0x8c, 0x84, 0x08, 0x6a, 0x6e, 0xb9, 0x0d, 0xe3,
-	0xf6, 0x30, 0xf2, 0x78, 0x7a, 0x34, 0x6e, 0x73, 0xd9, 0x17, 0xd9, 0xeb, 0xbe, 0xc0, 0x3e, 0xc7,
-	0x1e, 0xf7, 0x11, 0x56, 0xec, 0x71, 0x5f, 0x62, 0x55, 0xd5, 0x3d, 0x66, 0x2c, 0xe3, 0xdd, 0x5b,
-	0xd7, 0x7c, 0x5f, 0x75, 0x7d, 0x55, 0x5f, 0xb5, 0x0d, 0x9d, 0x28, 0x29, 0xa2, 0x45, 0xa2, 0x07,
-	0x79, 0xa1, 0xb4, 0x62, 0x30, 0x55, 0x03, 0xfb, 0x25, 0xf8, 0x1d, 0x7c, 0x21, 0x73, 0xc5, 0xce,
-	0xa0, 0x99, 0x87, 0xd1, 0x34, 0x8c, 0x25, 0x77, 0x7a, 0x5e, 0xbf, 0x3d, 0x3c, 0x18, 0xbc, 0xb0,
-	0x06, 0x77, 0x06, 0x12, 0x25, 0x27, 0xf8, 0x0b, 0x9a, 0xf6, 0x1b, 0x63, 0xe0, 0xe7, 0xa1, 0x7e,
-	0xe4, 0x4e, 0xcf, 0xed, 0x6f, 0x09, 0x3a, 0xb3, 0x9f, 0xc1, 0x9f, 0x2c, 0xb2, 0x88, 0xbb, 0x74,
-	0xd5, 0x5e, 0xf5, 0xaa, 0x7f, 0x16, 0x59, 0x24, 0x08, 0x0d, 0xde, 0xb9, 0xe0, 0x63, 0xc8, 0xf6,
-	0xc0, 0x1b, 0xab, 0x88, 0x3b, 0x3d, 0xa7, 0xbf, 0x25, 0xf0, 0xc8, 0xba, 0xe0, 0x26, 0x63, 0xde,
-	0xee, 0xb9, 0xfd, 0xf6, 0x70, 0xa7, 0x9a, 0x7e, 0x7d, 0x25, 0xdc, 0x64, 0xcc, 0x38, 0x34, 0xf3,
-	0x69, 0x7c, 0x87, 0x75, 0xb7, 0xa9, 0x6e, 0x19, 0xa2, 0x9c, 0x2c, 0x9c, 0x49, 0xde, 0x31, 0x72,
-	0xf0, 0x8c, 0x72, 0xe6, 0x5a, 0xe6, 0x7c, 0x67, 0x5d, 0xce, 0xbd, 0x96, 0xb9, 0x20, 0x94, 0x1d,
-	0x42, 0x5d, 0x66, 0x5a, 0x16, 0x7c, 0x97, 0x52, 0x4d, 0xc0, 0x4e, 0xc0, 0x0b, 0x8b, 0x98, 0xef,
-	0x51, 0xea, 0x6e, 0x35, 0xf5, 0xa2, 0x88, 0x05, 0x62, 0x28, 0x66, 0xa6, 0xb2, 0x70, 0x9c, 0x44,
-	0x7c, 0x9f, 0x5a, 0x28, 0x43, 0xbc, 0x32, 0x95, 0xe1, 0x93, 0xe4, 0xcc, 0x5c, 0x49, 0x01, 0x3b,
-	0x85, 0xc6, 0x5c, 0x2d, 0x8a, 0x48, 0xf2, 0x83, 0x9e, 0xd3, 0x6f, 0x0f, 0xd9, 0x8a, 0x20, 0x42,
-	0x84, 0x65, 0x04, 0x1c, 0xdc, 0xeb, 0x2b, 0x6c, 0x6a, 0x1c, 0xea, 0x90, 0x66, 0xec, 0x0b, 0x3a,
-	0x07, 0x5f, 0x1c, 0xf0, 0x51, 0xbd, 0x9d, 0x95, 0xb3, 0x71, 0x56, 0x28, 0x22, 0x7c, 0x90, 0x29,
-	0x77, 0xad, 0x08, 0x0c, 0x50, 0x44, 0x1c, 0xea, 0x47, 0x59, 0x70, 0x8f, 0x5a, 0x5b, 0x11, 0xf1,
-	0x2f, 0x21, 0xc2, 0x32, 0xd8, 0xaf, 0x50, 0x4f, 0x55, 0x9c, 0x44, 0xdc, 0xa7, 0x22, 0xfb, 0x55,
-	0xea, 0x0d, 0x02, 0xc2, 0xe0, 0x95, 0xce, 0xea, 0xdf, 0xeb, 0xac, 0x6a, 0x61, 0xc3, 0x4c, 0xad,
-	0x62, 0x21, 0x6d, 0x4f, 0x93, 0x3e, 0x9b, 0x5d, 0x39, 0x03, 0xef, 0xa2, 0x88, 0x97, 0xee, 0x3a,
-	0x15, 0x77, 0x99, 0x75, 0xd7, 0xb4, 0x47, 0xe7, 0x60, 0x00, 0x0d, 0xd3, 0x03, 0xee, 0x16, 0xfa,
-	0x67, 0x12, 0xc8, 0xae, 0xd7, 0xf8, 0xef, 0x3d, 0xa8, 0x53, 0x27, 0x6c, 0x50, 0x6e, 0x81, 0x43,
-	0x1d, 0x1c, 0xad, 0xf5, 0xfa, 0x37, 0xa2, 0xa3, 0x5a, 0xb9, 0x1f, 0x83, 0xd2, 0x62, 0x77, 0x03,
-	0xff, 0x06, 0x51, 0xe4, 0x1b, 0xf3, 0x7f, 0x83, 0x46, 0xb6, 0x98, 0x3d, 0xd0, 0xdc, 0x31, 0xe1,
-	0x78, 0x2d, 0xe1, 0x96, 0xe0, 0x51, 0x4d, 0x58, 0x22, 0xa6, 0xcc, 0x65, 0x2a, 0x23, 0xcd, 0xfd,
-	0x0d, 0x29, 0xf7, 0x04, 0x63, 0x8a, 0x21, 0xb2, 0x73, 0x68, 0x86, 0x8b, 0x78, 0x26, 0x33, 0x6d,
-	0x9d, 0xe0, 0x6b, 0x39, 0x17, 0x06, 0x1f, 0xd5, 0x44, 0x49, 0xc5, 0x42, 0x49, 0xf6, 0xa4, 0xa6,
-	0x92, 0x1c, 0x79, 0xad, 0xd0, 0x35, 0xc1, 0x58, 0xc8, 0x10, 0xd9, 0x9f, 0xd0, 0x52, 0xb9, 0x2c,
-	0x42, 0xad, 0x0a, 0xf2, 0xab, 0x3d, 0xfc, 0x61, 0x2d, 0xe9, 0x3f, 0x4b, 0x18, 0xd5, 0xc4, 0x92,
-	0x8c, 0x0a, 0xf3, 0x69, 0x8c, 0xcf, 0x9f, 0xb7, 0x36, 0x28, 0xbc, 0x33, 0x38, 0x2a, 0xb4, 0xd4,
-	0xcb, 0xa6, 0xdd, 0xc4, 0x60, 0x1b, 0xe0, 0xc5, 0x8d, 0x65, 0x44, 0xb3, 0x0e, 0xde, 0x40, 0xbb,
-	0x32, 0x48, 0x76, 0x08, 0xfe, 0x83, 0x52, 0x29, 0x19, 0xda, 0x1a, 0xd5, 0x04, 0x45, 0x8c, 0x43,
-	0x63, 0xae, 0x8b, 0x24, 0x8b, 0xc9, 0xb8, 0x2d, 0x9a, 0x1d, 0xc5, 0xec, 0x08, 0xea, 0x49, 0xa6,
-	0xff, 0x38, 0x27, 0x83, 0x3c, 0x74, 0x8e, 0x42, 0xf6, 0x23, 0x34, 0x27, 0xa9, 0x0a, 0x11, 0x41,
-	0x1f, 0x1c, 0xd4, 0x65, 0x3f, 0x5c, 0xb6, 0x4a, 0x57, 0x83, 0x13, 0x5b, 0xdc, 0x58, 0x52, 0xf9,
-	0x75, 0xf4, 0xca, 0x5f, 0xc7, 0x60, 0x07, 0xb6, 0xab, 0x0e, 0x04, 0x1d, 0x9b, 0x62, 0x86, 0x1b,
-	0xfc, 0x04, 0x9d, 0x95, 0xb1, 0xbd, 0x7a, 0xc7, 0xb9, 0xbd, 0xc3, 0xce, 0x08, 0xd7, 0x3c, 0x9f,
-	0x2e, 0xd7, 0x3c, 0x9f, 0xc6, 0xcb, 0x57, 0x64, 0xd7, 0x9c, 0x5e, 0x51, 0x0e, 0x0d, 0xf3, 0x0a,
-	0x09, 0x4d, 0xd2, 0xe5, 0x43, 0xc2, 0x33, 0x3b, 0x85, 0xfa, 0x5c, 0x87, 0x85, 0xa6, 0x94, 0xf6,
-	0xf0, 0x70, 0xe5, 0x1f, 0x40, 0xcd, 0x13, 0x9d, 0xa8, 0x4c, 0x18, 0x0a, 0xfb, 0x05, 0x3c, 0x99,
-	0x8d, 0xb9, 0xf7, 0x0d, 0x26, 0x12, 0x82, 0x5b, 0x68, 0x95, 0x1f, 0xd8, 0x11, 0x34, 0xd4, 0x64,
-	0x32, 0x97, 0x9a, 0xaa, 0x7a, 0xc2, 0x46, 0xa8, 0x25, 0x4d, 0x32, 0x49, 0x65, 0x3d, 0x41, 0x67,
-	0xe4, 0x46, 0x2a, 0x5d, 0xcc, 0x32, 0x2a, 0xe1, 0x09, 0x1b, 0x5d, 0x1e, 0x7f, 0x78, 0xee, 0x3a,
-	0x1f, 0x9f, 0xbb, 0xce, 0xa7, 0xe7, 0xae, 0xf3, 0xf6, 0x73, 0xb7, 0xf6, 0x7f, 0x9d, 0xfe, 0xd4,
-	0xbe, 0x06, 0x00, 0x00, 0xff, 0xff, 0x8b, 0x69, 0x0a, 0xd6, 0xe4, 0x06, 0x00, 0x00,
+	// 839 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x55, 0xcd, 0x6e, 0x23, 0x45,
+	0x10, 0xf6, 0xfc, 0xf8, 0xaf, 0x1c, 0x7b, 0xb3, 0xbd, 0x51, 0xd2, 0xec, 0xc1, 0xf2, 0x0e, 0x08,
+	0xac, 0x95, 0xd6, 0x12, 0x56, 0x80, 0x03, 0x12, 0x92, 0xc3, 0x02, 0x8e, 0xb4, 0x5a, 0xa2, 0xce,
+	0x8d, 0x0b, 0x9a, 0x8c, 0xdb, 0x93, 0x91, 0xc7, 0xd3, 0xa3, 0x99, 0x76, 0x2e, 0xbc, 0x08, 0x57,
+	0xde, 0x86, 0x23, 0x8f, 0x80, 0xc2, 0x31, 0x2f, 0x81, 0xaa, 0xba, 0xc7, 0x19, 0xcb, 0x36, 0xdc,
+	0xba, 0xa6, 0xbe, 0xaf, 0xeb, 0xab, 0xfe, 0xaa, 0x7b, 0xa0, 0x1f, 0x25, 0x45, 0xb4, 0x49, 0xf4,
+	0x24, 0x2f, 0x94, 0x56, 0x0c, 0x56, 0x6a, 0x62, 0xbf, 0x04, 0x5f, 0x81, 0x2f, 0x64, 0xae, 0xd8,
+	0x3b, 0x68, 0xe7, 0x61, 0xb4, 0x0a, 0x63, 0xc9, 0x9d, 0x91, 0x37, 0xee, 0x4d, 0x5f, 0x4d, 0x9e,
+	0x51, 0x93, 0x1b, 0x93, 0x12, 0x15, 0x26, 0xf8, 0x1e, 0xda, 0xf6, 0x1b, 0x63, 0xe0, 0xe7, 0xa1,
+	0xbe, 0xe7, 0xce, 0xc8, 0x1d, 0x77, 0x05, 0xad, 0xd9, 0x67, 0xe0, 0x2f, 0x37, 0x59, 0xc4, 0x5d,
+	0xda, 0xea, 0xb4, 0xbe, 0xd5, 0x8f, 0x9b, 0x2c, 0x12, 0x94, 0x0d, 0xfe, 0x70, 0xc1, 0xc7, 0x90,
+	0x9d, 0x82, 0xb7, 0x50, 0x11, 0x77, 0x46, 0xce, 0xb8, 0x2b, 0x70, 0xc9, 0x86, 0xe0, 0x26, 0x0b,
+	0xde, 0x1b, 0xb9, 0xe3, 0xde, 0x74, 0x50, 0xa7, 0x5f, 0xbf, 0x17, 0x6e, 0xb2, 0x60, 0x1c, 0xda,
+	0xf9, 0x2a, 0xbe, 0xc1, 0xba, 0x27, 0x54, 0xb7, 0x0a, 0x51, 0x4e, 0x16, 0xae, 0x25, 0xef, 0x1b,
+	0x39, 0xb8, 0x46, 0x39, 0xa5, 0x96, 0x39, 0x1f, 0xec, 0xcb, 0xb9, 0xd5, 0x32, 0x17, 0x94, 0x65,
+	0x67, 0xd0, 0x94, 0x99, 0x96, 0x05, 0x7f, 0x41, 0x54, 0x13, 0xb0, 0x37, 0xe0, 0x85, 0x45, 0xcc,
+	0x4f, 0x89, 0xfa, 0xa2, 0x4e, 0x9d, 0x15, 0xb1, 0xc0, 0x1c, 0x8a, 0x59, 0xab, 0x2c, 0x5c, 0x24,
+	0x11, 0x7f, 0x49, 0x2d, 0x54, 0x21, 0x6e, 0x99, 0xca, 0xf0, 0x41, 0x72, 0x66, 0xb6, 0xa4, 0x80,
+	0xbd, 0x85, 0x56, 0xa9, 0x36, 0x45, 0x24, 0xf9, 0xab, 0x91, 0x33, 0xee, 0x4d, 0xd9, 0x8e, 0x20,
+	0xca, 0x08, 0x8b, 0x08, 0x38, 0xb8, 0xd7, 0xef, 0xb1, 0xa9, 0x45, 0xa8, 0x43, 0x3a, 0x63, 0x5f,
+	0xd0, 0x3a, 0x78, 0x72, 0xc0, 0x47, 0xf5, 0xf6, 0xac, 0x9c, 0xa3, 0x67, 0x85, 0x22, 0xc2, 0x3b,
+	0x99, 0x72, 0xd7, 0x8a, 0xc0, 0x00, 0x45, 0xc4, 0xa1, 0xbe, 0x97, 0x05, 0xf7, 0xa8, 0xb5, 0x1d,
+	0x11, 0x3f, 0x51, 0x46, 0x58, 0x04, 0xfb, 0x02, 0x9a, 0xa9, 0x8a, 0x93, 0x88, 0xfb, 0x54, 0xe4,
+	0x65, 0x1d, 0xfa, 0x01, 0x13, 0xc2, 0xe4, 0x6b, 0x9d, 0x35, 0xff, 0xaf, 0xb3, 0xba, 0x85, 0x2d,
+	0x73, 0x6a, 0x35, 0x0b, 0x69, 0x7a, 0xda, 0xf4, 0xd9, 0xcc, 0xca, 0x3b, 0xf0, 0x66, 0x45, 0xbc,
+	0x75, 0xd7, 0xa9, 0xb9, 0xcb, 0xac, 0xbb, 0xa6, 0x3d, 0x5a, 0x07, 0x13, 0x68, 0x99, 0x1e, 0x70,
+	0xb6, 0xd0, 0x3f, 0x43, 0x20, 0xbb, 0x0e, 0xe1, 0x9f, 0x3c, 0x68, 0x52, 0x27, 0x6c, 0x52, 0x4d,
+	0x81, 0x43, 0x1d, 0x9c, 0xef, 0xf5, 0xfa, 0x03, 0x66, 0xe7, 0x8d, 0x6a, 0x3e, 0x26, 0x95, 0xc5,
+	0xee, 0x11, 0xfc, 0x07, 0xcc, 0x22, 0xde, 0x98, 0xff, 0x25, 0xb4, 0xb2, 0xcd, 0xfa, 0x8e, 0xce,
+	0x1d, 0x09, 0x17, 0x7b, 0x84, 0x8f, 0x94, 0x9e, 0x37, 0x84, 0x05, 0xb2, 0x6f, 0x01, 0x4a, 0x99,
+	0xca, 0x48, 0xff, 0x8a, 0x9d, 0xf8, 0x44, 0x7b, 0xbd, 0x47, 0xbb, 0x25, 0xc8, 0xac, 0x88, 0xe7,
+	0x0d, 0xd1, 0x2d, 0xab, 0x00, 0xeb, 0x99, 0xc0, 0x5a, 0x72, 0x71, 0x84, 0x88, 0xf5, 0x0c, 0x90,
+	0x5d, 0x42, 0x3b, 0xdc, 0xc4, 0x6b, 0x99, 0x69, 0x72, 0xa6, 0x37, 0xe5, 0x7b, 0x9c, 0x99, 0xc9,
+	0xcf, 0x1b, 0xa2, 0x82, 0x62, 0xa1, 0x24, 0x7b, 0x50, 0x2b, 0x49, 0xbe, 0x1d, 0x2a, 0x74, 0x4d,
+	0x69, 0x2c, 0x64, 0x80, 0xec, 0x1b, 0xe8, 0xa8, 0x5c, 0x16, 0xa1, 0x56, 0x05, 0xef, 0x10, 0xe9,
+	0x93, 0x3d, 0xd2, 0xcf, 0x16, 0x30, 0x6f, 0x88, 0x2d, 0x18, 0x15, 0xe6, 0xab, 0x18, 0xdf, 0x0e,
+	0xde, 0x3d, 0xa2, 0xf0, 0xc6, 0xe4, 0x51, 0xa1, 0x85, 0x5e, 0xb5, 0xed, 0x18, 0x07, 0x27, 0x00,
+	0xcf, 0x56, 0x6e, 0x23, 0x32, 0x2a, 0xf8, 0x0d, 0x7a, 0x35, 0x17, 0xd8, 0x19, 0xf8, 0x77, 0x4a,
+	0xa5, 0x34, 0x0d, 0x9d, 0x79, 0x43, 0x50, 0xc4, 0x38, 0xb4, 0x4a, 0x5d, 0x24, 0x59, 0x4c, 0xae,
+	0x77, 0xe9, 0xec, 0x28, 0x66, 0xe7, 0xd0, 0x4c, 0x32, 0xfd, 0xf5, 0x25, 0xb9, 0xeb, 0xa1, 0xed,
+	0x14, 0xb2, 0xd7, 0xd0, 0x5e, 0xa6, 0x2a, 0xc4, 0x0c, 0x1a, 0xe8, 0xa0, 0x2e, 0xfb, 0xe1, 0xaa,
+	0x53, 0x8d, 0x44, 0xf0, 0x1d, 0x0c, 0x76, 0xbd, 0x3c, 0x38, 0xf0, 0xb5, 0xf7, 0x06, 0xcb, 0x77,
+	0xb6, 0xef, 0x4d, 0xf0, 0xc6, 0x8a, 0x37, 0xfc, 0xda, 0xd3, 0xec, 0x55, 0x4f, 0x73, 0x30, 0x80,
+	0x93, 0xba, 0x83, 0x41, 0xdf, 0x52, 0x8c, 0x39, 0xc1, 0xa7, 0xd0, 0xdf, 0x39, 0xf6, 0x83, 0x7b,
+	0x5c, 0xda, 0x3d, 0xec, 0x19, 0xe3, 0x1d, 0xcb, 0x57, 0xdb, 0x3b, 0x96, 0xaf, 0xe2, 0xed, 0x15,
+	0xb6, 0x77, 0x8c, 0xae, 0x70, 0x0e, 0x2d, 0xf3, 0x04, 0x50, 0x36, 0x49, 0xb7, 0x4d, 0xe1, 0x9a,
+	0xbd, 0x85, 0x66, 0xa9, 0xc3, 0x42, 0x13, 0xa5, 0x37, 0x3d, 0xdb, 0xf9, 0xfd, 0xa8, 0x32, 0xd1,
+	0x89, 0xca, 0x84, 0x81, 0xb0, 0xcf, 0xc1, 0x93, 0xd9, 0x82, 0x7b, 0xff, 0x81, 0x44, 0x40, 0xf0,
+	0x11, 0x3a, 0xd5, 0x07, 0x76, 0x0e, 0x2d, 0xb5, 0x5c, 0x96, 0x52, 0x53, 0x55, 0x4f, 0xd8, 0x08,
+	0xb5, 0xa4, 0x49, 0x26, 0xa9, 0xac, 0x27, 0x68, 0x8d, 0xd8, 0x48, 0xa5, 0x9b, 0x75, 0x46, 0x25,
+	0x3c, 0x61, 0xa3, 0xab, 0x8b, 0x3f, 0x1f, 0x87, 0xce, 0x5f, 0x8f, 0x43, 0xe7, 0xef, 0xc7, 0xa1,
+	0xf3, 0xfb, 0x3f, 0xc3, 0xc6, 0x2f, 0x4d, 0xfa, 0xa3, 0xfe, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x8c,
+	0xac, 0xc8, 0x08, 0x61, 0x07, 0x00, 0x00,
 }

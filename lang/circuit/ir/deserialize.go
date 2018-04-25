@@ -134,6 +134,11 @@ func DeserializeLogic(pbLogic *pb.Logic) Logic {
 		return Enter{}
 	case *pb.Logic_Leave:
 		return Leave{}
+	case *pb.Logic_SelectArg:
+		return SelectArg{
+			Name:    u.SelectArg.GetName(),
+			Monadic: u.SelectArg.GetMonadic(),
+		}
 	case *pb.Logic_Select:
 		return Select{Path: u.Select.Path}
 	case *pb.Logic_Augment:
