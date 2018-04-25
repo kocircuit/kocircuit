@@ -39,12 +39,13 @@ func (m EvalTranslateMacro) Doc() string {
 		Combine(ctx, arg, stepResidues) -> (returns, effect)
 	)
 
+* arg is a user object
 * ctx is a user object
 * effect is a user object
-* step
-* knot : XXX
-* literal : XXX
-* stepResidue is a sequence of step residue 4-tuples: (step, returned, effect, panicked)
+* step is (label, XXX)
+* knot is a sequence of (name, arg) pairs
+* literal is XXX
+* stepResidue is a sequence of (step, returned, effect, panic)
 
 `
 }
