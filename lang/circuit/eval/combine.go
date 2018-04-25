@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -62,17 +61,7 @@ func (m *evalFixedFuncMacro) Doc() string {
 func (m *evalFixedFuncMacro) Invoke(span *Span, arg Arg) (Return, Effect, error) {
 	if arg == nil {
 		return m.Parent.EvalSeq(span, m.Func, nil)
+	} else {
+		return m.Parent.EvalSeq(span, m.Func, arg)
 	}
-	// relabel no-label fields in arg (Knot) as the monadic field of m.Func
-	relabel := Knot{}
-	for _, f := range arg.(Knot) {
-		if f.Name == NoLabel {
-			g := f
-			g.Name = m.Func.Monadic
-			relabel = append(relabel, g)
-		} else {
-			relabel = append(relabel, f)
-		}
-	}
-	return m.Parent.EvalSeq(span, m.Func, relabel)
 }

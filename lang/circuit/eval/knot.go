@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -32,7 +33,19 @@ func (v Knot) String() string { return Sprint(v) }
 
 func (v Knot) IsEmpty() bool { return len(v) == 0 }
 
-// Select implements Shape.Select.
+// SelectArg implements Shape.Select. For eval_test.go only.
+func (v Knot) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	if monadic {
+		if s, eff, err := v.Select(span, []string{NoLabel}); err != nil {
+			return nil, nil, err
+		} else if s != (Empty{}) {
+			return s, eff, nil
+		}
+	}
+	return v.Select(span, []string{name})
+}
+
+// Select implements Shape.Select. For eval_test.go only.
 func (v Knot) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return v, nil, nil

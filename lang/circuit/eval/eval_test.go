@@ -71,8 +71,8 @@ var testShapeFlow = []struct {
 			return: x()
 		}`,
 		Result: Knot{
-			{Name: "etc", Shape: String{Value_: "a"}},
-			{Name: "etc", Shape: String{Value_: "b"}},
+			{Name: "", Shape: String{Value_: "a"}},
+			{Name: "", Shape: String{Value_: "b"}},
 		},
 	},
 	{
@@ -175,6 +175,10 @@ type testUnknown struct {
 }
 
 func (u testUnknown) String() string { return fmt.Sprintf("unknown(%v)", u.Payload) }
+
+func (u testUnknown) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return u.Select(span, []string{name})
+}
 
 func (u testUnknown) Select(span *Span, path Path) (Shape, Effect, error) {
 	return testUnknown{

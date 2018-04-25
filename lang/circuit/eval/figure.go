@@ -11,6 +11,10 @@ type Empty struct{}
 
 func (e Empty) String() string { return Sprint(e) }
 
+func (e Empty) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into empty")
+}
+
 func (e Empty) Select(span *Span, path Path) (Shape, Effect, error) {
 	return e, nil, nil
 }
@@ -26,6 +30,10 @@ func (e Empty) Invoke(span *Span) (Shape, Effect, error) {
 type Integer struct{ Value_ int64 }
 
 func (v Integer) String() string { return Sprint(v) }
+
+func (v Integer) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into integer")
+}
 
 func (v Integer) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) > 0 {
@@ -46,6 +54,10 @@ type Float struct{ Value_ float64 }
 
 func (v Float) String() string { return Sprint(v) }
 
+func (v Float) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into float")
+}
+
 func (v Float) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) > 0 {
 		return nil, nil, span.Errorf(nil, "selecting %v into float", path)
@@ -65,6 +77,10 @@ type Bool struct{ Value_ bool }
 
 func (v Bool) String() string { return Sprint(v) }
 
+func (v Bool) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into bool")
+}
+
 func (v Bool) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) > 0 {
 		return nil, nil, span.Errorf(nil, "selecting %v into bool", path)
@@ -83,6 +99,10 @@ func (v Bool) Invoke(span *Span) (Shape, Effect, error) {
 type String struct{ Value_ string }
 
 func (v String) String() string { return Sprint(v) }
+
+func (v String) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "selecting argument into string")
+}
 
 func (v String) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) > 0 {

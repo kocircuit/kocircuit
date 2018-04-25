@@ -113,6 +113,14 @@ type evalFlow struct {
 	Frame  *Span // span during when this flow was created
 }
 
+func (f evalFlow) SelectArg(span *Span, name string, monadic bool) (Flow, error) {
+	returns, effect, err := f.Shape.SelectArg(span, name, monadic)
+	if err != nil {
+		return nil, err
+	}
+	return f.env.newFlow(span, returns, effect), nil
+}
+
 func (f evalFlow) Select(span *Span, path []string) (Flow, error) {
 	if len(path) == 0 {
 		return f, nil
