@@ -191,6 +191,20 @@ func (x Select) String() string {
 	return fmt.Sprintf("SELECT(%s)", strings.Join(x.Path, "."))
 }
 
+// Field <MainFlowLabel> carries the function argument structure.
+type SelectArg struct {
+	Name    string `ko:"name=name"`
+	Monadic bool   `ko:"monadic=true"`
+}
+
+func (x SelectArg) String() string {
+	monadic := ""
+	if x.Monadic {
+		monadic = "?"
+	}
+	return fmt.Sprintf("ARG(%s%s)", x.Name, monadic)
+}
+
 // Augment attaches to a lambda, in field <MainFlowLabel>, all other fields.
 type Augment struct{}
 

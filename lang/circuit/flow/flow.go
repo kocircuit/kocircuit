@@ -12,10 +12,11 @@ type Envelope interface {
 }
 
 type Flow interface {
-	Select(*Span, []string) (Flow, error)      // Select ...
-	Augment(*Span, []GatherFlow) (Flow, error) // Augment ...
-	Invoke(*Span) (Flow, error)                // Invoke ...
-	Leave(*Span) (Flow, error)                 // Leave ...
+	SelectArg(*Span, string, bool) (Flow, error) // SelectArg ...
+	Select(*Span, []string) (Flow, error)        // Select ...
+	Augment(*Span, []GatherFlow) (Flow, error)   // Augment ...
+	Invoke(*Span) (Flow, error)                  // Invoke ...
+	Leave(*Span) (Flow, error)                   // Leave ...
 }
 
 type GatherFlow struct {
@@ -23,8 +24,8 @@ type GatherFlow struct {
 	Flow  Flow
 }
 
-func PlaySeqFlow(frame *Span, f *Func, env Envelope) (Flow, []Flow, error) {
-	p := &flowPlayer{frame: RefineFunc(frame, f), fun: f, env: env}
+func PlaySeqFlow(span *Span, f *Func, env Envelope) (Flow, []Flow, error) {
+	p := &flowPlayer{span: RefineFunc(span, f), fun: f, env: env}
 	stepReturn, err := playSeq(f, p)
 	if err != nil {
 		return nil, nil, err
@@ -32,8 +33,8 @@ func PlaySeqFlow(frame *Span, f *Func, env Envelope) (Flow, []Flow, error) {
 	return stepReturnFlow(f, stepReturn)
 }
 
-func PlayParFlow(frame *Span, f *Func, env Envelope) (Flow, []Flow, error) {
-	p := &flowPlayer{frame: RefineFunc(frame, f), fun: f, env: env}
+func PlayParFlow(span *Span, f *Func, env Envelope) (Flow, []Flow, error) {
+	p := &flowPlayer{span: RefineFunc(span, f), fun: f, env: env}
 	stepReturn, err := playPar(f, p)
 	if err != nil {
 		return nil, nil, err

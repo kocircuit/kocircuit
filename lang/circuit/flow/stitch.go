@@ -7,37 +7,39 @@ import (
 )
 
 type flowPlayer struct {
-	env   Envelope
-	fun   *Func
-	frame *Span
+	env  Envelope
+	fun  *Func
+	span *Span
 }
 
 func (p *flowPlayer) PlayStep(step *Step, gather []GatherEdge) (returns Edge, err error) {
 	// Put the step we are in on the stack. Remove it at the end of this function.
-	frame := RefineStep(p.frame, step)
+	span := RefineStep(p.span, step)
 	// Convert edges into flows.
 	mainFlow, augmentedFlow, err := splitEdgeFlow(gather)
 	if err != nil {
-		return nil, p.frame.Errorf(err, "splitting flow")
+		return nil, p.span.Errorf(err, "splitting flow")
 	}
 	// Perform logic-dependent flow manipulation
 	switch u := step.Logic.(type) {
 	case Enter:
-		return p.env.Enter(frame)
+		return p.env.Enter(span)
 	case Leave:
-		return mainFlow.Leave(frame)
+		return mainFlow.Leave(span)
 	case Number:
-		return p.env.Make(frame, u.Value)
+		return p.env.Make(span, u.Value)
 	case Operator:
-		return p.env.MakeOp(frame, u.Path)
+		return p.env.MakeOp(span, u.Path)
 	case PkgFunc:
-		return p.env.MakePkgFunc(frame, u.Pkg, u.Func)
+		return p.env.MakePkgFunc(span, u.Pkg, u.Func)
+	case SelectArg:
+		return mainFlow.SelectArg(span, u.Name, u.Monadic)
 	case Select:
-		return mainFlow.Select(frame, u.Path)
+		return mainFlow.Select(span, u.Path)
 	case Augment:
-		return mainFlow.Augment(frame, augmentedFlow)
+		return mainFlow.Augment(span, augmentedFlow)
 	case Invoke:
-		return mainFlow.Invoke(frame)
+		return mainFlow.Invoke(span)
 	}
 	panic("unknown logic")
 }
