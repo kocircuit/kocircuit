@@ -11,8 +11,8 @@ type Empty struct{}
 
 func (e Empty) String() string { return Sprint(e) }
 
-func (e Empty) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into empty")
+func (e Empty) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to empty")
 }
 
 func (e Empty) Select(span *Span, path Path) (Shape, Effect, error) {
@@ -31,8 +31,8 @@ type Integer struct{ Value_ int64 }
 
 func (v Integer) String() string { return Sprint(v) }
 
-func (v Integer) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into integer")
+func (v Integer) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to integer")
 }
 
 func (v Integer) Select(span *Span, path Path) (Shape, Effect, error) {
@@ -54,8 +54,8 @@ type Float struct{ Value_ float64 }
 
 func (v Float) String() string { return Sprint(v) }
 
-func (v Float) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into float")
+func (v Float) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to float")
 }
 
 func (v Float) Select(span *Span, path Path) (Shape, Effect, error) {
@@ -77,8 +77,8 @@ type Bool struct{ Value_ bool }
 
 func (v Bool) String() string { return Sprint(v) }
 
-func (v Bool) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into bool")
+func (v Bool) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to bool")
 }
 
 func (v Bool) Select(span *Span, path Path) (Shape, Effect, error) {
@@ -100,8 +100,8 @@ type String struct{ Value_ string }
 
 func (v String) String() string { return Sprint(v) }
 
-func (v String) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into string")
+func (v String) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to string")
 }
 
 func (v String) Select(span *Span, path Path) (Shape, Effect, error) {

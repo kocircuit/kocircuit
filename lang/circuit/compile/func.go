@@ -89,7 +89,7 @@ func (g *grafting) graftArgs(parsed Design) error {
 			Step{
 				Label:  fmt.Sprintf("0_enter_%s", factor.Name.Name()),
 				Gather: []*Gather{{Field: MainFlowLabel, Step: g.in}},
-				Logic:  SelectArg{Name: factor.Name.Name(), Monadic: factor.Monadic},
+				Logic:  Link{Name: factor.Name.Name(), Monadic: factor.Monadic},
 				Syntax: parsed,
 			},
 		)

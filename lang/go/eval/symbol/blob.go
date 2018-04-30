@@ -77,8 +77,8 @@ func (blob *BlobSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	}
 }
 
-func (blob *BlobSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into blob")
+func (blob *BlobSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to blob")
 }
 
 func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

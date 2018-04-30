@@ -125,8 +125,8 @@ func (ms *MapSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(ms)
 }
 
-func (ms *MapSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into map")
+func (ms *MapSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to map")
 }
 
 func (ms *MapSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

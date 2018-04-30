@@ -9,22 +9,22 @@ import (
 )
 
 func init() {
-	RegisterEvalMacro("Translate", new(EvalTranslateMacro))
+	RegisterEvalMacro("Boot", new(EvalBootMacro))
 }
 
-type EvalTranslateMacro struct{}
+type EvalBootMacro struct{}
 
-func (m EvalTranslateMacro) MacroID() string { return m.Help() }
+func (m EvalBootMacro) MacroID() string { return m.Help() }
 
-func (m EvalTranslateMacro) Label() string { return "translate" }
+func (m EvalBootMacro) Label() string { return "boot" }
 
-func (m EvalTranslateMacro) MacroSheathString() *string { return PtrString("Translate") }
+func (m EvalBootMacro) MacroSheathString() *string { return PtrString("Boot") }
 
-func (m EvalTranslateMacro) Help() string {
-	return "Translate(translator, func, ctx, arg) -> (returns, effect)"
+func (m EvalBootMacro) Help() string {
+	return "Boot(translator, func, ctx, arg) -> (returns, effect)"
 }
 
-func (m EvalTranslateMacro) Doc() string {
+func (m EvalBootMacro) Doc() string {
 	return `XXX
 
 * translator is a structure of the form, where "->" indicates the return type of a variety:
@@ -33,7 +33,7 @@ func (m EvalTranslateMacro) Doc() string {
 		Enter(step, ctx, arg) -> (returns, effect)
 		Leave(step, ctx, arg) -> (returns, effect)
 		Figure(step, ctx, literal) -> (returns, effect)
-		SelectArg(step, ctx, arg, label, monadic) -> (returns, effect)
+		Link(step, ctx, arg, label, monadic) -> (returns, effect)
 		Select(step, ctx, arg, path) -> (returns, effect)
 		Augment(step, ctx, arg, fields) -> (returns, effect)
 		Invoke(step, ctx, arg) -> (returns, effect)
@@ -52,7 +52,7 @@ func (m EvalTranslateMacro) Doc() string {
 `
 }
 
-func (EvalTranslateMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+func (EvalBootMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	// extract translator
 	translator, err := ExtractTranslator(span, a.Walk("translator"))

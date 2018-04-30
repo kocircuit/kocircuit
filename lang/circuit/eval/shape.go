@@ -8,7 +8,7 @@ import (
 type Shape interface {
 	String() string
 	Select(*Span, Path) (Shape, Effect, error)
-	SelectArg(*Span, string, bool) (Shape, Effect, error)
+	Link(*Span, string, bool) (Shape, Effect, error)
 	Augment(*Span, Knot) (Shape, Effect, error)
 	Invoke(*Span) (Shape, Effect, error)
 }

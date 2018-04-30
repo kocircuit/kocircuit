@@ -124,8 +124,8 @@ func (basic BasicSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(basic)
 }
 
-func (basic BasicSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into basic")
+func (basic BasicSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to basic")
 }
 
 func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

@@ -32,8 +32,8 @@ func (p *flowPlayer) PlayStep(step *Step, gather []GatherEdge) (returns Edge, er
 		return p.env.MakeOp(span, u.Path)
 	case PkgFunc:
 		return p.env.MakePkgFunc(span, u.Pkg, u.Func)
-	case SelectArg:
-		return mainFlow.SelectArg(span, u.Name, u.Monadic)
+	case Link:
+		return mainFlow.Link(span, u.Name, u.Monadic)
 	case Select:
 		return mainFlow.Select(span, u.Path)
 	case Augment:

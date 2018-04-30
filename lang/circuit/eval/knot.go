@@ -33,8 +33,8 @@ func (v Knot) String() string { return Sprint(v) }
 
 func (v Knot) IsEmpty() bool { return len(v) == 0 }
 
-// SelectArg implements Shape.Select. For eval_test.go only.
-func (v Knot) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+// Link implements Shape.Select. For eval_test.go only.
+func (v Knot) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
 	if monadic {
 		if s, eff, err := v.Select(span, []string{NoLabel}); err != nil {
 			return nil, nil, err

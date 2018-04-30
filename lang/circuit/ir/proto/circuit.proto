@@ -57,7 +57,7 @@ message Logic {
 		LogicEnter enter = 1;
 		LogicLeave leave = 2;
 		LogicNumber number = 3;
-		LogicSelectArg select_arg = 4;
+		LogicLink link = 4;
 		LogicSelect select = 5;
 		LogicAugment augment = 6;
 		LogicInvoke invoke = 7;
@@ -79,7 +79,7 @@ message LogicNumber {
 	}
 }
 
-message LogicSelectArg {
+message LogicLink {
 	required string name = 1;
 	optional bool monadic = 2;
 }

@@ -176,7 +176,7 @@ type testUnknown struct {
 
 func (u testUnknown) String() string { return fmt.Sprintf("unknown(%v)", u.Payload) }
 
-func (u testUnknown) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (u testUnknown) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
 	return u.Select(span, []string{name})
 }
 

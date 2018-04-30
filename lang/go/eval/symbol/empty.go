@@ -40,8 +40,8 @@ func (empty EmptySymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return EmptySeries
 }
 
-func (empty EmptySymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into empty")
+func (empty EmptySymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to empty")
 }
 
 func (empty EmptySymbol) Select(span *Span, path Path) (Shape, Effect, error) {

@@ -6,14 +6,14 @@ import (
 )
 
 type Translator struct {
-	Enter     *VarietySymbol `ko:"name=Enter"`
-	Leave     *VarietySymbol `ko:"name=Leave"`
-	Figure    *VarietySymbol `ko:"name=Figure"`
-	SelectArg *VarietySymbol `ko:"name=SelectArg"`
-	Select    *VarietySymbol `ko:"name=Select"`
-	Augment   *VarietySymbol `ko:"name=Augment"`
-	Invoke    *VarietySymbol `ko:"name=Invoke"`
-	Combine   *VarietySymbol `ko:"name=Combine"`
+	Enter   *VarietySymbol `ko:"name=Enter"`
+	Leave   *VarietySymbol `ko:"name=Leave"`
+	Literal *VarietySymbol `ko:"name=Literal"`
+	Link    *VarietySymbol `ko:"name=Link"`
+	Select  *VarietySymbol `ko:"name=Select"`
+	Augment *VarietySymbol `ko:"name=Augment"`
+	Invoke  *VarietySymbol `ko:"name=Invoke"`
+	Combine *VarietySymbol `ko:"name=Combine"`
 }
 
 func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
@@ -28,11 +28,11 @@ func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
 	if t.Leave, ok = arg.Walk("Leave").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Leave must be a variety, got %v", arg.Walk("Leave"))
 	}
-	if t.Figure, ok = arg.Walk("Figure").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Figure must be a variety, got %v", arg.Walk("Figure"))
+	if t.Literal, ok = arg.Walk("Literal").(*VarietySymbol); !ok {
+		return nil, span.Errorf(nil, "translator.Literal must be a variety, got %v", arg.Walk("Literal"))
 	}
-	if t.SelectArg, ok = arg.Walk("SelectArg").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.SelectArg must be a variety, got %v", arg.Walk("SelectArg"))
+	if t.Link, ok = arg.Walk("Link").(*VarietySymbol); !ok {
+		return nil, span.Errorf(nil, "translator.Link must be a variety, got %v", arg.Walk("Link"))
 	}
 	if t.Select, ok = arg.Walk("Select").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Select must be a variety, got %v", arg.Walk("Select"))

@@ -192,12 +192,12 @@ func (x Select) String() string {
 }
 
 // Field <MainFlowLabel> carries the function argument structure.
-type SelectArg struct {
+type Link struct {
 	Name    string `ko:"name=name"`
 	Monadic bool   `ko:"monadic=true"`
 }
 
-func (x SelectArg) String() string {
+func (x Link) String() string {
 	monadic := ""
 	if x.Monadic {
 		monadic = "?"

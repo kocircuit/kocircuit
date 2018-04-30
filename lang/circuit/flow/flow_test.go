@@ -146,7 +146,7 @@ func (f *testFlow) MakeOp(frame *Span, ref []string) (Flow, error) {
 	return g, nil
 }
 
-func (f *testFlow) SelectArg(frame *Span, name string, monadic bool) (Flow, error) {
+func (f *testFlow) Link(frame *Span, name string, monadic bool) (Flow, error) {
 	panic("o")
 }
 

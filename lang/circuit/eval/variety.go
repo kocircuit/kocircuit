@@ -15,8 +15,8 @@ func (v Variety) Doc() string { return Sprint(v) }
 
 func (v Variety) String() string { return Sprint(v) }
 
-func (v Variety) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into variety")
+func (v Variety) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to variety")
 }
 
 func (v Variety) Select(span *Span, path Path) (Shape, Effect, error) {

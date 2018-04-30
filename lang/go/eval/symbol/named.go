@@ -53,8 +53,8 @@ func (named *NamedSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(named)
 }
 
-func (named *NamedSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "selecting argument into named")
+func (named *NamedSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return nil, nil, span.Errorf(nil, "linking argument to named")
 }
 
 func (named *NamedSymbol) Select(span *Span, path Path) (Shape, Effect, error) {

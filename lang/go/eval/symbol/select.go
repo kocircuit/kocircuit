@@ -23,7 +23,7 @@ func (ss *StructSymbol) SelectMonadic() Symbol {
 	return EmptySymbol{}
 }
 
-func (ss *StructSymbol) SelectArg(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (ss *StructSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
 	if found := ss.FindName(name); found != nil {
 		return found.Value, nil, nil
 	} else if monadic {
