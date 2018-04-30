@@ -16,7 +16,7 @@ import (
 // *VarietySymbol,
 // *BlobSymbol
 type Symbol interface {
-	Shape   // String, Select, Augment, Invoke
+	Shape   // String, Select, Augment, Invoke, Link
 	Splayer // Splay
 	Type() Type
 	Hash(*Span) ID

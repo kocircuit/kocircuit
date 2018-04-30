@@ -6,10 +6,11 @@ import (
 )
 
 type BootStepCtx struct {
-	Pkg  string `ko:"name=pkg"`
-	Func string `ko:"name=func"`
-	Step string `ko:"name=step"`
-	Ctx  Symbol `ko:"name=ctx"` // user ctx object
+	Pkg    string `ko:"name=pkg"`
+	Func   string `ko:"name=func"`
+	Step   string `ko:"name=step"`
+	Source string `ko:"name=source"`
+	Ctx    Symbol `ko:"name=ctx"` // user ctx object
 }
 
 type BootField struct {
@@ -28,14 +29,13 @@ type BootFigure struct {
 type BootResidue struct {
 	Returned Symbol `ko:"name=returned"`
 	Effect   Symbol `ko:"name=effect"`
-	Panicked Symbol `ko:"name=panicked"`
-	Error    error  `ko:"name=error"`
 }
 
 type BootSummary struct {
-	Pkg  string `ko:"name=pkg"`
-	Func string `ko:"name=func"`
-	Ctx  Symbol `ko:"name=ctx"` // user ctx object
+	Pkg    string `ko:"name=pkg"`
+	Func   string `ko:"name=func"`
+	Source string `ko:"name=source"`
+	Ctx    Symbol `ko:"name=ctx"` // user ctx object
 	//
 	Arg      Symbol `ko:"name=arg"`
 	Returned Symbol `ko:"name=returned"`

@@ -1,6 +1,7 @@
 package boot
 
 import (
+	"fmt"
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
@@ -51,8 +52,17 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	return t, nil
 }
 
-func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) *BootResidue {
+func (b *Booter) delegateSpan(ctx *BootStepCtx, tag string) *Span {
+	return RefineOutline(b.Origin, fmt.Sprintf("%s@%s", tag, ctx.Source))
+}
+
+func (b *Booter) combineSpan(summary *BootSummary, tag string) *Span {
+	return RefineOutline(b.Origin, fmt.Sprintf("%s@%s", tag, summary.Source))
+}
+
+func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "ENTER"),
 		b.EnterVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -61,8 +71,9 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) *BootResidue {
 	)
 }
 
-func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) *BootResidue {
+func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "LEAVE"),
 		b.LeaveVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -71,8 +82,9 @@ func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) *BootResidue {
 	)
 }
 
-func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) *BootResidue {
+func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "LINK"),
 		b.LinkVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -83,8 +95,9 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 	)
 }
 
-func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) *BootResidue {
+func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "SELECT"),
 		b.SelectVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -94,8 +107,9 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) *BootResid
 	)
 }
 
-func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) *BootResidue {
+func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "AUGMENT"),
 		b.AugmentVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -105,8 +119,9 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) *
 	)
 }
 
-func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) *BootResidue {
+func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "INVOKE"),
 		b.InvokeVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -115,8 +130,9 @@ func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) *BootResidue {
 	)
 }
 
-func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) *BootResidue {
+func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, error) {
 	return b.delegate(
+		b.delegateSpan(ctx, "LITERAL"),
 		b.LiteralVariety,
 		Fields{
 			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
@@ -125,8 +141,9 @@ func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) *BootResidue {
 	)
 }
 
-func (b *Booter) Combine(summary *BootSummary, steps []*BootResidue) *BootResidue {
+func (b *Booter) Combine(summary *BootSummary, steps []*BootResidue) (*BootResidue, error) {
 	return b.delegate(
+		b.combineSpan(summary, "COMBINE"),
 		b.CombineVariety,
 		Fields{
 			{Name: "summary", Shape: DeconstructInterface(b.Origin, summary)},
