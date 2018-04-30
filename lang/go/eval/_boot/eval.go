@@ -10,46 +10,31 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-type Translation struct {
+type BootEval struct {
+	Booter  *Booter `ko:"name=booter"`
 	Repo    Repo    `ko:"name=repo"`
 	Program Program `ko:"name=program"`
 }
 
-func NewTranslation(faculty Faculty, repo Repo) *Translation {
-	return &Translation{
-		Repo: repo,
+func NewBootEval(booter *Booter, faculty Faculty, repo Repo) *BootEval {
+	return &BootEval{
+		Booter: booter,
+		Repo:   repo,
 		Program: Program{
 			Idiom: EvalIdiomRepo,
 			Repo:  repo,
 			System: System{
 				Faculty:  faculty,
-				Boundary: TranslationBoundary{},
-				Combiner: TranslationCombiner{},
+				Boundary: BootEvalBoundary{Booter: booter},
+				Combiner: BootEvalCombiner{Booter: booter},
 			},
 		},
 	}
 }
 
-type TranslationPanic struct {
-	Origin *Span  `ko:"name=origin"`
-	Panic  Symbol `ko:"name=panic"`
-}
-
-func NewTranslationPanic(origin *Span, panik Symbol) *TranslationPanic {
-	return &TranslationPanic{Origin: origin, Panic: panik}
-}
-
-func (eval *Translation) Translate(span *Span, f *Func, arg Symbol) (returned, panicked, eff Symbol, err error) {
-	// catch unrecovered evaluator panics
-	defer func() {
-		if r := recover(); r != nil {
-			translationPanic := r.(*TranslationPanic)
-			returned, panicked, eff = EmptySymbol{}, translationPanic.Panic, EmptySymbol{}
-			err = nil
-			return
-		}
-	}()
-	// top-level evaluation strategy is sequential
+// boot forwards eval panics from the caller evaluator environment.
+func (eval *BootEval) Boot(span *Span, f *Func, arg Symbol) (returned, effect Symbol, err error) {
+	// evaluation strategy is sequential
 	if shape, effect, err := eval.Program.EvalSeq(span, f, arg); err != nil {
 		return nil, nil, err
 	} else {

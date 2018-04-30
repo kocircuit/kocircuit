@@ -7,8 +7,8 @@ import (
 )
 
 // delegate forwards invocation panics to its caller.
-// errors ...
-func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (*BootResidue, error) {
+// errors in types are forwarded in the return value.
+func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (residue *BootResidue, err error) {
 	result, _, err := vty.Evoke(delegated, fields)
 	if err != nil {
 		return nil, err
