@@ -145,10 +145,8 @@ func gatherFlowArg(gather []GatherFlow) Fields {
 	for _, g := range gather {
 		fieldFlow := g.Flow.(evalFlow)
 		s = append(s, Field{
-			Name:   g.Field,
-			Shape:  fieldFlow.Shape,
-			Effect: fieldFlow.Effect,
-			Frame:  fieldFlow.Frame,
+			Name:  g.Field,
+			Shape: fieldFlow.Shape,
 		})
 	}
 	return s

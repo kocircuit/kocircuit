@@ -70,14 +70,14 @@ func (EvalLoopMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 	for j := 0; true; j++ {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", j))
 		// step
-		stepFields := Fields{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+		stepFields := Fields{{Name: "", Shape: carry}}
 		if stepReturns, _, err := step.Evoke(iterSpan, stepFields); err != nil {
 			return nil, nil, err
 		} else {
 			carry = stepReturns.(Symbol)
 			// stop
 			if stop != nil {
-				stopFields := Fields{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+				stopFields := Fields{{Name: "", Shape: carry}}
 				if stopReturns, _, err := stop.Evoke(iterSpan, stopFields); err != nil {
 					return nil, nil, err
 				} else {

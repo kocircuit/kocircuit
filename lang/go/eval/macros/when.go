@@ -56,7 +56,7 @@ func (EvalWhenMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 			if !ok {
 				return nil, nil, span.Errorf(nil, "when then is not a variety")
 			}
-			thenFields := Fields{{Name: "", Shape: have, Effect: nil, Frame: span}}
+			thenFields := Fields{{Name: "", Shape: have}}
 			return thenVty.Evoke(span, thenFields)
 		}
 	}

@@ -52,14 +52,14 @@ func (EvalFormatMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effec
 	}
 	result := make(Symbols, 0, len(parts)+args.Len())
 	for i, p := range parts {
-		stringFields := Fields{{Name: "", Shape: BasicStringSymbol(p), Effect: nil, Frame: span}}
+		stringFields := Fields{{Name: "", Shape: BasicStringSymbol(p)}}
 		if formResult, _, err := withString.Evoke(span, stringFields); err != nil {
 			return nil, nil, err
 		} else {
 			result = append(result, formResult.(Symbol))
 		}
 		if i+1 < len(parts) { // if not the last string
-			argFields := Fields{{Name: "", Shape: args.Elem[i], Effect: nil, Frame: span}}
+			argFields := Fields{{Name: "", Shape: args.Elem[i]}}
 			if formResult, _, err := withArg.Evoke(span, argFields); err != nil {
 				return nil, nil, err
 			} else {

@@ -71,8 +71,8 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 	for i, elem := range over.LiftToSeries(span).Elem {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", i))
 		fields := Fields{
-			{Name: "carry", Shape: carry, Effect: nil, Frame: iterSpan},
-			{Name: "elem", Shape: elem, Effect: nil, Frame: iterSpan},
+			{Name: "carry", Shape: carry},
+			{Name: "elem", Shape: elem},
 		}
 		if iterReturns, _, err := with.Evoke(iterSpan, fields); err != nil {
 			return nil, nil, err
@@ -93,7 +93,7 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 		}
 		// stop
 		if stop != nil {
-			stopFields := Fields{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+			stopFields := Fields{{Name: "", Shape: carry}}
 			if stopReturns, _, err := stop.Evoke(iterSpan, stopFields); err != nil {
 				return nil, nil, err
 			} else {

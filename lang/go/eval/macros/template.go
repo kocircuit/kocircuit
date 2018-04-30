@@ -53,7 +53,7 @@ func (EvalTemplateMacro) Invoke(span *Span, arg Arg) (returns Return, effect Eff
 	for i, token := range tokens {
 		switch u := token.(type) {
 		case TemplateText:
-			stringFields := Fields{{Name: "", Shape: BasicStringSymbol(u.Text), Effect: nil, Frame: span}}
+			stringFields := Fields{{Name: "", Shape: BasicStringSymbol(u.Text)}}
 			if formResult, _, err := withString.Evoke(span, stringFields); err != nil {
 				return nil, nil, err
 			} else {
@@ -63,7 +63,7 @@ func (EvalTemplateMacro) Invoke(span *Span, arg Arg) (returns Return, effect Eff
 			if selected, _, err := args.Select(span, u.Path); err != nil {
 				return nil, nil, span.Errorf(err, "template selecting %v", u.Path)
 			} else {
-				argFields := Fields{{Name: "", Shape: selected.(Symbol), Effect: nil, Frame: span}}
+				argFields := Fields{{Name: "", Shape: selected.(Symbol)}}
 				if formResult, _, err := withArg.Evoke(span, argFields); err != nil {
 					return nil, nil, err
 				} else {
