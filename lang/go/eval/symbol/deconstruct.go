@@ -8,6 +8,10 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+func DeconstructInterface(span *Span, any interface{}) Symbol {
+	return Deconstruct(span, reflect.ValueOf(any))
+}
+
 func Deconstruct(span *Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
 	if symbol, err := ctx.Deconstruct(v); err != nil {

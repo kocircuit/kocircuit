@@ -1,6 +1,7 @@
 package boot
 
 import (
+	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
@@ -51,33 +52,85 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 }
 
 func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) *BootResidue {
-	return delegate(b.EnterVariety, XXX)
+	return b.delegate(
+		b.EnterVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+		},
+	)
 }
 
 func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) *BootResidue {
-	XXX
+	return b.delegate(
+		b.LeaveVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+		},
+	)
 }
 
 func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) *BootResidue {
-	XXX
+	return b.delegate(
+		b.LinkVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+			{Name: "name", Shape: DeconstructInterface(b.Origin, name)},
+			{Name: "monadic", Shape: DeconstructInterface(b.Origin, monadic)},
+		},
+	)
 }
 
 func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) *BootResidue {
-	XXX
+	return b.delegate(
+		b.SelectVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+			{Name: "name", Shape: DeconstructInterface(b.Origin, name)},
+		},
+	)
 }
 
 func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) *BootResidue {
-	XXX
+	return b.delegate(
+		b.AugmentVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+			{Name: "fields", Shape: DeconstructInterface(b.Origin, fields)},
+		},
+	)
 }
 
 func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) *BootResidue {
-	XXX
+	return b.delegate(
+		b.InvokeVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "object", Shape: object},
+		},
+	)
 }
 
 func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) *BootResidue {
-	XXX
+	return b.delegate(
+		b.LiteralVariety,
+		Fields{
+			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "figure", Shape: DeconstructInterface(b.Origin, figure)},
+		},
+	)
 }
 
-func (b *Booter) Combine(summary *BootSummary, stepResidues []*BootResidue) *BootResidue {
-	XXX
+func (b *Booter) Combine(summary *BootSummary, steps []*BootResidue) *BootResidue {
+	return b.delegate(
+		b.CombineVariety,
+		Fields{
+			{Name: "summary", Shape: DeconstructInterface(b.Origin, summary)},
+			{Name: "steps", Shape: DeconstructInterface(b.Origin, steps)},
+		},
+	)
 }
