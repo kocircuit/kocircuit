@@ -1,4 +1,4 @@
-package translate
+package boot
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
@@ -33,8 +33,9 @@ func (m EvalTranslateMacro) Doc() string {
 		Enter(step, ctx, arg) -> (returns, effect)
 		Leave(step, ctx, arg) -> (returns, effect)
 		Figure(step, ctx, literal) -> (returns, effect)
-		Select(step, ctx, arg, label, monadic) -> (returns, effect)
-		Augment(step, ctx, arg, knot) -> (returns, effect)
+		SelectArg(step, ctx, arg, label, monadic) -> (returns, effect)
+		Select(step, ctx, arg, path) -> (returns, effect)
+		Augment(step, ctx, arg, fields) -> (returns, effect)
 		Invoke(step, ctx, arg) -> (returns, effect)
 		Combine(ctx, arg, stepResults) -> (returns, effect)
 	)
@@ -45,9 +46,9 @@ func (m EvalTranslateMacro) Doc() string {
 * effect is a user object
 
 * step is (...)
-* knot is a sequence of (name, arg) pairs
+* fields is a sequence of (name, arg) pairs
 * literal is XXX
-* stepResults is a sequence of (step, returned, effect, panic)
+* stepResults is a sequence of (step, returned, panic, effect)
 `
 }
 

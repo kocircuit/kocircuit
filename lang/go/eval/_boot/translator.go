@@ -1,4 +1,4 @@
-package translate
+package boot
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
@@ -6,13 +6,14 @@ import (
 )
 
 type Translator struct {
-	Enter   *VarietySymbol `ko:"name=Enter"`
-	Leave   *VarietySymbol `ko:"name=Leave"`
-	Figure  *VarietySymbol `ko:"name=Figure"`
-	Select  *VarietySymbol `ko:"name=Select"`
-	Augment *VarietySymbol `ko:"name=Augment"`
-	Invoke  *VarietySymbol `ko:"name=Invoke"`
-	Combine *VarietySymbol `ko:"name=Combine"`
+	Enter     *VarietySymbol `ko:"name=Enter"`
+	Leave     *VarietySymbol `ko:"name=Leave"`
+	Figure    *VarietySymbol `ko:"name=Figure"`
+	SelectArg *VarietySymbol `ko:"name=SelectArg"`
+	Select    *VarietySymbol `ko:"name=Select"`
+	Augment   *VarietySymbol `ko:"name=Augment"`
+	Invoke    *VarietySymbol `ko:"name=Invoke"`
+	Combine   *VarietySymbol `ko:"name=Combine"`
 }
 
 func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
@@ -29,6 +30,9 @@ func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
 	}
 	if t.Figure, ok = arg.Walk("Figure").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Figure must be a variety, got %v", arg.Walk("Figure"))
+	}
+	if t.SelectArg, ok = arg.Walk("SelectArg").(*VarietySymbol); !ok {
+		return nil, span.Errorf(nil, "translator.SelectArg must be a variety, got %v", arg.Walk("SelectArg"))
 	}
 	if t.Select, ok = arg.Walk("Select").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Select must be a variety, got %v", arg.Walk("Select"))

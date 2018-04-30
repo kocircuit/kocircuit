@@ -1,4 +1,4 @@
-package translate
+package boot
 
 import (
 	"fmt"

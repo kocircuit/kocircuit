@@ -1,3 +1,3 @@
-package translate
+package boot
 
 var TranslationFaculty = XXX
