@@ -5,7 +5,7 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
 
-type Translator struct {
+type Booter struct {
 	Enter   *VarietySymbol `ko:"name=Enter"`
 	Leave   *VarietySymbol `ko:"name=Leave"`
 	Literal *VarietySymbol `ko:"name=Literal"`
@@ -16,12 +16,12 @@ type Translator struct {
 	Combine *VarietySymbol `ko:"name=Combine"`
 }
 
-func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
+func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	arg, ok := a.(*StructSymbol)
 	if !ok {
 		return nil, span.Errorf(nil, "translator must be a structure, got %v", a)
 	}
-	t := &Translator{}
+	t := &Booter{}
 	if t.Enter, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Enter must be a variety, got %v", arg.Walk("Enter"))
 	}
@@ -47,4 +47,36 @@ func ExtractTranslator(span *Span, a Symbol) (*Translator, error) {
 		return nil, span.Errorf(nil, "translator.Combine must be a variety, got %v", arg.Walk("Combine"))
 	}
 	return t, nil
+}
+
+func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) *BootResidue {
+	XXX
+}
+
+func (b *Booter) Combine(summary *BootSummary, stepResidues []*BootResidue) *BootResidue {
+	XXX
 }
