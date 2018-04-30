@@ -140,8 +140,8 @@ func (f evalFlow) Augment(span *Span, gather []GatherFlow) (Flow, error) {
 	return f.env.newFlow(span, returns, effect), nil
 }
 
-func gatherFlowArg(gather []GatherFlow) Knot {
-	var s Knot
+func gatherFlowArg(gather []GatherFlow) Fields {
+	var s Fields
 	for _, g := range gather {
 		fieldFlow := g.Flow.(evalFlow)
 		s = append(s, Field{

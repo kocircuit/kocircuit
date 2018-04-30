@@ -87,7 +87,7 @@ func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
 	}
 }
 
-func (named *NamedSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (named *NamedSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "named value %v cannot be augmented", named)
 }
 

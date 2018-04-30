@@ -70,15 +70,15 @@ func (EvalLoopMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 	for j := 0; true; j++ {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", j))
 		// step
-		stepKnot := Knot{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
-		if stepReturns, _, err := step.Evoke(iterSpan, stepKnot); err != nil {
+		stepFields := Fields{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+		if stepReturns, _, err := step.Evoke(iterSpan, stepFields); err != nil {
 			return nil, nil, err
 		} else {
 			carry = stepReturns.(Symbol)
 			// stop
 			if stop != nil {
-				stopKnot := Knot{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
-				if stopReturns, _, err := stop.Evoke(iterSpan, stopKnot); err != nil {
+				stopFields := Fields{{Name: "", Shape: carry, Effect: nil, Frame: iterSpan}}
+				if stopReturns, _, err := stop.Evoke(iterSpan, stopFields); err != nil {
 					return nil, nil, err
 				} else {
 					if stopFlag, ok := AsBasicBool(stopReturns.(Symbol)); !ok {

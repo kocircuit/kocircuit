@@ -136,7 +136,7 @@ func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (basic BasicSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (basic BasicSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "basic value %v cannot be augmented", basic)
 }
 

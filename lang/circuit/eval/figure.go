@@ -19,7 +19,7 @@ func (e Empty) Select(span *Span, path Path) (Shape, Effect, error) {
 	return e, nil, nil
 }
 
-func (e Empty) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (e Empty) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting an empty")
 }
 
@@ -42,7 +42,7 @@ func (v Integer) Select(span *Span, path Path) (Shape, Effect, error) {
 	return v, nil, nil
 }
 
-func (v Integer) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (v Integer) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting an integer")
 }
 
@@ -65,7 +65,7 @@ func (v Float) Select(span *Span, path Path) (Shape, Effect, error) {
 	return v, nil, nil
 }
 
-func (v Float) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (v Float) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting a float")
 }
 
@@ -88,7 +88,7 @@ func (v Bool) Select(span *Span, path Path) (Shape, Effect, error) {
 	return v, nil, nil
 }
 
-func (v Bool) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (v Bool) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting a bool")
 }
 
@@ -111,7 +111,7 @@ func (v String) Select(span *Span, path Path) (Shape, Effect, error) {
 	return v, nil, nil
 }
 
-func (v String) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (v String) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting a string")
 }
 

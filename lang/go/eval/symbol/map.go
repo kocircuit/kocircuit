@@ -141,7 +141,7 @@ func (ms *MapSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (ms *MapSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (ms *MapSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "map %v cannot be augmented", ms)
 }
 

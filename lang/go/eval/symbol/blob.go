@@ -89,7 +89,7 @@ func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (blob *BlobSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (blob *BlobSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "blob value %v cannot be augmented", blob)
 }
 

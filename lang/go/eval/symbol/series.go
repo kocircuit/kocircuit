@@ -91,7 +91,7 @@ func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (ss *SeriesSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (ss *SeriesSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "sequence %v cannot be augmented", ss)
 }
 

@@ -27,14 +27,14 @@ type Field struct {
 
 func (f Field) String() string { return Sprint(f) }
 
-type Knot []Field
+type Fields []Field
 
-func (v Knot) String() string { return Sprint(v) }
+func (v Fields) String() string { return Sprint(v) }
 
-func (v Knot) IsEmpty() bool { return len(v) == 0 }
+func (v Fields) IsEmpty() bool { return len(v) == 0 }
 
 // Link implements Shape.Select. For eval_test.go only.
-func (v Knot) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (v Fields) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
 	if monadic {
 		if s, eff, err := v.Select(span, []string{NoLabel}); err != nil {
 			return nil, nil, err
@@ -46,7 +46,7 @@ func (v Knot) Link(span *Span, name string, monadic bool) (Shape, Effect, error)
 }
 
 // Select implements Shape.Select. For eval_test.go only.
-func (v Knot) Select(span *Span, path Path) (Shape, Effect, error) {
+func (v Fields) Select(span *Span, path Path) (Shape, Effect, error) {
 	if len(path) == 0 {
 		return v, nil, nil
 	}
@@ -64,18 +64,18 @@ func (v Knot) Select(span *Span, path Path) (Shape, Effect, error) {
 }
 
 // Augment implements Shape.Augment.
-func (v Knot) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (v Fields) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting a knot")
 }
 
 // Invoke implements Shape.Invoke.
-func (v Knot) Invoke(span *Span) (Shape, Effect, error) {
+func (v Fields) Invoke(span *Span) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "invoking a knot")
 }
 
-func (v Knot) Fields() []Field { return v }
+func (v Fields) Fields() []Field { return v }
 
-func (v Knot) Names() []string {
+func (v Fields) Names() []string {
 	n := map[string]bool{}
 	r := []string{}
 	for _, f := range v {
@@ -87,7 +87,7 @@ func (v Knot) Names() []string {
 	return r
 }
 
-func (v Knot) FieldGroup() [][]Field {
+func (v Fields) FieldGroup() [][]Field {
 	r := [][]Field{}
 	for _, n := range v.Names() {
 		r = append(r, v.RestrictTo(n))
@@ -95,8 +95,8 @@ func (v Knot) FieldGroup() [][]Field {
 	return r
 }
 
-func (v Knot) RestrictTo(name string) Knot {
-	r := Knot{}
+func (v Fields) RestrictTo(name string) Fields {
+	r := Fields{}
 	for _, f := range v {
 		if f.Name == name {
 			r = append(r, f)
@@ -105,7 +105,7 @@ func (v Knot) RestrictTo(name string) Knot {
 	return r
 }
 
-func (v Knot) StringField(label string) (string, error) {
+func (v Fields) StringField(label string) (string, error) {
 	g := v.RestrictTo(label)
 	if len(g) != 1 {
 		return "", fmt.Errorf("not a singleton (got %d) field", len(g))

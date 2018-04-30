@@ -80,7 +80,7 @@ type lessErrorPanic struct {
 }
 
 func (ss *sortSymbols) Less(i, j int) bool {
-	knot := Knot{
+	knot := Fields{
 		{Name: "left", Shape: ss.symbols[i], Effect: nil, Frame: ss.span},
 		{Name: "right", Shape: ss.symbols[j], Effect: nil, Frame: ss.span},
 	}

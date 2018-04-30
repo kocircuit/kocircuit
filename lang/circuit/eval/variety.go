@@ -26,10 +26,10 @@ func (v Variety) Select(span *Span, path Path) (Shape, Effect, error) {
 	return v, nil, nil
 }
 
-func (v Variety) Augment(span *Span, arg Knot) (Shape, Effect, error) {
-	aug := Knot{} // copy-and-append arg
+func (v Variety) Augment(span *Span, arg Fields) (Shape, Effect, error) {
+	aug := Fields{} // copy-and-append arg
 	if v.Arg != nil {
-		aug = append(aug, v.Arg.(Knot)...)
+		aug = append(aug, v.Arg.(Fields)...)
 	}
 	aug = append(aug, arg...)
 	return Variety{Macro: v.Macro, Arg: aug}, nil, nil

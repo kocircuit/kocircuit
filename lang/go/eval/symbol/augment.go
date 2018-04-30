@@ -6,8 +6,8 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func (vty *VarietySymbol) Augment(span *Span, knot Knot) (Shape, Effect, error) {
-	augmented, err := KnotToFieldSymbols(span, knot)
+func (vty *VarietySymbol) Augment(span *Span, knot Fields) (Shape, Effect, error) {
+	augmented, err := FieldsToFieldSymbols(span, knot)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -18,7 +18,7 @@ func (vty *VarietySymbol) Augment(span *Span, knot Knot) (Shape, Effect, error) 
 	return MakeVarietySymbol(vty.Macro, aggregate), nil, nil
 }
 
-func KnotToFieldSymbols(span *Span, knot Knot) (FieldSymbols, error) {
+func FieldsToFieldSymbols(span *Span, knot Fields) (FieldSymbols, error) {
 	ef := FieldSymbols{}
 	for _, fieldGroup := range knot.FieldGroup() {
 		fieldGroupName := fieldGroup[0].Name

@@ -48,7 +48,7 @@ var testShapeFlow = []struct {
 		Main() {
 			return: ReturnReturn(fmt: "a", fmt: "b")
 		}`,
-		Result: Knot{
+		Result: Fields{
 			{Name: "fmt", Shape: String{Value_: "a"}},
 			{Name: "fmt", Shape: String{Value_: "b"}},
 		},
@@ -58,7 +58,7 @@ var testShapeFlow = []struct {
 		Main() {
 			return: ("a", "b")
 		}`,
-		Result: Knot{
+		Result: Fields{
 			{Name: NoLabel, Shape: String{Value_: "a"}},
 			{Name: NoLabel, Shape: String{Value_: "b"}},
 		},
@@ -70,7 +70,7 @@ var testShapeFlow = []struct {
 			x: Return["a", "b"]
 			return: x()
 		}`,
-		Result: Knot{
+		Result: Fields{
 			{Name: "", Shape: String{Value_: "a"}},
 			{Name: "", Shape: String{Value_: "b"}},
 		},
@@ -121,7 +121,7 @@ func TestShapeFlow(t *testing.T) {
 				Boundary: IdentityBoundary{},
 				Combiner: IdentityCombiner{},
 			},
-		}.EvalSeq(NewSpan(), repo.Lookup("test", "Main"), Knot{})
+		}.EvalSeq(NewSpan(), repo.Lookup("test", "Main"), Fields{})
 		if err != nil {
 			t.Errorf("test %d: evaluating (%v)", i, err)
 			continue
@@ -162,7 +162,7 @@ func (testUnknownMacro) Help() string { return "testUnknown" }
 func (testUnknownMacro) Doc() string { return "testUnknown" }
 
 func (testUnknownMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	pay, err := arg.(Knot).StringField("name")
+	pay, err := arg.(Fields).StringField("name")
 	if err != nil {
 		return nil, nil, span.Errorf(err, "unknown name argument")
 	}
@@ -187,7 +187,7 @@ func (u testUnknown) Select(span *Span, path Path) (Shape, Effect, error) {
 	}, nil, nil
 }
 
-func (u testUnknown) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (u testUnknown) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "augmenting test unknown")
 }
 

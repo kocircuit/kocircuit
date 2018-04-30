@@ -94,8 +94,8 @@ func (EvalRecoverMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effe
 	defer func() {
 		if r := recover(); r != nil {
 			evalPanic := r.(*EvalPanic)
-			panicKnot := Knot{{Name: "", Shape: evalPanic.Panic, Effect: nil, Frame: span}}
-			returns, effect, err = panicVty.Evoke(span, panicKnot)
+			panicFields := Fields{{Name: "", Shape: evalPanic.Panic, Effect: nil, Frame: span}}
+			returns, effect, err = panicVty.Evoke(span, panicFields)
 			return
 		}
 	}()

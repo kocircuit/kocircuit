@@ -137,7 +137,7 @@ func (ss *StructSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	return singletonSeries(ss)
 }
 
-func (ss *StructSymbol) Augment(span *Span, _ Knot) (Shape, Effect, error) {
+func (ss *StructSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
 	return nil, nil, span.Errorf(nil, "structure %v cannot be augmented", ss)
 }
 

@@ -6,7 +6,7 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
 
-func (b *Booter) delegate(vty *VarietySymbol, fields Knot) *BootResidue {
+func (b *Booter) delegate(vty *VarietySymbol, fields Fields) *BootResidue {
 	XXX
 	return &BootResidue{
 		Returned: XXX,

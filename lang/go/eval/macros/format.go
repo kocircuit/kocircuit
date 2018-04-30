@@ -52,15 +52,15 @@ func (EvalFormatMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effec
 	}
 	result := make(Symbols, 0, len(parts)+args.Len())
 	for i, p := range parts {
-		stringKnot := Knot{{Name: "", Shape: BasicStringSymbol(p), Effect: nil, Frame: span}}
-		if formResult, _, err := withString.Evoke(span, stringKnot); err != nil {
+		stringFields := Fields{{Name: "", Shape: BasicStringSymbol(p), Effect: nil, Frame: span}}
+		if formResult, _, err := withString.Evoke(span, stringFields); err != nil {
 			return nil, nil, err
 		} else {
 			result = append(result, formResult.(Symbol))
 		}
 		if i+1 < len(parts) { // if not the last string
-			argKnot := Knot{{Name: "", Shape: args.Elem[i], Effect: nil, Frame: span}}
-			if formResult, _, err := withArg.Evoke(span, argKnot); err != nil {
+			argFields := Fields{{Name: "", Shape: args.Elem[i], Effect: nil, Frame: span}}
+			if formResult, _, err := withArg.Evoke(span, argFields); err != nil {
 				return nil, nil, err
 			} else {
 				result = append(result, formResult.(Symbol))
