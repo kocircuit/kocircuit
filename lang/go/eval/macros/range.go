@@ -70,11 +70,11 @@ func (EvalRangeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 	image := Symbols{}
 	for i, elem := range over.LiftToSeries(span).Elem {
 		iterSpan := RefineOutline(span, fmt.Sprintf("#%d", i))
-		knot := Fields{
+		fields := Fields{
 			{Name: "carry", Shape: carry, Effect: nil, Frame: iterSpan},
 			{Name: "elem", Shape: elem, Effect: nil, Frame: iterSpan},
 		}
-		if iterReturns, _, err := with.Evoke(iterSpan, knot); err != nil {
+		if iterReturns, _, err := with.Evoke(iterSpan, fields); err != nil {
 			return nil, nil, err
 		} else {
 			iterResult := iterReturns.(Symbol)

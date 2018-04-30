@@ -65,12 +65,12 @@ func (v Fields) Select(span *Span, path Path) (Shape, Effect, error) {
 
 // Augment implements Shape.Augment.
 func (v Fields) Augment(span *Span, _ Fields) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "augmenting a knot")
+	return nil, nil, span.Errorf(nil, "cannot augment fields")
 }
 
 // Invoke implements Shape.Invoke.
 func (v Fields) Invoke(span *Span) (Shape, Effect, error) {
-	return nil, nil, span.Errorf(nil, "invoking a knot")
+	return nil, nil, span.Errorf(nil, "cannot invoke fields")
 }
 
 func (v Fields) Fields() []Field { return v }

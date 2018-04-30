@@ -6,8 +6,8 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func (vty *VarietySymbol) Augment(span *Span, knot Fields) (Shape, Effect, error) {
-	augmented, err := FieldsToFieldSymbols(span, knot)
+func (vty *VarietySymbol) Augment(span *Span, fields Fields) (Shape, Effect, error) {
+	augmented, err := FieldsToFieldSymbols(span, fields)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -18,9 +18,9 @@ func (vty *VarietySymbol) Augment(span *Span, knot Fields) (Shape, Effect, error
 	return MakeVarietySymbol(vty.Macro, aggregate), nil, nil
 }
 
-func FieldsToFieldSymbols(span *Span, knot Fields) (FieldSymbols, error) {
+func FieldsToFieldSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 	ef := FieldSymbols{}
-	for _, fieldGroup := range knot.FieldGroup() {
+	for _, fieldGroup := range fields.FieldGroup() {
 		fieldGroupName := fieldGroup[0].Name
 		fieldGroup = FilterEmptyFields(fieldGroup)
 		switch len(fieldGroup) {
@@ -77,9 +77,9 @@ func FilterEmptyFields(group []Field) (filtered []Field) {
 	return
 }
 
-func VerifyNoDuplicateFieldSymbol(span *Span, fields FieldSymbols) error {
+func VerifyNoDuplicateFieldSymbol(span *Span, fieldSymbols FieldSymbols) error {
 	seen := map[string]bool{}
-	for _, f := range fields {
+	for _, f := range fieldSymbols {
 		if seen[f.Name] {
 			return span.Errorf(nil, "augmenting duplicate field %s", f.Name)
 		} else {
