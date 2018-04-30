@@ -14,7 +14,7 @@ type BootEvalBoundary struct {
 	Booter *Booter `ko:"name=booter"`
 }
 
-func (BootEvalBoundary) Figure(span *Span, figure Figure) (Shape, Effect, error) {
+func (b *BootEvalBoundary) Figure(span *Span, figure Figure) (Shape, Effect, error) {
 	fig := &BootFigure{}
 	switch u := figure.(type) {
 	case Bool:
@@ -36,15 +36,18 @@ func (BootEvalBoundary) Figure(span *Span, figure Figure) (Shape, Effect, error)
 	XXX
 }
 
-func (BootEvalBoundary) Enter(_ *Span, arg Arg) (Shape, Effect, error) {
-	if residue, err := booter.Enter(ctx, arg.(Symbol)); err != nil {
+func (b *BootEvalBoundary) Enter(_ *Span, arg Arg) (Shape, Effect, error) {
+	if residue, err := b.Booter.Enter(ctx, arg.(Symbol)); err != nil { //XXX: ctx
 		return nil, nil, err
 	} else {
-		XXX //save residue.Effect somewhere centrally
-		return residue.Returned, nil, nil
+		return residue.Returned, residue.Effect, nil
 	}
 }
 
-func (BootEvalBoundary) Leave(_ *Span, shape Shape) (Return, Effect, error) {
-	// return shape, nil, nil
+func (b *BootEvalBoundary) Leave(_ *Span, shape Shape) (Return, Effect, error) {
+	if residue, err := b.Booter.Leave(ctx, arg.(Symbol)); err != nil {
+		return nil, nil, err
+	} else {
+		return residue.Returned, residue.Effect, nil
+	}
 }

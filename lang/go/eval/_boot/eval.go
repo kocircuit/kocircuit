@@ -10,14 +10,17 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-type BootEval struct {
-	Booter  *Booter `ko:"name=booter"`
-	Repo    Repo    `ko:"name=repo"`
-	Program Program `ko:"name=program"`
+type Boot struct {
+	Faculty Faculty // build
+	Repo    Repo    // inherit
+	Booter  *Booter
+	Func    *Func
+	Ctx     Symbol
+	Arg     Symbol
 }
 
-func NewBootEval(booter *Booter, faculty Faculty, repo Repo) *BootEval {
-	return &BootEval{
+func (boot *Boot) Play(XXX) (returned, effect Symbol, err error) {
+	bootEval := &BootEval{
 		Booter: booter,
 		Repo:   repo,
 		Program: Program{
@@ -25,11 +28,18 @@ func NewBootEval(booter *Booter, faculty Faculty, repo Repo) *BootEval {
 			Repo:  repo,
 			System: System{
 				Faculty:  faculty,
-				Boundary: BootEvalBoundary{Booter: booter},
-				Combiner: BootEvalCombiner{Booter: booter},
+				Boundary: &BootEvalBoundary{Booter: booter},
+				Combiner: &BootEvalCombiner{Booter: booter},
 			},
 		},
 	}
+	return bootEval.Boot(XXX, XXX, XXX)
+}
+
+type BootEval struct {
+	Booter  *Booter `ko:"name=booter"`
+	Repo    Repo    `ko:"name=repo"`
+	Program Program `ko:"name=program"`
 }
 
 // boot forwards eval panics from the caller evaluator environment.
