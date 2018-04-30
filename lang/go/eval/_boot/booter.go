@@ -6,14 +6,15 @@ import (
 )
 
 type Booter struct {
-	Enter   *VarietySymbol `ko:"name=Enter"`
-	Leave   *VarietySymbol `ko:"name=Leave"`
-	Literal *VarietySymbol `ko:"name=Literal"`
-	Link    *VarietySymbol `ko:"name=Link"`
-	Select  *VarietySymbol `ko:"name=Select"`
-	Augment *VarietySymbol `ko:"name=Augment"`
-	Invoke  *VarietySymbol `ko:"name=Invoke"`
-	Combine *VarietySymbol `ko:"name=Combine"`
+	Origin         *Span          `ko:"name=origin"`
+	EnterVariety   *VarietySymbol `ko:"name=Enter"`
+	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
+	LiteralVariety *VarietySymbol `ko:"name=Literal"`
+	LinkVariety    *VarietySymbol `ko:"name=Link"`
+	SelectVariety  *VarietySymbol `ko:"name=Select"`
+	AugmentVariety *VarietySymbol `ko:"name=Augment"`
+	InvokeVariety  *VarietySymbol `ko:"name=Invoke"`
+	CombineVariety *VarietySymbol `ko:"name=Combine"`
 }
 
 func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
@@ -21,36 +22,36 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	if !ok {
 		return nil, span.Errorf(nil, "translator must be a structure, got %v", a)
 	}
-	t := &Booter{}
-	if t.Enter, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
+	t := &Booter{Origin: span}
+	if t.EnterVariety, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Enter must be a variety, got %v", arg.Walk("Enter"))
 	}
-	if t.Leave, ok = arg.Walk("Leave").(*VarietySymbol); !ok {
+	if t.LeaveVariety, ok = arg.Walk("Leave").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Leave must be a variety, got %v", arg.Walk("Leave"))
 	}
-	if t.Literal, ok = arg.Walk("Literal").(*VarietySymbol); !ok {
+	if t.LiteralVariety, ok = arg.Walk("Literal").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Literal must be a variety, got %v", arg.Walk("Literal"))
 	}
-	if t.Link, ok = arg.Walk("Link").(*VarietySymbol); !ok {
+	if t.LinkVariety, ok = arg.Walk("Link").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Link must be a variety, got %v", arg.Walk("Link"))
 	}
-	if t.Select, ok = arg.Walk("Select").(*VarietySymbol); !ok {
+	if t.SelectVariety, ok = arg.Walk("Select").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Select must be a variety, got %v", arg.Walk("Select"))
 	}
-	if t.Augment, ok = arg.Walk("Augment").(*VarietySymbol); !ok {
+	if t.AugmentVariety, ok = arg.Walk("Augment").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Augment must be a variety, got %v", arg.Walk("Augment"))
 	}
-	if t.Invoke, ok = arg.Walk("Invoke").(*VarietySymbol); !ok {
+	if t.InvokeVariety, ok = arg.Walk("Invoke").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Invoke must be a variety, got %v", arg.Walk("Invoke"))
 	}
-	if t.Combine, ok = arg.Walk("Combine").(*VarietySymbol); !ok {
+	if t.CombineVariety, ok = arg.Walk("Combine").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "translator.Combine must be a variety, got %v", arg.Walk("Combine"))
 	}
 	return t, nil
 }
 
 func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) *BootResidue {
-	XXX
+	return delegate(b.EnterVariety, XXX)
 }
 
 func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) *BootResidue {

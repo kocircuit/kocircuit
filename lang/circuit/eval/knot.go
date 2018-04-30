@@ -21,8 +21,8 @@ type Return interface {
 type Field struct {
 	Name   string `ko:"name=name"` // step label or arg name
 	Shape  Shape  `ko:"name=shape"`
-	Effect Effect `ko:"name=effect"`
-	Frame  *Span  `ko:"name=frame"`
+	Effect Effect `ko:"name=effect"` // XXX: deprecate
+	Frame  *Span  `ko:"name=frame"`  // XXX: deprecate
 }
 
 func (f Field) String() string { return Sprint(f) }
