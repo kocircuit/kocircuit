@@ -32,11 +32,11 @@ func (b *BootController) GroupBootFields(span *Span, fields Fields) (BootFields,
 				&BootField{Name: groupName, Monadic: groupName == "", Objects: y.Object},
 			)
 		default:
-			fieldSymbols := make(Symbols, len(fieldGroup))
+			repeatedSymbols := make(Symbols, len(fieldGroup))
 			for i, f := range fieldGroup {
-				fieldSymbols[i] = f.Shape.(BootSymbol).Object
+				repeatedSymbols[i] = f.Shape.(BootSymbol).Object
 			}
-			if repeated, err := MakeSeriesSymbol(span, fieldSymbols); err != nil {
+			if repeated, err := MakeSeriesSymbol(span, repeatedSymbols); err != nil {
 				return nil, span.Errorf(err, "boot repeated field group %s", groupName)
 			} else {
 				bootFields = append(bootFields,

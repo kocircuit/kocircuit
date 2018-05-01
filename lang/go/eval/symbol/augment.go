@@ -19,53 +19,35 @@ func (vty *VarietySymbol) Augment(span *Span, fields Fields) (Shape, Effect, err
 }
 
 func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
-	ef := FieldSymbols{}
+	evalFields := FieldSymbols{}
 	for _, fieldGroup := range fields.FieldGroup() {
 		groupName := fieldGroup[0].Name
 		fieldGroup = FilterEmptyEvalFields(fieldGroup)
 		switch len(fieldGroup) {
 		case 0: // add a field with an empty symbol value (useful to All macro)
-			ef = append(ef,
-				&FieldSymbol{
-					Name:    groupName,
-					Monadic: groupName == "",
-					Value:   EmptySymbol{},
-				},
+			evalFields = append(evalFields,
+				&FieldSymbol{Name: groupName, Monadic: groupName == "", Value: EmptySymbol{}},
 			)
 		case 1:
 			y := fieldGroup[0].Shape.(Symbol)
-			ef = append(ef,
-				&FieldSymbol{
-					Name:    groupName,
-					Monadic: groupName == "",
-					Value:   y,
-				},
+			evalFields = append(evalFields,
+				&FieldSymbol{Name: groupName, Monadic: groupName == "", Value: y},
 			)
 		default:
-			fieldTypes, fieldSymbols := make([]Type, len(fieldGroup)), make(Symbols, len(fieldGroup))
+			repeatedSymbols := make(Symbols, len(fieldGroup))
 			for i, f := range fieldGroup {
-				y := f.Shape.(Symbol)
-				fieldSymbols[i] = y
-				fieldTypes[i] = y.Type()
+				repeatedSymbols[i] = f.Shape.(Symbol)
 			}
-			unifiedElem, err := UnifyTypes(span, fieldTypes)
-			if err != nil {
-				return nil, span.Errorf(err, "field group %s", groupName)
+			if repeated, err := MakeSeriesSymbol(span, repeatedSymbols); err != nil {
+				return nil, span.Errorf(err, "repeated field group %s", groupName)
+			} else {
+				evalFields = append(evalFields,
+					&FieldSymbol{Name: groupName, Monadic: groupName == "", Value: repeated},
+				)
 			}
-			series := &SeriesSymbol{
-				Type_: &SeriesType{Elem: unifiedElem},
-				Elem:  fieldSymbols,
-			}
-			ef = append(ef,
-				&FieldSymbol{
-					Name:    groupName,
-					Monadic: groupName == "",
-					Value:   series,
-				},
-			)
 		}
 	}
-	return ef, nil
+	return evalFields, nil
 }
 
 func FilterEmptyEvalFields(group []Field) (filtered []Field) {
