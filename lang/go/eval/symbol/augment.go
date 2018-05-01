@@ -21,14 +21,14 @@ func (vty *VarietySymbol) Augment(span *Span, fields Fields) (Shape, Effect, err
 func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 	ef := FieldSymbols{}
 	for _, fieldGroup := range fields.FieldGroup() {
-		fieldGroupName := fieldGroup[0].Name
-		fieldGroup = FilterEmptyFields(fieldGroup)
+		groupName := fieldGroup[0].Name
+		fieldGroup = FilterEmptyEvalFields(fieldGroup)
 		switch len(fieldGroup) {
 		case 0: // add a field with an empty symbol value (useful to All macro)
 			ef = append(ef,
 				&FieldSymbol{
-					Name:    fieldGroupName,
-					Monadic: fieldGroupName == "",
+					Name:    groupName,
+					Monadic: groupName == "",
 					Value:   EmptySymbol{},
 				},
 			)
@@ -36,8 +36,8 @@ func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 			y := fieldGroup[0].Shape.(Symbol)
 			ef = append(ef,
 				&FieldSymbol{
-					Name:    fieldGroupName,
-					Monadic: fieldGroupName == "",
+					Name:    groupName,
+					Monadic: groupName == "",
 					Value:   y,
 				},
 			)
@@ -50,7 +50,7 @@ func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 			}
 			unifiedElem, err := UnifyTypes(span, fieldTypes)
 			if err != nil {
-				return nil, span.Errorf(err, "field group %s", fieldGroupName)
+				return nil, span.Errorf(err, "field group %s", groupName)
 			}
 			series := &SeriesSymbol{
 				Type_: &SeriesType{Elem: unifiedElem},
@@ -58,8 +58,8 @@ func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 			}
 			ef = append(ef,
 				&FieldSymbol{
-					Name:    fieldGroupName,
-					Monadic: fieldGroupName == "",
+					Name:    groupName,
+					Monadic: groupName == "",
 					Value:   series,
 				},
 			)
@@ -68,7 +68,7 @@ func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 	return ef, nil
 }
 
-func FilterEmptyFields(group []Field) (filtered []Field) {
+func FilterEmptyEvalFields(group []Field) (filtered []Field) {
 	for _, field := range group {
 		if !IsEmptySymbol(field.Shape.(Symbol)) {
 			filtered = append(filtered, field)

@@ -33,15 +33,17 @@ func (ctx *BootStepCtx) Deconstruct(span *Span) Symbol {
 }
 
 type BootField struct {
-	Name   string `ko:"name=name"`
-	Object Symbol `ko:"name=object"`
+	Name    string `ko:"name=name"`
+	Monadic bool   `ko:"name=monadic"`
+	Objects Symbol `ko:"name=objects"`
 }
 
 func (field *BootField) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
 			{Name: "name", Value: BasicSymbol{field.Name}},
-			{Name: "object", Value: field.Object},
+			{Name: "monadic", Value: BasicSymbol{field.Monadic}},
+			{Name: "objects", Value: field.Objects},
 		},
 	)
 }
