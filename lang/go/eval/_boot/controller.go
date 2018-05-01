@@ -57,6 +57,7 @@ func (b *BootController) BootStepCtx(bootSpan *Span) *BootStepCtx {
 		Pkg:    b.Func.Pkg,
 		Func:   b.Func.Name,
 		Step:   bootStep.Label,
+		Logic:  bootStep.Logic.String(),
 		Source: bootStep.RegionString(),
 		Ctx:    b.Ctx,
 	}

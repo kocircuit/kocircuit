@@ -1,4 +1,4 @@
-package symbol
+package boot
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
@@ -6,19 +6,13 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func (vty *VarietySymbol) Augment(span *Span, fields Fields) (Shape, Effect, error) {
-	augmented, err := GroupFieldsToSymbols(span, fields)
-	if err != nil {
-		return nil, nil, err
-	}
-	aggregate := append(append(FieldSymbols{}, vty.Arg...), augmented...)
-	if err = VerifyNoDuplicateFieldSymbol(span, aggregate); err != nil {
-		return nil, nil, span.Errorf(err, "augmenting %s", Sprint(vty))
-	}
-	return MakeVarietySymbol(vty.Macro, aggregate), nil, nil
+func (b BootObject) Augment(bootSpan *Span, fields Fields) (Shape, Effect, error) {
+	span := b.Controller.BootStepCtx(bootSpan)
+	XXX
 }
 
-func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
+func GroupBootFields(span *Span, fields Fields) (BootFields, error) {
+	XXX
 	ef := FieldSymbols{}
 	for _, fieldGroup := range fields.FieldGroup() {
 		fieldGroupName := fieldGroup[0].Name
@@ -66,25 +60,4 @@ func GroupFieldsToSymbols(span *Span, fields Fields) (FieldSymbols, error) {
 		}
 	}
 	return ef, nil
-}
-
-func FilterEmptyFields(group []Field) (filtered []Field) {
-	for _, field := range group {
-		if !IsEmptySymbol(field.Shape.(Symbol)) {
-			filtered = append(filtered, field)
-		}
-	}
-	return
-}
-
-func VerifyNoDuplicateFieldSymbol(span *Span, fieldSymbols FieldSymbols) error {
-	seen := map[string]bool{}
-	for _, f := range fieldSymbols {
-		if seen[f.Name] {
-			return span.Errorf(nil, "augmenting duplicate field %s", f.Name)
-		} else {
-			seen[f.Name] = true
-		}
-	}
-	return nil
 }

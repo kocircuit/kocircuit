@@ -3,7 +3,6 @@ package boot
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -51,8 +50,4 @@ func (b BootObject) Invoke(bootSpan *Span) (Shape, Effect, error) {
 	} else {
 		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
 	}
-}
-
-func (b BootObject) Augment(bootSpan *Span, fields Fields) (Shape, Effect, error) {
-	XXX
 }

@@ -9,6 +9,7 @@ type BootStepCtx struct {
 	Pkg    string `ko:"name=pkg"`
 	Func   string `ko:"name=func"`
 	Step   string `ko:"name=step"`
+	Logic  string `ko:"name=logic"`
 	Source string `ko:"name=source"`
 	Ctx    Symbol `ko:"name=ctx"` // user ctx object
 }
@@ -19,6 +20,7 @@ func (ctx *BootStepCtx) Deconstruct(span *Span) Symbol {
 			{Name: "pkg", Value: BasicSymbol{ctx.Pkg}},
 			{Name: "func", Value: BasicSymbol{ctx.Func}},
 			{Name: "step", Value: BasicSymbol{ctx.Step}},
+			{Name: "logic", Value: BasicSymbol{ctx.Logic}},
 			{Name: "source", Value: BasicSymbol{ctx.Source}},
 			{Name: "ctx", Value: ctx.Ctx},
 		},
