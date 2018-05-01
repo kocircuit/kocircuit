@@ -133,14 +133,6 @@ func (st *SeriesType) Splay() Tree {
 	}
 }
 
-func MustMakeSeriesSymbol(span *Span, elem Symbols) Symbol {
-	if ss, err := MakeSeriesSymbol(span, elem); err != nil {
-		return ss
-	} else {
-		panic("must")
-	}
-}
-
 func MakeSeriesSymbol(span *Span, elem Symbols) (Symbol, error) {
 	elem = FilterEmptySymbols(elem)
 	if len(elem) == 0 {

@@ -41,12 +41,12 @@ func (field *BootField) Deconstruct(span *Span) Symbol {
 
 type BootFields []*BootField
 
-func (bf BootFields) Deconstruct(span *Span) Symbol {
+func (bf BootFields) Deconstruct(span *Span) (Symbol, error) {
 	elem := make(Symbols, len(bf))
 	for i := range bf {
 		elem[i] = bf[i].Deconstruct(span)
 	}
-	return MustMakeSeriesSymbol(span, elem)
+	return MakeSeriesSymbol(span, elem)
 }
 
 type BootFigure struct {
@@ -87,20 +87,19 @@ func (residue *BootResidue) Deconstruct(span *Span) Symbol {
 
 type BootResidues []*BootResidue
 
-func (br BootResidues) Deconstruct(span *Span) Symbol {
+func (br BootResidues) Deconstruct(span *Span) (Symbol, error) {
 	elem := make(Symbols, len(br))
 	for i := range br {
 		elem[i] = br[i].Deconstruct(span)
 	}
-	return MustMakeSeriesSymbol(span, elem) //XXX: residue content might be un-unifiable
+	return MakeSeriesSymbol(span, elem)
 }
 
 type BootSummary struct {
-	Pkg    string `ko:"name=pkg"`
-	Func   string `ko:"name=func"`
-	Source string `ko:"name=source"`
-	Ctx    Symbol `ko:"name=ctx"` // user ctx object
-	//
+	Pkg      string `ko:"name=pkg"`
+	Func     string `ko:"name=func"`
+	Source   string `ko:"name=source"`
+	Ctx      Symbol `ko:"name=ctx"` // user ctx object
 	Arg      Symbol `ko:"name=arg"`
 	Returned Symbol `ko:"name=returned"`
 	Panicked Symbol `ko:"name=panicked"`
