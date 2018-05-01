@@ -6,12 +6,17 @@ import (
 )
 
 type BootStepCtx struct {
+	Origin *Span  `ko:"name=origin"` // evaluation span (not boot span)
 	Pkg    string `ko:"name=pkg"`
 	Func   string `ko:"name=func"`
 	Step   string `ko:"name=step"`
 	Logic  string `ko:"name=logic"`
 	Source string `ko:"name=source"`
 	Ctx    Symbol `ko:"name=ctx"` // user ctx object
+}
+
+func (ctx *BootStepCtx) DelegateSpan() *Span {
+	return RefineOutline(ctx.Origin, fmt.Sprintf("%s @ %s", ctx.Logic, ctx.Source))
 }
 
 func (ctx *BootStepCtx) Deconstruct(span *Span) Symbol {
@@ -98,6 +103,7 @@ func (br BootResidues) Deconstruct(span *Span) (Symbol, error) {
 }
 
 type BootSummary struct {
+	Origin   *Span  `ko:"name=origin"` // evaluation span (not boot span)
 	Pkg      string `ko:"name=pkg"`
 	Func     string `ko:"name=func"`
 	Source   string `ko:"name=source"`
@@ -105,6 +111,10 @@ type BootSummary struct {
 	Arg      Symbol `ko:"name=arg"`
 	Returned Symbol `ko:"name=returned"`
 	Panicked Symbol `ko:"name=panicked"`
+}
+
+func (summary *BootSummary) CombineSpan() *Span {
+	return RefineOutline(b.Origin, fmt.Sprintf("COMBINE @ %s", summary.Source))
 }
 
 func (summary *BootSummary) Deconstruct(span *Span) Symbol {

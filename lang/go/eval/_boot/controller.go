@@ -19,8 +19,14 @@ type Boot struct {
 	Arg     Symbol
 }
 
-func (b *Boot) Play() (returned, effect Symbol, err error) {
-	bootController := &BootController{Booter: booter, Func: b.Func, Ctx: b.Ctx, Arg: b.Arg}
+func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
+	bootController := &BootController{
+		Origin: origin,
+		Booter: booter,
+		Func:   b.Func,
+		Ctx:    b.Ctx,
+		Arg:    b.Arg,
+	}
 	bootController.Program = Program{
 		Idiom:  EvalIdiomRepo,
 		Repo:   b.Repo,
@@ -30,6 +36,7 @@ func (b *Boot) Play() (returned, effect Symbol, err error) {
 }
 
 type BootController struct {
+	Origin  *Span   `ko:"name=origin"` // evaluation span (not boot span)
 	Booter  *Booter `ko:"name=booter"`
 	Func    *Func   `ko:"name=func"`
 	Ctx     Symbol  `ko:"name=ctx"`
@@ -54,11 +61,25 @@ func (b *BootController) Boot() (returned, effect Symbol, err error) {
 func (b *BootController) BootStepCtx(bootSpan *Span) *BootStepCtx {
 	bootStep := NearestStep(bootSpan)
 	return &BootStepCtx{
+		Origin: b.Origin,
 		Pkg:    b.Func.Pkg,
 		Func:   b.Func.Name,
 		Step:   bootStep.Label,
 		Logic:  bootStep.Logic.String(),
 		Source: bootStep.RegionString(),
 		Ctx:    b.Ctx,
+	}
+}
+
+func (b *BootController) BootSummary(returned, panicked Symbol) *BootSummary {
+	return &BootSummary{
+		Origin:   b.Origin,
+		Pkg:      b.Func.Pkg,
+		Func:     b.Func.Name,
+		Source:   b.Func.RegionString(),
+		Ctx:      b.Ctx,
+		Arg:      b.Arg,
+		Returned: returned,
+		Panicked: panicked,
 	}
 }

@@ -8,8 +8,6 @@ import (
 )
 
 type Booter struct {
-	XXX                           // XXX: move origin span to controller
-	Origin         *Span          `ko:"name=origin"` // span in evaluation environment (rather than booting env)
 	EnterVariety   *VarietySymbol `ko:"name=Enter"`
 	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
 	LiteralVariety *VarietySymbol `ko:"name=Literal"`
@@ -25,7 +23,7 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	if !ok {
 		return nil, span.Errorf(nil, "booter must be a structure, got %v", a)
 	}
-	t := &Booter{Origin: span}
+	t := &Booter{}
 	if t.EnterVariety, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
 		return nil, span.Errorf(nil, "booter Enter must be a variety, got %v", arg.Walk("Enter"))
 	}
@@ -53,16 +51,8 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	return t, nil
 }
 
-func (b *Booter) delegateSpan(ctx *BootStepCtx) *Span {
-	return RefineOutline(b.Origin, fmt.Sprintf("%s @ %s", ctx.Logic, ctx.Source))
-}
-
-func (b *Booter) combineSpan(summary *BootSummary) *Span {
-	return RefineOutline(b.Origin, fmt.Sprintf("COMBINE @ %s", tag, summary.Source))
-}
-
 func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.EnterVariety,
@@ -74,7 +64,7 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 }
 
 func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.LeaveVariety,
@@ -86,7 +76,7 @@ func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 }
 
 func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.LinkVariety,
@@ -100,7 +90,7 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 }
 
 func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.SelectVariety,
@@ -113,7 +103,7 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootResidu
 }
 
 func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	if deFields, err := fields.Deconstruct(b.Origin); err != nil {
 		return nil, delegatedSpan.Errorf(err, "boot augmentation")
 	} else {
@@ -130,7 +120,7 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*B
 }
 
 func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.InvokeVariety,
@@ -142,7 +132,7 @@ func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 }
 
 func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, error) {
-	delegatedSpan := b.delegateSpan(ctx)
+	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
 		b.LiteralVariety,
@@ -154,7 +144,7 @@ func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, er
 }
 
 func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootResidue, error) {
-	combineSpan := b.combineSpan(summary)
+	combineSpan := summary.CombineSpan()
 	if deSteps, err := steps.Deconstruct(combineSpan); err != nil {
 		return nil, combineSpan.Errorf(err, "boot combining steps")
 	} else {
