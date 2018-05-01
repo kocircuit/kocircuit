@@ -1,5 +1,8 @@
 package boot
 
-// XXX: define boot macro for linking a macro name to a faculty
+type BootMacroMacro struct {
+	BootPlaceholderMacro `ko:"name=placeholder"`
+	Macro                string `ko:"name=macro"`
+}
 
-var TranslationFaculty = XXX
+XXX// pass faculty macros in user program

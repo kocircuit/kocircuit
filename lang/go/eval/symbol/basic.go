@@ -18,6 +18,10 @@ func MakeBasicSymbol(span *Span, v interface{}) BasicSymbol {
 	return Deconstruct(span, reflect.ValueOf(v)).(BasicSymbol)
 }
 
+func BasicBoolSymbol(b bool) Symbol {
+	return BasicSymbol{b}
+}
+
 func BasicByteSymbol(i byte) Symbol {
 	return BasicSymbol{i}
 }

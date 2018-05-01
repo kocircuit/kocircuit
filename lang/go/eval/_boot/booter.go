@@ -22,32 +22,32 @@ type Booter struct {
 func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	arg, ok := a.(*StructSymbol)
 	if !ok {
-		return nil, span.Errorf(nil, "translator must be a structure, got %v", a)
+		return nil, span.Errorf(nil, "booter must be a structure, got %v", a)
 	}
 	t := &Booter{Origin: span}
 	if t.EnterVariety, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Enter must be a variety, got %v", arg.Walk("Enter"))
+		return nil, span.Errorf(nil, "booter Enter must be a variety, got %v", arg.Walk("Enter"))
 	}
 	if t.LeaveVariety, ok = arg.Walk("Leave").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Leave must be a variety, got %v", arg.Walk("Leave"))
+		return nil, span.Errorf(nil, "booter Leave must be a variety, got %v", arg.Walk("Leave"))
 	}
 	if t.LiteralVariety, ok = arg.Walk("Literal").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Literal must be a variety, got %v", arg.Walk("Literal"))
+		return nil, span.Errorf(nil, "booter Literal must be a variety, got %v", arg.Walk("Literal"))
 	}
 	if t.LinkVariety, ok = arg.Walk("Link").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Link must be a variety, got %v", arg.Walk("Link"))
+		return nil, span.Errorf(nil, "booter Link must be a variety, got %v", arg.Walk("Link"))
 	}
 	if t.SelectVariety, ok = arg.Walk("Select").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Select must be a variety, got %v", arg.Walk("Select"))
+		return nil, span.Errorf(nil, "booter Select must be a variety, got %v", arg.Walk("Select"))
 	}
 	if t.AugmentVariety, ok = arg.Walk("Augment").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Augment must be a variety, got %v", arg.Walk("Augment"))
+		return nil, span.Errorf(nil, "booter Augment must be a variety, got %v", arg.Walk("Augment"))
 	}
 	if t.InvokeVariety, ok = arg.Walk("Invoke").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Invoke must be a variety, got %v", arg.Walk("Invoke"))
+		return nil, span.Errorf(nil, "booter Invoke must be a variety, got %v", arg.Walk("Invoke"))
 	}
 	if t.CombineVariety, ok = arg.Walk("Combine").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "translator.Combine must be a variety, got %v", arg.Walk("Combine"))
+		return nil, span.Errorf(nil, "booter Combine must be a variety, got %v", arg.Walk("Combine"))
 	}
 	return t, nil
 }
@@ -65,7 +65,7 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 		b.delegateSpan(ctx, "ENTER"),
 		b.EnterVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -76,7 +76,7 @@ func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 		b.delegateSpan(ctx, "LEAVE"),
 		b.LeaveVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -87,10 +87,10 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 		b.delegateSpan(ctx, "LINK"),
 		b.LinkVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
-			{Name: "name", Shape: DeconstructInterface(b.Origin, name)},
-			{Name: "monadic", Shape: DeconstructInterface(b.Origin, monadic)},
+			{Name: "name", Shape: BasicStringSymbol(name)},
+			{Name: "monadic", Shape: BasicBoolSymbol(monadic)},
 		},
 	)
 }
@@ -100,21 +100,21 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) (*BootResi
 		b.delegateSpan(ctx, "SELECT"),
 		b.SelectVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
-			{Name: "name", Shape: DeconstructInterface(b.Origin, name)},
+			{Name: "name", Shape: BasicStringSymbol(name)},
 		},
 	)
 }
 
-func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields []*BootField) (*BootResidue, error) {
+func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootResidue, error) {
 	return b.delegate(
 		b.delegateSpan(ctx, "AUGMENT"),
 		b.AugmentVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
-			{Name: "fields", Shape: DeconstructInterface(b.Origin, fields)},
+			{Name: "fields", Shape: fields.Deconstruct(b.Origin)},
 		},
 	)
 }
@@ -124,7 +124,7 @@ func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 		b.delegateSpan(ctx, "INVOKE"),
 		b.InvokeVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -135,19 +135,19 @@ func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, er
 		b.delegateSpan(ctx, "LITERAL"),
 		b.LiteralVariety,
 		Fields{
-			{Name: "ctx", Shape: DeconstructInterface(b.Origin, ctx)},
-			{Name: "figure", Shape: DeconstructInterface(b.Origin, figure)},
+			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "figure", Shape: figure.Deconstruct(b.Origin)},
 		},
 	)
 }
 
-func (b *Booter) Combine(summary *BootSummary, steps []*BootResidue) (*BootResidue, error) {
+func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootResidue, error) {
 	return b.delegate(
 		b.combineSpan(summary, "COMBINE"),
 		b.CombineVariety,
 		Fields{
-			{Name: "summary", Shape: DeconstructInterface(b.Origin, summary)},
-			{Name: "steps", Shape: DeconstructInterface(b.Origin, steps)},
+			{Name: "summary", Shape: summary.Deconstruct(b.Origin)},
+			{Name: "steps", Shape: steps.Deconstruct(b.Origin)},
 		},
 	)
 }
