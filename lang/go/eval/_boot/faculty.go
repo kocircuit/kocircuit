@@ -5,4 +5,6 @@ type BootMacroMacro struct {
 	Macro                string `ko:"name=macro"`
 }
 
-XXX// pass faculty macros in user program
+func BootFaculty(ideals []string) Faculty {
+	XXX // pass faculty macros in user program
+}

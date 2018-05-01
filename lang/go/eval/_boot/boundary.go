@@ -37,22 +37,22 @@ func (b *BootController) Figure(bootSpan *Span, figure Figure) (Shape, Effect, e
 	if residue, err := b.Booter.Literal(b.BootStepCtx(bootSpan), fig); err != nil {
 		return nil, nil, err
 	} else {
-		return residue.Returned, residue.Effect, nil
+		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
 	}
 }
 
 func (b *BootController) Enter(bootSpan *Span, arg Arg) (Shape, Effect, error) {
-	if residue, err := b.Booter.Enter(b.BootStepCtx(bootSpan), arg.(Symbol)); err != nil {
+	if residue, err := b.Booter.Enter(b.BootStepCtx(bootSpan), b.UnwrapArg(arg)); err != nil {
 		return nil, nil, err
 	} else {
-		return residue.Returned, residue.Effect, nil
+		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
 	}
 }
 
 func (b *BootController) Leave(bootSpan *Span, shape Shape) (Return, Effect, error) {
-	if residue, err := b.Booter.Leave(b.BootStepCtx(bootSpan), arg.(Symbol)); err != nil {
+	if residue, err := b.Booter.Leave(b.BootStepCtx(bootSpan), b.Unwrap(shape)); err != nil {
 		return nil, nil, err
 	} else {
-		return residue.Returned, residue.Effect, nil
+		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
 	}
 }
