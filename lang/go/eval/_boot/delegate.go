@@ -8,7 +8,7 @@ import (
 
 // delegate forwards invocation panics to its caller.
 // errors in types are forwarded in the return value.
-func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (residue *BootResidue, err error) {
+func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (result *BootStepResult, err error) {
 	result, _, err := vty.Evoke(delegated, fields)
 	if err != nil {
 		return nil, err
@@ -21,6 +21,6 @@ func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (r
 		if err != nil {
 			return nil, delegated.Errorf(err, "expecting a structure with an effect field")
 		}
-		return &BootResidue{Returned: returned, Effect: effect}, nil
+		return &BootStepResult{Returned: returned, Effect: effect}, nil
 	}
 }

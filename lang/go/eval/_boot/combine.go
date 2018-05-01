@@ -16,7 +16,11 @@ func (b *BootController) Combine(
 	stepResidue StepResidues,
 ) (Effect, error) {
 	XXX //XXX
-	return nil, nil
+	if residue, err := b.Booter.Combine(b.Controller.BootStepCtx(bootSpan), b.Object, path); err != nil {
+		return nil, nil, err
+	} else {
+		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+	}
 }
 
 func (b *BootController) Interpret(_ Evaluator, f *Func) Macro {

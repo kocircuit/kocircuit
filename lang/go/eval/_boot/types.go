@@ -80,7 +80,8 @@ func (fig *BootFigure) Deconstruct(span *Span) Symbol {
 	return DeconstructInterface(span, fig)
 }
 
-type BootResidue struct {
+type BootResidue struct { //XXX
+	XXX
 	Returned Symbol `ko:"name=returned"`
 	Effect   Symbol `ko:"name=effect"`
 }
@@ -131,4 +132,9 @@ func (summary *BootSummary) Deconstruct(span *Span) Symbol {
 			{Name: "panicked", Value: summary.Panicked},
 		},
 	)
+}
+
+type BootStepResult struct {
+	Returned Symbol `ko:"name=returned"`
+	Effect   Symbol `ko:"name=effect"`
 }

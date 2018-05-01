@@ -51,7 +51,7 @@ func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
 	return t, nil
 }
 
-func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -63,7 +63,7 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	)
 }
 
-func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -75,7 +75,7 @@ func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	)
 }
 
-func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootResidue, error) {
+func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -89,7 +89,7 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 	)
 }
 
-func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootResidue, error) {
+func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -102,7 +102,7 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootResidu
 	)
 }
 
-func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootResidue, error) {
+func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	if deFields, err := fields.Deconstruct(b.Origin); err != nil {
 		return nil, delegatedSpan.Errorf(err, "boot augmentation")
@@ -119,7 +119,7 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*B
 	}
 }
 
-func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -131,7 +131,7 @@ func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
 	)
 }
 
-func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, error) {
+func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -143,7 +143,7 @@ func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, er
 	)
 }
 
-func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootResidue, error) {
+func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootStepResult, error) {
 	combineSpan := summary.CombineSpan()
 	if deSteps, err := steps.Deconstruct(combineSpan); err != nil {
 		return nil, combineSpan.Errorf(err, "boot combining steps")

@@ -27,7 +27,7 @@ func (b *BootController) Figure(bootSpan *Span, figure Figure) (Shape, Effect, e
 				Name: u.Func.Name,
 			},
 		}
-	case *BootMacroMacro: // from faculty
+	case *BootReservedMacro: // from faculty of reserved words
 		fig.Functional = &BootFunctional{
 			Macro: PtrString(u.Macro),
 		}
