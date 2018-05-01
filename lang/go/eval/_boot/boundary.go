@@ -1,13 +1,12 @@
 package boot
 
 import (
-	"fmt"
-
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
 func (b *BootController) Figure(bootSpan *Span, figure Figure) (Shape, Effect, error) {
@@ -21,11 +20,17 @@ func (b *BootController) Figure(bootSpan *Span, figure Figure) (Shape, Effect, e
 		fig.Float64 = &u.Value_
 	case String:
 		fig.String = &u.Value_
-	case Macro:
-		// macro is either a macro from registry, or from Interpret()
-		// return MakeVarietySymbol(u, nil), nil, nil
-		vty := XXX //XXX
-		fig.Func = &u.Value_
+	case *BootFuncMacro: // from Interpret()
+		fig.Functional = &BootFunctional{
+			Func: &BootFunc{
+				Pkg:  u.Func.Pkg,
+				Name: u.Func.Name,
+			},
+		}
+	case *BootMacroMacro: // from faculty
+		fig.Functional = &BootFunctional{
+			Macro: PtrString(u.Macro),
+		}
 	default:
 		panic("unknown figure")
 	}

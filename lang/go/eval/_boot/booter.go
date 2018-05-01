@@ -8,7 +8,7 @@ import (
 )
 
 type Booter struct {
-	Origin         *Span          `ko:"name=origin"`
+	Origin         *Span          `ko:"name=origin"` // span in evaluation environment (rather than booting env)
 	EnterVariety   *VarietySymbol `ko:"name=Enter"`
 	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
 	LiteralVariety *VarietySymbol `ko:"name=Literal"`
