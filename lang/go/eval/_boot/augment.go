@@ -13,7 +13,11 @@ func (b BootObject) Augment(bootSpan *Span, fields Fields) (Shape, Effect, error
 	if err != nil {
 		return nil, nil, err
 	}
-	XXX
+	if residue, err := b.Booter.Augment(ctx, b.Object, bootFields); err != nil {
+		return nil, nil, err
+	} else {
+		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+	}
 }
 
 func (b *BootController) GroupBootFields(span *Span, fields Fields) (BootFields, error) {
