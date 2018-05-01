@@ -133,6 +133,21 @@ func (st *SeriesType) Splay() Tree {
 	}
 }
 
+func MakeStringsSymbol(span *Span, ss []string) Symbol {
+	switch len(ss) {
+	case 0:
+		return EmptySymbol{}
+	case 1:
+		return BasicSymbol{ss[0]}
+	default:
+		elems := make(Symbols, len(ss))
+		for i := range ss {
+			elems[i] = BasicSymbol{ss[i]}
+		}
+		return makeSeriesDontUnify(span, elems, elems[0].Type())
+	}
+}
+
 func MakeSeriesSymbol(span *Span, elem Symbols) (Symbol, error) {
 	elem = FilterEmptySymbols(elem)
 	if len(elem) == 0 {

@@ -61,33 +61,36 @@ func (b *Booter) combineSpan(summary *BootSummary, tag string) *Span {
 }
 
 func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "ENTER")
 	return b.delegate(
-		b.delegateSpan(ctx, "ENTER"),
+		delegatedSpan,
 		b.EnterVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
 }
 
 func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "LEAVE")
 	return b.delegate(
-		b.delegateSpan(ctx, "LEAVE"),
+		delegatedSpan,
 		b.LeaveVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
 }
 
 func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "LINK")
 	return b.delegate(
-		b.delegateSpan(ctx, "LINK"),
+		delegatedSpan,
 		b.LinkVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 			{Name: "name", Shape: BasicSymbol{name}},
 			{Name: "monadic", Shape: BasicSymbol{monadic}},
@@ -95,14 +98,15 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 	)
 }
 
-func (b *Booter) Select(ctx *BootStepCtx, object Symbol, name string) (*BootResidue, error) {
+func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "SELECT")
 	return b.delegate(
-		b.delegateSpan(ctx, "SELECT"),
+		delegatedSpan,
 		b.SelectVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
-			{Name: "name", Shape: BasicSymbol{name}},
+			{Name: "path", Shape: MakeStringsSymbol(delegatedSpan, []string(path))},
 		},
 	)
 }
@@ -116,7 +120,7 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*B
 			delegatedSpan,
 			b.AugmentVariety,
 			Fields{
-				{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+				{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 				{Name: "object", Shape: object},
 				{Name: "fields", Shape: deFields},
 			},
@@ -125,23 +129,25 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*B
 }
 
 func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "INVOKE")
 	return b.delegate(
-		b.delegateSpan(ctx, "INVOKE"),
+		delegatedSpan,
 		b.InvokeVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
 }
 
 func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootResidue, error) {
+	delegatedSpan := b.delegateSpan(ctx, "LITERAL")
 	return b.delegate(
-		b.delegateSpan(ctx, "LITERAL"),
+		delegatedSpan,
 		b.LiteralVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(b.Origin)},
-			{Name: "figure", Shape: figure.Deconstruct(b.Origin)},
+			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "figure", Shape: figure.Deconstruct(delegatedSpan)},
 		},
 	)
 }
@@ -155,7 +161,7 @@ func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootResidue
 			combineSpan,
 			b.CombineVariety,
 			Fields{
-				{Name: "summary", Shape: summary.Deconstruct(b.Origin)},
+				{Name: "summary", Shape: summary.Deconstruct(combineSpan)},
 				{Name: "steps", Shape: deSteps},
 			},
 		)
