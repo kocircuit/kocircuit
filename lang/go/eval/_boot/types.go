@@ -88,11 +88,11 @@ func (fig *BootFigure) Deconstruct(span *Span) Symbol {
 }
 
 type BootResidue struct {
-	Step     string `ko:"name=step"`
-	Logic    string `ko:"name=logic"`
-	Source   string `ko:"name=source"`
-	Returned Symbol `ko:"name=returned"`
-	Effect   Symbol `ko:"name=effect"`
+	Step    string `ko:"name=step"`
+	Logic   string `ko:"name=logic"`
+	Source  string `ko:"name=source"`
+	Returns Symbol `ko:"name=returns"`
+	Effect  Symbol `ko:"name=effect"`
 }
 
 func (residue *BootResidue) Deconstruct(span *Span) Symbol {
@@ -101,7 +101,7 @@ func (residue *BootResidue) Deconstruct(span *Span) Symbol {
 			{Name: "step", Value: BasicSymbol{residue.Step}},
 			{Name: "logic", Value: BasicSymbol{residue.Logic}},
 			{Name: "source", Value: BasicSymbol{residue.Source}},
-			{Name: "returned", Value: residue.Returned},
+			{Name: "returns", Value: residue.Returns},
 			{Name: "effect", Value: residue.Effect},
 		},
 	)
@@ -118,13 +118,13 @@ func (br BootResidues) Deconstruct(span *Span) (Symbol, error) {
 }
 
 type BootSummary struct {
-	Origin   *Span  `ko:"name=origin"` // evaluation span (not boot span)
-	Pkg      string `ko:"name=pkg"`
-	Func     string `ko:"name=func"`
-	Source   string `ko:"name=source"`
-	Ctx      Symbol `ko:"name=ctx"` // user ctx object
-	Arg      Symbol `ko:"name=arg"`
-	Returned Symbol `ko:"name=returned"`
+	Origin  *Span  `ko:"name=origin"` // evaluation span (not boot span)
+	Pkg     string `ko:"name=pkg"`
+	Func    string `ko:"name=func"`
+	Source  string `ko:"name=source"`
+	Ctx     Symbol `ko:"name=ctx"` // user ctx object
+	Arg     Symbol `ko:"name=arg"`
+	Returns Symbol `ko:"name=returns"`
 }
 
 func (summary *BootSummary) CombineSpan() *Span {
@@ -139,12 +139,12 @@ func (summary *BootSummary) Deconstruct(span *Span) Symbol {
 			{Name: "source", Value: BasicSymbol{summary.Source}},
 			{Name: "ctx", Value: summary.Ctx},
 			{Name: "arg", Value: summary.Arg},
-			{Name: "returned", Value: summary.Returned},
+			{Name: "returns", Value: summary.Returns},
 		},
 	)
 }
 
 type BootStepResult struct {
-	Returned Symbol `ko:"name=returned"`
-	Effect   Symbol `ko:"name=effect"`
+	Returns Symbol `ko:"name=returns"`
+	Effect  Symbol `ko:"name=effect"`
 }

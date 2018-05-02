@@ -51,7 +51,7 @@ The named arguments (above) have the following types:
 * step is (...)
 * fields is a sequence of (name, arg) pairs
 * literal is XXX
-* stepResults is a sequence of (step, returned, panic, effect)
+* stepResults is a sequence of (step, returns, panic, effect)
 `
 }
 

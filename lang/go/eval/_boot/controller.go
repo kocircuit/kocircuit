@@ -15,7 +15,7 @@ type Boot struct {
 	Arg    Symbol
 }
 
-func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
+func (b *Boot) Play(origin *Span) (returns, effect Symbol, err error) {
 	bootController := &BootController{
 		Origin: origin,
 		Booter: b.Booter,
@@ -45,7 +45,7 @@ type BootController struct {
 }
 
 // boot forwards eval panics from the caller evaluator environment.
-func (b *BootController) Boot() (returned, effect Symbol, err error) {
+func (b *BootController) Boot() (returns, effect Symbol, err error) {
 	// evaluation strategy is sequential
 	if shape, effect, err := b.Program.EvalSeq(NewSpan(), b.Func, b.Wrap(b.Arg)); err != nil {
 		return nil, nil, err
@@ -72,14 +72,14 @@ func (b *BootController) BootStepCtx(bootSpan *Span) *BootStepCtx {
 	}
 }
 
-func (b *BootController) BootSummary(returned Symbol) *BootSummary {
+func (b *BootController) BootSummary(returns Symbol) *BootSummary {
 	return &BootSummary{
-		Origin:   b.Origin,
-		Pkg:      b.Func.Pkg,
-		Func:     b.Func.Name,
-		Source:   b.Func.RegionString(),
-		Ctx:      b.Ctx,
-		Arg:      b.Arg,
-		Returned: returned,
+		Origin:  b.Origin,
+		Pkg:     b.Func.Pkg,
+		Func:    b.Func.Name,
+		Source:  b.Func.RegionString(),
+		Ctx:     b.Ctx,
+		Arg:     b.Arg,
+		Returns: returns,
 	}
 }

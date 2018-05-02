@@ -16,7 +16,7 @@ func (b BootObject) Augment(bootSpan *Span, fields Fields) (Shape, Effect, error
 	if residue, err := b.Controller.Booter.Augment(ctx, b.Object, bootFields); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Controller.Wrap(residue.Returned), b.Controller.WrapEffect(residue.Effect), nil
+		return b.Controller.Wrap(residue.Returns), b.Controller.WrapEffect(residue.Effect), nil
 	}
 }
 

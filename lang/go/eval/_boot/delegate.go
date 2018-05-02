@@ -10,12 +10,12 @@ import (
 // errors in types are forwarded in the return value.
 func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (_ *BootStepResult, err error) {
 	if vty == nil {
-		return &BootStepResult{Returned: EmptySymbol{}, Effect: EmptySymbol{}}, nil
+		return &BootStepResult{Returns: EmptySymbol{}, Effect: EmptySymbol{}}, nil
 	}
 	if stepResult, _, err := vty.Evoke(delegated, fields); err != nil {
 		return nil, err
 	} else {
-		returned, _, err := stepResult.Select(delegated, Path{"returns"})
+		returns, _, err := stepResult.Select(delegated, Path{"returns"})
 		if err != nil {
 			return nil, delegated.Errorf(err, "expecting a structure with a returns field")
 		}
@@ -23,6 +23,6 @@ func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (_
 		if err != nil {
 			return nil, delegated.Errorf(err, "expecting a structure with an effect field")
 		}
-		return &BootStepResult{Returned: returned.(Symbol), Effect: effect.(Symbol)}, nil
+		return &BootStepResult{Returns: returns.(Symbol), Effect: effect.(Symbol)}, nil
 	}
 }

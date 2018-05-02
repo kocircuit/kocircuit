@@ -38,7 +38,7 @@ func (b BootObject) Select(bootSpan *Span, path Path) (Shape, Effect, error) {
 	); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Controller.Wrap(residue.Returned), b.Controller.WrapEffect(residue.Effect), nil
+		return b.Controller.Wrap(residue.Returns), b.Controller.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -51,7 +51,7 @@ func (b BootObject) Link(bootSpan *Span, name string, monadic bool) (Shape, Effe
 	); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Controller.Wrap(residue.Returned), b.Controller.WrapEffect(residue.Effect), nil
+		return b.Controller.Wrap(residue.Returns), b.Controller.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -62,6 +62,6 @@ func (b BootObject) Invoke(bootSpan *Span) (Shape, Effect, error) {
 	); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Controller.Wrap(residue.Returned), b.Controller.WrapEffect(residue.Effect), nil
+		return b.Controller.Wrap(residue.Returns), b.Controller.WrapEffect(residue.Effect), nil
 	}
 }

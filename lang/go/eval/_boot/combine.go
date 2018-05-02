@@ -9,10 +9,10 @@ func (b *BootController) Combine(
 	bootSpan *Span,
 	_ *Func,
 	_ Arg, // BoolObject
-	returned Return, // BoolObject
+	returns Return, // BoolObject
 	stepResidues StepResidues,
 ) (Effect, error) {
-	summary := b.BootSummary(b.Unwrap(returned))
+	summary := b.BootSummary(b.Unwrap(returns))
 	steps := b.BootResidues(stepResidues)
 	if residue, err := b.Booter.Combine(summary, steps); err != nil {
 		return nil, err
@@ -26,11 +26,11 @@ func (b *BootController) BootResidues(stepResidues StepResidues) BootResidues {
 	for i, stepResidue := range stepResidues {
 		bootStep := NearestStep(stepResidue.Span)
 		bootResidues[i] = &BootResidue{
-			Step:     bootStep.Label,
-			Logic:    bootStep.Logic.String(),
-			Source:   bootStep.RegionString(),
-			Returned: stepResidue.Shape.(BootObject).Object,
-			Effect:   stepResidue.Effect.(BootEffect).Effect,
+			Step:    bootStep.Label,
+			Logic:   bootStep.Logic.String(),
+			Source:  bootStep.RegionString(),
+			Returns: stepResidue.Shape.(BootObject).Object,
+			Effect:  stepResidue.Effect.(BootEffect).Effect,
 		}
 	}
 	return bootResidues
