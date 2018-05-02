@@ -7,12 +7,12 @@ import (
 
 func (b *BootController) Combine(
 	bootSpan *Span,
-	f *Func,
-	arg Arg,
-	returned Return,
+	_ *Func,
+	_ Arg, // BoolObject
+	returned Return, // BoolObject
 	stepResidues StepResidues,
 ) (Effect, error) {
-	summary := b.BootSummary(returned)
+	summary := b.BootSummary(b.Unwrap(returned))
 	steps := b.BootResidues(stepResidues)
 	if residue, err := b.Booter.Combine(summary, steps); err != nil {
 		return nil, err

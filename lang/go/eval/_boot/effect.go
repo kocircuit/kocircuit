@@ -1,6 +1,8 @@
 package boot
 
 import (
+	"fmt"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
@@ -10,7 +12,7 @@ func (b *BootController) WrapEffect(symbol Symbol) Effect {
 }
 
 func (b *BootController) UnwrapEffect(eff Effect) Symbol {
-	return arg.(BootEffect).Effect
+	return eff.(BootEffect).Effect
 }
 
 // BootEffect is an Effect.

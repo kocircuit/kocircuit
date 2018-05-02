@@ -9,13 +9,11 @@ import (
 )
 
 type Arg interface {
-	String() string
-	// Shape
+	Shape
 }
 
 type Return interface {
-	String() string
-	// Shape
+	Shape
 }
 
 type Field struct {

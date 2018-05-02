@@ -23,6 +23,6 @@ func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (_
 		if err != nil {
 			return nil, delegated.Errorf(err, "expecting a structure with an effect field")
 		}
-		return &BootStepResult{Returned: returned, Effect: effect}, nil
+		return &BootStepResult{Returned: returned.(Symbol), Effect: effect.(Symbol)}, nil
 	}
 }

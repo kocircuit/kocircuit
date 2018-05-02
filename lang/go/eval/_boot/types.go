@@ -1,6 +1,8 @@
 package boot
 
 import (
+	"fmt"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
@@ -96,9 +98,9 @@ type BootResidue struct {
 func (residue *BootResidue) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
-			{Name: "step", Value: BasicSymbol{summary.Step}},
-			{Name: "logic", Value: BasicSymbol{summary.Logic}},
-			{Name: "source", Value: BasicSymbol{summary.Source}},
+			{Name: "step", Value: BasicSymbol{residue.Step}},
+			{Name: "logic", Value: BasicSymbol{residue.Logic}},
+			{Name: "source", Value: BasicSymbol{residue.Source}},
 			{Name: "returned", Value: residue.Returned},
 			{Name: "effect", Value: residue.Effect},
 		},
@@ -126,7 +128,7 @@ type BootSummary struct {
 }
 
 func (summary *BootSummary) CombineSpan() *Span {
-	return RefineOutline(b.Origin, fmt.Sprintf("COMBINE @ %s", summary.Source))
+	return RefineOutline(summary.Origin, fmt.Sprintf("COMBINE @ %s", summary.Source))
 }
 
 func (summary *BootSummary) Deconstruct(span *Span) Symbol {

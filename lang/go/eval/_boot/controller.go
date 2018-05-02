@@ -18,7 +18,7 @@ type Boot struct {
 func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
 	bootController := &BootController{
 		Origin: origin,
-		Booter: booter,
+		Booter: b.Booter,
 		Func:   b.Func,
 		Ctx:    b.Ctx,
 		Arg:    b.Arg,

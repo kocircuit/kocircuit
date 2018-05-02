@@ -17,7 +17,8 @@ func ParseBootReserve(span *Span, ideals Symbol) (Faculty, error) {
 	if v, err := IntegrateInterface(span, ideals, typeOfIdeals); err != nil {
 		return nil, span.Errorf(err, "boot parsing reserve (pkg, name) pairs")
 	} else {
-		return v.(Ideals), nil
+		mk := &bootReserveFaculty{Ideals: v.(Ideals)}
+		return mk.Make(), nil
 	}
 }
 

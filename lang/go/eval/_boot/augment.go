@@ -13,10 +13,10 @@ func (b BootObject) Augment(bootSpan *Span, fields Fields) (Shape, Effect, error
 	if err != nil {
 		return nil, nil, err
 	}
-	if residue, err := b.Booter.Augment(ctx, b.Object, bootFields); err != nil {
+	if residue, err := b.Controller.Booter.Augment(ctx, b.Object, bootFields); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Returned), b.WrapEffect(residue.Effect), nil
+		return b.Controller.Wrap(residue.Returned), b.Controller.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -44,7 +44,7 @@ func (b *BootController) GroupBootFields(span *Span, fields Fields) (BootFields,
 				return nil, span.Errorf(err, "boot repeated field group %s", groupName)
 			} else {
 				bootFields = append(bootFields,
-					&FieldSymbol{Name: groupName, Monadic: groupName == "", Objects: repeated},
+					&BootField{Name: groupName, Monadic: groupName == "", Objects: repeated},
 				)
 			}
 		}
