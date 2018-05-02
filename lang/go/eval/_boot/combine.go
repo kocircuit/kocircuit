@@ -3,9 +3,6 @@ package boot
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 func (b *BootController) Combine(
@@ -13,18 +10,18 @@ func (b *BootController) Combine(
 	f *Func,
 	arg Arg,
 	returned Return,
-	stepResidue StepResidues,
+	stepResidues StepResidues,
 ) (Effect, error) {
-	summary := b.Controller.BootSummary(returned)
-	steps := b.Controller.BootResidues(stepResidues)
+	summary := b.BootSummary(returned)
+	steps := b.BootResidues(stepResidues)
 	if residue, err := b.Booter.Combine(summary, steps); err != nil {
-		return nil, nil, err
+		return nil, err
 	} else {
 		return b.WrapEffect(residue.Effect), nil
 	}
 }
 
-func (b *BootController) BootResidues(stepResidue StepResidues) BootResidues {
+func (b *BootController) BootResidues(stepResidues StepResidues) BootResidues {
 	bootResidues := make(BootResidues, len(stepResidues))
 	for i, stepResidue := range stepResidues {
 		bootStep := NearestStep(stepResidue.Span)

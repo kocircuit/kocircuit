@@ -1,7 +1,6 @@
 package boot
 
 import (
-	"fmt"
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
@@ -122,7 +121,7 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootStepRe
 
 func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
-	if deFields, err := fields.Deconstruct(b.Origin); err != nil {
+	if deFields, err := fields.Deconstruct(ctx.Origin); err != nil {
 		return nil, delegatedSpan.Errorf(err, "boot augmentation")
 	} else {
 		return b.delegate(
