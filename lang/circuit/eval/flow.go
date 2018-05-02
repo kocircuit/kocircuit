@@ -17,11 +17,11 @@ type evalEnvelope struct {
 func (env evalEnvelope) boundary() Boundary { return env.Program.System.Boundary }
 
 func (env evalEnvelope) newFlow(span *Span, r Shape, eff Effect) evalFlow {
-	return evalFlow{env: env, Frame: span, Shape: r, Effect: eff}
+	return evalFlow{env: env, Span: span, Shape: r, Effect: eff}
 }
 
 func (env evalEnvelope) returnFlow(span *Span, r Return, eff Effect) evalFlow {
-	return evalFlow{env: env, Frame: span, Return: r, Effect: eff}
+	return evalFlow{env: env, Span: span, Return: r, Effect: eff}
 }
 
 func (env evalEnvelope) Enter(span *Span) (Flow, error) {
@@ -110,7 +110,7 @@ type evalFlow struct {
 	Shape  Shape
 	Return Arg
 	Effect Effect
-	Frame  *Span // span during when this flow was created
+	Span   *Span // span during when this flow was created
 }
 
 func (f evalFlow) Link(span *Span, name string, monadic bool) (Flow, error) {

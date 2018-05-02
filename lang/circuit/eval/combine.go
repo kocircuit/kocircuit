@@ -13,7 +13,7 @@ type Combiner interface {
 }
 
 type StepResidue struct {
-	Frame  *Span  `ko:"name=frame"`
+	Span   *Span  `ko:"name=span"`
 	Shape  Shape  `ko:"name=shape"`
 	Effect Effect `ko:"name=effect"`
 }

@@ -80,8 +80,10 @@ func (fig *BootFigure) Deconstruct(span *Span) Symbol {
 	return DeconstructInterface(span, fig)
 }
 
-type BootResidue struct { //XXX
-	XXX
+type BootResidue struct {
+	Step     string `ko:"name=step"`
+	Logic    string `ko:"name=logic"`
+	Source   string `ko:"name=source"`
 	Returned Symbol `ko:"name=returned"`
 	Effect   Symbol `ko:"name=effect"`
 }
@@ -89,6 +91,9 @@ type BootResidue struct { //XXX
 func (residue *BootResidue) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
+			{Name: "step", Value: BasicSymbol{summary.Step}},
+			{Name: "logic", Value: BasicSymbol{summary.Logic}},
+			{Name: "source", Value: BasicSymbol{summary.Source}},
 			{Name: "returned", Value: residue.Returned},
 			{Name: "effect", Value: residue.Effect},
 		},
@@ -113,7 +118,6 @@ type BootSummary struct {
 	Ctx      Symbol `ko:"name=ctx"` // user ctx object
 	Arg      Symbol `ko:"name=arg"`
 	Returned Symbol `ko:"name=returned"`
-	Panicked Symbol `ko:"name=panicked"`
 }
 
 func (summary *BootSummary) CombineSpan() *Span {
@@ -129,7 +133,6 @@ func (summary *BootSummary) Deconstruct(span *Span) Symbol {
 			{Name: "ctx", Value: summary.Ctx},
 			{Name: "arg", Value: summary.Arg},
 			{Name: "returned", Value: summary.Returned},
-			{Name: "panicked", Value: summary.Panicked},
 		},
 	)
 }

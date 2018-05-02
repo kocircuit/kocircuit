@@ -32,7 +32,7 @@ type System struct {
 func (prog Program) String() string { return Sprint(prog) }
 
 func (f evalFlow) StepResidue() *StepResidue {
-	return &StepResidue{Frame: f.Frame, Shape: f.Shape, Effect: f.Effect}
+	return &StepResidue{Span: f.Span, Shape: f.Shape, Effect: f.Effect}
 }
 
 func FlowResidues(stepFlow []Flow) (stepResidue []*StepResidue) {

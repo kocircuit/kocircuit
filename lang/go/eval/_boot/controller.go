@@ -71,7 +71,7 @@ func (b *BootController) BootStepCtx(bootSpan *Span) *BootStepCtx {
 	}
 }
 
-func (b *BootController) BootSummary(returned, panicked Symbol) *BootSummary {
+func (b *BootController) BootSummary(returned Symbol) *BootSummary {
 	return &BootSummary{
 		Origin:   b.Origin,
 		Pkg:      b.Func.Pkg,
@@ -80,6 +80,5 @@ func (b *BootController) BootSummary(returned, panicked Symbol) *BootSummary {
 		Ctx:      b.Ctx,
 		Arg:      b.Arg,
 		Returned: returned,
-		Panicked: panicked,
 	}
 }
