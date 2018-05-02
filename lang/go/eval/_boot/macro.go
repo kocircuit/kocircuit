@@ -72,10 +72,7 @@ func (EvalBootMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 		return nil, nil, span.Errorf(nil, "func must be a user function (not a builtin), got %v", fu.Macro)
 	}
 	// parse ctx and arg
-	ctxArg := a.Walk("ctx")
-	_ = ctxArg
-	argArg := a.Walk("arg")
-	_ = argArg
+	ctxArg, argArg := a.Walk("ctx"), a.Walk("arg")
 	// boot
 	boot := &Boot{
 		Idiom:  interpretFunc.Evaluator.EvalIdiom(),

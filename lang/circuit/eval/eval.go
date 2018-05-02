@@ -63,7 +63,7 @@ func (prog Program) EvalSeq(span *Span, f *Func, arg Arg) (Return, Effect, error
 	if returnFlow, stepFlow, err := PlaySeqFlow(span, f, envelope); err != nil {
 		return nil, nil, err
 	} else {
-		returned := returnFlow.(evalFlow).Return
+		returned := returnFlow.(evalFlow).Shape
 		if eff, err := prog.Combiner.Combine(span, f, arg, returned, FlowResidues(stepFlow)); err != nil {
 			return nil, nil, err
 		} else {
@@ -78,7 +78,7 @@ func (prog Program) EvalPar(span *Span, f *Func, arg Arg) (Return, Effect, error
 	if returnFlow, stepFlow, err := PlayParFlow(span, f, envelope); err != nil {
 		return nil, nil, err
 	} else {
-		returned := returnFlow.(evalFlow).Return
+		returned := returnFlow.(evalFlow).Shape
 		if eff, err := prog.Combiner.Combine(span, f, arg, returned, FlowResidues(stepFlow)); err != nil {
 			return nil, nil, err
 		} else {

@@ -50,7 +50,12 @@ func (b *BootController) Boot() (returned, effect Symbol, err error) {
 	if shape, effect, err := b.Program.EvalSeq(NewSpan(), b.Func, b.Wrap(b.Arg)); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Unwrap(shape.(BootObject)), b.UnwrapEffect(effect.(BootEffect)), nil
+		return MakeStructSymbol(
+			FieldSymbols{
+				{Name: "returns", Value: b.Unwrap(shape.(BootObject))},
+				{Name: "effect", Value: b.UnwrapEffect(effect.(BootEffect))},
+			},
+		), nil, nil
 	}
 }
 

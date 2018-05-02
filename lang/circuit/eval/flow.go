@@ -20,10 +20,6 @@ func (env evalEnvelope) newFlow(span *Span, r Shape, eff Effect) evalFlow {
 	return evalFlow{env: env, Span: span, Shape: r, Effect: eff}
 }
 
-func (env evalEnvelope) returnFlow(span *Span, r Return, eff Effect) evalFlow {
-	return evalFlow{env: env, Span: span, Return: r, Effect: eff}
-}
-
 func (env evalEnvelope) Enter(span *Span) (Flow, error) {
 	arg, effect, err := env.boundary().Enter(span, env.Arg)
 	if err != nil {
@@ -108,7 +104,6 @@ func (env evalEnvelope) makeMacroFigure(span *Span, macro Macro) (Flow, error) {
 type evalFlow struct {
 	env    evalEnvelope
 	Shape  Shape
-	Return Arg
 	Effect Effect
 	Span   *Span // span during when this flow was created
 }
@@ -165,5 +160,5 @@ func (f evalFlow) Leave(span *Span) (Flow, error) {
 	if err != nil {
 		return nil, err
 	}
-	return f.env.returnFlow(span, r, effect), nil
+	return f.env.newFlow(span, r, effect), nil
 }

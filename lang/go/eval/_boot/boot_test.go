@@ -37,7 +37,7 @@ var bootTests = []*EvalTest{
 				ctx: (bootUserCtx: true)
 				arg: (bootUserArg: true)
 			)
-			return: Show(r)
+			return: Show(parsed: (result: r))
 		}
 		`,
 		Arg: struct {
@@ -45,6 +45,6 @@ var bootTests = []*EvalTest{
 		}{
 			Ko_x: 7,
 		},
-		Result: nil,
+		Result: struct{}{},
 	},
 }
