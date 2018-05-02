@@ -47,7 +47,7 @@ type BootController struct {
 // boot forwards eval panics from the caller evaluator environment.
 func (b *BootController) Boot() (returned, effect Symbol, err error) {
 	// evaluation strategy is sequential
-	if shape, effect, err := b.Program.EvalSeq(NewSpan(), b.Func, b.Arg); err != nil {
+	if shape, effect, err := b.Program.EvalSeq(NewSpan(), b.Func, b.Wrap(b.Arg)); err != nil {
 		return nil, nil, err
 	} else {
 		return b.Unwrap(shape.(BootObject)), b.UnwrapEffect(effect.(BootEffect)), nil

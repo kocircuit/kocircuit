@@ -1,6 +1,8 @@
 package boot
 
 import (
+	"fmt"
+
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/circuit/model"
 )
@@ -25,6 +27,7 @@ func (b *BootController) BootResidues(stepResidues StepResidues) BootResidues {
 	bootResidues := make(BootResidues, len(stepResidues))
 	for i, stepResidue := range stepResidues {
 		bootStep := NearestStep(stepResidue.Span)
+		fmt.Printf("SR src=%s label=%s shape=%v\n", bootStep.RegionString(), bootStep.Label, stepResidue.Shape)
 		bootResidues[i] = &BootResidue{
 			Step:     bootStep.Label,
 			Logic:    bootStep.Logic.String(),

@@ -81,6 +81,7 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootStepResult, error)
 }
 
 func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
+	println("LEAVE", object.String())
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
