@@ -67,8 +67,13 @@ type BootFigure struct {
 }
 
 type BootFunctional struct {
-	Macro *string   `ko:"name=macro"`
-	Func  *BootFunc `ko:"name=func"`
+	Reserve *BootReserve `ko:"name=reserve"`
+	Func    *BootFunc    `ko:"name=func"`
+}
+
+type BootReserve struct {
+	Pkg  string `ko:"name=pkg"`
+	Name string `ko:"name=name"`
 }
 
 type BootFunc struct {

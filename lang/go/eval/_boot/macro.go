@@ -30,10 +30,11 @@ func (m EvalBootMacro) Doc() string {
 * translator is a structure of the form, where "->" indicates the return type of a variety:
 
 	(
+		reserved: (pkg: string, name: string)
 		Enter(step, ctx, arg) -> (returns, effect)
 		Leave(step, ctx, arg) -> (returns, effect)
 		Figure(step, ctx, literal) -> (returns, effect)
-		Link(step, ctx, arg, label, monadic) -> (returns, effect)
+		Link(step, ctx, arg, name, monadic) -> (returns, effect)
 		Select(step, ctx, arg, path) -> (returns, effect)
 		Augment(step, ctx, arg, fields) -> (returns, effect)
 		Invoke(step, ctx, arg) -> (returns, effect)

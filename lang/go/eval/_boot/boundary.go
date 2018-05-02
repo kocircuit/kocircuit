@@ -22,14 +22,11 @@ func (b *BootController) Figure(bootSpan *Span, figure Figure) (Shape, Effect, e
 		fig.String = &u.Value_
 	case *BootFuncMacro: // from Interpret()
 		fig.Functional = &BootFunctional{
-			Func: &BootFunc{
-				Pkg:  u.Func.Pkg,
-				Name: u.Func.Name,
-			},
+			Func: &BootFunc{Pkg: u.Func.Pkg, Name: u.Func.Name},
 		}
-	case *BootReservedMacro: // from faculty of reserved words
+	case *BootReserveMacro: // from faculty of reserved words
 		fig.Functional = &BootFunctional{
-			Macro: PtrString(u.Macro),
+			Reserve: &BootReserve{Pkg: u.Ideal.Pkg, Name: u.Ideal.Name},
 		}
 	default:
 		panic("unknown figure")

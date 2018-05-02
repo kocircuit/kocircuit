@@ -8,6 +8,14 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+func IntegrateInterface(span *Span, s Symbol, t reflect.Type) (interface{}, error) {
+	if v, err := Integrate(span, s, t); err != nil {
+		return nil, err
+	} else {
+		return v.Interface(), nil
+	}
+}
+
 func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 	ctx := &typingCtx{Span: span}
 	return ctx.Integrate(s, t)
