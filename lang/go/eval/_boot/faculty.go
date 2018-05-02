@@ -12,9 +12,7 @@ type BootReserveMacro struct {
 	Ideal                Ideal `ko:"name=ideal"`
 }
 
-//XXX: add reserved ideals to booter
-
-func BootReserveFaculty(span *Span, ideals Symbol) (Faculty, error) {
+func ParseBootReserve(span *Span, ideals Symbol) (Faculty, error) {
 	if v, err := IntegrateInterface(span, ideals, typeOfIdeals); err != nil {
 		return nil, span.Errorf(err, "boot parsing reserve (pkg, name) pairs")
 	} else {

@@ -9,7 +9,7 @@ import (
 )
 
 type Boot struct {
-	Faculty Faculty // build
+	Faculty Faculty // XXX: build; now in booter?
 	Repo    Repo    // inherit
 	Booter  *Booter
 	Func    *Func

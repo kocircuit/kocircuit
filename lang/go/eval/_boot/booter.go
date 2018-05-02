@@ -8,6 +8,7 @@ import (
 )
 
 type Booter struct {
+	Reserve        Faculty        `ko:"name=reserve"`
 	EnterVariety   *VarietySymbol `ko:"name=Enter"`
 	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
 	LiteralVariety *VarietySymbol `ko:"name=Literal"`
@@ -18,37 +19,54 @@ type Booter struct {
 	CombineVariety *VarietySymbol `ko:"name=Combine"`
 }
 
-func ExtractBooter(span *Span, a Symbol) (*Booter, error) {
+func ExtractBooter(span *Span, a Symbol) (_ *Booter, err error) {
 	arg, ok := a.(*StructSymbol)
 	if !ok {
 		return nil, span.Errorf(nil, "booter must be a structure, got %v", a)
 	}
 	t := &Booter{}
-	if t.EnterVariety, ok = arg.Walk("Enter").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Enter must be a variety, got %v", arg.Walk("Enter"))
+	if t.Reserve, err = ParseBootReserve(span, arg.Walk("reserve")); err != nil {
+		return nil, span.Errorf(err,
+			"booter reserve must be a sequence of (pkg, name) pairs, got %v", arg.Walk("reserve"))
 	}
-	if t.LeaveVariety, ok = arg.Walk("Leave").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Leave must be a variety, got %v", arg.Walk("Leave"))
+	if t.EnterVariety, err = ParseBooterVariety(span, arg, "Enter"); err != nil {
+		return nil, err
 	}
-	if t.LiteralVariety, ok = arg.Walk("Literal").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Literal must be a variety, got %v", arg.Walk("Literal"))
+	if t.LeaveVariety, err = ParseBooterVariety(span, arg, "Leave"); err != nil {
+		return nil, err
 	}
-	if t.LinkVariety, ok = arg.Walk("Link").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Link must be a variety, got %v", arg.Walk("Link"))
+	if t.LiteralVariety, err = ParseBooterVariety(span, arg, "Literal"); err != nil {
+		return nil, err
 	}
-	if t.SelectVariety, ok = arg.Walk("Select").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Select must be a variety, got %v", arg.Walk("Select"))
+	if t.LinkVariety, err = ParseBooterVariety(span, arg, "Link"); err != nil {
+		return nil, err
 	}
-	if t.AugmentVariety, ok = arg.Walk("Augment").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Augment must be a variety, got %v", arg.Walk("Augment"))
+	if t.SelectVariety, err = ParseBooterVariety(span, arg, "Select"); err != nil {
+		return nil, err
 	}
-	if t.InvokeVariety, ok = arg.Walk("Invoke").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Invoke must be a variety, got %v", arg.Walk("Invoke"))
+	if t.AugmentVariety, err = ParseBooterVariety(span, arg, "Augment"); err != nil {
+		return nil, err
 	}
-	if t.CombineVariety, ok = arg.Walk("Combine").(*VarietySymbol); !ok {
-		return nil, span.Errorf(nil, "booter Combine must be a variety, got %v", arg.Walk("Combine"))
+	if t.InvokeVariety, err = ParseBooterVariety(span, arg, "Invoke"); err != nil {
+		return nil, err
+	}
+	if t.CombineVariety, err = ParseBooterVariety(span, arg, "Combine"); err != nil {
+		return nil, err
 	}
 	return t, nil
+}
+
+func ParseBooterVariety(span *Span, arg *StructSymbol, name string) (*VarietySymbol, error) {
+	switch u := arg.Walk(name).(type) {
+	case EmptySymbol:
+		return nil, nil
+	case *VarietySymbol:
+		return u, nil
+	case nil:
+		panic("o")
+	default:
+		return nil, span.Errorf(nil, "booter %s must be a variety, got %v", name, u)
+	}
 }
 
 func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {

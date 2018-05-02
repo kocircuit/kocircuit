@@ -9,6 +9,9 @@ import (
 // delegate forwards invocation panics to its caller.
 // errors in types are forwarded in the return value.
 func (b *Booter) delegate(delegated *Span, vty *VarietySymbol, fields Fields) (_ *BootStepResult, err error) {
+	if vty == nil {
+		return &BootStepResult{Returned: EmptySymbol{}, Effect: EmptySymbol{}}, nil
+	}
 	if stepResult, _, err := vty.Evoke(delegated, fields); err != nil {
 		return nil, err
 	} else {
