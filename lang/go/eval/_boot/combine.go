@@ -20,19 +20,20 @@ func (b *BootController) Combine(
 	if residue, err := b.Booter.Combine(summary, steps); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+		return b.Wrap(residue.Effect), nil
 	}
 }
 
 func (b *BootController) BootResidues(stepResidue StepResidues) BootResidues {
 	bootResidues := make(BootResidues, len(stepResidues))
-	for i := range stepResidues {
+	for i, stepResidue := range stepResidues {
+		bootStep := NearestStep(stepResidue.Span)
 		bootResidues[i] = &BootResidue{
-			Step:     XXX, //     string `ko:"name=step"`
-			Logic:    XXX, //    string `ko:"name=logic"`
-			Source:   XXX, //   string `ko:"name=source"`
-			Returned: XXX, // Symbol `ko:"name=returned"`
-			Effect:   XXX, //   Symbol `ko:"name=effect"`
+			Step:     bootStep.Label,
+			Logic:    bootStep.Logic.String(),
+			Source:   bootStep.RegionString(),
+			Returned: stepResidue.Shape.(BootShape).Object,
+			Effect:   stepResidue.Effect.(BootShape).Object,
 		}
 	}
 	return bootResidues
