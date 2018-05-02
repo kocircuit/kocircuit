@@ -1,0 +1,69 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToSeries(place, fromType, toSeriesType?) {
+	stepped: space.Walk(place: place, step: "()")
+	return: Switch(
+		case: types.WhenEmpty[
+			type: fromType
+			then: IntegrateEmptyToSeries[place: stepped, toSeriesType: toSeriesType]
+		]
+		case: types.WhenOptional[
+			type: fromType
+			then: IntegrateOptionalToSeries[place: stepped, toSeriesType: toSeriesType]
+		]
+		case: types.WhenSeries[
+			type: fromType
+			then: IntegrateSeriesToSeries[place: stepped, toSeriesType: toSeriesType]
+		]
+		otherwise: IntegrateIntoSeries[
+			place: stepped
+			fromType: fromType
+			toSeriesType: toSeriesType
+		]
+	)
+}
+
+IntegrateEmptyToSeries(place, fromEmptyType?, toSeriesType) {
+	return: shapers.ZeroSeries(fromType: fromEmptyType, toType: toSeriesType)
+}
+
+IntegrateOptionalToSeries(place, fromOptionalType?, toSeriesType) {
+	elemShaper: Integrate(
+		place: place
+		fromType: types.OptionalTypeElem(fromOptionalType)
+		toType: types.SeriesTypeElem(toSeriesType)
+	)
+	return: shapers.OptionalSeries(
+		elemShaper: elemShaper
+		fromType: fromOptionalType
+		toType: toSeriesType
+	)
+}
+
+IntegrateSeriesToSeries(place, fromSeriesType?, toSeriesType) {
+	elemShaper: Integrate(
+		place: place
+		fromType: types.SeriesTypeElem(fromSeriesType)
+		toType: types.SeriesTypeElem(toSeriesType)
+	)
+	return: shapers.SeriesSeries(
+		elemShaper: elemShaper
+		fromType: fromSeriesType
+		toType: toSeriesType
+	)
+}
+
+IntegrateIntoSeries(place, fromType, toSeriesType) {
+	elemShaper: Integrate(
+		place: place
+		fromType: fromType
+		toType: types.SeriesTypeElem(toSeriesType)
+	)
+	return: shapers.IntoSeries(
+		elemShaper: elemShaper
+		fromType: fromType
+		toType: toSeriesType
+	)
+}

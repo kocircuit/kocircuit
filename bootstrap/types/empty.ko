@@ -1,0 +1,10 @@
+EmptyType() {
+	return: (empty: true)
+}
+
+WhenEmpty(type?, then, else) {
+	return: When(
+		have: All(empty: Expect(type).empty)
+		then: then, else: else
+	)
+}

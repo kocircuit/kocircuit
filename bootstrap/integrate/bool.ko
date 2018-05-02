@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToBool(place, fromType, toBoolType?) {
+	return: Switch(
+		case: types.WhenBool[
+			type: fromType
+			then: IntegrateBoolToBool[place: place, toBoolType: toBoolType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to bool"
+				fromType: fromType
+				toBoolType: toBoolType
+			)
+		]
+	)
+}
+
+IntegrateBoolToBool(place, fromBoolType?, toBoolType) {
+	_: Branch(if: Not(Equal(fromBoolType, toBoolType)), then: Panic[bug: "bool types differ"])
+	return: shapers.Identity(toBoolType)
+}

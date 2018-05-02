@@ -1,0 +1,41 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+import "github.com/kocircuit/kocircuit/bootstrap/time"
+
+Root(span?) {
+	return: _Place(span: span)
+}
+
+Walk(place, step) {
+	return: _Place(span: place.span, parent: place, step: String(step))
+}
+
+Error(place, error) {
+	return: time.Error(
+		span: place.span
+		error: (
+			typeError: Expect(error)
+			place: strings.Join(string: PathTo(place), delimiter: ".")
+		)
+	)
+}
+
+PathTo(place?) {
+	return: When(
+		have: place.parent
+		then: appendPathToParent[step: place.step]
+		else: Return[place.step]
+	)
+}
+
+appendPathToParent(parent?, step) {
+	return: Merge(PathTo(parent), step)
+}
+
+_Place(parent, span, step) {
+	return: (
+		parent: parent
+		span: Expect(span)
+		step: step
+	)
+}

@@ -1,0 +1,12 @@
+import "github.com/kocircuit/kocircuit/bootstrap/lang"
+import "github.com/kocircuit/kocircuit/bootstrap/source"
+
+TestingRoot() {
+	return: Root(
+		supervisor: lang.Supervisor(
+			name: "testing.supervisor"
+			source: source.Source(file: "_testing_", offset: 0, line: 1, column: 1)
+		)
+		background: "testing"
+	)
+}

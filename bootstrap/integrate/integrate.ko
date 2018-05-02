@@ -1,0 +1,28 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+Integrate(place, fromType, toType) {
+	return: Switch(
+		case: types.WhenEmpty[type: toType, then: IntegrateToEmpty[place: place, fromType: fromType]]
+		case: types.WhenOptional[type: toType, then: IntegrateToOptional[place: place, fromType: fromType]]
+		case: types.WhenSeries[type: toType, then: IntegrateToSeries[place: place, fromType: fromType]]
+		//
+		case: types.WhenNamed[type: toType, then: IntegrateToNamed[place: place, fromType: fromType]]
+		case: types.WhenBool[type: toType, then: IntegrateToBool[place: place, fromType: fromType]]
+		case: types.WhenString[type: toType, then: IntegrateToString[place: place, fromType: fromType]]
+		case: types.WhenInteger[type: toType, then: IntegrateToInteger[place: place, fromType: fromType]]
+		case: types.WhenFloating[type: toType, then: IntegrateToFloat[place: place, fromType: fromType]]
+		//
+		case: types.WhenStructure[type: toType, then: IntegrateToStructure[place: place, fromType: fromType]]
+		case: types.WhenUnion[type: toType, then: IntegrateToUnion[place: place, fromType: fromType]]
+		//
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate"
+				fromType: fromType
+				toType: toType
+			)
+		]
+	)
+}

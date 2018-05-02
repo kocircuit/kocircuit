@@ -1,0 +1,19 @@
+
+NamedType(named?) {
+	return: ( // type
+		named: ( // named type
+			name: String(named)
+		)
+	)
+}
+
+WhenNamed(type?, then, else) {
+	return: When(
+		have: All(named: Expect(type).named)
+		then: then, else: else
+	)
+}
+
+NamedTypeName(namedType?) {
+	return: String(namedType.named.name)
+}

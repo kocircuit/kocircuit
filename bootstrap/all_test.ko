@@ -1,0 +1,16 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/time"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+import "github.com/kocircuit/kocircuit/bootstrap/unify"
+import "github.com/kocircuit/kocircuit/bootstrap/integrate"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/TestAll
+TestAll() {
+	return: And(
+		space.TestAll()
+		time.TestAll()
+		types.TestAll()
+		unify.TestAll()
+		integrate.TestAll()
+	)
+}

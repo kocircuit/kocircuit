@@ -1,0 +1,55 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/set"
+
+Field(name, type) {
+	return: (name: String(name), type: Expect(type))
+}
+
+FieldName(field?) {
+	return: String(field.name)
+}
+
+FieldType(field?) {
+	return: Expect(field.type)
+}
+
+NoDuplicateFields(fields?) {
+	assert: series.Map(
+		over: fields
+		with: panicOnDuplicateField[memory: Memory()]
+	)
+	return: fields
+}
+
+panicOnDuplicateField(memory, field?) {
+	fieldName: FieldName(field)
+	fieldType: FieldType(field)
+	return: When(
+		have: memory.Recall(key: fieldName)
+		then: Panic[typeError: "duplicate field"]
+		else: memory.Remember[key: fieldName, value: fieldType]
+	)
+}
+
+RemoveEmptyTypeFields(fields?) {
+	return: series.Filter(
+		over: fields
+		with: removeEmptyTypeField(field?) {
+			return: WhenEmpty(
+				type: FieldType(field)
+				then: Return[pass: false]
+				else: Return[pass: true]
+			)
+		}
+	)
+}
+
+FieldsUnion(leftFields, rightFields) {
+	fieldLists: Range(
+		over: Merge(NoDuplicateFields(leftFields), NoDuplicateFields(rightFields))
+		with: fieldsUnion(carry, elem) {
+			return: (carry: InsertObjIntoLists(lists: carry, obj: elem))
+		}
+	).residue
+	return: fieldLists
+}

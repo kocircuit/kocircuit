@@ -1,0 +1,27 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestSwitch
+TestSwitch() {
+	return: And(test1, test2, test3)
+	test1: Equal(
+		Switch(
+			case: Return[]
+			case: Return[1]
+			case: Return[2]
+		)
+		1
+	)
+	test2: Equal(
+		Switch(
+			case: Return[]
+			case: Return[]
+			otherwise: Return[3]
+		)
+		3
+	)
+	test3: Equal(
+		Switch(
+			case: Return[]
+			case: Return[]
+		)
+		Empty()
+	)
+}

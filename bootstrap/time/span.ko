@@ -1,0 +1,115 @@
+import "github.com/kocircuit/kocircuit/lib/integer"
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+import "github.com/kocircuit/kocircuit/bootstrap/lang"
+import "github.com/kocircuit/kocircuit/bootstrap/source" as ko_source
+
+SourceLine(span?) {
+	return: String(span.view.source)
+}
+
+Root(supervisor, background) {
+	sheath: _Sheath(supervisor: supervisor)
+	return: _Span(
+		view: _View(
+			depth: 0
+			sheath: sheath
+			source: lang.SupervisorSource(supervisor)
+			tag: lang.SupervisorTag(supervisor)
+		)
+		sheath: sheath
+		background: background
+	)
+}
+
+Error(span?, error) {
+	return: Panic(
+		error: Expect(error)
+		stack: spanSourceTrace(span)
+	)
+}
+
+StackSupervisor(span, supervisor) {
+	sheath: _Sheath(supervisor: supervisor)
+	return: _Span(
+		parent: span
+		view: _View(
+			parent: span
+			depth: Inc(span.depth)
+			sheath: sheath
+			source: lang.SupervisorSource(supervisor)
+			tag: lang.SupervisorTag(supervisor)
+		)
+		sheath: sheath
+		background: span.background
+	)
+}
+
+StackFunc(span, func) {
+	sheath: _Sheath(supervisor: span.supervisor, func: func)
+	return: _Span(
+		parent: span
+		view: _View(
+			parent: span
+			depth: Inc(span.depth)
+			sheath: sheath
+			source: lang.FuncSource(func)
+			tag: lang.FuncTag(func)
+		)
+		sheath: sheath
+		background: span.background
+	)
+}
+
+StackStep(span, step) {
+	sheath: _Sheath(supervisor: span.supervisor, func: span.func, step: step)
+	return: _Span(
+		parent: span
+		view: _View(
+			parent: span
+			depth: Inc(span.depth)
+			sheath: sheath
+			source: lang.StepSource(step)
+			tag: lang.StepTag(step)
+		)
+		sheath: sheath
+		background: span.background
+	)
+}
+
+ChangeBackground(span, background) {
+	return: _Span(
+		parent: span
+		view: span.view
+		sheath: span.sheath
+		background: background
+	)
+}
+
+_View(parent, depth, sheath, source, tag) {
+	id: Hash(parent.id, sheath)
+	return: (
+		id: id
+		source: strings.Join( // "[<depth>] <id> <source_line> <tag>"
+			string: ("[", integer.FormatInt64(depth), "] ", id, ", ", ko_source.Line(source), ", ", tag)
+		)
+		tag: tag
+	)
+}
+
+_Sheath(supervisor, func, step) {
+	return: (
+		supervisor: Expect(supervisor)
+		func: func
+		step: step
+	)
+}
+
+_Span(parent, view, sheath, background) {
+	return: (
+		parent: parent
+		view: Expect(view)
+		sheath: Expect(sheath)
+		background: background
+	)
+}

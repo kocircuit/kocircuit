@@ -1,0 +1,17 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+Step(func, label, source) {
+	return: (func: func, label: String(label), source: source)
+}
+
+StepLabel(step?) {
+	return: String(step.label)
+}
+
+StepSource(step?) {
+	return: Expect(step.source)
+}
+
+StepTag(step?) {
+	return: strings.Join(step.func.name, ":", step.label)
+}

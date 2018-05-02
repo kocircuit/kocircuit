@@ -1,0 +1,36 @@
+// OptionalType returns the optional analog of the given type, unless the type is already optional.
+OptionalType(elemType?) {
+	return: WhenAlreadyOptional(
+		type: elemType
+		then: Return[pass: elemType]
+		else: optionalType[elemType]
+	)
+}
+
+optionalType(elemType?) {
+	return: ( // type
+		optional: ( // optional type
+			elemType: elemType
+		)
+	)
+}
+
+WhenOptional(type?, then, else) {
+	return: When(
+		have: All(optional: Expect(type).optional)
+		then: then, else: else
+	)
+}
+
+OptionalTypeElem(optionalType?) {
+	return: Expect(optionalType.optional.elemType)
+}
+
+WhenAlreadyOptional(type?, then, else) {
+	return: Switch(
+		case: WhenEmpty[type: type, then: then]
+		case: WhenSeries[type: type, then: then]
+		case: WhenOptional[type: type, then: then]
+		otherwise: else
+	)
+}

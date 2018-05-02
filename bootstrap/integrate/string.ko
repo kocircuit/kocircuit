@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToString(place, fromType, toStringType?) {
+	return: Switch(
+		case: types.WhenString[
+			type: fromType
+			then: IntegrateStringToString[place: place, toStringType: toStringType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to string"
+				fromType: fromType
+				toStringType: toStringType
+			)
+		]
+	)
+}
+
+IntegrateStringToString(place, fromStringType?, toStringType) {
+	_: Branch(if: Not(Equal(fromStringType, toStringType)), then: Panic[bug: "string types differ"])
+	return: shapers.Identity(toStringType)
+}

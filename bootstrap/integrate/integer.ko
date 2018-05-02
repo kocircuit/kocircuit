@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToInteger(place, fromType, toIntegerType?) {
+	return: Switch(
+		case: types.WhenInteger[
+			type: fromType
+			then: IntegrateIntegerToInteger[place: place, toIntegerType: toIntegerType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to integer"
+				fromType: fromType
+				toIntegerType: toIntegerType
+			)
+		]
+	)
+}
+
+IntegrateIntegerToInteger(place, fromIntegerType?, toIntegerType) {
+	_: Branch(if: Not(Equal(fromIntegerType, toIntegerType)), then: Panic[bug: "integer types differ"])
+	return: shapers.Identity(toIntegerType)
+}

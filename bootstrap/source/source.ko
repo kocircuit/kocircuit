@@ -1,0 +1,24 @@
+import "github.com/kocircuit/kocircuit/lib/integer"
+import "github.com/kocircuit/kocircuit/lib/strings"
+
+Source(file, offset, line, column) {
+	return: (
+		file: String(file)
+		offset: Int64(offset)
+		line: Int64(line)
+		column: Int64(column)
+	)
+}
+
+NoSource() {
+	return: Source(file: "-----", offset: 0, line: 0, column: 0)
+}
+
+// Line returns a readable string line representation of the source region.
+Line(source?) {
+	return: strings.Join(
+		source.file
+		":", integer.FormatInt64(source.line)
+		":", integer.FormatInt64(source.column)
+	)
+}

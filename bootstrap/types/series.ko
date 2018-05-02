@@ -1,0 +1,40 @@
+SeriesType(elemType?) {
+	return: Switch(
+		// series of empty = empty
+		case: WhenEmpty[type: elemType, then: EmptyType]
+		// series of optional type = series of type
+		case: WhenOptional[type: elemType, then: seriesFromOptionalElem]
+		otherwise: seriesType[elemType]
+	)
+}
+
+seriesType(elemType?) {
+	return: ( // type
+		series: ( // series type
+			elemType: elemType
+		)
+	)
+}
+
+WhenSeries(type?, then, else) {
+	return: When(
+		have: All(series: Expect(type).series)
+		then: then, else: else
+	)
+}
+
+HaveSeries(type?) {
+	return: WhenSeries(
+		type: SeriesType(type)
+		then: Return[pass: true]
+		else: Return[pass: false]
+	)
+}
+
+seriesFromOptionalElem(optionalType?) {
+	return: seriesType(OptionalTypeElem(optionalType))
+}
+
+SeriesTypeElem(seriesType?) {
+	return: Expect(seriesType.series.elemType)
+}

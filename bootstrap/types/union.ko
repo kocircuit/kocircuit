@@ -1,0 +1,29 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+
+UnionType(varieties?) {
+	return: ( // type
+		union: ( // type union
+			varieties: Expect(varieties)
+		)
+	)
+}
+
+UnionTypeVarieties(unionType?) {
+	return: Expect(unionType.union).varieties
+}
+
+WhenUnion(type?, then, else) {
+	return: When(
+		have: All(union: Expect(type).union)
+		then: then, else: else
+	)
+}
+
+AugmentUnionType(unionType?, fields) {
+	return: UnionType(
+		varieties: series.Map(
+			over: Expect(unionType.union.varieties)
+			with: AugmentVarietyType[fields: fields]
+		)
+	)
+}

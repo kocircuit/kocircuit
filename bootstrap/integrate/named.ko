@@ -1,0 +1,36 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToNamed(place, fromType, toNamedType?) {
+	return: Switch(
+		case: types.WhenNamed[
+			type: fromType
+			then: IntegrateNamedToNamed[place: place, toNamedType: toNamedType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to named"
+				fromType: fromType
+				toNamedType: toNamedType
+			)
+		]
+	)
+}
+
+IntegrateNamedToNamed(place, fromNamedType?, toNamedType) {
+	namedType: Branch(
+		if: Equal(NamedTypeName(fromNamedType), NamedTypeName(toNamedType))
+		then: Return[toNamedType]
+		else: space.Error[
+			place: place
+			error: (
+				integrating: "named types with different names"
+				fromNamedType: fromNamedType
+				toNamedType: toNamedType
+			)
+		]
+	)
+	return: shapers.Identity(namedType)
+}

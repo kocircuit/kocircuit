@@ -1,0 +1,72 @@
+import "github.com/kocircuit/kocircuit/bootstrap/testutil"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestVarietyType
+TestVarietyType() {
+	return: And(
+		testBuildValidVarietyType()
+		testutil.ShouldPanic(testBuildInvalidVarietyType1)
+		testutil.ShouldPanic(testBuildInvalidVarietyType2)
+	)
+}
+
+testBuildValidVarietyType() {
+	v: VarietyType(
+		macro: "Macro"
+		fields: Field(name: "a1", type: BoolType())
+		fields: Field(name: "a2", type: IntegerType())
+	)
+	return: WhenVariety(type: v, then: Return[pass: true], else: Return[pass: false])
+}
+
+testBuildInvalidVarietyType1() {
+	_: VarietyType(
+		// missing macro
+		fields: Field(name: "a1", type: BoolType())
+		fields: Field(name: "a2", type: IntegerType())
+	)
+	return: false
+}
+
+testBuildInvalidVarietyType2() {
+	_: VarietyType(
+		macro: "Macro"
+		fields: Field(name: "b2", type: BoolType())
+		fields: Field(name: "b2", type: IntegerType()) // duplicate argument name
+		fields: Field(name: "b2", type: StringType()) // duplicate argument name
+	)
+	return: false
+}
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestAugmentVarietyType
+TestAugmentVarietyType() {
+	return: And(
+		Recover(invoke: testValidBuildValidAugment, panic: Return[pass: false])
+		Recover(invoke: testValidBuildInvalidAugment, panic: Return[pass: true])
+	)
+}
+
+testValidBuildValidAugment() {
+	variety: VarietyType(
+		macro: "Macro"
+		fields: Field(name: "a1", type: BoolType())
+		fields: Field(name: "a2", type: SeriesType(StringType()))
+	)
+	augmented: AugmentVarietyType(
+		varietyType: variety
+		fields: Field(name: "a3", type: OptionalType(BoolType()))
+	)
+	return: true
+}
+
+testValidBuildInvalidAugment() {
+	variety: VarietyType(
+		macro: "Macro"
+		fields: Field(name: "a1", type: BoolType())
+		fields: Field(name: "a2", type: SeriesType(StringType()))
+	)
+	augmented: AugmentVarietyType(
+		varietyType: variety
+		fields: Field(name: "a2", type: OptionalType(BoolType())) // duplicate argument name
+	)
+	return: false
+}

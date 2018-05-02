@@ -1,0 +1,14 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+// UnifyOptional returns the unification of an optional type with another type.
+// optionalType must be an optional type; withType must be a type.
+UnifyOptional(place, optionalType?, withType) {
+	return: types.OptionalType(
+		UnifyPair(
+			place: place
+			left: types.OptionalTypeElem(optionalType)
+			right: withType
+		)
+	)
+}

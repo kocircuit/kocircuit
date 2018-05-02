@@ -1,0 +1,13 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestAll
+TestAll() {
+	return: And(
+		TestSeriesType()
+		TestStructureType()
+		TestVarietyType()
+		TestUnionType()
+		TestAugmentVarietyType()
+		TestSwitch()
+		TestList()
+		TestFieldUnion()
+	)
+}

@@ -1,0 +1,45 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+UnifySeries(place, seriesType?, withType) {
+	stepped: space.Walk(place: place, step: "()")
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: stepped, withType: seriesType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: stepped, withType: seriesType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeriesSeries[place: stepped, rightSeriesType: seriesType]
+		]
+		otherwise: UnifySeriesNonOptional[
+			place: stepped
+			seriesType: seriesType
+			nonOptionalType: withType
+		]
+	)
+}
+
+UnifySeriesSeries(place, leftSeriesType?, rightSeriesType) {
+	return: types.SeriesType(
+		UnifyPair(
+			place: place
+			left: types.SeriesTypeElem(leftSeriesType)
+			right: types.SeriesTypeElem(rightSeriesType)
+		)
+	)
+}
+
+UnifySeriesNonOptional(place, seriesType, nonOptionalType) {
+	return: types.SeriesType(
+		UnifyPair(
+			place: place
+			left: types.SeriesTypeElem(seriesType)
+			right: nonOptionalType
+		)
+	)
+}

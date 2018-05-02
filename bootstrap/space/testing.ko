@@ -1,0 +1,5 @@
+import "github.com/kocircuit/kocircuit/bootstrap/time"
+
+TestingRoot() {
+	return: Root(time.TestingRoot())
+}

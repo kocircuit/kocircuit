@@ -1,0 +1,7 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/unify/TestAll
+TestAll() {
+	return: And(
+		TestUnify()
+		TestUnifyPanic()
+	)
+}

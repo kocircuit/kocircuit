@@ -1,0 +1,47 @@
+import "github.com/kocircuit/kocircuit/bootstrap/lang"
+import "github.com/kocircuit/kocircuit/bootstrap/source"
+import "github.com/kocircuit/kocircuit/bootstrap/time"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/space/TestAll
+TestAll() {
+	return: And(
+		TestStep()
+		TestRoot()
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/space/TestStep
+TestStep() {
+	return: Equal(
+		PathTo(Walk(place: Walk(place: testRoot(), step: "step1"), step: "step2"))
+		("step1", "step2")
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/space/TestRoot
+TestRoot() {
+	return: Equal(
+		testRoot()
+		(
+			span: (
+				view: (id: "2ti3z1u", source: "[0] 2ti3z1u, place.ko:1:1, test.place", tag: "test.place")
+				sheath: (
+					supervisor: (name: "test.place", source: (file: "place.ko", offset: 0, line: 1, column: 1))
+				)
+				background: "qp"
+			)
+		)
+	)
+}
+
+testRoot() {
+	return: Root(
+		time.Root(
+			supervisor: lang.Supervisor(
+				name: "test.place"
+				source: source.Source(file: "place.ko", offset: 0, line: 1, column: 1)
+			)
+			background: "qp"
+		)
+	)
+}

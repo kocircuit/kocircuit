@@ -1,0 +1,106 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+UnifyBool(place, boolType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: boolType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: boolType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: boolType]
+		]
+		case: types.WhenBool[type: withType, then: Return]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify boolean"
+				boolType: boolType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyString(place, stringType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: stringType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: stringType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: stringType]
+		]
+		case: types.WhenString[type: withType, then: Return]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify string"
+				stringType: stringType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyInteger(place, integerType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: integerType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: integerType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: integerType]
+		]
+		case: types.WhenInteger[type: withType, then: Return]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify integer"
+				integerType: integerType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyFloating(place, floatingType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: floatingType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: floatingType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: floatingType]
+		]
+		case: types.WhenFloating[type: withType, then: Return]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify floating-point"
+				floatingType: floatingType
+				withType: withType
+			)
+		]
+	)
+}

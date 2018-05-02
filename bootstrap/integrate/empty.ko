@@ -1,0 +1,6 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToEmpty(place, fromType, toEmptyType?) {
+	return: shapers.Erase(fromType: fromType, toType: toEmptyType)
+}

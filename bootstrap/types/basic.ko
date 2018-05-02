@@ -1,0 +1,51 @@
+// Bool
+
+BoolType() {
+	return: (bool: true)
+}
+
+WhenBool(type?, then, else) {
+	return: When(
+		have: All(bool: Expect(type).bool)
+		then: then, else: else
+	)
+}
+
+// String
+
+StringType() {
+	return: (string: true)
+}
+
+WhenString(type?, then, else) {
+	return: When(
+		have: All(string: Expect(type).string)
+		then: then, else: else
+	)
+}
+
+// Integer
+
+IntegerType() {
+	return: (integer: true)
+}
+
+WhenInteger(type?, then, else) {
+	return: When(
+		have: All(integer: Expect(type).integer)
+		then: then, else: else
+	)
+}
+
+// Float
+
+FloatingType() {
+	return: (floating: true)
+}
+
+WhenFloating(type?, then, else) {
+	return: When(
+		have: All(floating: Expect(type).floating)
+		then: then, else: else
+	)
+}

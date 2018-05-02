@@ -1,0 +1,32 @@
+// fields must be a sequence of (name, type) pairs.
+VarietyType(macro, fields) {
+	return: ( // type
+		variety: ( // type variety
+			macro: Expect(macro)
+			fields: NoDuplicateFields(fields)
+		)
+	)
+}
+
+VarietyTypeMacro(varietyType?) {
+	return: Expect(varietyType.variety.macro)
+}
+
+VarietyTypeFields(varietyType?) {
+	return: Expect(varietyType.variety).fields
+}
+
+WhenVariety(type?, then, else) {
+	return: When(
+		have: All(variety: Expect(type).variety)
+		then: then, else: else
+	)
+}
+
+// fields must be a sequence of (name, type) pairs.
+AugmentVarietyType(varietyType?, fields) {
+	return: VarietyType(
+		macro: Expect(varietyType.variety.macro)
+		fields: NoDuplicateFields(Merge(varietyType.variety.fields, fields))
+	)
+}

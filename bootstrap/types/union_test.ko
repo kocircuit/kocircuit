@@ -1,0 +1,59 @@
+import "github.com/kocircuit/kocircuit/bootstrap/testutil"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestUnionType
+TestUnionType() {
+	return: And(
+		testValidUnionAugment()
+		testutil.ShouldPanic(testInvalidUnionAugment)
+	)
+}
+
+testValidUnionAugment() {
+	union: UnionType(
+		VarietyType(
+			macro: "Macro"
+			fields: Field(name: "a1", type: BoolType())
+			fields: Field(name: "a2", type: IntegerType())
+		)
+	)
+	augmented: AugmentUnionType(
+		unionType: union
+		fields: Field(name: "b1", type: BoolType())
+		fields: Field(name: "b2", type: IntegerType())
+	)
+	return: Equal(
+		augmented
+		(
+			union: (
+				varieties: (
+					(
+						variety: (
+							macro: "Macro"
+							fields: (
+								(name: "a1", type: (bool: true))
+								(name: "a2", type: (integer: true))
+								(name: "b1", type: (bool: true))
+								(name: "b2", type: (integer: true))
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+}
+
+testInvalidUnionAugment() {
+	union: UnionType(
+		VarietyType(
+			macro: "Macro"
+			fields: Field(name: "a1", type: BoolType())
+			fields: Field(name: "a2", type: IntegerType())
+		)
+	)
+	augmented: AugmentUnionType(
+		unionType: union
+		fields: Field(name: "a1", type: BoolType()) // duplicate arg name
+	)
+	return: false
+}

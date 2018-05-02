@@ -1,0 +1,21 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+
+// fields must be a sequence of (name, type) pairs.
+StructureType(fields?) {
+	return: ( // type
+		structure: ( // type structure
+			fields: RemoveEmptyTypeFields(NoDuplicateFields(fields))
+		)
+	)
+}
+
+WhenStructure(type?, then, else) {
+	return: When(
+		have: All(structure: Expect(type).structure)
+		then: then, else: else
+	)
+}
+
+StructureTypeFields(structureType?) {
+	return: Expect(structureType.structure).fields
+}

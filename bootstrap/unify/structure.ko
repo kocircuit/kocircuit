@@ -1,0 +1,41 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+UnifyStructure(place, structureType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: structureType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: structureType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: structureType]
+		]
+		case: types.WhenStructure[
+			type: withType
+			then: UnifyStructureStructure[place: place, rightStructureType: structureType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify structure"
+				structureType: structureType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyStructureStructure(place, leftStructureType?, rightStructureType) {
+	return: types.StructureType(
+		UnifyFields(
+			place: place
+			leftFields: types.StructureTypeFields(leftStructureType)
+			rightFields: types.StructureTypeFields(rightStructureType)
+		)
+	)
+}

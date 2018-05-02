@@ -1,0 +1,143 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+// XXX: test commutativity
+// XXX: test associativity
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/unify/TestUnify
+TestUnify() {
+	place: space.TestingRoot()
+	integerType: types.IntegerType()
+	optIntegerType: types.OptionalType(integerType)
+	seqIntegerType: types.SeriesType(integerType)
+	fields0: (
+		types.Field(name: "f1", type: integerType)
+		types.Field(name: "f2", type: optIntegerType)
+	)
+	fields1: (
+		types.Field(name: "f1", type: optIntegerType)
+		types.Field(name: "f3", type: seqIntegerType)
+	)
+	leftStructure: types.StructureType(fields0)
+	rightStructure: types.StructureType(fields1)
+	leftUnion: types.UnionType(
+		types.VarietyType(macro: "M1", fields: fields0)
+		types.VarietyType(macro: "M2", fields: fields1)
+	)
+	rightUnion: types.UnionType(
+		types.VarietyType(macro: "M1", fields: fields1)
+		types.VarietyType(macro: "M3", fields: fields0)
+	)
+	//
+	return: And(
+		Equal(
+			UnifyTypes(place: place, types: (optIntegerType))
+			optIntegerType
+		)
+		Equal(
+			UnifyTypes(place: place, types: (integerType, optIntegerType))
+			optIntegerType
+		)
+		Equal(
+			UnifyTypes(place: place, types: (optIntegerType, seqIntegerType))
+			seqIntegerType
+		)
+		Equal(
+			UnifyTypes(place: place, types: (leftStructure, rightStructure))
+			expectUnifiedStructure()
+		)
+		Equal(
+			UnifyTypes(place: place, types: (leftUnion, rightUnion))
+			expectUnifiedUnion()
+		)
+	)
+}
+
+expectUnifiedStructure() {
+	return: (
+		structure: (
+			fields: (
+				(name: "f1", type: (optional: (elemType: (integer: true))))
+				(name: "f3", type: (series: (elemType: (integer: true))))
+				(name: "f2", type: (optional: (elemType: (integer: true))))
+			)
+		)
+	)
+}
+
+expectUnifiedUnion() {
+	return: (
+		union: (
+			varieties: (
+				(
+					variety: (
+						macro: "M1"
+						fields: (
+							(name: "f1", type: (optional: (elemType: (integer: true))))
+							(name: "f2", type: (optional: (elemType: (integer: true))))
+							(name: "f3", type: (series: (elemType: (integer: true))))
+						)
+					)
+				)
+				(
+					variety: (
+						macro: "M3"
+						fields: (
+							(name: "f1", type: (integer: true))
+							(name: "f2", type: (optional: (elemType: (integer: true))))
+						)
+					)
+				)
+				(
+					variety: (
+						macro: "M2"
+						fields: (
+							(name: "f1", type: (optional: (elemType: (integer: true))))
+							(name: "f3", type: (series: (elemType: (integer: true))))
+						)
+					)
+				)
+			)
+		)
+	)
+}
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/unify/TestUnifyPanic
+TestUnifyPanic() {
+	t0: types.StructureType(
+		types.Field(name: "f1", type: types.IntegerType())
+		types.Field(
+			name: "f2"
+			type: types.SeriesType(
+				types.StructureType(
+					types.Field(name: "g1", type: types.BoolType())
+				)
+			)
+		)
+	)
+	t1: types.StructureType(
+		types.Field(name: "f1", type: types.IntegerType())
+		types.Field(
+			name: "f2"
+			type: types.OptionalType(
+				types.StructureType(
+					types.Field(name: "g1", type: types.StringType())
+				)
+			)
+		)
+	)
+	return: Recover(
+		invoke: UnifyPair[place: space.TestingRoot(), left: t0, right: t1]
+		panic: verifyUnifyPanic
+	)
+}
+
+verifyUnifyPanic(panic?) {
+	return: Equal(
+		panic.error
+		(
+			typeError: (unifying: "cannot unify string", stringType: (string: true), withType: (bool: true))
+			place: "f2.().g1"
+		)
+	)
+}

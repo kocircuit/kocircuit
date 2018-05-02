@@ -1,0 +1,9 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestSeriesType
+TestSeriesType() {
+	return: And(
+		HaveSeries(SeriesType(FloatingType()))
+		Equal(SeriesType(EmptyType()), EmptyType())
+		Equal(SeriesType(OptionalType(IntegerType())), SeriesType(IntegerType()))
+		Equal(SeriesTypeElem(SeriesType(IntegerType())), IntegerType())
+	)
+}

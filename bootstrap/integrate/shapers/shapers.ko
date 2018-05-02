@@ -1,0 +1,108 @@
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+Identity(forType?) {
+	return: (
+		identity: ()
+		fromType: Expect(forType)
+		toType: forType
+	)
+}
+
+// Erase is a shaper to an empty type.
+Erase(fromType, toType) {
+	return: (erase: (), fromType: Expect(fromType), toType: Expect(toType))
+}
+
+// ZeroOptional is a shaper from an empty type to an optional type.
+ZeroOptional(fromType, toType) {
+	return: (zeroOptional: (), fromType: Expect(fromType), toType: Expect(toType))
+}
+
+// ZeroSeries is a shaper from a empty type to a series type.
+ZeroSeries(fromType, toType) {
+	return: (zeroSeries: (), fromType: Expect(fromType), toType: Expect(toType))
+}
+
+OptionalOptional(elemShaper, fromType, toType) {
+	return: ( // shaper
+		optionalOptional: ( // optional-optional shaper
+			elemShaper: elemShaper
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+IntoOptional(elemShaper, fromType, toType) {
+	return: ( // shaper
+		intoOptional: ( // optional-optional shaper
+			elemShaper: elemShaper
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+OptionalSeries(elemShaper, fromType, toType) {
+	return: ( // shaper
+		optionalSeries: ( // optional-optional shaper
+			elemShaper: elemShaper
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+SeriesSeries(elemShaper, fromType, toType) {
+	return: ( // shaper
+		seriesSeries: ( // optional-optional shaper
+			elemShaper: elemShaper
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+IntoSeries(elemShaper, fromType, toType) {
+	return: ( // shaper
+		intoSeries: ( // optional-optional shaper
+			elemShaper: elemShaper
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+StructureStructure(fieldShapers, fromType, toType) {
+	return: ( // shaper
+		structureStructure: ( // structure-structure shaper
+			fieldShapers: fieldShapers
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+Field(name, shaper) {
+	return: ( // field shaper
+		name: String(name)
+		shaper: Expect(shaper)
+	)
+}
+
+UnionUnion(varietyShapers, fromType, toType) {
+	return: ( // shaper
+		unionUnion: ( // union-union shaper
+			varietyShapers: varietyShapers
+		)
+		fromType: Expect(fromType)
+		toType: Expect(toType)
+	)
+}
+
+Variety(macro, fieldShapers) {
+	return: (
+		macro: Expect(macro)
+		fieldShapers: Expect(fieldShapers)
+	)
+}

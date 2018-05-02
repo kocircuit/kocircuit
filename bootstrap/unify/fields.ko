@@ -1,0 +1,26 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+UnifyFields(place, leftFields, rightFields) {
+	return: series.Map(
+		// sequence of named lists, each holding 1 or 2 field types
+		over: types.FieldsUnion(leftFields: leftFields, rightFields: rightFields)
+		with: unifyFieldList[place: place]
+	)
+}
+
+// unifyFieldList unifies the fields in the list and
+// returns a field or empty.
+unifyFieldList(place, fieldList?) {
+	fieldName: types.ListName(fieldList)
+	fieldTypes: series.Map(over: types.ListElems(fieldList), with: types.FieldType)
+	return: types.Field(
+		name: fieldName
+		type: UnifyTypes(
+			place: space.Walk(place: place, step: fieldName)
+			types: fieldTypes
+		)
+	)
+}

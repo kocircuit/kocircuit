@@ -1,0 +1,50 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToOptional(place, fromType, toOptionalType?) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: fromType
+			then: IntegrateEmptyToOptional[place: place, toOptionalType: toOptionalType]
+		]
+		case: types.WhenOptional[
+			type: fromType
+			then: IntegrateOptionalToOptional[place: place, toOptionalType: toOptionalType]
+		]
+		otherwise: IntegrateIntoOptional[
+			place: place
+			fromType: fromType
+			toOptionalType: toOptionalType
+		]
+	)
+}
+
+IntegrateEmptyToOptional(place, fromEmptyType?, toOptionalType) {
+	return: shapers.ZeroOptional(fromType: fromEmptyType, toType: toOptionalType)
+}
+
+IntegrateOptionalToOptional(place, fromOptionalType?, toOptionalType) {
+	elemShaper: Integrate(
+		place: place
+		fromType: types.OptionalTypeElem(fromOptionalType)
+		toType: types.OptionalTypeElem(toOptionalType)
+	)
+	return: shapers.OptionalOptional(
+		elemShaper: elemShaper
+		fromType: fromOptionalType
+		toType: toOptionalType
+	)
+}
+
+IntegrateIntoOptional(place, fromType, toOptionalType) {
+	elemShaper: Integrate(
+		place: place
+		fromType: fromType
+		toType: types.OptionalTypeElem(toOptionalType)
+	)
+	return: shapers.IntoOptional(
+		elemShaper: elemShaper
+		fromType: fromType
+		toType: toOptionalType
+	)
+}

@@ -1,0 +1,11 @@
+spanSourceTrace(span?) {
+	return: When(
+		have: span.parent
+		then: spanSourceTraceTail[span: span]
+		else: SourceLine[span]
+	)
+}
+
+spanSourceTraceTail(span, parent?) {
+	return: Merge(SourceLine(span), spanSourceTrace(parent))
+}

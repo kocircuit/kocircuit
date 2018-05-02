@@ -1,0 +1,23 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestFieldUnion
+TestFieldUnion() {
+	return: Equal(
+		FieldsUnion(
+			leftFields: Field(name: "f1", type: IntegerType())
+			leftFields: Field(name: "f2", type: BoolType())
+			rightFields: Field(name: "f2", type: OptionalType(BoolType()))
+			rightFields: Field(name: "f3", type: EmptyType())
+		)
+		// ==
+		(
+			(name: "f1", elems: (name: "f1", type: (integer: true)))
+			(
+				name: "f2"
+				elems: (
+					(name: "f2", type: (bool: true))
+					(name: "f2", type: (optional: (elemType: (bool: true))))
+				)
+			)
+			(name: "f3", elems: (name: "f3", type: (empty: true)))
+		)
+	)
+}

@@ -1,0 +1,30 @@
+import "github.com/kocircuit/kocircuit/bootstrap/testutil"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestStructureType
+TestStructureType() {
+	return: And(
+		testBuildValidStructureType()
+		testutil.ShouldPanic(testBuildInvalidStructureType)
+		Equal(
+			StructureTypeFields(StructureType(fields: (name: "f1", type: BoolType())))
+			(name: "f1", type: BoolType())
+		)
+	)
+}
+
+testBuildValidStructureType() {
+	s: StructureType(
+		fields: (name: "f1", type: BoolType())
+		fields: (name: "f2", type: IntegerType())
+	)
+	return: WhenStructure(type: s, then: Return[pass: true], else: Return[pass: false])
+}
+
+testBuildInvalidStructureType() {
+	_: StructureType(
+		fields: (name: "g2", type: BoolType())
+		fields: (name: "g2", type: IntegerType()) // duplicate field name
+		fields: (name: "g2", type: StringType()) // duplicate field name
+	)
+	return: false
+}

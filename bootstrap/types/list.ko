@@ -1,0 +1,51 @@
+List(name, elems) {
+	return: (name: String(name), elems: elems)
+}
+
+ListElems(list?) {
+	return: list.elems
+}
+
+ListName(list?) {
+	return: String(list.name)
+}
+
+ObjToList(obj?) {
+	return: List(name: String(obj.name), elems: obj)
+}
+
+AppendObjToList(list, obj) {
+	_: MustEqual(String(obj.name), String(list.name))
+	return: List(name: list.name, elems: Merge(list.elems, obj))
+}
+
+MustEqual(v?) {
+	return: Branch(
+		if: Not(Equal(v))
+		then: Panic[mustEqual: "not equal"]
+	)
+}
+
+// InsertObjIntoLists returns a sequence of lists, derived by
+// appending obj to the list with the corresponding name, or
+// otherwise adding a new list holding obj.
+InsertObjIntoLists(lists, obj) {
+	sweep: Range(start: false, over: lists, with: insertObjIntoList[obj: obj])
+	return: Yield(
+		if: sweep.residue // found a list and inserted obj there
+		then: sweep.image
+		else: Merge(sweep.image, ObjToList(obj))
+	)
+}
+
+// elem is a list.
+// carry is a boolean.
+insertObjIntoList(obj, carry, elem) {
+	found: Equal(String(obj.name), String(elem.name))
+	emit: Branch(
+		if: found
+		then: AppendObjToList[list: elem, obj: obj]
+		else: Return[elem]
+	)
+	return: (emit: emit, carry: Or(carry, found)) // propagate found flag
+}

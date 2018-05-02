@@ -1,0 +1,57 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/set"
+
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+UnifyUnion(place, unionType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: unionType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: unionType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: unionType]
+		]
+		case: types.WhenUnion[
+			type: withType
+			then: UnifyUnionUnion[place: place, rightUnionType: unionType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify union"
+				unionType: unionType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyUnionUnion(place, leftUnionType?, rightUnionType) {
+	return: types.UnionType(
+		set.Union(
+			leftObjects: types.UnionTypeVarieties(leftUnionType)
+			rightObjects: types.UnionTypeVarieties(rightUnionType)
+			ObjectKey: types.VarietyTypeMacro
+			MergeObjects: unifyVarietiesWithSameMacro[place: place]
+		)
+	)
+}
+
+// leftObject and rightObject are variety types, with the same macro.
+unifyVarietiesWithSameMacro(place, leftObject, rightObject) {
+	return: types.VarietyType(
+		macro: types.VarietyTypeMacro(leftObject)
+		fields: UnifyFields(
+			place: place
+			leftFields: types.VarietyTypeFields(leftObject)
+			rightFields: types.VarietyTypeFields(rightObject)
+		)
+	)
+}

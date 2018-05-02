@@ -1,0 +1,15 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestList
+TestList() {
+	l0: InsertObjIntoLists(obj: (name: "a", value: 1))
+	l1: InsertObjIntoLists(lists: l0, obj: (name: "b", value: 2))
+	l2: InsertObjIntoLists(lists: l1, obj: (name: "c", value: 3))
+	l3: InsertObjIntoLists(lists: l2, obj: (name: "b", value: 4))
+	return: Equal(
+		l3
+		(
+			(name: "a", elems: (name: "a", value: 1))
+			(name: "b", elems: ((name: "b", value: 2), (name: "b", value: 4)))
+			(name: "c", elems: (name: "c", value: 3))
+		)
+	)
+}

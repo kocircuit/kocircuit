@@ -1,0 +1,25 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToFloat(place, fromType, toFloatingType?) {
+	return: Switch(
+		case: types.WhenFloating[
+			type: fromType
+			then: IntegrateFloatToFloat[place: place, toFloatingType: toFloatingType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to floating"
+				fromType: fromType
+				toFloatingType: toFloatingType
+			)
+		]
+	)
+}
+
+IntegrateFloatToFloat(place, fromFloatingType?, toFloatingType) {
+	_: Branch(if: Not(Equal(fromFloatingType, toFloatingType)), then: Panic[bug: "floating types differ"])
+	return: shapers.Identity(toFloatingType)
+}

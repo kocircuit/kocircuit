@@ -1,0 +1,24 @@
+import "github.com/kocircuit/kocircuit/bootstrap/lang"
+import "github.com/kocircuit/kocircuit/bootstrap/source"
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/time/TestAll
+TestAll() {
+	return: TestRoot()
+}
+
+TestRoot() {
+	return: Equal(
+		Root(
+			supervisor: lang.Supervisor(
+				name: "test.sv"
+				source: source.Source(file: "sv.ko", offset: 0, line: 1, column: 1)
+			)
+			background: "b"
+		)
+		(
+			view: (id: "3b09lup", source: "[0] 3b09lup, sv.ko:1:1, test.sv", tag: "test.sv")
+			sheath: (supervisor: (name: "test.sv", source: (file: "sv.ko", offset: 0, line: 1, column: 1)))
+			background: "b"
+		)
+	)
+}

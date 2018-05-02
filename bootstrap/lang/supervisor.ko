@@ -1,0 +1,11 @@
+Supervisor(name, source) {
+	return: (name: String(name), source: source)
+}
+
+SupervisorSource(supervisor?) {
+	return: Expect(supervisor.source)
+}
+
+SupervisorTag(supervisor?) {
+	return: String(supervisor.name)
+}

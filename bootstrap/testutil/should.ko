@@ -1,0 +1,9 @@
+ShouldPanic(invoke?) {
+	return: Recover(
+		invoke: shouldPanicInvoke(invoke?) {
+			_: invoke()
+			return: false
+		} [invoke]
+		panic: Return[pass: true]
+	)
+}

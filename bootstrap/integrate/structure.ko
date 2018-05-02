@@ -1,0 +1,71 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/set"
+
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToStructure(place, fromType, toStructureType?) {
+	return: Switch(
+		case: types.WhenStructure[
+			type: fromType
+			then: IntegrateStructureToStructure[place: place, toStructureType: toStructureType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to structure"
+				fromType: fromType
+				toStructureType: toStructureType
+			)
+		]
+	)
+}
+
+IntegrateStructureToStructure(place, fromStructureType?, toStructureType) {
+	return: shapers.StructureStructure(
+		fieldShapers: integrateFieldsToFields(
+			place: place
+			fromFields: types.StructureTypeFields(fromStructureType)
+			toFields: types.StructureTypeFields(toStructureType)
+		)
+		fromType: fromStructureType
+		toType: toStructureType
+	)
+}
+
+integrateFieldsToFields(place, fromFields, toFields) {
+	return: series.Map(
+		over: toFields
+		with: integrateFieldsToField[place: place, fromFields: fromFields]
+	)
+}
+
+integrateFieldsToField(place, fromFields, toField?) {
+	name: types.FieldName(toField)
+	fromField: set.Find(
+		key: name
+		objects: fromFields
+		ObjectKey: types.FieldName
+	)
+	return: integrateFieldToField(
+		place: place
+		fromField: Pick(
+			either: fromField
+			or: types.Field(name: name, type: types.EmptyType())
+		)
+		toField: toField
+	)
+}
+
+integrateFieldToField(place, fromField, toField) {
+	fieldName: types.FieldName(toField)
+	return: shapers.Field(
+		name: fieldName
+		shaper: Integrate(
+			place: space.Walk(place: place, step: fieldName)
+			fromType: types.FieldType(fromField)
+			toType: types.FieldType(toField)
+		)
+	)
+}

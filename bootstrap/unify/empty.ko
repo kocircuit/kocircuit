@@ -1,0 +1,7 @@
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+// UnifyEmpty returns the unification of an empty type with another type.
+// emptyType must be the empty type; withType must be a type.
+UnifyEmpty(place, emptyType?, withType) {
+	return: types.OptionalType(withType)
+}

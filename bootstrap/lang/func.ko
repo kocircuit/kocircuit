@@ -1,0 +1,11 @@
+Func(pkg, name, source) {
+	return: (pkg: String(pkg), name: String(name), source: source)
+}
+
+FuncSource(func?) {
+	return: Expect(func.source)
+}
+
+FuncTag(func?) {
+	return: Empty() // do not show func-only spans in source stack
+}

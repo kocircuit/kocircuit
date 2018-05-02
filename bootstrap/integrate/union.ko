@@ -1,0 +1,32 @@
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+IntegrateToUnion(place, fromType, toUnionType?) {
+	return: Switch(
+		case: types.WhenUnion[
+			type: fromType
+			then: IntegrateUnionToUnion[place: place, toUnionType: toUnionType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				integrating: "cannot integrate to union"
+				fromType: fromType
+				toUnionType: toUnionType
+			)
+		]
+	)
+}
+
+IntegrateUnionToUnion(place, fromUnionType?, toUnionType) {
+	return: shapers.UnionUnion(
+		varietyShapers: integrateVarietiesToVarieties(
+			place: place
+			fromVarieties: types.UnionTypeVarieties(fromUnionType)
+			toVarieties: types.UnionTypeVarieties(toUnionType)
+		)
+		fromType: fromUnionType
+		toType: toUnionType
+	)
+}

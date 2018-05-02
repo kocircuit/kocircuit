@@ -1,0 +1,48 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+// UnifyNamed returns the unification of an named type with another type.
+// named must be a named type; withType must be a type.
+UnifyNamed(place, namedType?, withType) {
+	return: Switch(
+		case: types.WhenEmpty[
+			type: withType
+			then: UnifyEmpty[place: place, withType: namedType]
+		]
+		case: types.WhenOptional[
+			type: withType
+			then: UnifyOptional[place: place, withType: namedType]
+		]
+		case: types.WhenSeries[
+			type: withType
+			then: UnifySeries[place: place, withType: namedType]
+		]
+		case: types.WhenNamed[
+			type: withType
+			then: UnifyNamedNamed[place: place, rightNamedType: namedType]
+		]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify named"
+				namedType: namedType
+				withType: withType
+			)
+		]
+	)
+}
+
+UnifyNamedNamed(place, leftNamedType?, rightNamedType) {
+	return: Branch(
+		if: Equal(leftNamedType, rightNamedType)
+		then: Return[leftNamedType]
+		else: space.Error[
+			place: place
+			error: (
+				unify: "unifying different named types"
+				leftNamedType: leftNamedType
+				rightNamedType: rightNamedType
+			)
+		]
+	)
+}

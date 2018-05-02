@@ -1,0 +1,49 @@
+import "github.com/kocircuit/kocircuit/lib/series"
+import "github.com/kocircuit/kocircuit/lib/set"
+
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+integrateVarietiesToVarieties(place, fromVarieties, toVarieties) {
+	return: series.Map(
+		over: fromVarieties
+		with: integrateVarietyToVarieties[place: place, toVarieties: toVarieties]
+	)
+}
+
+integrateVarietyToVarieties(place, fromVariety?, toVarieties) {
+	macro: types.VarietyTypeMacro(fromVariety)
+	toVariety: set.Find(
+		key: macro
+		objects: toVarieties
+		ObjectKey: types.VarietyTypeMacro
+	)
+	return: integrateVarietyToVariety(
+		place: place
+		fromVariety: fromVariety
+		toVariety: When(
+			have: toVariety
+			then: Return
+			else: space.Error[
+				place: place
+				error: (
+					integrating: "no matching variety"
+					fromVariety: fromVariety
+					toVarieties: toVarieties
+				)
+			]
+		)
+	)
+}
+
+integrateVarietyToVariety(place, fromVariety, toVariety) {
+	return: shapers.Variety(
+		macro: types.VarietyTypeMacro(fromVariety)
+		fieldShapers: integrateFieldsToFields(
+			place: place
+			fromFields: types.VarietyTypeFields(fromVariety)
+			toFields: types.VarietyTypeFields(toVariety)
+		)
+	)
+}

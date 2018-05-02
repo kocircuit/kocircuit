@@ -1,0 +1,49 @@
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types" as ko_types
+
+UnifyTypes(place, types?) {
+	took: Take(types)
+	return: When(
+		have: took.first
+		then: unifyWithRemainingTypes[place: place, remainingTypes: took.remainder]
+		else: ko_types.EmptyType
+	)
+}
+
+unifyWithRemainingTypes(type?, place, remainingTypes) {
+	return: Range(
+		start: type
+		over: remainingTypes
+		with: unifyWithRemainingType[place: place]
+	).residue
+}
+
+// carry and elem are a types.
+unifyWithRemainingType(place, carry, elem) {
+	return: (carry: UnifyPair(place: place, left: carry, right: elem))
+}
+
+UnifyPair(place, left, right) {
+	return: Switch(
+		case: ko_types.WhenEmpty[type: left, then: UnifyEmpty[place: place, withType: right]]
+		case: ko_types.WhenOptional[type: left, then: UnifyOptional[place: place, withType: right]]
+		case: ko_types.WhenSeries[type: left, then: UnifySeries[place: place, withType: right]]
+		//
+		case: ko_types.WhenNamed[type: left, then: UnifyNamed[place: place, withType: right]]
+		case: ko_types.WhenBool[type: left, then: UnifyBool[place: place, withType: right]]
+		case: ko_types.WhenString[type: left, then: UnifyString[place: place, withType: right]]
+		case: ko_types.WhenInteger[type: left, then: UnifyInteger[place: place, withType: right]]
+		case: ko_types.WhenFloating[type: left, then: UnifyFloating[place: place, withType: right]]
+		//
+		case: ko_types.WhenStructure[type: left, then: UnifyStructure[place: place, withType: right]]
+		case: ko_types.WhenUnion[type: left, then: UnifyUnion[place: place, withType: right]]
+		otherwise: space.Error[
+			place: place
+			error: (
+				unifying: "cannot unify"
+				leftType: left
+				rightType: right
+			)
+		]
+	)
+}

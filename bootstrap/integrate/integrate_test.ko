@@ -1,0 +1,191 @@
+import "github.com/kocircuit/kocircuit/bootstrap/testutil"
+import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+
+TestAll() {
+	return: TestIntegrate()
+}
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/integrate/TestIntegrate
+TestIntegrate() {
+	return: And(
+		testIntegrateBasicToOptional()
+		testutil.ShouldPanic(testIntegrateOptionalToBasic)
+		testIntegrateBasicToSeries()
+		testutil.ShouldPanic(testIntegrateSeriesToBasic)
+		testIntegrateValidStructToStruct()
+		testutil.ShouldPanic(testIntegrateInvalidStructToStruct)
+		testIntegrateValidUnionToUnion()
+		testutil.ShouldPanic(testIntegrateInvalidUnionToUnion)
+		testIntegratePanic()
+	)
+}
+
+testIntegrateBasicToOptional() {
+	integerType: types.IntegerType()
+	optIntegerType: types.OptionalType(integerType)
+	return: Equal(
+		Integrate(place: space.TestingRoot(), fromType: integerType, toType: optIntegerType)
+		(
+			intoOptional: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
+			fromType: (integer: true)
+			toType: (optional: (elemType: (integer: true)))
+		)
+	)
+}
+
+testIntegrateOptionalToBasic() {
+	integerType: types.IntegerType()
+	optIntegerType: types.OptionalType(integerType)
+	return: Integrate(place: space.TestingRoot(), fromType: optIntegerType, toType: integerType)
+}
+
+testIntegrateBasicToSeries() {
+	integerType: types.IntegerType()
+	seriesIntegerType: types.SeriesType(integerType)
+	return: Equal(
+		Integrate(place: space.TestingRoot(), fromType: integerType, toType: seriesIntegerType)
+		(
+			intoSeries: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
+			fromType: (integer: true)
+			toType: (series: (elemType: (integer: true)))
+		)
+	)
+}
+
+testIntegrateSeriesToBasic() {
+	integerType: types.IntegerType()
+	seriesIntegerType: types.SeriesType(integerType)
+	return: Integrate(place: space.TestingRoot(), fromType: seriesIntegerType, toType: integerType)
+}
+
+testIntegratePanic() {
+	return: Recover(
+		invoke: testIntegrateInvalidStructToStruct
+		panic: testIntegratePanicRecover(panic?) {
+			return: Equal(
+				panic.error.fromType
+				(series: (elemType: (bool: true)))
+			)
+		}
+	)
+}
+
+testIntegrateInvalidStructToStruct() {
+	_: Integrate(place: space.TestingRoot(), fromType: testSmallStruct(), toType: testBigStruct())
+	return: false
+}
+
+testIntegrateValidStructToStruct() {
+	return: Equal(
+		Integrate(place: space.TestingRoot(), fromType: testBigStruct(), toType: testSmallStruct())
+		(
+			structureStructure: (
+				fieldShapers: (
+					(name: "f1", shaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
+					(
+						name: "f2"
+						shaper: (
+							intoSeries: (elemShaper: (identity: (), fromType: (bool: true), toType: (bool: true)))
+							fromType: (bool: true)
+							toType: (series: (elemType: (bool: true)))
+						)
+					)
+				)
+			)
+			fromType: (
+				structure: (
+					fields: (
+						(name: "f1", type: (integer: true))
+						(name: "f2", type: (bool: true))
+						(name: "f3", type: (string: true))
+					)
+				)
+			)
+			toType: (
+				structure: (
+					fields: (
+						(name: "f1", type: (integer: true))
+						(name: "f2", type: (series: (elemType: (bool: true))))
+					)
+				)
+			)
+		)
+	)
+}
+
+testSmallStruct() {
+	return: types.StructureType(
+		types.Field(name: "f1", type: types.IntegerType())
+		types.Field(name: "f2", type: types.SeriesType(types.BoolType()))
+	)
+}
+
+testBigStruct() {
+	return: types.StructureType(
+		types.Field(name: "f1", type: types.IntegerType())
+		types.Field(name: "f2", type: types.BoolType())
+		types.Field(name: "f3", type: types.StringType())
+	)
+}
+
+testIntegrateInvalidUnionToUnion() {
+	return: Integrate(place: space.TestingRoot(), fromType: testBigUnion(), toType: testSmallUnion())
+}
+
+testIntegrateValidUnionToUnion() {
+	return: Equal(
+		Integrate(place: space.TestingRoot(), fromType: testSmallUnion(), toType: testBigUnion())
+		(
+			unionUnion: (
+				varietyShapers: (
+					(
+						macro: "M1"
+						fieldShapers: (
+							(
+								name: "a2"
+								shaper: (
+									intoSeries: (elemShaper: (identity: (), fromType: (bool: true), toType: (bool: true)))
+									fromType: (bool: true)
+									toType: (series: (elemType: (bool: true)))
+								)
+							)
+						)
+					)
+				)
+			)
+			fromType: (
+				union: (varieties: (variety: (macro: "M1", fields: (name: "a2", type: (bool: true)))))
+			)
+			toType: (
+				union: (
+					varieties: (
+						(
+						variety: (macro: "M1", fields: (name: "a2", type: (series: (elemType: (bool: true)))))
+						)
+						(variety: (macro: "M2"))
+					)
+				)
+			)
+		)
+	)
+}
+
+testBigUnion() {
+	return: types.UnionType(
+		types.VarietyType(
+			macro: "M1"
+			fields: types.Field(name: "a2", type: types.SeriesType(types.BoolType()))
+		)
+		types.VarietyType(macro: "M2")
+	)
+}
+
+testSmallUnion() {
+	return: types.UnionType(
+		types.VarietyType(
+			macro: "M1"
+			fields: types.Field(name: "a2", type: types.BoolType())
+		)
+	)
+}
