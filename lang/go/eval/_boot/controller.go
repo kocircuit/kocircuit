@@ -9,12 +9,11 @@ import (
 )
 
 type Boot struct {
-	Faculty Faculty // XXX: build; now in booter?
-	Repo    Repo    // inherit
-	Booter  *Booter
-	Func    *Func
-	Ctx     Symbol
-	Arg     Symbol
+	Repo   Repo
+	Booter *Booter
+	Func   *Func
+	Ctx    Symbol
+	Arg    Symbol
 }
 
 func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
@@ -26,9 +25,13 @@ func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
 		Arg:    b.Arg,
 	}
 	bootController.Program = Program{
-		Idiom:  EvalIdiomRepo,
-		Repo:   b.Repo,
-		System: System{Faculty: b.Faculty, Boundary: bootController, Combiner: bootController},
+		Idiom: EvalIdiomRepo,
+		Repo:  b.Repo,
+		System: System{
+			Faculty:  b.Booter.Reserve,
+			Boundary: bootController,
+			Combiner: bootController,
+		},
 	}
 	return bootController.Boot()
 }
@@ -48,11 +51,7 @@ func (b *BootController) Boot() (returned, effect Symbol, err error) {
 	if shape, effect, err := b.Program.EvalSeq(NewSpan(), b.Func, b.Arg); err != nil {
 		return nil, nil, err
 	} else {
-		if sym, ok := shape.(Symbol); ok {
-			return sym, effect, nil
-		} else {
-			return nil, effect, nil
-		}
+		return b.Unwrap(shape.(BootObject)), b.UnwrapEffect(effect.(BootEffect)), nil
 	}
 }
 

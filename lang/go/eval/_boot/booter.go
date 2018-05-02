@@ -19,7 +19,7 @@ type Booter struct {
 	CombineVariety *VarietySymbol `ko:"name=Combine"`
 }
 
-func ExtractBooter(span *Span, a Symbol) (_ *Booter, err error) {
+func ParseBooter(span *Span, a Symbol) (_ *Booter, err error) {
 	arg, ok := a.(*StructSymbol)
 	if !ok {
 		return nil, span.Errorf(nil, "booter must be a structure, got %v", a)
