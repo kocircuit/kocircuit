@@ -7,15 +7,15 @@ import (
 )
 
 func (b *BootController) Wrap(symbol Symbol) Shape {
-	return BootObject{Controller: b, Symbol: symbol}
+	return BootObject{Controller: b, Object: symbol}
 }
 
 func (b *BootController) UnwrapArg(arg Arg) Symbol {
-	return arg.(BootObject).Symbol
+	return arg.(BootObject).Object
 }
 
 func (b *BootController) Unwrap(shape Shape) Symbol {
-	return shape.(BootObject).Symbol
+	return shape.(BootObject).Object
 }
 
 // BootObject is a Shape.
@@ -25,14 +25,14 @@ type BootObject struct {
 }
 
 func (b BootObject) String() string {
-	return fmt.Sprintf("BOOT-%s", b.String())
+	return fmt.Sprintf("BOOT-OBJECT-%s", b.Object.String())
 }
 
 func (b BootObject) Select(bootSpan *Span, path Path) (Shape, Effect, error) {
 	if residue, err := b.Booter.Select(b.Controller.BootStepCtx(bootSpan), b.Object, path); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+		return b.Wrap(residue.Returned), b.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -40,7 +40,7 @@ func (b BootObject) Link(bootSpan *Span, name string, monadic bool) (Shape, Effe
 	if residue, err := b.Booter.Link(b.Controller.BootStepCtx(bootSpan), b.Object, name, monadic); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+		return b.Wrap(residue.Returned), b.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -48,6 +48,6 @@ func (b BootObject) Invoke(bootSpan *Span) (Shape, Effect, error) {
 	if residue, err := b.Booter.Invoke(b.Controller.BootStepCtx(bootSpan), b.Object); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Returned), b.Wrap(residue.Effect), nil
+		return b.Wrap(residue.Returned), b.WrapEffect(residue.Effect), nil
 	}
 }

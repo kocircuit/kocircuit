@@ -20,7 +20,7 @@ func (b *BootController) Combine(
 	if residue, err := b.Booter.Combine(summary, steps); err != nil {
 		return nil, nil, err
 	} else {
-		return b.Wrap(residue.Effect), nil
+		return b.WrapEffect(residue.Effect), nil
 	}
 }
 
@@ -32,8 +32,8 @@ func (b *BootController) BootResidues(stepResidue StepResidues) BootResidues {
 			Step:     bootStep.Label,
 			Logic:    bootStep.Logic.String(),
 			Source:   bootStep.RegionString(),
-			Returned: stepResidue.Shape.(BootShape).Object,
-			Effect:   stepResidue.Effect.(BootShape).Object,
+			Returned: stepResidue.Shape.(BootObject).Object,
+			Effect:   stepResidue.Effect.(BootEffect).Effect,
 		}
 	}
 	return bootResidues
