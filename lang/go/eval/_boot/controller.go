@@ -9,6 +9,7 @@ import (
 )
 
 type Boot struct {
+	Idiom  Repo
 	Repo   Repo
 	Booter *Booter
 	Func   *Func
@@ -25,7 +26,7 @@ func (b *Boot) Play(origin *Span) (returned, effect Symbol, err error) {
 		Arg:    b.Arg,
 	}
 	bootController.Program = Program{
-		Idiom: EvalIdiomRepo,
+		Idiom: b.Idiom,
 		Repo:  b.Repo,
 		System: System{
 			Faculty:  b.Booter.Reserve,

@@ -10,6 +10,8 @@ type Evaluator interface {
 	String() string
 	EvalPar(*Span, *Func, Arg) (Return, Effect, error)
 	EvalSeq(*Span, *Func, Arg) (Return, Effect, error)
+	EvalIdiom() Repo
+	EvalRepo() Repo
 }
 
 func SpanEvaluator(span *Span) Evaluator {
@@ -30,6 +32,14 @@ type System struct {
 }
 
 func (prog Program) String() string { return Sprint(prog) }
+
+func (prog Program) EvalIdiom() Repo {
+	return prog.Idiom
+}
+
+func (prog Program) EvalRepo() Repo {
+	return prog.Repo
+}
 
 func (f evalFlow) StepResidue() *StepResidue {
 	return &StepResidue{Span: f.Span, Shape: f.Shape, Effect: f.Effect}

@@ -77,9 +77,10 @@ func (EvalBootMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 	argArg := a.Walk("arg")
 	_ = argArg
 	// boot
-	boot := Boot{
-		Repo:   XXX,    //   Repo
-		Booter: booter, // *Booter
+	boot := &Boot{
+		Idiom:  interpretFunc.Evaluator.EvalIdiom(),
+		Repo:   interpretFunc.Evaluator.EvalRepo(),
+		Booter: booter,
 		Func:   interpretFunc.Func,
 		Ctx:    ctxArg,
 		Arg:    argArg,
