@@ -41,7 +41,7 @@ where "->" indicates the return type of a function:
 		Augment: function (stepCtx, object, fields) -> (returns, effect)
 		Invoke: function (stepCtx, object) -> (returns, effect)
 		Literal: function (stepCtx, figure) -> (returns, effect)
-		Combine: function (summaryCtx, stepResidues) -> (returns, effect)
+		Combine: function (summaryCtx, stepResidues) -> (effect)
 	)
 
 The named arguments (above) have the following types:
