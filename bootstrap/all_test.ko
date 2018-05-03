@@ -1,5 +1,5 @@
 import "github.com/kocircuit/kocircuit/bootstrap/space"
-import "github.com/kocircuit/kocircuit/bootstrap/time"
+import "github.com/kocircuit/kocircuit/bootstrap/context/span"
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 import "github.com/kocircuit/kocircuit/bootstrap/unify"
 import "github.com/kocircuit/kocircuit/bootstrap/integrate"
@@ -8,7 +8,7 @@ import "github.com/kocircuit/kocircuit/bootstrap/integrate"
 TestAll() {
 	return: And(
 		space.TestAll()
-		time.TestAll()
+		span.TestAll()
 		types.TestAll()
 		unify.TestAll()
 		integrate.TestAll()

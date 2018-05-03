@@ -1,6 +1,6 @@
 import "github.com/kocircuit/kocircuit/bootstrap/lang"
 import "github.com/kocircuit/kocircuit/bootstrap/source"
-import "github.com/kocircuit/kocircuit/bootstrap/time"
+import "github.com/kocircuit/kocircuit/bootstrap/context/span"
 
 // ko play github.com/kocircuit/kocircuit/bootstrap/space/TestAll
 TestAll() {
@@ -36,7 +36,7 @@ TestRoot() {
 
 testRoot() {
 	return: Root(
-		time.Root(
+		span.Root(
 			supervisor: lang.Supervisor(
 				name: "test.place"
 				source: source.Source(file: "place.ko", offset: 0, line: 1, column: 1)

@@ -1,5 +1,5 @@
-import "github.com/kocircuit/kocircuit/bootstrap/time"
+import "github.com/kocircuit/kocircuit/bootstrap/context/span"
 
 TestingRoot() {
-	return: Root(time.TestingRoot())
+	return: Root(span.TestingRoot())
 }
