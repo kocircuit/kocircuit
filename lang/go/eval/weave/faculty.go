@@ -1,4 +1,4 @@
-package boot
+package weave
 
 import (
 	"reflect"
@@ -8,30 +8,30 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
 
-type BootReserveMacro struct {
-	BootPlaceholderMacro `ko:"name=placeholder"`
+type WeaveReserveMacro struct {
+	WeavePlaceholderMacro `ko:"name=placeholder"`
 	Ideal                Ideal `ko:"name=ideal"`
 }
 
-func ParseBootReserve(span *Span, ideals Symbol) (Faculty, error) {
+func ParseWeaveReserve(span *Span, ideals Symbol) (Faculty, error) {
 	if v, err := IntegrateInterface(span, ideals, typeOfIdeals); err != nil {
-		return nil, span.Errorf(err, "boot parsing reserve (pkg, name) pairs")
+		return nil, span.Errorf(err, "weave parsing reserve (pkg, name) pairs")
 	} else {
-		mk := &bootReserveFaculty{Ideals: v.(Ideals)}
+		mk := &weaveReserveFaculty{Ideals: v.(Ideals)}
 		return mk.Make(), nil
 	}
 }
 
 var typeOfIdeals = reflect.TypeOf(Ideals{})
 
-type bootReserveFaculty struct {
+type weaveReserveFaculty struct {
 	Ideals Ideals `ko:"name=ideals,monadic"`
 }
 
-func (b *bootReserveFaculty) Make() Faculty {
+func (b *weaveReserveFaculty) Make() Faculty {
 	faculty := Faculty{}
 	for _, ideal := range b.Ideals {
-		faculty[ideal] = &BootReserveMacro{Ideal: ideal}
+		faculty[ideal] = &WeaveReserveMacro{Ideal: ideal}
 	}
 	return faculty
 }

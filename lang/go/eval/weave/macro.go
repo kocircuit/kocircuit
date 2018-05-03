@@ -1,4 +1,4 @@
-package boot
+package weave
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
@@ -9,28 +9,28 @@ import (
 )
 
 func init() {
-	RegisterEvalMacro("Boot", new(EvalBootMacro))
+	RegisterEvalMacro("Weave", new(EvalWeaveMacro))
 }
 
-type EvalBootMacro struct{}
+type EvalWeaveMacro struct{}
 
-func (m EvalBootMacro) MacroID() string { return m.Help() }
+func (m EvalWeaveMacro) MacroID() string { return m.Help() }
 
-func (m EvalBootMacro) Label() string { return "boot" }
+func (m EvalWeaveMacro) Label() string { return "weave" }
 
-func (m EvalBootMacro) MacroSheathString() *string { return PtrString("Boot") }
+func (m EvalWeaveMacro) MacroSheathString() *string { return PtrString("Weave") }
 
-func (m EvalBootMacro) Help() string {
-	return "Boot(booter, func, ctx, arg) -> (returns, effect)"
+func (m EvalWeaveMacro) Help() string {
+	return "Weave(weaver, func, ctx, arg) -> (returns, effect)"
 }
 
-func (m EvalBootMacro) Doc() string {
-	return `Boot plays the user function func, using a user-supplied evaluation logic ...
+func (m EvalWeaveMacro) Doc() string {
+	return `Weave plays the user function func, using a user-supplied evaluation logic ...
 
-booter is a structure of the form below, where "->" indicates the return type of a function:
+weaver is a structure of the form below, where "->" indicates the return type of a function:
 
 	(
-		reserve: (pkg, name) // pkg and name are strings
+		reserve: (pkg, name)
 		Enter: (step, ctx, arg) -> (returns, effect)
 		Leave: (step, ctx, arg) -> (returns, effect)
 		Figure: (step, ctx, literal) -> (returns, effect)
@@ -47,6 +47,8 @@ The named arguments (above) have the following types:
 	ctx is a user object
 	returns is a user object
 	effect is a user object
+	pkg is a string
+	name is a string
 
 * step is (...)
 * fields is a sequence of (name, arg) pairs
@@ -55,10 +57,10 @@ The named arguments (above) have the following types:
 `
 }
 
-func (EvalBootMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
+func (EvalWeaveMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
-	// parse booter
-	booter, err := ParseBooter(span, a.Walk("booter"))
+	// parse weaver
+	weaver, err := ParseWeaver(span, a.Walk("weaver"))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -73,14 +75,14 @@ func (EvalBootMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect,
 	}
 	// parse ctx and arg
 	ctxArg, argArg := a.Walk("ctx"), a.Walk("arg")
-	// boot
-	boot := &Boot{
+	// weave
+	weave := &Weave{
 		Idiom:  interpretFunc.Evaluator.EvalIdiom(),
 		Repo:   interpretFunc.Evaluator.EvalRepo(),
-		Booter: booter,
+		Weaver: weaver,
 		Func:   interpretFunc.Func,
 		Ctx:    ctxArg,
 		Arg:    argArg,
 	}
-	return boot.Play(span)
+	return weave.Play(span)
 }

@@ -1,4 +1,4 @@
-package boot
+package weave
 
 import (
 	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
@@ -6,7 +6,7 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 )
 
-type Booter struct {
+type Weaver struct {
 	Reserve        Faculty        `ko:"name=reserve"`
 	EnterVariety   *VarietySymbol `ko:"name=Enter"`
 	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
@@ -18,44 +18,44 @@ type Booter struct {
 	CombineVariety *VarietySymbol `ko:"name=Combine"`
 }
 
-func ParseBooter(span *Span, a Symbol) (_ *Booter, err error) {
+func ParseWeaver(span *Span, a Symbol) (_ *Weaver, err error) {
 	arg, ok := a.(*StructSymbol)
 	if !ok {
-		return nil, span.Errorf(nil, "booter must be a structure, got %v", a)
+		return nil, span.Errorf(nil, "weaver must be a structure, got %v", a)
 	}
-	t := &Booter{}
-	if t.Reserve, err = ParseBootReserve(span, arg.Walk("reserve")); err != nil {
+	t := &Weaver{}
+	if t.Reserve, err = ParseWeaveReserve(span, arg.Walk("reserve")); err != nil {
 		return nil, span.Errorf(err,
-			"booter reserve must be a sequence of (pkg, name) pairs, got %v", arg.Walk("reserve"))
+			"weaver reserve must be a sequence of (pkg, name) pairs, got %v", arg.Walk("reserve"))
 	}
-	if t.EnterVariety, err = ParseBooterVariety(span, arg, "Enter"); err != nil {
+	if t.EnterVariety, err = ParseWeaverVariety(span, arg, "Enter"); err != nil {
 		return nil, err
 	}
-	if t.LeaveVariety, err = ParseBooterVariety(span, arg, "Leave"); err != nil {
+	if t.LeaveVariety, err = ParseWeaverVariety(span, arg, "Leave"); err != nil {
 		return nil, err
 	}
-	if t.LiteralVariety, err = ParseBooterVariety(span, arg, "Literal"); err != nil {
+	if t.LiteralVariety, err = ParseWeaverVariety(span, arg, "Literal"); err != nil {
 		return nil, err
 	}
-	if t.LinkVariety, err = ParseBooterVariety(span, arg, "Link"); err != nil {
+	if t.LinkVariety, err = ParseWeaverVariety(span, arg, "Link"); err != nil {
 		return nil, err
 	}
-	if t.SelectVariety, err = ParseBooterVariety(span, arg, "Select"); err != nil {
+	if t.SelectVariety, err = ParseWeaverVariety(span, arg, "Select"); err != nil {
 		return nil, err
 	}
-	if t.AugmentVariety, err = ParseBooterVariety(span, arg, "Augment"); err != nil {
+	if t.AugmentVariety, err = ParseWeaverVariety(span, arg, "Augment"); err != nil {
 		return nil, err
 	}
-	if t.InvokeVariety, err = ParseBooterVariety(span, arg, "Invoke"); err != nil {
+	if t.InvokeVariety, err = ParseWeaverVariety(span, arg, "Invoke"); err != nil {
 		return nil, err
 	}
-	if t.CombineVariety, err = ParseBooterVariety(span, arg, "Combine"); err != nil {
+	if t.CombineVariety, err = ParseWeaverVariety(span, arg, "Combine"); err != nil {
 		return nil, err
 	}
 	return t, nil
 }
 
-func ParseBooterVariety(span *Span, arg *StructSymbol, name string) (*VarietySymbol, error) {
+func ParseWeaverVariety(span *Span, arg *StructSymbol, name string) (*VarietySymbol, error) {
 	switch u := arg.Walk(name).(type) {
 	case EmptySymbol:
 		return nil, nil
@@ -64,11 +64,11 @@ func ParseBooterVariety(span *Span, arg *StructSymbol, name string) (*VarietySym
 	case nil:
 		panic("o")
 	default:
-		return nil, span.Errorf(nil, "booter %s must be a variety, got %v", name, u)
+		return nil, span.Errorf(nil, "weaver %s must be a variety, got %v", name, u)
 	}
 }
 
-func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
+func (b *Weaver) Enter(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -80,7 +80,7 @@ func (b *Booter) Enter(ctx *BootStepCtx, object Symbol) (*BootStepResult, error)
 	)
 }
 
-func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
+func (b *Weaver) Leave(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -92,7 +92,7 @@ func (b *Booter) Leave(ctx *BootStepCtx, object Symbol) (*BootStepResult, error)
 	)
 }
 
-func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool) (*BootStepResult, error) {
+func (b *Weaver) Link(ctx *WeaveStepCtx, object Symbol, name string, monadic bool) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -106,7 +106,7 @@ func (b *Booter) Link(ctx *BootStepCtx, object Symbol, name string, monadic bool
 	)
 }
 
-func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootStepResult, error) {
+func (b *Weaver) Select(ctx *WeaveStepCtx, object Symbol, path Path) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -119,10 +119,10 @@ func (b *Booter) Select(ctx *BootStepCtx, object Symbol, path Path) (*BootStepRe
 	)
 }
 
-func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*BootStepResult, error) {
+func (b *Weaver) Augment(ctx *WeaveStepCtx, object Symbol, fields WeaveFields) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	if deFields, err := fields.Deconstruct(ctx.Origin); err != nil {
-		return nil, delegatedSpan.Errorf(err, "boot augmentation")
+		return nil, delegatedSpan.Errorf(err, "weave augmentation")
 	} else {
 		return b.delegate(
 			delegatedSpan,
@@ -136,7 +136,7 @@ func (b *Booter) Augment(ctx *BootStepCtx, object Symbol, fields BootFields) (*B
 	}
 }
 
-func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootStepResult, error) {
+func (b *Weaver) Invoke(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -148,7 +148,7 @@ func (b *Booter) Invoke(ctx *BootStepCtx, object Symbol) (*BootStepResult, error
 	)
 }
 
-func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootStepResult, error) {
+func (b *Weaver) Literal(ctx *WeaveStepCtx, figure *WeaveFigure) (*WeaveStepResult, error) {
 	delegatedSpan := ctx.DelegateSpan()
 	return b.delegate(
 		delegatedSpan,
@@ -160,10 +160,10 @@ func (b *Booter) Literal(ctx *BootStepCtx, figure *BootFigure) (*BootStepResult,
 	)
 }
 
-func (b *Booter) Combine(summary *BootSummary, steps BootResidues) (*BootStepResult, error) {
+func (b *Weaver) Combine(summary *WeaveSummary, steps WeaveResidues) (*WeaveStepResult, error) {
 	combineSpan := summary.CombineSpan()
 	if deSteps, err := steps.Deconstruct(combineSpan); err != nil {
-		return nil, combineSpan.Errorf(err, "boot combining steps")
+		return nil, combineSpan.Errorf(err, "weave combining steps")
 	} else {
 		return b.delegate(
 			combineSpan,

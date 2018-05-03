@@ -1,4 +1,4 @@
-package boot
+package weave
 
 import (
 	"testing"
@@ -9,12 +9,12 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
-func TestBoot(t *testing.T) {
-	tests := &EvalTests{T: t, Test: bootTests}
+func TestWeave(t *testing.T) {
+	tests := &EvalTests{T: t, Test: weaveTests}
 	tests.Play(runtime.NewContext())
 }
 
-var bootTests = []*EvalTest{
+var weaveTests = []*EvalTest{
 	{
 		Enabled: true,
 		File: `
@@ -27,15 +27,15 @@ var bootTests = []*EvalTest{
 			)
 		}
 		Main(x) {
-			r: Boot(
-				booter: (
+			r: Weave(
+				weaver: (
 					reserve: (pkg: "", name: "")
 					reserve: (pkg: "", name: "Reserved")
 					reserve: (pkg: "reserve_pkg1", name: "Reserved1")
 				)
 				func: G
-				ctx: (bootUserCtx: true)
-				arg: (bootUserArg: true)
+				ctx: (weaveUserCtx: true)
+				arg: (weaveUserArg: true)
 			)
 			return: Show(parsed: (result: r))
 		}
