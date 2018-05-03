@@ -1,8 +1,9 @@
++ fix Reserve/Func naming in weaver/types.go and update .proto
++ proto fixtures in boot/types + test
+-------------------------
 * add size to: integer, floating
 * add value to: integer, floating, string, bool
 
 * attach Panic to place objects
 * attach Panic to span objects
 * /integer -> /integers
-
-* extend union over structures?

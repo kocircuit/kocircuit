@@ -13,7 +13,7 @@ func init() {
 	RegisterEvalGateAt("", "WeaveFigure", new(WeaveFigure))
 	RegisterEvalGateAt("", "WeaveFunctional", new(WeaveFunctional))
 	RegisterEvalGateAt("", "WeaveFunc", new(WeaveFunc))
-	RegisterEvalGateAt("", "WeaveReserve", new(WeaveReserve))
+	RegisterEvalGateAt("", "WeaveOperator", new(WeaveOperator))
 }
 
 type WeaveStepCtx struct {
@@ -82,20 +82,20 @@ func (fig *WeaveFigure) Play(*runtime.Context) *WeaveFigure {
 }
 
 type WeaveFunctional struct {
-	Reserve *WeaveReserve `ko:"name=reserve"` //XXX: name?
-	Func    *WeaveFunc    `ko:"name=func"`    //XXX: name?
+	Operator *WeaveOperator `ko:"name=operator"`
+	Func     *WeaveFunc     `ko:"name=func"`
 }
 
 func (w *WeaveFunctional) Play(*runtime.Context) *WeaveFunctional {
 	return w
 }
 
-type WeaveReserve struct {
+type WeaveOperator struct {
 	Pkg  string `ko:"name=pkg"`
 	Name string `ko:"name=name"`
 }
 
-func (w *WeaveReserve) Play(*runtime.Context) *WeaveReserve {
+func (w *WeaveOperator) Play(*runtime.Context) *WeaveOperator {
 	return w
 }
 

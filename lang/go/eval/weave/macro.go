@@ -33,7 +33,7 @@ weaver is a structure of the form below,
 where "->" indicates the return type of a function:
 
 	(
-		reserve: sequence of (pkg, name) pairs
+		operator: sequence of (pkg, name) pairs
 		Enter: function (stepCtx, object) -> (returns, effect)
 		Leave: function (stepCtx, object) -> (returns, effect)
 		Link: function (stepCtx, object, name, monadic) -> (returns, effect)

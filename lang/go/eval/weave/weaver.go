@@ -7,7 +7,7 @@ import (
 )
 
 type Weaver struct {
-	Reserve        Faculty        `ko:"name=reserve"`
+	Operator       Faculty        `ko:"name=operator"`
 	EnterVariety   *VarietySymbol `ko:"name=Enter"`
 	LeaveVariety   *VarietySymbol `ko:"name=Leave"`
 	LiteralVariety *VarietySymbol `ko:"name=Literal"`
@@ -24,9 +24,9 @@ func ParseWeaver(span *Span, a Symbol) (_ *Weaver, err error) {
 		return nil, span.Errorf(nil, "weaver must be a structure, got %v", a)
 	}
 	t := &Weaver{}
-	if t.Reserve, err = ParseWeaveReserve(span, arg.Walk("reserve")); err != nil {
+	if t.Operator, err = ParseWeaveOperator(span, arg.Walk("operator")); err != nil {
 		return nil, span.Errorf(err,
-			"weaver reserve must be a sequence of (pkg, name) pairs, got %v", arg.Walk("reserve"))
+			"weaver operator must be a sequence of (pkg, name) pairs, got %v", arg.Walk("operator"))
 	}
 	if t.EnterVariety, err = ParseWeaverVariety(span, arg, "Enter"); err != nil {
 		return nil, err

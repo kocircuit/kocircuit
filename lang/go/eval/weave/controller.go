@@ -27,7 +27,7 @@ func (b *Weave) Play(origin *Span) (returns, effect Symbol, err error) {
 		Idiom: b.Idiom,
 		Repo:  b.Repo,
 		System: System{
-			Faculty:  b.Weaver.Reserve,
+			Faculty:  b.Weaver.Operator,
 			Boundary: weaveController,
 			Combiner: weaveController,
 		},

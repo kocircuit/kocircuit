@@ -20,9 +20,9 @@ func (b *WeaveController) Figure(weaveSpan *Span, figure Figure) (Shape, Effect,
 		fig.Functional = &WeaveFunctional{
 			Func: &WeaveFunc{Pkg: u.Func.Pkg, Name: u.Func.Name},
 		}
-	case *WeaveReserveMacro: // from faculty of reserved words
+	case *WeaveOperatorMacro: // from faculty of operators
 		fig.Functional = &WeaveFunctional{
-			Reserve: &WeaveReserve{Pkg: u.Ideal.Pkg, Name: u.Ideal.Name},
+			Operator: &WeaveOperator{Pkg: u.Ideal.Pkg, Name: u.Ideal.Name},
 		}
 	default:
 		panic("unknown figure")

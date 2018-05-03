@@ -54,9 +54,9 @@ var weaveTests = []*EvalTest{
 		Main(x) {
 			r: Weave(
 				weaver: (
-					reserve: (pkg: "", name: "")
-					reserve: (pkg: "", name: "Reserved")
-					reserve: (pkg: "reserve_pkg1", name: "Reserved1")
+					operator: (pkg: "", name: "")
+					operator: (pkg: "", name: "OperatorA")
+					operator: (pkg: "operator_pkg", name: "OperatorB")
 					Enter: Forward
 					Leave: Forward
 					Link: Forward
