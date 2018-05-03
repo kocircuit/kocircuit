@@ -100,9 +100,9 @@ UnionUnion(varietyShapers, fromType, toType) {
 	)
 }
 
-Variety(macro, fieldShapers) {
+Variety(functional, fieldShapers) {
 	return: (
-		macro: Expect(macro)
+		functional: Expect(functional)
 		fieldShapers: Expect(fieldShapers)
 	)
 }

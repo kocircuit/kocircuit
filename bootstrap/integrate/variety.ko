@@ -13,11 +13,11 @@ integrateVarietiesToVarieties(place, fromVarieties, toVarieties) {
 }
 
 integrateVarietyToVarieties(place, fromVariety?, toVarieties) {
-	macro: types.VarietyTypeMacro(fromVariety)
+	functional: types.VarietyTypeFunctional(fromVariety)
 	toVariety: set.Find(
-		key: macro
+		key: functional
 		objects: toVarieties
-		ObjectKey: types.VarietyTypeMacro
+		ObjectKey: types.VarietyTypeFunctional
 	)
 	return: integrateVarietyToVariety(
 		place: place
@@ -39,7 +39,7 @@ integrateVarietyToVarieties(place, fromVariety?, toVarieties) {
 
 integrateVarietyToVariety(place, fromVariety, toVariety) {
 	return: shapers.Variety(
-		macro: types.VarietyTypeMacro(fromVariety)
+		functional: types.VarietyTypeFunctional(fromVariety)
 		fieldShapers: integrateFieldsToFields(
 			place: place
 			fromFields: types.VarietyTypeFields(fromVariety)

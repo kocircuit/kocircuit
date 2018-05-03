@@ -140,7 +140,7 @@ testIntegrateValidUnionToUnion() {
 			unionUnion: (
 				varietyShapers: (
 					(
-						macro: "M1"
+						functional: "M1"
 						fieldShapers: (
 							(
 								name: "a2"
@@ -155,15 +155,15 @@ testIntegrateValidUnionToUnion() {
 				)
 			)
 			fromType: (
-				union: (varieties: (variety: (macro: "M1", fields: (name: "a2", type: (bool: ())))))
+				union: (varieties: (variety: (functional: "M1", fields: (name: "a2", type: (bool: ())))))
 			)
 			toType: (
 				union: (
 					varieties: (
 						(
-						variety: (macro: "M1", fields: (name: "a2", type: (series: (elemType: (bool: ())))))
+						variety: (functional: "M1", fields: (name: "a2", type: (series: (elemType: (bool: ())))))
 						)
-						(variety: (macro: "M2"))
+						(variety: (functional: "M2"))
 					)
 				)
 			)
@@ -174,17 +174,17 @@ testIntegrateValidUnionToUnion() {
 testBigUnion() {
 	return: types.UnionType(
 		types.VarietyType(
-			macro: "M1"
+			functional: "M1"
 			fields: types.Field(name: "a2", type: types.SeriesType(types.BoolType()))
 		)
-		types.VarietyType(macro: "M2")
+		types.VarietyType(functional: "M2")
 	)
 }
 
 testSmallUnion() {
 	return: types.UnionType(
 		types.VarietyType(
-			macro: "M1"
+			functional: "M1"
 			fields: types.Field(name: "a2", type: types.BoolType())
 		)
 	)
