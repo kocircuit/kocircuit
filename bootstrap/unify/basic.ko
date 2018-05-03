@@ -1,4 +1,4 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 UnifyBool(place, boolType?, withType) {
@@ -16,7 +16,7 @@ UnifyBool(place, boolType?, withType) {
 			then: UnifySeries[place: place, withType: boolType]
 		]
 		case: types.WhenBool[type: withType, then: Return]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify boolean"
@@ -42,7 +42,7 @@ UnifyString(place, stringType?, withType) {
 			then: UnifySeries[place: place, withType: stringType]
 		]
 		case: types.WhenString[type: withType, then: Return]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify string"
@@ -68,7 +68,7 @@ UnifyInteger(place, integerType?, withType) {
 			then: UnifySeries[place: place, withType: integerType]
 		]
 		case: types.WhenInteger[type: withType, then: Return]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify integer"
@@ -94,7 +94,7 @@ UnifyFloating(place, floatingType?, withType) {
 			then: UnifySeries[place: place, withType: floatingType]
 		]
 		case: types.WhenFloating[type: withType, then: Return]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify floating-point"

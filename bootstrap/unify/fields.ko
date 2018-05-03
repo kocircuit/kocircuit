@@ -1,6 +1,6 @@
 import "github.com/kocircuit/kocircuit/lib/series"
 
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 UnifyFields(place, leftFields, rightFields) {
@@ -19,7 +19,7 @@ unifyFieldList(place, fieldList?) {
 	return: types.Field(
 		name: fieldName
 		type: UnifyTypes(
-			place: space.Walk(place: place, step: fieldName)
+			place: ko_place.Walk(place: place, step: fieldName)
 			types: fieldTypes
 		)
 	)

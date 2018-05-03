@@ -1,5 +1,5 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
-import "github.com/kocircuit/kocircuit/bootstrap/context/span"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
+import "github.com/kocircuit/kocircuit/bootstrap/context/span" as ko_span
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 import "github.com/kocircuit/kocircuit/bootstrap/unify"
 import "github.com/kocircuit/kocircuit/bootstrap/integrate"
@@ -7,8 +7,8 @@ import "github.com/kocircuit/kocircuit/bootstrap/integrate"
 // ko play github.com/kocircuit/kocircuit/bootstrap/TestAll
 TestAll() {
 	return: And(
-		space.TestAll()
-		span.TestAll()
+		ko_place.TestAll()
+		ko_span.TestAll()
 		types.TestAll()
 		unify.TestAll()
 		integrate.TestAll()

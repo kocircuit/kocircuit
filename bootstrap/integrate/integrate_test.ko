@@ -1,5 +1,5 @@
 import "github.com/kocircuit/kocircuit/bootstrap/testutil"
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 TestAll() {
@@ -25,7 +25,7 @@ testIntegrateBasicToOptional() {
 	integerType: types.IntegerType()
 	optIntegerType: types.OptionalType(integerType)
 	return: Equal(
-		Integrate(place: space.TestingRoot(), fromType: integerType, toType: optIntegerType)
+		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: optIntegerType)
 		(
 			intoOptional: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
 			fromType: (integer: true)
@@ -37,14 +37,14 @@ testIntegrateBasicToOptional() {
 testIntegrateOptionalToBasic() {
 	integerType: types.IntegerType()
 	optIntegerType: types.OptionalType(integerType)
-	return: Integrate(place: space.TestingRoot(), fromType: optIntegerType, toType: integerType)
+	return: Integrate(place: ko_place.TestingRoot(), fromType: optIntegerType, toType: integerType)
 }
 
 testIntegrateBasicToSeries() {
 	integerType: types.IntegerType()
 	seriesIntegerType: types.SeriesType(integerType)
 	return: Equal(
-		Integrate(place: space.TestingRoot(), fromType: integerType, toType: seriesIntegerType)
+		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: seriesIntegerType)
 		(
 			intoSeries: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
 			fromType: (integer: true)
@@ -56,7 +56,7 @@ testIntegrateBasicToSeries() {
 testIntegrateSeriesToBasic() {
 	integerType: types.IntegerType()
 	seriesIntegerType: types.SeriesType(integerType)
-	return: Integrate(place: space.TestingRoot(), fromType: seriesIntegerType, toType: integerType)
+	return: Integrate(place: ko_place.TestingRoot(), fromType: seriesIntegerType, toType: integerType)
 }
 
 testIntegratePanic() {
@@ -72,13 +72,13 @@ testIntegratePanic() {
 }
 
 testIntegrateInvalidStructToStruct() {
-	_: Integrate(place: space.TestingRoot(), fromType: testSmallStruct(), toType: testBigStruct())
+	_: Integrate(place: ko_place.TestingRoot(), fromType: testSmallStruct(), toType: testBigStruct())
 	return: false
 }
 
 testIntegrateValidStructToStruct() {
 	return: Equal(
-		Integrate(place: space.TestingRoot(), fromType: testBigStruct(), toType: testSmallStruct())
+		Integrate(place: ko_place.TestingRoot(), fromType: testBigStruct(), toType: testSmallStruct())
 		(
 			structureStructure: (
 				fieldShapers: (
@@ -130,12 +130,12 @@ testBigStruct() {
 }
 
 testIntegrateInvalidUnionToUnion() {
-	return: Integrate(place: space.TestingRoot(), fromType: testBigUnion(), toType: testSmallUnion())
+	return: Integrate(place: ko_place.TestingRoot(), fromType: testBigUnion(), toType: testSmallUnion())
 }
 
 testIntegrateValidUnionToUnion() {
 	return: Equal(
-		Integrate(place: space.TestingRoot(), fromType: testSmallUnion(), toType: testBigUnion())
+		Integrate(place: ko_place.TestingRoot(), fromType: testSmallUnion(), toType: testBigUnion())
 		(
 			unionUnion: (
 				varietyShapers: (

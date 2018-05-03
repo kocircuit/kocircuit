@@ -1,4 +1,4 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 // XXX: test commutativity
@@ -6,7 +6,7 @@ import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 // ko play github.com/kocircuit/kocircuit/bootstrap/unify/TestUnify
 TestUnify() {
-	place: space.TestingRoot()
+	place: ko_place.TestingRoot()
 	integerType: types.IntegerType()
 	optIntegerType: types.OptionalType(integerType)
 	seqIntegerType: types.SeriesType(integerType)
@@ -127,7 +127,7 @@ TestUnifyPanic() {
 		)
 	)
 	return: Recover(
-		invoke: UnifyPair[place: space.TestingRoot(), left: t0, right: t1]
+		invoke: UnifyPair[place: ko_place.TestingRoot(), left: t0, right: t1]
 		panic: verifyUnifyPanic
 	)
 }

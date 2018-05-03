@@ -1,7 +1,7 @@
 import "github.com/kocircuit/kocircuit/lib/series"
 import "github.com/kocircuit/kocircuit/lib/set"
 
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 UnifyUnion(place, unionType?, withType) {
@@ -22,7 +22,7 @@ UnifyUnion(place, unionType?, withType) {
 			type: withType
 			then: UnifyUnionUnion[place: place, rightUnionType: unionType]
 		]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify union"

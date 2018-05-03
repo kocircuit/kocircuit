@@ -2,7 +2,7 @@ import "github.com/kocircuit/kocircuit/lib/series"
 import "github.com/kocircuit/kocircuit/lib/set"
 
 import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 IntegrateToStructure(place, fromType, toStructureType?) {
@@ -11,7 +11,7 @@ IntegrateToStructure(place, fromType, toStructureType?) {
 			type: fromType
 			then: IntegrateStructureToStructure[place: place, toStructureType: toStructureType]
 		]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				integrating: "cannot integrate to structure"
@@ -63,7 +63,7 @@ integrateFieldToField(place, fromField, toField) {
 	return: shapers.Field(
 		name: fieldName
 		shaper: Integrate(
-			place: space.Walk(place: place, step: fieldName)
+			place: ko_place.Walk(place: place, step: fieldName)
 			fromType: types.FieldType(fromField)
 			toType: types.FieldType(toField)
 		)

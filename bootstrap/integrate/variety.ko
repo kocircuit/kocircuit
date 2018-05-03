@@ -2,7 +2,7 @@ import "github.com/kocircuit/kocircuit/lib/series"
 import "github.com/kocircuit/kocircuit/lib/set"
 
 import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 integrateVarietiesToVarieties(place, fromVarieties, toVarieties) {
@@ -25,7 +25,7 @@ integrateVarietyToVarieties(place, fromVariety?, toVarieties) {
 		toVariety: When(
 			have: toVariety
 			then: Return
-			else: space.Error[
+			else: ko_place.Error[
 				place: place
 				error: (
 					integrating: "no matching variety"

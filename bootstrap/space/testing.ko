@@ -1,5 +1,0 @@
-import "github.com/kocircuit/kocircuit/bootstrap/context/span"
-
-TestingRoot() {
-	return: Root(span.TestingRoot())
-}

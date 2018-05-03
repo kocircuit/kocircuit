@@ -1,6 +1,6 @@
 import "github.com/kocircuit/kocircuit/lib/strings"
 
-import "github.com/kocircuit/kocircuit/bootstrap/context/span"
+import "github.com/kocircuit/kocircuit/bootstrap/context/span" as ko_span
 
 Root(span?) {
 	return: _Place(span: span)
@@ -11,7 +11,7 @@ Walk(place, step) {
 }
 
 Error(place, error) {
-	return: span.Error(
+	return: ko_span.Error(
 		span: place.span
 		error: (
 			typeError: Expect(error)

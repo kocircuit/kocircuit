@@ -1,4 +1,4 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 // UnifyNamed returns the unification of an named type with another type.
@@ -21,7 +21,7 @@ UnifyNamed(place, namedType?, withType) {
 			type: withType
 			then: UnifyNamedNamed[place: place, rightNamedType: namedType]
 		]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify named"
@@ -36,7 +36,7 @@ UnifyNamedNamed(place, leftNamedType?, rightNamedType) {
 	return: Branch(
 		if: Equal(leftNamedType, rightNamedType)
 		then: Return[leftNamedType]
-		else: space.Error[
+		else: ko_place.Error[
 			place: place
 			error: (
 				unify: "unifying different named types"

@@ -1,4 +1,4 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 Integrate(place, fromType, toType) {
@@ -16,7 +16,7 @@ Integrate(place, fromType, toType) {
 		case: types.WhenStructure[type: toType, then: IntegrateToStructure[place: place, fromType: fromType]]
 		case: types.WhenUnion[type: toType, then: IntegrateToUnion[place: place, fromType: fromType]]
 		//
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				integrating: "cannot integrate"

@@ -1,4 +1,4 @@
-import "github.com/kocircuit/kocircuit/bootstrap/space"
+import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 UnifyStructure(place, structureType?, withType) {
@@ -19,7 +19,7 @@ UnifyStructure(place, structureType?, withType) {
 			type: withType
 			then: UnifyStructureStructure[place: place, rightStructureType: structureType]
 		]
-		otherwise: space.Error[
+		otherwise: ko_place.Error[
 			place: place
 			error: (
 				unifying: "cannot unify structure"
