@@ -56,7 +56,7 @@ message Functional {
 
 message Address {
 	required string pkg = 1;
-	required string name = 1;
+	required string name = 2;
 }
 
 message Optional {

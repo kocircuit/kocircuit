@@ -82,8 +82,8 @@ func (fig *WeaveFigure) Play(*runtime.Context) *WeaveFigure {
 }
 
 type WeaveFunctional struct {
-	Reserve *WeaveReserve `ko:"name=reserve"`
-	Func    *WeaveFunc    `ko:"name=func"`
+	Reserve *WeaveReserve `ko:"name=reserve"` //XXX: name?
+	Func    *WeaveFunc    `ko:"name=func"`    //XXX: name?
 }
 
 func (w *WeaveFunctional) Play(*runtime.Context) *WeaveFunctional {

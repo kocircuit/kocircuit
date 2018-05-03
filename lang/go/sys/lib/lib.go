@@ -1,11 +1,11 @@
 package lib
 
 import (
-	// Register eval macros
+	// macros
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros/circuit"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/weave"
-	// Packages with side-effect of registering go gate implementations
+	// standard library
 	_ "github.com/kocircuit/kocircuit/lib/encoding/json"
 	_ "github.com/kocircuit/kocircuit/lib/encoding/yaml"
 	_ "github.com/kocircuit/kocircuit/lib/file"
@@ -17,5 +17,6 @@ import (
 	_ "github.com/kocircuit/kocircuit/lib/sync"
 	_ "github.com/kocircuit/kocircuit/lib/time"
 	_ "github.com/kocircuit/kocircuit/lib/web/xml"
-	// _ "github.com/kocircuit/kocircuit/x/tree"
+	// bootstrap
+	_ "github.com/kocircuit/kocircuit/bootstrap/types"
 )
