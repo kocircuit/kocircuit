@@ -26,12 +26,32 @@ var weaveTests = []*EvalTest{
 				t: (p.b, q.a)
 			)
 		}
+		Forward(stepCtx, object) {
+			return: (
+				returns: object
+				effect: (effect: true)
+			)
+		}
+		Literal(stepCtx, figure) {
+			return: (
+				returns: (figure: figure)
+				effect: (effect: true)
+			)
+		}
 		Main(x) {
 			r: Weave(
 				weaver: (
 					reserve: (pkg: "", name: "")
 					reserve: (pkg: "", name: "Reserved")
 					reserve: (pkg: "reserve_pkg1", name: "Reserved1")
+					Enter: Forward
+					Leave: Forward
+					Link: Forward
+					Select: Forward
+					Augment: Forward
+					Invoke: Forward
+					Literal: Literal
+					// Combine: function (summaryCtx, stepResidues) -> (returns, effect)
 				)
 				func: G
 				ctx: (weaveUserCtx: true)

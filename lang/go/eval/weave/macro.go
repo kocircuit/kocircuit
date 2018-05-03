@@ -25,35 +25,37 @@ func (m EvalWeaveMacro) Help() string {
 }
 
 func (m EvalWeaveMacro) Doc() string {
-	return `Weave plays the user function func, using a user-supplied evaluation logic ...
+	return `Weave executes the circuit func on argument arg,
+using a circuit evaluation logic given by argument weaver,
+as well as an evaluation context ctx.
 
-weaver is a structure of the form below, where "->" indicates the return type of a function:
+weaver is a structure of the form below,
+where "->" indicates the return type of a function:
 
 	(
-		reserve: (pkg, name)
-		Enter: (step, ctx, arg) -> (returns, effect)
-		Leave: (step, ctx, arg) -> (returns, effect)
-		Figure: (step, ctx, literal) -> (returns, effect)
-		Link: (step, ctx, arg, name, monadic) -> (returns, effect)
-		Select: (step, ctx, arg, path) -> (returns, effect)
-		Augment: (step, ctx, arg, fields) -> (returns, effect)
-		Invoke: (step, ctx, arg) -> (returns, effect)
-		Combine: (ctx, arg, stepResults) -> (returns, effect)
+		reserve: sequence of (pkg, name) pairs
+		Enter: function (stepCtx, object) -> (returns, effect)
+		Leave: function (stepCtx, object) -> (returns, effect)
+		Link: function (stepCtx, object, name, monadic) -> (returns, effect)
+		Select: function (stepCtx, object, path) -> (returns, effect)
+		Augment: function (stepCtx, object, fields) -> (returns, effect)
+		Invoke: function (stepCtx, object) -> (returns, effect)
+		Literal: function (stepCtx, figure) -> (returns, effect)
+		Combine: function (summaryCtx, stepResidues) -> (returns, effect)
 	)
 
 The named arguments (above) have the following types:
 
-	arg is a user object
-	ctx is a user object
-	returns is a user object
-	effect is a user object
+	object is a any type
+	ctx is any type
+	returns is any type
+	effect is any type
 	pkg is a string
 	name is a string
 
-* step is (...)
-* fields is a sequence of (name, arg) pairs
-* literal is XXX
-* stepResults is a sequence of (step, returns, panic, effect)
+stepCtx is a structure of the form (pkg, func, step, logic, source, ctx).
+summaryCtx is a structure of the form (pkg, func, source, ctx, arg, returns).
+fields is a sequence of structures of the form (name, monadic, objects).
 `
 }
 

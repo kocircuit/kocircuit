@@ -74,7 +74,7 @@ func (b *Weaver) Enter(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, erro
 		delegatedSpan,
 		b.EnterVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -86,7 +86,7 @@ func (b *Weaver) Leave(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, erro
 		delegatedSpan,
 		b.LeaveVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -98,7 +98,7 @@ func (b *Weaver) Link(ctx *WeaveStepCtx, object Symbol, name string, monadic boo
 		delegatedSpan,
 		b.LinkVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 			{Name: "name", Shape: BasicSymbol{name}},
 			{Name: "monadic", Shape: BasicSymbol{monadic}},
@@ -112,7 +112,7 @@ func (b *Weaver) Select(ctx *WeaveStepCtx, object Symbol, path Path) (*WeaveStep
 		delegatedSpan,
 		b.SelectVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 			{Name: "path", Shape: MakeStringsSymbol(delegatedSpan, []string(path))},
 		},
@@ -128,7 +128,7 @@ func (b *Weaver) Augment(ctx *WeaveStepCtx, object Symbol, fields WeaveFields) (
 			delegatedSpan,
 			b.AugmentVariety,
 			Fields{
-				{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+				{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 				{Name: "object", Shape: object},
 				{Name: "fields", Shape: deFields},
 			},
@@ -142,7 +142,7 @@ func (b *Weaver) Invoke(ctx *WeaveStepCtx, object Symbol) (*WeaveStepResult, err
 		delegatedSpan,
 		b.InvokeVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
 		},
 	)
@@ -154,7 +154,7 @@ func (b *Weaver) Literal(ctx *WeaveStepCtx, figure *WeaveFigure) (*WeaveStepResu
 		delegatedSpan,
 		b.LiteralVariety,
 		Fields{
-			{Name: "ctx", Shape: ctx.Deconstruct(delegatedSpan)},
+			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "figure", Shape: figure.Deconstruct(delegatedSpan)},
 		},
 	)
@@ -169,8 +169,8 @@ func (b *Weaver) Combine(summary *WeaveSummary, steps WeaveResidues) (*WeaveStep
 			combineSpan,
 			b.CombineVariety,
 			Fields{
-				{Name: "summary", Shape: summary.Deconstruct(combineSpan)},
-				{Name: "steps", Shape: deSteps},
+				{Name: "summaryCtx", Shape: summary.Deconstruct(combineSpan)},
+				{Name: "stepResidues", Shape: deSteps},
 			},
 		)
 	}
