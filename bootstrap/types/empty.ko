@@ -1,5 +1,5 @@
 EmptyType() {
-	return: (empty: true)
+	return: (empty: ())
 }
 
 WhenEmpty(type?, then, else) {

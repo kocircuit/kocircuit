@@ -57,9 +57,9 @@ expectUnifiedStructure() {
 	return: (
 		structure: (
 			fields: (
-				(name: "f1", type: (optional: (elemType: (integer: true))))
-				(name: "f3", type: (series: (elemType: (integer: true))))
-				(name: "f2", type: (optional: (elemType: (integer: true))))
+				(name: "f1", type: (optional: (elemType: (integer: ()))))
+				(name: "f3", type: (series: (elemType: (integer: ()))))
+				(name: "f2", type: (optional: (elemType: (integer: ()))))
 			)
 		)
 	)
@@ -73,9 +73,9 @@ expectUnifiedUnion() {
 					variety: (
 						macro: "M1"
 						fields: (
-							(name: "f1", type: (optional: (elemType: (integer: true))))
-							(name: "f2", type: (optional: (elemType: (integer: true))))
-							(name: "f3", type: (series: (elemType: (integer: true))))
+							(name: "f1", type: (optional: (elemType: (integer: ()))))
+							(name: "f2", type: (optional: (elemType: (integer: ()))))
+							(name: "f3", type: (series: (elemType: (integer: ()))))
 						)
 					)
 				)
@@ -83,8 +83,8 @@ expectUnifiedUnion() {
 					variety: (
 						macro: "M3"
 						fields: (
-							(name: "f1", type: (integer: true))
-							(name: "f2", type: (optional: (elemType: (integer: true))))
+							(name: "f1", type: (integer: ()))
+							(name: "f2", type: (optional: (elemType: (integer: ()))))
 						)
 					)
 				)
@@ -92,8 +92,8 @@ expectUnifiedUnion() {
 					variety: (
 						macro: "M2"
 						fields: (
-							(name: "f1", type: (optional: (elemType: (integer: true))))
-							(name: "f3", type: (series: (elemType: (integer: true))))
+							(name: "f1", type: (optional: (elemType: (integer: ()))))
+							(name: "f3", type: (series: (elemType: (integer: ()))))
 						)
 					)
 				)
@@ -136,7 +136,7 @@ verifyUnifyPanic(panic?) {
 	return: Equal(
 		panic.error
 		(
-			typeError: (unifying: "cannot unify string", stringType: (string: true), withType: (bool: true))
+			typeError: (unifying: "cannot unify string", stringType: (string: ()), withType: (bool: ()))
 			place: "f2.().g1"
 		)
 	)

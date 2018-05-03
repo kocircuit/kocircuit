@@ -1,7 +1,7 @@
 // Bool
 
 BoolType() {
-	return: (bool: true)
+	return: (bool: ())
 }
 
 WhenBool(type?, then, else) {
@@ -14,7 +14,7 @@ WhenBool(type?, then, else) {
 // String
 
 StringType() {
-	return: (string: true)
+	return: (string: ())
 }
 
 WhenString(type?, then, else) {
@@ -27,7 +27,7 @@ WhenString(type?, then, else) {
 // Integer
 
 IntegerType() {
-	return: (integer: true)
+	return: (integer: ())
 }
 
 WhenInteger(type?, then, else) {
@@ -37,10 +37,10 @@ WhenInteger(type?, then, else) {
 	)
 }
 
-// Float
+// Floating
 
 FloatingType() {
-	return: (floating: true)
+	return: (floating: ())
 }
 
 WhenFloating(type?, then, else) {

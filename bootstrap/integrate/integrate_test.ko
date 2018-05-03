@@ -27,9 +27,9 @@ testIntegrateBasicToOptional() {
 	return: Equal(
 		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: optIntegerType)
 		(
-			intoOptional: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
-			fromType: (integer: true)
-			toType: (optional: (elemType: (integer: true)))
+			intoOptional: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
+			fromType: (integer: ())
+			toType: (optional: (elemType: (integer: ())))
 		)
 	)
 }
@@ -46,9 +46,9 @@ testIntegrateBasicToSeries() {
 	return: Equal(
 		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: seriesIntegerType)
 		(
-			intoSeries: (elemShaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
-			fromType: (integer: true)
-			toType: (series: (elemType: (integer: true)))
+			intoSeries: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
+			fromType: (integer: ())
+			toType: (series: (elemType: (integer: ())))
 		)
 	)
 }
@@ -65,7 +65,7 @@ testIntegratePanic() {
 		panic: testIntegratePanicRecover(panic?) {
 			return: Equal(
 				panic.error.fromType
-				(series: (elemType: (bool: true)))
+				(series: (elemType: (bool: ())))
 			)
 		}
 	)
@@ -82,13 +82,13 @@ testIntegrateValidStructToStruct() {
 		(
 			structureStructure: (
 				fieldShapers: (
-					(name: "f1", shaper: (identity: (), fromType: (integer: true), toType: (integer: true)))
+					(name: "f1", shaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
 					(
 						name: "f2"
 						shaper: (
-							intoSeries: (elemShaper: (identity: (), fromType: (bool: true), toType: (bool: true)))
-							fromType: (bool: true)
-							toType: (series: (elemType: (bool: true)))
+							intoSeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
+							fromType: (bool: ())
+							toType: (series: (elemType: (bool: ())))
 						)
 					)
 				)
@@ -96,17 +96,17 @@ testIntegrateValidStructToStruct() {
 			fromType: (
 				structure: (
 					fields: (
-						(name: "f1", type: (integer: true))
-						(name: "f2", type: (bool: true))
-						(name: "f3", type: (string: true))
+						(name: "f1", type: (integer: ()))
+						(name: "f2", type: (bool: ()))
+						(name: "f3", type: (string: ()))
 					)
 				)
 			)
 			toType: (
 				structure: (
 					fields: (
-						(name: "f1", type: (integer: true))
-						(name: "f2", type: (series: (elemType: (bool: true))))
+						(name: "f1", type: (integer: ()))
+						(name: "f2", type: (series: (elemType: (bool: ()))))
 					)
 				)
 			)
@@ -145,9 +145,9 @@ testIntegrateValidUnionToUnion() {
 							(
 								name: "a2"
 								shaper: (
-									intoSeries: (elemShaper: (identity: (), fromType: (bool: true), toType: (bool: true)))
-									fromType: (bool: true)
-									toType: (series: (elemType: (bool: true)))
+									intoSeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
+									fromType: (bool: ())
+									toType: (series: (elemType: (bool: ())))
 								)
 							)
 						)
@@ -155,13 +155,13 @@ testIntegrateValidUnionToUnion() {
 				)
 			)
 			fromType: (
-				union: (varieties: (variety: (macro: "M1", fields: (name: "a2", type: (bool: true)))))
+				union: (varieties: (variety: (macro: "M1", fields: (name: "a2", type: (bool: ())))))
 			)
 			toType: (
 				union: (
 					varieties: (
 						(
-						variety: (macro: "M1", fields: (name: "a2", type: (series: (elemType: (bool: true)))))
+						variety: (macro: "M1", fields: (name: "a2", type: (series: (elemType: (bool: ())))))
 						)
 						(variety: (macro: "M2"))
 					)

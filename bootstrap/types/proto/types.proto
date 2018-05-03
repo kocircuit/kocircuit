@@ -1,0 +1,64 @@
+syntax = "proto2";
+
+package ko.bootstrap.types;
+
+option go_package = "proto";
+
+message Type {
+	optional Empty empty = 1;
+	optional Bool bool = 11;
+	optional String string = 12;
+	optional Integer integer = 13;
+	optional Floating floating = 14;
+	optional Series series = 21;
+	optional Structure structure = 22;
+	optional Union union = 31;
+	optional Variety variety = 32;
+	optional Optional optional = 41;
+}
+
+message Empty {}
+
+message Bool {}
+
+message String {}
+
+message Integer {}
+
+message Floating {}
+
+message Series {
+	repeated Type elemType = 1;
+}
+
+message Structure {
+	repeated Field fields = 1;
+}
+
+message Field {
+	required string name = 1;
+	required Type type = 2;
+}
+
+message Union {
+	repeated Type varieties = 1;
+}
+
+message Variety {
+	required Functional functional = 1;
+	repeated Field fields = 2;
+}
+
+message Functional {
+	optional Address func = 1;
+	optional Address reserve = 2;
+}
+
+message Address {
+	required string pkg = 1;
+	required string name = 1;
+}
+
+message Optional {
+	required Type elemType = 1;
+}
