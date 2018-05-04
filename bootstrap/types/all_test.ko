@@ -9,5 +9,6 @@ TestAll() {
 		TestSwitch()
 		TestList()
 		TestFieldUnion()
+		TestProto()
 	)
 }

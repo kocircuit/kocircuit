@@ -1,4 +1,28 @@
 // ko play github.com/kocircuit/kocircuit/bootstrap/types/TestProto
 TestProto() {
-	return: Unmarshal(Marshal(Proto(BoolType())))
+	fields: (
+		Field(name: "g1", type: BoolType())
+		Field(name: "g2", type: SeriesType(StringType()))
+	)
+	varieties: (
+		VarietyType(transform: Func(pkg: "pkg", name: "func"), fields: fields)
+		VarietyType(transform: Operator(pkg: "pkg", name: "operator"), fields: fields)
+	)
+	return: And(
+		testTypeProto(EmptyType())
+		testTypeProto(BoolType())
+		testTypeProto(StringType())
+		testTypeProto(IntegerType())
+		testTypeProto(FloatingType())
+		testTypeProto(SeriesType(IntegerType()))
+		testTypeProto(StructureType(fields))
+		testTypeProto(UnionType(varieties))
+		testTypeProto(OptionalType(UnionType(varieties)))
+	)
+}
+
+testTypeProto(type?) {
+	proto: Proto(type) // test type compliance
+	marshaled: Marshal(proto)
+	return: Equal(Unmarshal(marshaled), proto)
 }
