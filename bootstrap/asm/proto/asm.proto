@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+package ko.bootstrap.asm;
+
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers/proto/shapers.proto";
+import "github.com/kocircuit/kocircuit/bootstrap/source/proto/source.proto";
+import "github.com/kocircuit/kocircuit/bootstrap/types/proto/types.proto";
+
+option go_package = "proto";
+
+message Func {
+	required Address address = 1;
+	required types.Type arg = 2;
+	required types.Type returns = 3;
+	repeated Step step = 4;
+	optional source.Source source = 5;
+}
+
+message Address {
+	required string pkg = 1;
+	required string name = 2;
+}
+
+message Step {
+	required string label = 1;
+	required types.Type returns = 2;
+	optional source.Source source = 3;
+	required Logic logic = 4;
+}
+
+message Logic {
+	optional Enter enter = 1;
+	optional Leave leave = 2;
+	optional Link link = 3;
+	optional Select select = 4;
+	optional Augment augment = 5;
+	optional Invoke invoke = 6;
+	optional Literal literal = 7;
+}
+
+// Gather
+message Gather {
+	required string step = 1;
+	required shapers.Shaper shaper = 2;
+}
+
+message Enter {}
+
+message Leave {
+	required Gather object = 1;
+}
+
+message Link {
+	required Gather object = 1;
+	required string name = 2;
+	required bool monadic = 3;
+}
+
+message Select {
+	required Gather object = 1;
+	required string name = 2;
+}
+
+message Augment {
+	required Gather object = 1;
+	repeated Field field = 2;
+}
+
+message Field {
+	required string name = 1;
+	repeated Gather gather = 2;
+}
+
+message Invoke {
+	required Gather object = 1;
+}
+
+message Literal {
+	required Figure figure = 1;
+}
+
+message Figure {
+	optional int64 int64 = 1;
+	optional string string = 2;
+	optional bool bool = 3;
+	optional double float64 = 4;
+	optional Transform transform = 5;
+}
+
+message Transform {
+	optional Address operator = 1;
+	optional Address func = 2;
+}
