@@ -8,19 +8,19 @@ Identity(forType?) {
 	)
 }
 
-// Erase is a shaper to an empty type.
-Erase(fromType, toType) {
-	return: (erase: (), fromType: Expect(fromType), toType: Expect(toType))
+// AnyEmpty is a shaper to an empty type.
+AnyEmpty(fromType, toType) {
+	return: (anyEmpty: (), fromType: Expect(fromType), toType: Expect(toType))
 }
 
-// ZeroOptional is a shaper from an empty type to an optional type.
-ZeroOptional(fromType, toType) {
-	return: (zeroOptional: (), fromType: Expect(fromType), toType: Expect(toType))
+// EmptyOptional is a shaper from an empty type to an optional type.
+EmptyOptional(fromType, toType) {
+	return: (emptyOptional: (), fromType: Expect(fromType), toType: Expect(toType))
 }
 
-// ZeroSeries is a shaper from a empty type to a series type.
-ZeroSeries(fromType, toType) {
-	return: (zeroSeries: (), fromType: Expect(fromType), toType: Expect(toType))
+// EmptySeries is a shaper from a empty type to a series type.
+EmptySeries(fromType, toType) {
+	return: (emptySeries: (), fromType: Expect(fromType), toType: Expect(toType))
 }
 
 OptionalOptional(elemShaper, fromType, toType) {
@@ -33,9 +33,9 @@ OptionalOptional(elemShaper, fromType, toType) {
 	)
 }
 
-IntoOptional(elemShaper, fromType, toType) {
+AnyOptional(elemShaper, fromType, toType) {
 	return: ( // shaper
-		intoOptional: ( // optional-optional shaper
+		anyOptional: ( // optional-optional shaper
 			elemShaper: elemShaper
 		)
 		fromType: Expect(fromType)
@@ -63,9 +63,9 @@ SeriesSeries(elemShaper, fromType, toType) {
 	)
 }
 
-IntoSeries(elemShaper, fromType, toType) {
+AnySeries(elemShaper, fromType, toType) {
 	return: ( // shaper
-		intoSeries: ( // optional-optional shaper
+		anySeries: ( // optional-optional shaper
 			elemShaper: elemShaper
 		)
 		fromType: Expect(fromType)

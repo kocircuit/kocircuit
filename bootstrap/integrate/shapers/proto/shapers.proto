@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package ko.bootstrap.shapers;
+
+import "github.com/kocircuit/kocircuit/bootstrap/types/proto/types.proto";
+
+option go_package = "proto";
+
+message Fixture {
+	required Shaper shaper = 1;
+}
+
+message Shaper {
+	required types.Type fromType = 1;
+	required types.Type toType = 2;
+	//
+	optional Identity identity = 100;
+	optional AnyEmpty anyEmpty = 101;
+	optional EmptyOptional emptyOptional = 102;
+	optional EmptySeries emptySeries = 103;
+	optional OptionalOptional optionalOptional = 104;
+	optional AnyOptional anyOptional = 105;
+	optional OptionalSeries optionalSeries = 106;
+	optional SeriesSeries seriesSeries = 107;
+	optional AnySeries anySeries = 108;
+	optional StructureStructure structureStructure = 109;
+	optional UnionUnion unionUnion = 110;
+}

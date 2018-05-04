@@ -11,7 +11,7 @@ IntegrateToOptional(place, fromType, toOptionalType?) {
 			type: fromType
 			then: IntegrateOptionalToOptional[place: place, toOptionalType: toOptionalType]
 		]
-		otherwise: IntegrateIntoOptional[
+		otherwise: IntegrateAnyToOptional[
 			place: place
 			fromType: fromType
 			toOptionalType: toOptionalType
@@ -20,7 +20,7 @@ IntegrateToOptional(place, fromType, toOptionalType?) {
 }
 
 IntegrateEmptyToOptional(place, fromEmptyType?, toOptionalType) {
-	return: shapers.ZeroOptional(fromType: fromEmptyType, toType: toOptionalType)
+	return: shapers.EmptyOptional(fromType: fromEmptyType, toType: toOptionalType)
 }
 
 IntegrateOptionalToOptional(place, fromOptionalType?, toOptionalType) {
@@ -36,13 +36,13 @@ IntegrateOptionalToOptional(place, fromOptionalType?, toOptionalType) {
 	)
 }
 
-IntegrateIntoOptional(place, fromType, toOptionalType) {
+IntegrateAnyToOptional(place, fromType, toOptionalType) {
 	elemShaper: Integrate(
 		place: place
 		fromType: fromType
 		toType: types.OptionalTypeElem(toOptionalType)
 	)
-	return: shapers.IntoOptional(
+	return: shapers.AnyOptional(
 		elemShaper: elemShaper
 		fromType: fromType
 		toType: toOptionalType

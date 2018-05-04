@@ -17,7 +17,7 @@ IntegrateToSeries(place, fromType, toSeriesType?) {
 			type: fromType
 			then: IntegrateSeriesToSeries[place: stepped, toSeriesType: toSeriesType]
 		]
-		otherwise: IntegrateIntoSeries[
+		otherwise: IntegrateAnyToSeries[
 			place: stepped
 			fromType: fromType
 			toSeriesType: toSeriesType
@@ -26,7 +26,7 @@ IntegrateToSeries(place, fromType, toSeriesType?) {
 }
 
 IntegrateEmptyToSeries(place, fromEmptyType?, toSeriesType) {
-	return: shapers.ZeroSeries(fromType: fromEmptyType, toType: toSeriesType)
+	return: shapers.EmptySeries(fromType: fromEmptyType, toType: toSeriesType)
 }
 
 IntegrateOptionalToSeries(place, fromOptionalType?, toSeriesType) {
@@ -55,13 +55,13 @@ IntegrateSeriesToSeries(place, fromSeriesType?, toSeriesType) {
 	)
 }
 
-IntegrateIntoSeries(place, fromType, toSeriesType) {
+IntegrateAnyToSeries(place, fromType, toSeriesType) {
 	elemShaper: Integrate(
 		place: place
 		fromType: fromType
 		toType: types.SeriesTypeElem(toSeriesType)
 	)
-	return: shapers.IntoSeries(
+	return: shapers.AnySeries(
 		elemShaper: elemShaper
 		fromType: fromType
 		toType: toSeriesType

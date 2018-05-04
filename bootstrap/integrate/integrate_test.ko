@@ -27,7 +27,7 @@ testIntegrateBasicToOptional() {
 	return: Equal(
 		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: optIntegerType)
 		(
-			intoOptional: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
+			anyOptional: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
 			fromType: (integer: ())
 			toType: (optional: (elemType: (integer: ())))
 		)
@@ -46,7 +46,7 @@ testIntegrateBasicToSeries() {
 	return: Equal(
 		Integrate(place: ko_place.TestingRoot(), fromType: integerType, toType: seriesIntegerType)
 		(
-			intoSeries: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
+			anySeries: (elemShaper: (identity: (), fromType: (integer: ()), toType: (integer: ())))
 			fromType: (integer: ())
 			toType: (series: (elemType: (integer: ())))
 		)
@@ -86,7 +86,7 @@ testIntegrateValidStructToStruct() {
 					(
 						name: "f2"
 						shaper: (
-							intoSeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
+							anySeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
 							fromType: (bool: ())
 							toType: (series: (elemType: (bool: ())))
 						)
@@ -145,7 +145,7 @@ testIntegrateValidUnionToUnion() {
 							(
 								name: "a2"
 								shaper: (
-									intoSeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
+									anySeries: (elemShaper: (identity: (), fromType: (bool: ()), toType: (bool: ())))
 									fromType: (bool: ())
 									toType: (series: (elemType: (bool: ())))
 								)
