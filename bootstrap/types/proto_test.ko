@@ -1,0 +1,4 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/types/TestProto
+TestProto() {
+	return: Proto(BoolType())
+}

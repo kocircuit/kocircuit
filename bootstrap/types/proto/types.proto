@@ -4,6 +4,10 @@ package ko.bootstrap.types;
 
 option go_package = "proto";
 
+message Fixture {
+	required Type type = 1;
+}
+
 message Type {
 	optional Empty empty = 1;
 	optional Bool bool = 11;

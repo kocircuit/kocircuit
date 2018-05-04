@@ -11,7 +11,7 @@ TestVarietyType() {
 
 testBuildValidVarietyType() {
 	v: VarietyType(
-		transform: "Transform"
+		transform: Operator(pkg: "", name: "Op")
 		fields: Field(name: "a1", type: BoolType())
 		fields: Field(name: "a2", type: IntegerType())
 	)
@@ -29,7 +29,7 @@ testBuildInvalidVarietyType1() {
 
 testBuildInvalidVarietyType2() {
 	_: VarietyType(
-		transform: "Transform"
+		transform: Operator(pkg: "", name: "Op")
 		fields: Field(name: "b2", type: BoolType())
 		fields: Field(name: "b2", type: IntegerType()) // duplicate argument name
 		fields: Field(name: "b2", type: StringType()) // duplicate argument name
@@ -47,7 +47,7 @@ TestAugmentVarietyType() {
 
 testValidBuildValidAugment() {
 	variety: VarietyType(
-		transform: "Transform"
+		transform: Operator(pkg: "", name: "Op")
 		fields: Field(name: "a1", type: BoolType())
 		fields: Field(name: "a2", type: SeriesType(StringType()))
 	)
@@ -60,7 +60,7 @@ testValidBuildValidAugment() {
 
 testValidBuildInvalidAugment() {
 	variety: VarietyType(
-		transform: "Transform"
+		transform: Operator(pkg: "", name: "Op")
 		fields: Field(name: "a1", type: BoolType())
 		fields: Field(name: "a2", type: SeriesType(StringType()))
 	)

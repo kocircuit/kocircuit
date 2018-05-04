@@ -1,0 +1,9 @@
+import "proto/ko.bootstrap.types" as pb
+
+Proto(type?) {
+	return: pb.ProtoFixture(type: type).type
+}
+
+//Marshal(type?) {
+//	return: XXXpb.MarshalFixture(type: type).type
+//}

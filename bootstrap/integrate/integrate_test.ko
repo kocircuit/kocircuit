@@ -140,7 +140,7 @@ testIntegrateValidUnionToUnion() {
 			unionUnion: (
 				varietyShapers: (
 					(
-						transform: "M1"
+						transform: types.Func(pkg: "pkg", name: "M1")
 						fieldShapers: (
 							(
 								name: "a2"
@@ -155,15 +155,17 @@ testIntegrateValidUnionToUnion() {
 				)
 			)
 			fromType: (
-				union: (varieties: (variety: (transform: "M1", fields: (name: "a2", type: (bool: ())))))
+				union: (varieties: (variety: (transform: types.Func(pkg: "pkg", name: "M1"), fields: (name: "a2", type: (bool: ())))))
 			)
 			toType: (
 				union: (
 					varieties: (
 						(
-						variety: (transform: "M1", fields: (name: "a2", type: (series: (elemType: (bool: ())))))
+						variety: (
+							transform: types.Func(pkg: "pkg", name: "M1")
+							fields: (name: "a2", type: (series: (elemType: (bool: ())))))
 						)
-						(variety: (transform: "M2"))
+						(variety: (transform: types.Func(pkg: "pkg", name: "M2")))
 					)
 				)
 			)
@@ -174,17 +176,17 @@ testIntegrateValidUnionToUnion() {
 testBigUnion() {
 	return: types.UnionType(
 		types.VarietyType(
-			transform: "M1"
+			transform: types.Func(pkg: "pkg", name: "M1")
 			fields: types.Field(name: "a2", type: types.SeriesType(types.BoolType()))
 		)
-		types.VarietyType(transform: "M2")
+		types.VarietyType(transform: types.Func(pkg: "pkg", name: "M2"))
 	)
 }
 
 testSmallUnion() {
 	return: types.UnionType(
 		types.VarietyType(
-			transform: "M1"
+			transform: types.Func(pkg: "pkg", name: "M1")
 			fields: types.Field(name: "a2", type: types.BoolType())
 		)
 	)

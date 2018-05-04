@@ -1,4 +1,5 @@
 import "github.com/kocircuit/kocircuit/bootstrap/testutil"
+import "github.com/kocircuit/kocircuit/bootstrap/types"
 
 // ko play github.com/kocircuit/kocircuit/bootstrap/types/TestUnionType
 TestUnionType() {
@@ -11,7 +12,7 @@ TestUnionType() {
 testValidUnionAugment() {
 	union: UnionType(
 		VarietyType(
-			transform: "Transform"
+			transform: types.Operator(pkg: "", name: "Op")
 			fields: Field(name: "a1", type: BoolType())
 			fields: Field(name: "a2", type: IntegerType())
 		)
@@ -28,7 +29,7 @@ testValidUnionAugment() {
 				varieties: (
 					(
 						variety: (
-							transform: "Transform"
+							transform: types.Operator(pkg: "", name: "Op")
 							fields: (
 								(name: "a1", type: (bool: ()))
 								(name: "a2", type: (integer: ()))
@@ -46,7 +47,7 @@ testValidUnionAugment() {
 testInvalidUnionAugment() {
 	union: UnionType(
 		VarietyType(
-			transform: "Transform"
+			transform: types.Operator(pkg: "", name: "Op")
 			fields: Field(name: "a1", type: BoolType())
 			fields: Field(name: "a2", type: IntegerType())
 		)

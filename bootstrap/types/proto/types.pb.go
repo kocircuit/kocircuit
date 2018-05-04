@@ -8,6 +8,7 @@
 		types.proto
 
 	It has these top-level messages:
+		Fixture
 		Type
 		Empty
 		Bool
@@ -43,6 +44,23 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto1.ProtoPackageIsVersion2 // please upgrade the proto package
 
+type Fixture struct {
+	Type             *Type  `protobuf:"bytes,1,req,name=type" json:"type,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *Fixture) Reset()                    { *m = Fixture{} }
+func (m *Fixture) String() string            { return proto1.CompactTextString(m) }
+func (*Fixture) ProtoMessage()               {}
+func (*Fixture) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+
+func (m *Fixture) GetType() *Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
 type Type struct {
 	Empty            *Empty     `protobuf:"bytes,1,opt,name=empty" json:"empty,omitempty"`
 	Bool             *Bool      `protobuf:"bytes,11,opt,name=bool" json:"bool,omitempty"`
@@ -60,7 +78,7 @@ type Type struct {
 func (m *Type) Reset()                    { *m = Type{} }
 func (m *Type) String() string            { return proto1.CompactTextString(m) }
 func (*Type) ProtoMessage()               {}
-func (*Type) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (*Type) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
 
 func (m *Type) GetEmpty() *Empty {
 	if m != nil {
@@ -139,7 +157,7 @@ type Empty struct {
 func (m *Empty) Reset()                    { *m = Empty{} }
 func (m *Empty) String() string            { return proto1.CompactTextString(m) }
 func (*Empty) ProtoMessage()               {}
-func (*Empty) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (*Empty) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 type Bool struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -148,7 +166,7 @@ type Bool struct {
 func (m *Bool) Reset()                    { *m = Bool{} }
 func (m *Bool) String() string            { return proto1.CompactTextString(m) }
 func (*Bool) ProtoMessage()               {}
-func (*Bool) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (*Bool) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
 type String struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -157,7 +175,7 @@ type String struct {
 func (m *String) Reset()                    { *m = String{} }
 func (m *String) String() string            { return proto1.CompactTextString(m) }
 func (*String) ProtoMessage()               {}
-func (*String) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (*String) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 type Integer struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -166,7 +184,7 @@ type Integer struct {
 func (m *Integer) Reset()                    { *m = Integer{} }
 func (m *Integer) String() string            { return proto1.CompactTextString(m) }
 func (*Integer) ProtoMessage()               {}
-func (*Integer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (*Integer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 type Floating struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -175,7 +193,7 @@ type Floating struct {
 func (m *Floating) Reset()                    { *m = Floating{} }
 func (m *Floating) String() string            { return proto1.CompactTextString(m) }
 func (*Floating) ProtoMessage()               {}
-func (*Floating) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*Floating) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 type Series struct {
 	ElemType         []*Type `protobuf:"bytes,1,rep,name=elemType" json:"elemType,omitempty"`
@@ -185,7 +203,7 @@ type Series struct {
 func (m *Series) Reset()                    { *m = Series{} }
 func (m *Series) String() string            { return proto1.CompactTextString(m) }
 func (*Series) ProtoMessage()               {}
-func (*Series) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*Series) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
 
 func (m *Series) GetElemType() []*Type {
 	if m != nil {
@@ -202,7 +220,7 @@ type Structure struct {
 func (m *Structure) Reset()                    { *m = Structure{} }
 func (m *Structure) String() string            { return proto1.CompactTextString(m) }
 func (*Structure) ProtoMessage()               {}
-func (*Structure) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*Structure) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
 
 func (m *Structure) GetFields() []*Field {
 	if m != nil {
@@ -220,7 +238,7 @@ type Field struct {
 func (m *Field) Reset()                    { *m = Field{} }
 func (m *Field) String() string            { return proto1.CompactTextString(m) }
 func (*Field) ProtoMessage()               {}
-func (*Field) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (*Field) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 func (m *Field) GetName() string {
 	if m != nil && m.Name != nil {
@@ -244,7 +262,7 @@ type Union struct {
 func (m *Union) Reset()                    { *m = Union{} }
 func (m *Union) String() string            { return proto1.CompactTextString(m) }
 func (*Union) ProtoMessage()               {}
-func (*Union) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (*Union) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
 
 func (m *Union) GetVarieties() []*Type {
 	if m != nil {
@@ -262,7 +280,7 @@ type Variety struct {
 func (m *Variety) Reset()                    { *m = Variety{} }
 func (m *Variety) String() string            { return proto1.CompactTextString(m) }
 func (*Variety) ProtoMessage()               {}
-func (*Variety) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (*Variety) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *Variety) GetTransform() *Transform {
 	if m != nil {
@@ -287,7 +305,7 @@ type Transform struct {
 func (m *Transform) Reset()                    { *m = Transform{} }
 func (m *Transform) String() string            { return proto1.CompactTextString(m) }
 func (*Transform) ProtoMessage()               {}
-func (*Transform) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (*Transform) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 func (m *Transform) GetOperator() *Operator {
 	if m != nil {
@@ -312,7 +330,7 @@ type Operator struct {
 func (m *Operator) Reset()                    { *m = Operator{} }
 func (m *Operator) String() string            { return proto1.CompactTextString(m) }
 func (*Operator) ProtoMessage()               {}
-func (*Operator) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (*Operator) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 func (m *Operator) GetPkg() string {
 	if m != nil && m.Pkg != nil {
@@ -337,7 +355,7 @@ type Func struct {
 func (m *Func) Reset()                    { *m = Func{} }
 func (m *Func) String() string            { return proto1.CompactTextString(m) }
 func (*Func) ProtoMessage()               {}
-func (*Func) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (*Func) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 func (m *Func) GetPkg() string {
 	if m != nil && m.Pkg != nil {
@@ -361,7 +379,7 @@ type Optional struct {
 func (m *Optional) Reset()                    { *m = Optional{} }
 func (m *Optional) String() string            { return proto1.CompactTextString(m) }
 func (*Optional) ProtoMessage()               {}
-func (*Optional) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (*Optional) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
 
 func (m *Optional) GetElemType() *Type {
 	if m != nil {
@@ -371,6 +389,7 @@ func (m *Optional) GetElemType() *Type {
 }
 
 func init() {
+	proto1.RegisterType((*Fixture)(nil), "ko.bootstrap.types.Fixture")
 	proto1.RegisterType((*Type)(nil), "ko.bootstrap.types.Type")
 	proto1.RegisterType((*Empty)(nil), "ko.bootstrap.types.Empty")
 	proto1.RegisterType((*Bool)(nil), "ko.bootstrap.types.Bool")
@@ -387,6 +406,39 @@ func init() {
 	proto1.RegisterType((*Func)(nil), "ko.bootstrap.types.Func")
 	proto1.RegisterType((*Optional)(nil), "ko.bootstrap.types.Optional")
 }
+func (m *Fixture) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Fixture) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Type == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type.Size()))
+		n1, err := m.Type.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -406,51 +458,51 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Empty.Size()))
-		n1, err := m.Empty.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
-	if m.Bool != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Bool.Size()))
-		n2, err := m.Bool.MarshalTo(dAtA[i:])
+		n2, err := m.Empty.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n2
 	}
-	if m.String_ != nil {
-		dAtA[i] = 0x62
+	if m.Bool != nil {
+		dAtA[i] = 0x5a
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.String_.Size()))
-		n3, err := m.String_.MarshalTo(dAtA[i:])
+		i = encodeVarintTypes(dAtA, i, uint64(m.Bool.Size()))
+		n3, err := m.Bool.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n3
 	}
-	if m.Integer != nil {
-		dAtA[i] = 0x6a
+	if m.String_ != nil {
+		dAtA[i] = 0x62
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Integer.Size()))
-		n4, err := m.Integer.MarshalTo(dAtA[i:])
+		i = encodeVarintTypes(dAtA, i, uint64(m.String_.Size()))
+		n4, err := m.String_.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n4
 	}
-	if m.Floating != nil {
-		dAtA[i] = 0x72
+	if m.Integer != nil {
+		dAtA[i] = 0x6a
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Floating.Size()))
-		n5, err := m.Floating.MarshalTo(dAtA[i:])
+		i = encodeVarintTypes(dAtA, i, uint64(m.Integer.Size()))
+		n5, err := m.Integer.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n5
+	}
+	if m.Floating != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Floating.Size()))
+		n6, err := m.Floating.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
 	}
 	if m.Series != nil {
 		dAtA[i] = 0xaa
@@ -458,11 +510,11 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Series.Size()))
-		n6, err := m.Series.MarshalTo(dAtA[i:])
+		n7, err := m.Series.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n7
 	}
 	if m.Structure != nil {
 		dAtA[i] = 0xb2
@@ -470,11 +522,11 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Structure.Size()))
-		n7, err := m.Structure.MarshalTo(dAtA[i:])
+		n8, err := m.Structure.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n8
 	}
 	if m.Union != nil {
 		dAtA[i] = 0xfa
@@ -482,11 +534,11 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Union.Size()))
-		n8, err := m.Union.MarshalTo(dAtA[i:])
+		n9, err := m.Union.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n9
 	}
 	if m.Variety != nil {
 		dAtA[i] = 0x82
@@ -494,11 +546,11 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Variety.Size()))
-		n9, err := m.Variety.MarshalTo(dAtA[i:])
+		n10, err := m.Variety.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n10
 	}
 	if m.Optional != nil {
 		dAtA[i] = 0xca
@@ -506,11 +558,11 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Optional.Size()))
-		n10, err := m.Optional.MarshalTo(dAtA[i:])
+		n11, err := m.Optional.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n11
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -718,11 +770,11 @@ func (m *Field) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Type.Size()))
-		n11, err := m.Type.MarshalTo(dAtA[i:])
+		n12, err := m.Type.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n11
+		i += n12
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -784,11 +836,11 @@ func (m *Variety) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Transform.Size()))
-		n12, err := m.Transform.MarshalTo(dAtA[i:])
+		n13, err := m.Transform.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n13
 	}
 	if len(m.Fields) > 0 {
 		for _, msg := range m.Fields {
@@ -827,21 +879,21 @@ func (m *Transform) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Operator.Size()))
-		n13, err := m.Operator.MarshalTo(dAtA[i:])
+		n14, err := m.Operator.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n13
+		i += n14
 	}
 	if m.Func != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Func.Size()))
-		n14, err := m.Func.MarshalTo(dAtA[i:])
+		n15, err := m.Func.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n14
+		i += n15
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -944,11 +996,11 @@ func (m *Optional) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ElemType.Size()))
-		n15, err := m.ElemType.MarshalTo(dAtA[i:])
+		n16, err := m.ElemType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n16
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -965,6 +1017,19 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
+func (m *Fixture) Size() (n int) {
+	var l int
+	_ = l
+	if m.Type != nil {
+		l = m.Type.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func (m *Type) Size() (n int) {
 	var l int
 	_ = l
@@ -1216,6 +1281,95 @@ func sovTypes(x uint64) (n int) {
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *Fixture) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Fixture: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Fixture: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Type == nil {
+				m.Type = &Type{}
+			}
+			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *Type) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -2896,38 +3050,39 @@ var (
 func init() { proto1.RegisterFile("types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 520 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0xd4, 0xdd, 0x8a, 0xd3, 0x40,
-	0x14, 0x07, 0x70, 0x93, 0x4d, 0xd2, 0xe4, 0xac, 0x8a, 0x0c, 0xa8, 0xe3, 0x57, 0x2d, 0x73, 0xb5,
-	0xc2, 0x12, 0x75, 0x51, 0x11, 0x84, 0x55, 0x16, 0x2c, 0xec, 0x95, 0x30, 0xae, 0x5e, 0x78, 0x97,
-	0xad, 0xd3, 0x12, 0x36, 0xcd, 0x84, 0xc9, 0x44, 0xc8, 0x9b, 0x78, 0xe3, 0xfb, 0x78, 0xe9, 0x23,
-	0x48, 0x7d, 0x11, 0x39, 0x33, 0x93, 0x54, 0x34, 0x59, 0x7b, 0x17, 0x9a, 0xdf, 0x99, 0x9c, 0xfc,
-	0xcf, 0x49, 0x61, 0x5f, 0xb7, 0x95, 0xa8, 0xd3, 0x4a, 0x49, 0x2d, 0x09, 0xb9, 0x90, 0xe9, 0xb9,
-	0x94, 0xba, 0xd6, 0x2a, 0xab, 0x52, 0x73, 0x87, 0x7d, 0x0b, 0x20, 0x38, 0x6b, 0x2b, 0x41, 0x1e,
-	0x43, 0x28, 0xd6, 0x95, 0x6e, 0xa9, 0x37, 0xf3, 0x0e, 0xf6, 0x8f, 0xee, 0xa4, 0xff, 0xe2, 0xf4,
-	0x2d, 0x02, 0x6e, 0x1d, 0x39, 0x84, 0xe0, 0x5c, 0xca, 0x82, 0xee, 0x1b, 0x4f, 0x87, 0xfc, 0x89,
-	0x94, 0x05, 0x37, 0x8a, 0x1c, 0x41, 0x54, 0x6b, 0x95, 0x97, 0x2b, 0x7a, 0xd5, 0xf8, 0xbb, 0x43,
-	0xfe, 0xbd, 0x11, 0xdc, 0x49, 0xf2, 0x1c, 0x26, 0x79, 0xa9, 0xc5, 0x4a, 0x28, 0x7a, 0xcd, 0x14,
-	0xdd, 0x1b, 0x2a, 0x3a, 0xb5, 0x84, 0x77, 0x96, 0xbc, 0x84, 0x78, 0x59, 0xc8, 0x4c, 0xe3, 0xc3,
-	0xae, 0x9b, 0xba, 0xfb, 0x43, 0x75, 0x73, 0x67, 0x78, 0xaf, 0x4d, 0x93, 0x42, 0xe5, 0xa2, 0xa6,
-	0x37, 0x2f, 0x69, 0xd2, 0x08, 0xee, 0x24, 0x79, 0x05, 0x49, 0xad, 0x55, 0xb3, 0xd0, 0x8d, 0x12,
-	0xf4, 0x96, 0x29, 0x7b, 0x30, 0xf2, 0x6e, 0x16, 0xf1, 0xad, 0xc7, 0xd0, 0x9b, 0x32, 0x97, 0x25,
-	0x7d, 0x38, 0x1e, 0xfa, 0x07, 0x04, 0xdc, 0x3a, 0x8c, 0xe4, 0x4b, 0xa6, 0x72, 0xa1, 0x5b, 0x3a,
-	0x1b, 0x8f, 0xe4, 0xa3, 0x25, 0xbc, 0xb3, 0x18, 0x89, 0xac, 0x74, 0x2e, 0xcb, 0xac, 0xa0, 0x8f,
-	0xc6, 0x23, 0x79, 0xe7, 0x0c, 0xef, 0x35, 0x9b, 0x40, 0x68, 0xa6, 0xce, 0x22, 0x08, 0x70, 0x9c,
-	0x2c, 0x86, 0xc8, 0x8e, 0x89, 0x25, 0x30, 0x71, 0xd9, 0x33, 0x80, 0xb8, 0x8b, 0x93, 0x1d, 0x43,
-	0x64, 0x23, 0x22, 0xcf, 0x20, 0x16, 0x85, 0x58, 0xe3, 0x7a, 0x51, 0x6f, 0xb6, 0x37, 0xb6, 0x25,
-	0x78, 0x9f, 0xf7, 0x92, 0x1d, 0x43, 0xd2, 0x67, 0x45, 0x9e, 0x42, 0xb4, 0xcc, 0x45, 0xf1, 0xb9,
-	0x76, 0x07, 0x0c, 0x26, 0x34, 0x47, 0xc1, 0x1d, 0x64, 0xa7, 0x10, 0x9a, 0x1f, 0x08, 0x81, 0xa0,
-	0xcc, 0xd6, 0xf8, 0x68, 0xff, 0x20, 0xe1, 0xe6, 0x1a, 0x97, 0x16, 0x6b, 0xa8, 0x3f, 0xf3, 0x2f,
-	0x6d, 0xc7, 0x28, 0xf6, 0x1a, 0x42, 0x93, 0x3e, 0x79, 0x01, 0x89, 0x8d, 0x12, 0x77, 0xe3, 0x7f,
-	0xaf, 0xb2, 0xa5, 0xac, 0x85, 0x89, 0x9b, 0x05, 0xee, 0x89, 0x56, 0x59, 0x59, 0x2f, 0xa5, 0x5a,
-	0x9b, 0x96, 0x46, 0xf6, 0xe4, 0xac, 0x43, 0x7c, 0xeb, 0xff, 0x88, 0xc1, 0xdf, 0x35, 0x86, 0x1a,
-	0x92, 0xfe, 0x28, 0x3b, 0x7f, 0xa1, 0x32, 0x2d, 0x95, 0xfb, 0xbe, 0x47, 0xe6, 0x6f, 0x0d, 0xef,
-	0x35, 0x06, 0xb6, 0x6c, 0xca, 0x05, 0xf5, 0xc7, 0xbf, 0xf2, 0x79, 0x53, 0x2e, 0xb8, 0x51, 0xec,
-	0x09, 0xc4, 0xdd, 0x19, 0xe4, 0x06, 0xec, 0x55, 0x17, 0x2b, 0x97, 0x3e, 0x5e, 0xf6, 0x03, 0xf1,
-	0xb7, 0x03, 0x61, 0x87, 0x10, 0x60, 0xfd, 0x8e, 0xfa, 0x0d, 0x9e, 0x6f, 0x37, 0xf3, 0xaf, 0xed,
-	0xf2, 0x77, 0xdb, 0xae, 0x93, 0xdb, 0xdf, 0x37, 0x53, 0xef, 0xc7, 0x66, 0xea, 0xfd, 0xdc, 0x4c,
-	0xbd, 0xaf, 0xbf, 0xa6, 0x57, 0x3e, 0x85, 0xe6, 0xcf, 0xf1, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x9e, 0xc5, 0xa3, 0x85, 0x2a, 0x05, 0x00, 0x00,
+	// 532 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0xdd, 0x8a, 0xd3, 0x40,
+	0x14, 0xc7, 0x4d, 0x36, 0xcd, 0xc7, 0xa9, 0x8a, 0x0c, 0xa8, 0xe3, 0x57, 0x2d, 0x73, 0xb5, 0xc2,
+	0x12, 0xb5, 0xf8, 0x05, 0xc2, 0x2a, 0x0b, 0x16, 0xf6, 0x4a, 0x18, 0xab, 0x17, 0xde, 0x65, 0xeb,
+	0xb4, 0x84, 0x4d, 0x67, 0xc2, 0x64, 0x22, 0xe6, 0x4d, 0xbc, 0xf1, 0x7d, 0xbc, 0xf4, 0x11, 0xa4,
+	0xbe, 0x88, 0xcc, 0x47, 0x52, 0xd1, 0x64, 0xed, 0x5d, 0x9a, 0xfe, 0xce, 0x99, 0xe4, 0x77, 0xfe,
+	0x27, 0x30, 0x56, 0x4d, 0xc9, 0xaa, 0xb4, 0x94, 0x42, 0x09, 0x84, 0xce, 0x45, 0x7a, 0x26, 0x84,
+	0xaa, 0x94, 0xcc, 0xca, 0xd4, 0xfc, 0x43, 0x9e, 0x43, 0x34, 0xcf, 0xbf, 0xa8, 0x5a, 0x32, 0x74,
+	0x04, 0x81, 0xbe, 0x87, 0xbd, 0xa9, 0x7f, 0x38, 0x9e, 0xe1, 0xf4, 0x5f, 0x3a, 0x5d, 0x34, 0x25,
+	0xa3, 0x86, 0x22, 0xdf, 0x02, 0x08, 0xf4, 0x4f, 0xf4, 0x10, 0x46, 0x6c, 0x53, 0xaa, 0x06, 0x7b,
+	0x53, 0xef, 0x70, 0x3c, 0xbb, 0xd5, 0x57, 0xf7, 0x46, 0x03, 0xd4, 0x72, 0xfa, 0x9c, 0x33, 0x21,
+	0x0a, 0x3c, 0x36, 0x7c, 0xef, 0x39, 0x27, 0x42, 0x14, 0xd4, 0x50, 0x68, 0x06, 0x61, 0xa5, 0x64,
+	0xce, 0xd7, 0xf8, 0xb2, 0xe1, 0x6f, 0xf7, 0xf1, 0xef, 0x0c, 0x41, 0x1d, 0x89, 0x9e, 0x42, 0x94,
+	0x73, 0xc5, 0xd6, 0x4c, 0xe2, 0x2b, 0xa6, 0xe8, 0x4e, 0x5f, 0xd1, 0xa9, 0x45, 0x68, 0xcb, 0xa2,
+	0x17, 0x10, 0xaf, 0x0a, 0x91, 0x29, 0x7d, 0xd8, 0x55, 0x53, 0x77, 0xb7, 0xaf, 0x6e, 0xee, 0x18,
+	0xda, 0xd1, 0xe6, 0x21, 0x99, 0xcc, 0x59, 0x85, 0xaf, 0x5f, 0xf0, 0x90, 0x86, 0xa0, 0x8e, 0x44,
+	0x2f, 0x21, 0xa9, 0x94, 0xac, 0x97, 0xda, 0x3d, 0xbe, 0x61, 0xca, 0xee, 0x0d, 0xbc, 0x9b, 0x85,
+	0xe8, 0x8e, 0xd7, 0xd2, 0x6b, 0x9e, 0x0b, 0x8e, 0xef, 0x0f, 0x4b, 0x7f, 0xaf, 0x01, 0x6a, 0x39,
+	0xad, 0xe4, 0x73, 0x26, 0x73, 0xa6, 0x1a, 0x3c, 0x1d, 0x56, 0xf2, 0xc1, 0x22, 0xb4, 0x65, 0xb5,
+	0x12, 0x51, 0xaa, 0x5c, 0xf0, 0xac, 0xc0, 0x0f, 0x86, 0x95, 0xbc, 0x75, 0x0c, 0xed, 0x68, 0x12,
+	0xc1, 0xc8, 0x4c, 0x9d, 0x84, 0x10, 0xe8, 0x71, 0x92, 0x18, 0x42, 0x3b, 0x26, 0x92, 0x40, 0xe4,
+	0xdc, 0x13, 0x80, 0xb8, 0xd5, 0x49, 0x8e, 0x21, 0xb4, 0x8a, 0xd0, 0x13, 0x88, 0x59, 0xc1, 0x36,
+	0x0b, 0x9b, 0xc6, 0x83, 0x0b, 0xd3, 0xd8, 0x91, 0xe4, 0x18, 0x92, 0xce, 0x15, 0x7a, 0x0c, 0xe1,
+	0x2a, 0x67, 0xc5, 0xa7, 0xca, 0x35, 0xe8, 0x35, 0x34, 0xd7, 0x04, 0x75, 0x20, 0x39, 0x85, 0x91,
+	0xb9, 0x81, 0x10, 0x04, 0x3c, 0xdb, 0xd8, 0x45, 0x48, 0xa8, 0xb9, 0xee, 0x96, 0xc3, 0xdf, 0x6b,
+	0x39, 0x5e, 0xc1, 0xc8, 0xd8, 0x47, 0xcf, 0x20, 0xb1, 0x2a, 0x75, 0x36, 0xfe, 0xf7, 0x2a, 0x3b,
+	0x94, 0x34, 0x10, 0xb9, 0x59, 0xe8, 0x9c, 0x28, 0x99, 0xf1, 0x6a, 0x25, 0xe4, 0xc6, 0xed, 0x66,
+	0x6f, 0x4e, 0x16, 0x2d, 0x44, 0x77, 0xfc, 0x1f, 0x1a, 0xfc, 0x7d, 0x35, 0x54, 0x90, 0x74, 0xad,
+	0xec, 0xfc, 0x99, 0xcc, 0x94, 0x90, 0x6e, 0xbf, 0x07, 0xe6, 0x6f, 0x19, 0xda, 0xd1, 0x5a, 0xd8,
+	0xaa, 0xe6, 0x4b, 0xec, 0x0f, 0x6f, 0xf9, 0xbc, 0xe6, 0x4b, 0x6a, 0x28, 0xf2, 0x08, 0xe2, 0xb6,
+	0x07, 0xba, 0x06, 0x07, 0xe5, 0xf9, 0xda, 0xd9, 0xd7, 0x97, 0xdd, 0x40, 0xfc, 0xdd, 0x40, 0xc8,
+	0x11, 0x04, 0xba, 0x7e, 0x4f, 0xfa, 0xb5, 0xee, 0x6f, 0x93, 0xf9, 0x57, 0xba, 0xfc, 0xfd, 0xd2,
+	0x75, 0x72, 0xf3, 0xfb, 0x76, 0xe2, 0xfd, 0xd8, 0x4e, 0xbc, 0x9f, 0xdb, 0x89, 0xf7, 0xf5, 0xd7,
+	0xe4, 0xd2, 0xc7, 0x91, 0xf9, 0xaa, 0xfe, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x02, 0x75, 0x30, 0x9d,
+	0x63, 0x05, 0x00, 0x00,
 }

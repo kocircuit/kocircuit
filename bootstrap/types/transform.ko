@@ -1,0 +1,11 @@
+Operator(pkg, name) {
+	return: ( // transform
+		operator: (pkg: String(pkg), name: String(name))
+	)
+}
+
+Func(pkg, name) {
+	return: ( // transform
+		func: (pkg: String(pkg), name: String(name))
+	)
+}
