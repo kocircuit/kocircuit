@@ -18,5 +18,6 @@ import (
 	_ "github.com/kocircuit/kocircuit/lib/time"
 	_ "github.com/kocircuit/kocircuit/lib/web/xml"
 	// bootstrap
+	_ "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
 	_ "github.com/kocircuit/kocircuit/bootstrap/types"
 )

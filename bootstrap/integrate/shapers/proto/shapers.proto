@@ -26,3 +26,49 @@ message Shaper {
 	optional StructureStructure structureStructure = 109;
 	optional UnionUnion unionUnion = 110;
 }
+
+message Identity {}
+
+message AnyEmpty {}
+
+message EmptyOptional {}
+
+message EmptySeries {}
+
+message OptionalOptional {
+	required Shaper elemShaper = 1;
+}
+
+message AnyOptional {
+	required Shaper elemShaper = 1;
+}
+
+message OptionalSeries {
+	required Shaper elemShaper = 1;
+}
+
+message SeriesSeries {
+	required Shaper elemShaper = 1;
+}
+
+message AnySeries {
+	required Shaper elemShaper = 1;
+}
+
+message StructureStructure {
+	repeated Field fieldShapers = 1;
+}
+
+message Field {
+	required string name = 1;
+	required Shaper shaper = 2;
+}
+
+message UnionUnion {
+	repeated Variety varietyShapers = 1;
+}
+
+message Variety {
+	required types.Transform transform = 1;
+	repeated Field fieldShapers = 2;
+}

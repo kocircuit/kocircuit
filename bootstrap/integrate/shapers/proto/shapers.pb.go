@@ -10,6 +10,19 @@
 	It has these top-level messages:
 		Fixture
 		Shaper
+		Identity
+		AnyEmpty
+		EmptyOptional
+		EmptySeries
+		OptionalOptional
+		AnyOptional
+		OptionalSeries
+		SeriesSeries
+		AnySeries
+		StructureStructure
+		Field
+		UnionUnion
+		Variety
 */
 package proto
 
@@ -49,9 +62,21 @@ func (m *Fixture) GetShaper() *Shaper {
 }
 
 type Shaper struct {
-	From             *ko_bootstrap_types.Type `protobuf:"bytes,1,opt,name=from" json:"from,omitempty"`
-	To               *ko_bootstrap_types.Type `protobuf:"bytes,2,opt,name=to" json:"to,omitempty"`
-	XXX_unrecognized []byte                   `json:"-"`
+	FromType *ko_bootstrap_types.Type `protobuf:"bytes,1,req,name=fromType" json:"fromType,omitempty"`
+	ToType   *ko_bootstrap_types.Type `protobuf:"bytes,2,req,name=toType" json:"toType,omitempty"`
+	//
+	Identity           *Identity           `protobuf:"bytes,100,opt,name=identity" json:"identity,omitempty"`
+	AnyEmpty           *AnyEmpty           `protobuf:"bytes,101,opt,name=anyEmpty" json:"anyEmpty,omitempty"`
+	EmptyOptional      *EmptyOptional      `protobuf:"bytes,102,opt,name=emptyOptional" json:"emptyOptional,omitempty"`
+	EmptySeries        *EmptySeries        `protobuf:"bytes,103,opt,name=emptySeries" json:"emptySeries,omitempty"`
+	OptionalOptional   *OptionalOptional   `protobuf:"bytes,104,opt,name=optionalOptional" json:"optionalOptional,omitempty"`
+	AnyOptional        *AnyOptional        `protobuf:"bytes,105,opt,name=anyOptional" json:"anyOptional,omitempty"`
+	OptionalSeries     *OptionalSeries     `protobuf:"bytes,106,opt,name=optionalSeries" json:"optionalSeries,omitempty"`
+	SeriesSeries       *SeriesSeries       `protobuf:"bytes,107,opt,name=seriesSeries" json:"seriesSeries,omitempty"`
+	AnySeries          *AnySeries          `protobuf:"bytes,108,opt,name=anySeries" json:"anySeries,omitempty"`
+	StructureStructure *StructureStructure `protobuf:"bytes,109,opt,name=structureStructure" json:"structureStructure,omitempty"`
+	UnionUnion         *UnionUnion         `protobuf:"bytes,110,opt,name=unionUnion" json:"unionUnion,omitempty"`
+	XXX_unrecognized   []byte              `json:"-"`
 }
 
 func (m *Shaper) Reset()                    { *m = Shaper{} }
@@ -59,16 +84,298 @@ func (m *Shaper) String() string            { return proto1.CompactTextString(m)
 func (*Shaper) ProtoMessage()               {}
 func (*Shaper) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{1} }
 
-func (m *Shaper) GetFrom() *ko_bootstrap_types.Type {
+func (m *Shaper) GetFromType() *ko_bootstrap_types.Type {
 	if m != nil {
-		return m.From
+		return m.FromType
 	}
 	return nil
 }
 
-func (m *Shaper) GetTo() *ko_bootstrap_types.Type {
+func (m *Shaper) GetToType() *ko_bootstrap_types.Type {
 	if m != nil {
-		return m.To
+		return m.ToType
+	}
+	return nil
+}
+
+func (m *Shaper) GetIdentity() *Identity {
+	if m != nil {
+		return m.Identity
+	}
+	return nil
+}
+
+func (m *Shaper) GetAnyEmpty() *AnyEmpty {
+	if m != nil {
+		return m.AnyEmpty
+	}
+	return nil
+}
+
+func (m *Shaper) GetEmptyOptional() *EmptyOptional {
+	if m != nil {
+		return m.EmptyOptional
+	}
+	return nil
+}
+
+func (m *Shaper) GetEmptySeries() *EmptySeries {
+	if m != nil {
+		return m.EmptySeries
+	}
+	return nil
+}
+
+func (m *Shaper) GetOptionalOptional() *OptionalOptional {
+	if m != nil {
+		return m.OptionalOptional
+	}
+	return nil
+}
+
+func (m *Shaper) GetAnyOptional() *AnyOptional {
+	if m != nil {
+		return m.AnyOptional
+	}
+	return nil
+}
+
+func (m *Shaper) GetOptionalSeries() *OptionalSeries {
+	if m != nil {
+		return m.OptionalSeries
+	}
+	return nil
+}
+
+func (m *Shaper) GetSeriesSeries() *SeriesSeries {
+	if m != nil {
+		return m.SeriesSeries
+	}
+	return nil
+}
+
+func (m *Shaper) GetAnySeries() *AnySeries {
+	if m != nil {
+		return m.AnySeries
+	}
+	return nil
+}
+
+func (m *Shaper) GetStructureStructure() *StructureStructure {
+	if m != nil {
+		return m.StructureStructure
+	}
+	return nil
+}
+
+func (m *Shaper) GetUnionUnion() *UnionUnion {
+	if m != nil {
+		return m.UnionUnion
+	}
+	return nil
+}
+
+type Identity struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *Identity) Reset()                    { *m = Identity{} }
+func (m *Identity) String() string            { return proto1.CompactTextString(m) }
+func (*Identity) ProtoMessage()               {}
+func (*Identity) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{2} }
+
+type AnyEmpty struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *AnyEmpty) Reset()                    { *m = AnyEmpty{} }
+func (m *AnyEmpty) String() string            { return proto1.CompactTextString(m) }
+func (*AnyEmpty) ProtoMessage()               {}
+func (*AnyEmpty) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{3} }
+
+type EmptyOptional struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *EmptyOptional) Reset()                    { *m = EmptyOptional{} }
+func (m *EmptyOptional) String() string            { return proto1.CompactTextString(m) }
+func (*EmptyOptional) ProtoMessage()               {}
+func (*EmptyOptional) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{4} }
+
+type EmptySeries struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *EmptySeries) Reset()                    { *m = EmptySeries{} }
+func (m *EmptySeries) String() string            { return proto1.CompactTextString(m) }
+func (*EmptySeries) ProtoMessage()               {}
+func (*EmptySeries) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{5} }
+
+type OptionalOptional struct {
+	ElemShaper       *Shaper `protobuf:"bytes,1,req,name=elemShaper" json:"elemShaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *OptionalOptional) Reset()                    { *m = OptionalOptional{} }
+func (m *OptionalOptional) String() string            { return proto1.CompactTextString(m) }
+func (*OptionalOptional) ProtoMessage()               {}
+func (*OptionalOptional) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{6} }
+
+func (m *OptionalOptional) GetElemShaper() *Shaper {
+	if m != nil {
+		return m.ElemShaper
+	}
+	return nil
+}
+
+type AnyOptional struct {
+	ElemShaper       *Shaper `protobuf:"bytes,1,req,name=elemShaper" json:"elemShaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *AnyOptional) Reset()                    { *m = AnyOptional{} }
+func (m *AnyOptional) String() string            { return proto1.CompactTextString(m) }
+func (*AnyOptional) ProtoMessage()               {}
+func (*AnyOptional) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{7} }
+
+func (m *AnyOptional) GetElemShaper() *Shaper {
+	if m != nil {
+		return m.ElemShaper
+	}
+	return nil
+}
+
+type OptionalSeries struct {
+	ElemShaper       *Shaper `protobuf:"bytes,1,req,name=elemShaper" json:"elemShaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *OptionalSeries) Reset()                    { *m = OptionalSeries{} }
+func (m *OptionalSeries) String() string            { return proto1.CompactTextString(m) }
+func (*OptionalSeries) ProtoMessage()               {}
+func (*OptionalSeries) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{8} }
+
+func (m *OptionalSeries) GetElemShaper() *Shaper {
+	if m != nil {
+		return m.ElemShaper
+	}
+	return nil
+}
+
+type SeriesSeries struct {
+	ElemShaper       *Shaper `protobuf:"bytes,1,req,name=elemShaper" json:"elemShaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *SeriesSeries) Reset()                    { *m = SeriesSeries{} }
+func (m *SeriesSeries) String() string            { return proto1.CompactTextString(m) }
+func (*SeriesSeries) ProtoMessage()               {}
+func (*SeriesSeries) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{9} }
+
+func (m *SeriesSeries) GetElemShaper() *Shaper {
+	if m != nil {
+		return m.ElemShaper
+	}
+	return nil
+}
+
+type AnySeries struct {
+	ElemShaper       *Shaper `protobuf:"bytes,1,req,name=elemShaper" json:"elemShaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *AnySeries) Reset()                    { *m = AnySeries{} }
+func (m *AnySeries) String() string            { return proto1.CompactTextString(m) }
+func (*AnySeries) ProtoMessage()               {}
+func (*AnySeries) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{10} }
+
+func (m *AnySeries) GetElemShaper() *Shaper {
+	if m != nil {
+		return m.ElemShaper
+	}
+	return nil
+}
+
+type StructureStructure struct {
+	FieldShapers     []*Field `protobuf:"bytes,1,rep,name=fieldShapers" json:"fieldShapers,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *StructureStructure) Reset()                    { *m = StructureStructure{} }
+func (m *StructureStructure) String() string            { return proto1.CompactTextString(m) }
+func (*StructureStructure) ProtoMessage()               {}
+func (*StructureStructure) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{11} }
+
+func (m *StructureStructure) GetFieldShapers() []*Field {
+	if m != nil {
+		return m.FieldShapers
+	}
+	return nil
+}
+
+type Field struct {
+	Name             *string `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	Shaper           *Shaper `protobuf:"bytes,2,req,name=shaper" json:"shaper,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *Field) Reset()                    { *m = Field{} }
+func (m *Field) String() string            { return proto1.CompactTextString(m) }
+func (*Field) ProtoMessage()               {}
+func (*Field) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{12} }
+
+func (m *Field) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *Field) GetShaper() *Shaper {
+	if m != nil {
+		return m.Shaper
+	}
+	return nil
+}
+
+type UnionUnion struct {
+	VarietyShapers   []*Variety `protobuf:"bytes,1,rep,name=varietyShapers" json:"varietyShapers,omitempty"`
+	XXX_unrecognized []byte     `json:"-"`
+}
+
+func (m *UnionUnion) Reset()                    { *m = UnionUnion{} }
+func (m *UnionUnion) String() string            { return proto1.CompactTextString(m) }
+func (*UnionUnion) ProtoMessage()               {}
+func (*UnionUnion) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{13} }
+
+func (m *UnionUnion) GetVarietyShapers() []*Variety {
+	if m != nil {
+		return m.VarietyShapers
+	}
+	return nil
+}
+
+type Variety struct {
+	Transform        *ko_bootstrap_types.Transform `protobuf:"bytes,1,req,name=transform" json:"transform,omitempty"`
+	FieldShapers     []*Field                      `protobuf:"bytes,2,rep,name=fieldShapers" json:"fieldShapers,omitempty"`
+	XXX_unrecognized []byte                        `json:"-"`
+}
+
+func (m *Variety) Reset()                    { *m = Variety{} }
+func (m *Variety) String() string            { return proto1.CompactTextString(m) }
+func (*Variety) ProtoMessage()               {}
+func (*Variety) Descriptor() ([]byte, []int) { return fileDescriptorShapers, []int{14} }
+
+func (m *Variety) GetTransform() *ko_bootstrap_types.Transform {
+	if m != nil {
+		return m.Transform
+	}
+	return nil
+}
+
+func (m *Variety) GetFieldShapers() []*Field {
+	if m != nil {
+		return m.FieldShapers
 	}
 	return nil
 }
@@ -76,6 +383,19 @@ func (m *Shaper) GetTo() *ko_bootstrap_types.Type {
 func init() {
 	proto1.RegisterType((*Fixture)(nil), "ko.bootstrap.shapers.Fixture")
 	proto1.RegisterType((*Shaper)(nil), "ko.bootstrap.shapers.Shaper")
+	proto1.RegisterType((*Identity)(nil), "ko.bootstrap.shapers.Identity")
+	proto1.RegisterType((*AnyEmpty)(nil), "ko.bootstrap.shapers.AnyEmpty")
+	proto1.RegisterType((*EmptyOptional)(nil), "ko.bootstrap.shapers.EmptyOptional")
+	proto1.RegisterType((*EmptySeries)(nil), "ko.bootstrap.shapers.EmptySeries")
+	proto1.RegisterType((*OptionalOptional)(nil), "ko.bootstrap.shapers.OptionalOptional")
+	proto1.RegisterType((*AnyOptional)(nil), "ko.bootstrap.shapers.AnyOptional")
+	proto1.RegisterType((*OptionalSeries)(nil), "ko.bootstrap.shapers.OptionalSeries")
+	proto1.RegisterType((*SeriesSeries)(nil), "ko.bootstrap.shapers.SeriesSeries")
+	proto1.RegisterType((*AnySeries)(nil), "ko.bootstrap.shapers.AnySeries")
+	proto1.RegisterType((*StructureStructure)(nil), "ko.bootstrap.shapers.StructureStructure")
+	proto1.RegisterType((*Field)(nil), "ko.bootstrap.shapers.Field")
+	proto1.RegisterType((*UnionUnion)(nil), "ko.bootstrap.shapers.UnionUnion")
+	proto1.RegisterType((*Variety)(nil), "ko.bootstrap.shapers.Variety")
 }
 func (m *Fixture) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -125,25 +445,562 @@ func (m *Shaper) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.From != nil {
+	if m.FromType == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintShapers(dAtA, i, uint64(m.From.Size()))
-		n2, err := m.From.MarshalTo(dAtA[i:])
+		i = encodeVarintShapers(dAtA, i, uint64(m.FromType.Size()))
+		n2, err := m.FromType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n2
 	}
-	if m.To != nil {
+	if m.ToType == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintShapers(dAtA, i, uint64(m.To.Size()))
-		n3, err := m.To.MarshalTo(dAtA[i:])
+		i = encodeVarintShapers(dAtA, i, uint64(m.ToType.Size()))
+		n3, err := m.ToType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n3
+	}
+	if m.Identity != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.Identity.Size()))
+		n4, err := m.Identity.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if m.AnyEmpty != nil {
+		dAtA[i] = 0xaa
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.AnyEmpty.Size()))
+		n5, err := m.AnyEmpty.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	if m.EmptyOptional != nil {
+		dAtA[i] = 0xb2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.EmptyOptional.Size()))
+		n6, err := m.EmptyOptional.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	if m.EmptySeries != nil {
+		dAtA[i] = 0xba
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.EmptySeries.Size()))
+		n7, err := m.EmptySeries.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	if m.OptionalOptional != nil {
+		dAtA[i] = 0xc2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.OptionalOptional.Size()))
+		n8, err := m.OptionalOptional.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	if m.AnyOptional != nil {
+		dAtA[i] = 0xca
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.AnyOptional.Size()))
+		n9, err := m.AnyOptional.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	if m.OptionalSeries != nil {
+		dAtA[i] = 0xd2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.OptionalSeries.Size()))
+		n10, err := m.OptionalSeries.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	if m.SeriesSeries != nil {
+		dAtA[i] = 0xda
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.SeriesSeries.Size()))
+		n11, err := m.SeriesSeries.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	if m.AnySeries != nil {
+		dAtA[i] = 0xe2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.AnySeries.Size()))
+		n12, err := m.AnySeries.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	if m.StructureStructure != nil {
+		dAtA[i] = 0xea
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.StructureStructure.Size()))
+		n13, err := m.StructureStructure.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
+	}
+	if m.UnionUnion != nil {
+		dAtA[i] = 0xf2
+		i++
+		dAtA[i] = 0x6
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.UnionUnion.Size()))
+		n14, err := m.UnionUnion.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Identity) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Identity) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AnyEmpty) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnyEmpty) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *EmptyOptional) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EmptyOptional) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *EmptySeries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EmptySeries) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *OptionalOptional) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OptionalOptional) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ElemShaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.ElemShaper.Size()))
+		n15, err := m.ElemShaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AnyOptional) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnyOptional) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ElemShaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.ElemShaper.Size()))
+		n16, err := m.ElemShaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *OptionalSeries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OptionalSeries) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ElemShaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.ElemShaper.Size()))
+		n17, err := m.ElemShaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *SeriesSeries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SeriesSeries) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ElemShaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.ElemShaper.Size()))
+		n18, err := m.ElemShaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AnySeries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnySeries) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ElemShaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.ElemShaper.Size()))
+		n19, err := m.ElemShaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *StructureStructure) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *StructureStructure) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.FieldShapers) > 0 {
+		for _, msg := range m.FieldShapers {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintShapers(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Field) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Field) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Name == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(len(*m.Name)))
+		i += copy(dAtA[i:], *m.Name)
+	}
+	if m.Shaper == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.Shaper.Size()))
+		n20, err := m.Shaper.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *UnionUnion) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UnionUnion) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.VarietyShapers) > 0 {
+		for _, msg := range m.VarietyShapers {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintShapers(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Variety) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Variety) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Transform == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintShapers(dAtA, i, uint64(m.Transform.Size()))
+		n21, err := m.Transform.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
+	}
+	if len(m.FieldShapers) > 0 {
+		for _, msg := range m.FieldShapers {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintShapers(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -176,13 +1033,224 @@ func (m *Fixture) Size() (n int) {
 func (m *Shaper) Size() (n int) {
 	var l int
 	_ = l
-	if m.From != nil {
-		l = m.From.Size()
+	if m.FromType != nil {
+		l = m.FromType.Size()
 		n += 1 + l + sovShapers(uint64(l))
 	}
-	if m.To != nil {
-		l = m.To.Size()
+	if m.ToType != nil {
+		l = m.ToType.Size()
 		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.Identity != nil {
+		l = m.Identity.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.AnyEmpty != nil {
+		l = m.AnyEmpty.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.EmptyOptional != nil {
+		l = m.EmptyOptional.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.EmptySeries != nil {
+		l = m.EmptySeries.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.OptionalOptional != nil {
+		l = m.OptionalOptional.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.AnyOptional != nil {
+		l = m.AnyOptional.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.OptionalSeries != nil {
+		l = m.OptionalSeries.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.SeriesSeries != nil {
+		l = m.SeriesSeries.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.AnySeries != nil {
+		l = m.AnySeries.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.StructureStructure != nil {
+		l = m.StructureStructure.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.UnionUnion != nil {
+		l = m.UnionUnion.Size()
+		n += 2 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Identity) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AnyEmpty) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EmptyOptional) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EmptySeries) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *OptionalOptional) Size() (n int) {
+	var l int
+	_ = l
+	if m.ElemShaper != nil {
+		l = m.ElemShaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AnyOptional) Size() (n int) {
+	var l int
+	_ = l
+	if m.ElemShaper != nil {
+		l = m.ElemShaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *OptionalSeries) Size() (n int) {
+	var l int
+	_ = l
+	if m.ElemShaper != nil {
+		l = m.ElemShaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *SeriesSeries) Size() (n int) {
+	var l int
+	_ = l
+	if m.ElemShaper != nil {
+		l = m.ElemShaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AnySeries) Size() (n int) {
+	var l int
+	_ = l
+	if m.ElemShaper != nil {
+		l = m.ElemShaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *StructureStructure) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.FieldShapers) > 0 {
+		for _, e := range m.FieldShapers {
+			l = e.Size()
+			n += 1 + l + sovShapers(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Field) Size() (n int) {
+	var l int
+	_ = l
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.Shaper != nil {
+		l = m.Shaper.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *UnionUnion) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.VarietyShapers) > 0 {
+		for _, e := range m.VarietyShapers {
+			l = e.Size()
+			n += 1 + l + sovShapers(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Variety) Size() (n int) {
+	var l int
+	_ = l
+	if m.Transform != nil {
+		l = m.Transform.Size()
+		n += 1 + l + sovShapers(uint64(l))
+	}
+	if len(m.FieldShapers) > 0 {
+		for _, e := range m.FieldShapers {
+			l = e.Size()
+			n += 1 + l + sovShapers(uint64(l))
+		}
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -293,6 +1361,7 @@ func (m *Fixture) Unmarshal(dAtA []byte) error {
 	return nil
 }
 func (m *Shaper) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -323,7 +1392,7 @@ func (m *Shaper) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field FromType", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -347,16 +1416,17 @@ func (m *Shaper) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.From == nil {
-				m.From = &ko_bootstrap_types.Type{}
+			if m.FromType == nil {
+				m.FromType = &ko_bootstrap_types.Type{}
 			}
-			if err := m.From.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.FromType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field To", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ToType", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -380,10 +1450,374 @@ func (m *Shaper) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.To == nil {
-				m.To = &ko_bootstrap_types.Type{}
+			if m.ToType == nil {
+				m.ToType = &ko_bootstrap_types.Type{}
 			}
-			if err := m.To.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.ToType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000002)
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Identity == nil {
+				m.Identity = &Identity{}
+			}
+			if err := m.Identity.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyEmpty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AnyEmpty == nil {
+				m.AnyEmpty = &AnyEmpty{}
+			}
+			if err := m.AnyEmpty.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EmptyOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EmptyOptional == nil {
+				m.EmptyOptional = &EmptyOptional{}
+			}
+			if err := m.EmptyOptional.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 103:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EmptySeries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EmptySeries == nil {
+				m.EmptySeries = &EmptySeries{}
+			}
+			if err := m.EmptySeries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 104:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OptionalOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OptionalOptional == nil {
+				m.OptionalOptional = &OptionalOptional{}
+			}
+			if err := m.OptionalOptional.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 105:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AnyOptional == nil {
+				m.AnyOptional = &AnyOptional{}
+			}
+			if err := m.AnyOptional.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 106:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OptionalSeries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OptionalSeries == nil {
+				m.OptionalSeries = &OptionalSeries{}
+			}
+			if err := m.OptionalSeries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 107:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SeriesSeries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SeriesSeries == nil {
+				m.SeriesSeries = &SeriesSeries{}
+			}
+			if err := m.SeriesSeries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 108:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnySeries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AnySeries == nil {
+				m.AnySeries = &AnySeries{}
+			}
+			if err := m.AnySeries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 109:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StructureStructure", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.StructureStructure == nil {
+				m.StructureStructure = &StructureStructure{}
+			}
+			if err := m.StructureStructure.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 110:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UnionUnion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UnionUnion == nil {
+				m.UnionUnion = &UnionUnion{}
+			}
+			if err := m.UnionUnion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -402,6 +1836,1068 @@ func (m *Shaper) Unmarshal(dAtA []byte) error {
 			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+	if hasFields[0]&uint64(0x00000002) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Identity) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Identity: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Identity: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnyEmpty) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnyEmpty: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnyEmpty: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EmptyOptional) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EmptyOptional: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EmptyOptional: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EmptySeries) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EmptySeries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EmptySeries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OptionalOptional) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OptionalOptional: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OptionalOptional: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemShaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemShaper == nil {
+				m.ElemShaper = &Shaper{}
+			}
+			if err := m.ElemShaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnyOptional) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnyOptional: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnyOptional: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemShaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemShaper == nil {
+				m.ElemShaper = &Shaper{}
+			}
+			if err := m.ElemShaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OptionalSeries) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OptionalSeries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OptionalSeries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemShaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemShaper == nil {
+				m.ElemShaper = &Shaper{}
+			}
+			if err := m.ElemShaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SeriesSeries) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SeriesSeries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SeriesSeries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemShaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemShaper == nil {
+				m.ElemShaper = &Shaper{}
+			}
+			if err := m.ElemShaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnySeries) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnySeries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnySeries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemShaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemShaper == nil {
+				m.ElemShaper = &Shaper{}
+			}
+			if err := m.ElemShaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *StructureStructure) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StructureStructure: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StructureStructure: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FieldShapers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FieldShapers = append(m.FieldShapers, &Field{})
+			if err := m.FieldShapers[len(m.FieldShapers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Field) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Field: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Field: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(dAtA[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Shaper", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Shaper == nil {
+				m.Shaper = &Shaper{}
+			}
+			if err := m.Shaper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000002)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+	if hasFields[0]&uint64(0x00000002) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UnionUnion) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UnionUnion: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UnionUnion: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VarietyShapers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VarietyShapers = append(m.VarietyShapers, &Variety{})
+			if err := m.VarietyShapers[len(m.VarietyShapers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Variety) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowShapers
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Variety: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Variety: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Transform", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Transform == nil {
+				m.Transform = &ko_bootstrap_types.Transform{}
+			}
+			if err := m.Transform.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FieldShapers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowShapers
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthShapers
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FieldShapers = append(m.FieldShapers, &Field{})
+			if err := m.FieldShapers[len(m.FieldShapers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipShapers(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthShapers
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
 	}
 
 	if iNdEx > l {
@@ -517,18 +3013,43 @@ var (
 func init() { proto1.RegisterFile("shapers.proto", fileDescriptorShapers) }
 
 var fileDescriptorShapers = []byte{
-	// 200 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0xce, 0x48, 0x2c,
-	0x48, 0x2d, 0x2a, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0xc9, 0xce, 0xd7, 0x4b, 0xca,
-	0xcf, 0x2f, 0x29, 0x2e, 0x29, 0x4a, 0x2c, 0xd0, 0x83, 0xca, 0x49, 0x39, 0xa4, 0x67, 0x96, 0x64,
-	0x94, 0x26, 0xe9, 0x25, 0xe7, 0xe7, 0xea, 0x67, 0xe7, 0x27, 0x67, 0x16, 0x25, 0x97, 0x66, 0x96,
-	0x20, 0xb1, 0xe0, 0x3a, 0xf4, 0x4b, 0x2a, 0x0b, 0x52, 0x8b, 0xf5, 0xc1, 0x66, 0x41, 0xd8, 0x10,
-	0x73, 0x95, 0xec, 0xb9, 0xd8, 0xdd, 0x32, 0x2b, 0x4a, 0x4a, 0x8b, 0x52, 0x85, 0x4c, 0xb8, 0xd8,
-	0x20, 0xe6, 0x4a, 0x30, 0x2a, 0x30, 0x69, 0x70, 0x1b, 0xc9, 0xe8, 0x61, 0xb3, 0x53, 0x2f, 0x18,
-	0x4c, 0x07, 0x41, 0xd5, 0x2a, 0x25, 0x70, 0xb1, 0x41, 0x44, 0x84, 0x74, 0xb8, 0x58, 0xd2, 0x8a,
-	0xf2, 0x73, 0x25, 0x18, 0x15, 0x18, 0x35, 0xb8, 0x8d, 0x24, 0x50, 0x75, 0x43, 0xec, 0x0c, 0xa9,
-	0x2c, 0x48, 0x0d, 0x02, 0xab, 0x12, 0xd2, 0xe0, 0x62, 0x2a, 0xc9, 0x97, 0x60, 0x22, 0xa0, 0x96,
-	0xa9, 0x24, 0xdf, 0x49, 0xfc, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92,
-	0x63, 0x9c, 0xf1, 0x58, 0x8e, 0x21, 0x8a, 0x15, 0xec, 0x76, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xf6, 0xd4, 0x28, 0x73, 0x23, 0x01, 0x00, 0x00,
+	// 608 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x95, 0xdf, 0x8e, 0xd2, 0x40,
+	0x14, 0xc6, 0x2d, 0xba, 0x0b, 0x9c, 0x02, 0x6e, 0x26, 0x26, 0x36, 0xea, 0x22, 0x56, 0x63, 0xb8,
+	0x2a, 0x86, 0xec, 0x95, 0x7f, 0xb2, 0xbb, 0x1a, 0x48, 0x88, 0x1b, 0x57, 0x07, 0x31, 0xc6, 0xbb,
+	0x2e, 0x0c, 0xcb, 0x08, 0xed, 0x34, 0xed, 0x60, 0xec, 0xad, 0x37, 0xbe, 0x82, 0x8f, 0xe4, 0xa5,
+	0x8f, 0x60, 0xf0, 0x45, 0x4c, 0xa7, 0xd3, 0x32, 0x85, 0x82, 0x6e, 0xb8, 0x81, 0x93, 0x99, 0xef,
+	0xfb, 0xf5, 0xcc, 0xe4, 0xeb, 0x29, 0x54, 0x83, 0x89, 0xed, 0x11, 0x3f, 0xb0, 0x3c, 0x9f, 0x71,
+	0x86, 0x6e, 0x4d, 0x99, 0x75, 0xc1, 0x18, 0x0f, 0xb8, 0x6f, 0x7b, 0x96, 0xdc, 0xbb, 0x73, 0x72,
+	0x49, 0xf9, 0x64, 0x7e, 0x61, 0x0d, 0x99, 0xd3, 0x9a, 0xb2, 0x21, 0xf5, 0x87, 0x73, 0xca, 0x95,
+	0x2a, 0x75, 0xb4, 0x78, 0xe8, 0x91, 0xa0, 0x25, 0x58, 0x71, 0x1d, 0x73, 0xcd, 0x63, 0x28, 0x76,
+	0xe9, 0x57, 0x3e, 0xf7, 0x09, 0x3a, 0x82, 0xfd, 0x98, 0x6b, 0x68, 0x8d, 0x42, 0x53, 0x6f, 0xdf,
+	0xb3, 0xf2, 0x9e, 0x69, 0xf5, 0xc5, 0x3f, 0x96, 0x5a, 0xf3, 0x5b, 0x11, 0xf6, 0xe3, 0x25, 0x74,
+	0x04, 0xa5, 0xb1, 0xcf, 0x9c, 0xf7, 0xa1, 0x47, 0x24, 0xc2, 0xc8, 0x22, 0xe2, 0x07, 0x47, 0xfb,
+	0x38, 0x55, 0xa2, 0x27, 0xb0, 0xcf, 0x99, 0xf0, 0x14, 0xfe, 0xe1, 0x91, 0x3a, 0xf4, 0x14, 0x4a,
+	0x74, 0x44, 0x5c, 0x4e, 0x79, 0x68, 0x8c, 0x1a, 0x5a, 0x53, 0x6f, 0xd7, 0xf3, 0x5b, 0xed, 0x49,
+	0x15, 0x4e, 0xf5, 0x91, 0xd7, 0x76, 0xc3, 0x8e, 0xe3, 0xf1, 0xd0, 0x20, 0xdb, 0xbc, 0xa7, 0x52,
+	0x85, 0x53, 0x3d, 0xea, 0x41, 0x95, 0x44, 0xc5, 0xb9, 0xc7, 0x29, 0x73, 0xed, 0x99, 0x31, 0x16,
+	0x80, 0x87, 0xf9, 0x80, 0x8e, 0x2a, 0xc5, 0x59, 0x27, 0x7a, 0x05, 0xba, 0x58, 0xe8, 0x13, 0x9f,
+	0x92, 0xc0, 0xb8, 0x14, 0xa0, 0x07, 0x5b, 0x40, 0xb1, 0x10, 0xab, 0x2e, 0x84, 0xe1, 0x80, 0x49,
+	0x60, 0xda, 0xd2, 0x44, 0x90, 0x1e, 0xe7, 0x93, 0xce, 0x57, 0xd4, 0x78, 0xcd, 0x1f, 0x35, 0x66,
+	0xbb, 0xcb, 0x13, 0xd2, 0x6d, 0x8d, 0x9d, 0x2e, 0x85, 0x58, 0x75, 0xa1, 0x33, 0xa8, 0x25, 0x60,
+	0x79, 0xc0, 0xcf, 0x82, 0xf3, 0x68, 0x7b, 0x5b, 0xf2, 0x8c, 0x2b, 0x5e, 0xd4, 0x85, 0x4a, 0x20,
+	0x2a, 0xc9, 0x9a, 0x0a, 0x96, 0xb9, 0x21, 0x9d, 0x8a, 0x12, 0x67, 0x7c, 0xe8, 0x05, 0x94, 0x6d,
+	0x37, 0xb9, 0xf1, 0x99, 0x80, 0xdc, 0xdf, 0x78, 0x30, 0x49, 0x58, 0x3a, 0xd0, 0x47, 0x40, 0x01,
+	0xf7, 0xe7, 0xc3, 0xe8, 0x5d, 0xe9, 0x27, 0x85, 0xe1, 0x08, 0x4e, 0x73, 0x43, 0x33, 0x6b, 0x7a,
+	0x9c, 0xc3, 0x40, 0x27, 0x00, 0x73, 0x97, 0x32, 0x77, 0x10, 0xfd, 0x18, 0xae, 0x20, 0x36, 0xf2,
+	0x89, 0x83, 0x54, 0x87, 0x15, 0x8f, 0x09, 0x50, 0x4a, 0xb2, 0x1e, 0xd5, 0x49, 0x76, 0xcd, 0x9b,
+	0x50, 0xcd, 0xc4, 0xd0, 0xac, 0x82, 0xae, 0xc4, 0xc9, 0x7c, 0x0b, 0x07, 0xab, 0x99, 0x40, 0xcf,
+	0x01, 0xc8, 0x8c, 0x38, 0xfd, 0xff, 0x1f, 0x05, 0x8a, 0xde, 0x7c, 0x0d, 0xba, 0x12, 0x8b, 0x1d,
+	0x61, 0x6f, 0xa0, 0x96, 0xcd, 0xc6, 0x8e, 0xbc, 0x33, 0xa8, 0xa8, 0xf9, 0xd8, 0x91, 0xd6, 0x83,
+	0x72, 0x1a, 0x94, 0x1d, 0x51, 0x03, 0x40, 0xeb, 0x59, 0x41, 0xc7, 0x50, 0x19, 0x53, 0x32, 0x1b,
+	0xc5, 0xa2, 0xc0, 0xd0, 0x1a, 0xd7, 0x9b, 0x7a, 0xfb, 0x6e, 0x3e, 0xb5, 0x1b, 0x29, 0x71, 0xc6,
+	0x60, 0xbe, 0x83, 0x3d, 0xb1, 0x8c, 0x10, 0xdc, 0x70, 0x6d, 0x27, 0x9e, 0xca, 0x65, 0x2c, 0x6a,
+	0x65, 0xdc, 0x17, 0xae, 0x30, 0xee, 0xfb, 0x00, 0xcb, 0x0c, 0xa2, 0x0e, 0xd4, 0xbe, 0xd8, 0x3e,
+	0x25, 0x3c, 0xcc, 0xf6, 0x78, 0x98, 0xcf, 0xfa, 0x10, 0x6b, 0xf1, 0x8a, 0xc9, 0xfc, 0xae, 0x41,
+	0x51, 0xee, 0xa1, 0x67, 0x50, 0xe6, 0xbe, 0xed, 0x06, 0x63, 0xe6, 0x3b, 0xf2, 0x1e, 0x0f, 0x73,
+	0xbf, 0x08, 0x89, 0x08, 0x2f, 0xf5, 0x6b, 0x37, 0x56, 0xb8, 0xe2, 0x8d, 0xbd, 0xbc, 0xfd, 0x73,
+	0x51, 0xd7, 0x7e, 0x2d, 0xea, 0xda, 0xef, 0x45, 0x5d, 0xfb, 0xf1, 0xa7, 0x7e, 0xed, 0xd3, 0x9e,
+	0xf8, 0x4e, 0xfe, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x9a, 0x4a, 0xea, 0x12, 0x8f, 0x07, 0x00, 0x00,
 }

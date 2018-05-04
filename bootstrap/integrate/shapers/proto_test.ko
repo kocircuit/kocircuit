@@ -1,0 +1,60 @@
+import "github.com/kocircuit/kocircuit/bootstrap/types"
+//XXX: link test
+
+// ko play github.com/kocircuit/kocircuit/bootstrap/integrate/shapers/TestProto
+TestProto() {
+	emptyType: types.EmptyType()
+	boolType: types.BoolType()
+	integerType: types.IntegerType()
+	optionalIntegerType: types.OptionalType(integerType)
+	integerSeriesType: types.SeriesType(integerType)
+	emptySeriesType: types.SeriesType(emptyType)
+	return: And(
+		testShaperProto(Identity(forType: boolType))
+		testShaperProto(AnyEmpty(fromType: integerType, toType: emptyType))
+		testShaperProto(EmptyOptional(fromType: integerType, toType: optionalIntegerType))
+		testShaperProto(EmptySeries(fromType: integerType, toType: integerSeriesType))
+		testShaperProto(
+			OptionalOptional(
+				elemShaper: AnyEmpty(fromType: integerType, toType: emptyType)
+				fromType: integerSeriesType
+				toType: emptySeriesType
+			)
+		)
+		testShaperProto(
+			AnyOptional(
+				elemShaper: Identity(forType: integerType)
+				fromType: integerType
+				toType: optionalIntegerType
+			)
+		)
+		testShaperProto(
+			OptionalSeries(
+				elemShaper: Identity(forType: integerType)
+				fromType: optionalIntegerType
+				toType: integerSeriesType
+			)
+		)
+		testShaperProto(
+			SeriesSeries(
+				elemShaper: Identity(forType: integerType)
+				fromType: integerSeriesType
+				toType: integerSeriesType
+			)
+		)
+		testShaperProto(
+			AnySeries(
+				elemShaper: Identity(forType: integerType)
+				fromType: integerType
+				toType: integerSeriesType
+			)
+		)
+		//XXX
+	)
+}
+
+testShaperProto(shaper?) {
+	proto: Proto(shaper) // test type compliance
+	marshaled: Marshal(proto)
+	return: Equal(Unmarshal(marshaled), proto)
+}

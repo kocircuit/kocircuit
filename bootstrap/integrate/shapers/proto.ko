@@ -1,0 +1,13 @@
+import "proto/ko.bootstrap.shapers" as pb
+
+Proto(shaper?) {
+	return: pb.ProtoFixture(shaper: shaper).shaper
+}
+
+Marshal(shaper?) {
+	return: pb.MarshalShaper(proto: shaper)
+}
+
+Unmarshal(blob?) {
+	return: pb.UnmarshalShaper(bytes: blob)
+}

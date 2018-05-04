@@ -35,7 +35,7 @@ OptionalOptional(elemShaper, fromType, toType) {
 
 AnyOptional(elemShaper, fromType, toType) {
 	return: ( // shaper
-		anyOptional: ( // optional-optional shaper
+		anyOptional: ( // any-optional shaper
 			elemShaper: elemShaper
 		)
 		fromType: Expect(fromType)
@@ -45,7 +45,7 @@ AnyOptional(elemShaper, fromType, toType) {
 
 OptionalSeries(elemShaper, fromType, toType) {
 	return: ( // shaper
-		optionalSeries: ( // optional-optional shaper
+		optionalSeries: ( // optional-series shaper
 			elemShaper: elemShaper
 		)
 		fromType: Expect(fromType)
@@ -55,7 +55,7 @@ OptionalSeries(elemShaper, fromType, toType) {
 
 SeriesSeries(elemShaper, fromType, toType) {
 	return: ( // shaper
-		seriesSeries: ( // optional-optional shaper
+		seriesSeries: ( // series-series shaper
 			elemShaper: elemShaper
 		)
 		fromType: Expect(fromType)
