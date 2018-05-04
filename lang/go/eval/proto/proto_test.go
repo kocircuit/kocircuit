@@ -22,7 +22,7 @@ var protoTests = []*EvalTest{
 		Enabled: true,
 		File: `
 		import "proto/testdata" as pb
-		Main(x, y) {
+		Main() {
 			_: pb.ProtoGoEnum(
 				foo: pb.EnumFOO_FOO1()
 			)
@@ -31,17 +31,31 @@ var protoTests = []*EvalTest{
 			)
 		}
 		`,
-		Arg: struct { // deconstruct/construct
-			Ko_x byte    `ko:"name=x"`
-			Ko_y float64 `ko:"name=y"`
-		}{
-			Ko_x: 7,
-			Ko_y: 3.3,
-		},
+		Arg: nil,
 		Result: struct {
 			Ko_Kind int32 `ko:"name=Kind"`
 		}{
 			Ko_Kind: 12,
 		},
+	},
+	{
+		Enabled: true,
+		File: `
+		import "proto/testdata" as pb
+		Main() {
+			p1: pb.ProtoOldMessage(
+				num: Int32(13)
+				nested: pb.ProtoOldMessage(
+					num: Int32(13)
+				)
+			)
+			blob: pb.MarshalOldMessage(proto: p1)
+			_: Show(len: Len(blob))
+			p2: pb.UnmarshalOldMessage(bytes: blob)
+			return: Equal(p1, p2)
+		}
+		`,
+		Arg:    nil,
+		Result: true,
 	},
 }

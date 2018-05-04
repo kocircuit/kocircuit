@@ -36,7 +36,10 @@ func (m *EvalMarshalProtoMacro) Doc() string {
 func (m *EvalMarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	a := arg.(*StructSymbol)
 	protoArg := a.Walk("proto")
-	protoValue, err := Integrate(span, protoArg, reflect.PtrTo(m.MsgType)) // *MsgType
+	if IsEmptySymbol(protoArg) {
+		return nil, nil, span.Errorf(nil, "empty is not a proto %v", m.MsgType)
+	}
+	protoValue, err := Integrate(span, protoArg, m.MsgType) // *MsgType
 	if err != nil {
 		return nil, nil, span.Errorf(nil,
 			"%s exepcts a proto argument of type %v, got %v",

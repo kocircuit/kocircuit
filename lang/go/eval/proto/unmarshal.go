@@ -48,7 +48,7 @@ func (m *EvalUnmarshalProtoMacro) Invoke(span *Span, arg Arg) (returns Return, e
 			m.Help(), bytesArg,
 		)
 	}
-	msg := reflect.New(m.MsgType).Interface().(proto.Message)
+	msg := reflect.New(m.MsgType.Elem()).Interface().(proto.Message)
 	if err := proto.Unmarshal(bytesValue.Interface().([]byte), msg); err != nil {
 		panic(
 			NewEvalPanic(

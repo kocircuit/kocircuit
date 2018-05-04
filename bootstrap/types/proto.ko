@@ -4,6 +4,10 @@ Proto(type?) {
 	return: pb.ProtoFixture(type: type).type
 }
 
-//Marshal(type?) {
-//	return: XXXpb.MarshalFixture(type: type).type
-//}
+Marshal(type?) {
+	return: pb.MarshalType(proto: type)
+}
+
+Unmarshal(blob?) {
+	return: pb.UnmarshalType(bytes: blob)
+}
