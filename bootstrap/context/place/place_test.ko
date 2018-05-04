@@ -18,15 +18,15 @@ TestStep() {
 	)
 }
 
-// ko play github.com/kocircuit/kocircuit/bootstrap/space/TestRoot
+// ko play github.com/kocircuit/kocircuit/bootstrap/context/place/TestRoot
 TestRoot() {
 	return: Equal(
 		testRoot()
 		(
 			span: (
-				view: (id: "2ti3z1u", source: "[0] 2ti3z1u, place.ko:1:1, test.place", tag: "test.place")
+				view: (id: "2zmoro9", source: "[0] 2zmoro9, place.ko:1:1, test.place", tag: "test.place")
 				sheath: (
-					supervisor: (name: "test.place", source: (file: "place.ko", offset: 0, line: 1, column: 1))
+					supervisor: (name: "test.place", source: testSrc())
 				)
 				background: "qp"
 			)
@@ -34,13 +34,12 @@ TestRoot() {
 	)
 }
 
+testSrc() { return: source.Point(file: "place.ko", offset: 0, line: 1, column: 1) }
+
 testRoot() {
 	return: Root(
 		ko_span.Root(
-			supervisor: lang.Supervisor(
-				name: "test.place"
-				source: source.Source(file: "place.ko", offset: 0, line: 1, column: 1)
-			)
+			supervisor: lang.Supervisor(name: "test.place", source: testSrc())
 			background: "qp"
 		)
 	)
