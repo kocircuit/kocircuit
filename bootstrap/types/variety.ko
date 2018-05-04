@@ -1,15 +1,15 @@
 // fields must be a sequence of (name, type) pairs.
-VarietyType(functional, fields) {
+VarietyType(transform, fields) {
 	return: ( // type
 		variety: ( // type variety
-			functional: Expect(functional)
+			transform: Expect(transform)
 			fields: NoDuplicateFields(fields)
 		)
 	)
 }
 
-VarietyTypeFunctional(varietyType?) {
-	return: Expect(varietyType.variety.functional)
+VarietyTypeTransform(varietyType?) {
+	return: Expect(varietyType.variety.transform)
 }
 
 VarietyTypeFields(varietyType?) {
@@ -26,7 +26,7 @@ WhenVariety(type?, then, else) {
 // fields must be a sequence of (name, type) pairs.
 AugmentVarietyType(varietyType?, fields) {
 	return: VarietyType(
-		functional: Expect(varietyType.variety.functional)
+		transform: Expect(varietyType.variety.transform)
 		fields: NoDuplicateFields(Merge(varietyType.variety.fields, fields))
 	)
 }

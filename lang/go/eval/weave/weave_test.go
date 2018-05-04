@@ -86,7 +86,7 @@ expected() {
 	return: (
 		returns: (
 			figure: WeaveFigure(
-				functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+				transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 			)
 		)
 		effect: (
@@ -98,7 +98,7 @@ expected() {
 				arg: (weaveUserArg: true)
 				returns: (
 					figure: WeaveFigure(
-						functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+						transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 					)
 				)
 			)
@@ -109,7 +109,7 @@ expected() {
 					source: "test.ko:7:3"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 						)
 					)
 					effect: (
@@ -129,7 +129,7 @@ expected() {
 					source: "test.ko:10:12"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 						)
 					)
 					effect: (
@@ -149,7 +149,7 @@ expected() {
 					source: "test.ko:10:12"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 						)
 					)
 					effect: (
@@ -169,7 +169,7 @@ expected() {
 					source: "test.ko:10:12"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "H"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "H"))
 						)
 					)
 					effect: (
@@ -189,7 +189,7 @@ expected() {
 					source: "test.ko:11:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "C"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "C"))
 						)
 					)
 					effect: (
@@ -209,7 +209,7 @@ expected() {
 					source: "test.ko:12:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "D"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "D"))
 						)
 					)
 					effect: (
@@ -229,7 +229,7 @@ expected() {
 					source: "test.ko:11:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "C"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "C"))
 						)
 					)
 					effect: (
@@ -249,7 +249,7 @@ expected() {
 					source: "test.ko:12:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "D"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "D"))
 						)
 					)
 					effect: (
@@ -269,7 +269,7 @@ expected() {
 					source: "test.ko:11:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "C"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "C"))
 						)
 					)
 					effect: (
@@ -289,7 +289,7 @@ expected() {
 					source: "test.ko:11:10"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "A"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "A"))
 						)
 					)
 					effect: (
@@ -309,7 +309,7 @@ expected() {
 					source: "test.ko:11:15"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "B"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "B"))
 						)
 					)
 					effect: (
@@ -329,7 +329,7 @@ expected() {
 					source: "test.ko:12:8"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "D"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "D"))
 						)
 					)
 					effect: (
@@ -349,7 +349,7 @@ expected() {
 					source: "test.ko:12:10"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "A"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "A"))
 						)
 					)
 					effect: (
@@ -369,7 +369,7 @@ expected() {
 					source: "test.ko:12:15"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "B"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "B"))
 						)
 					)
 					effect: (
@@ -389,7 +389,7 @@ expected() {
 					source: "test.ko:8:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "A"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "A"))
 						)
 					)
 					effect: (
@@ -409,7 +409,7 @@ expected() {
 					source: "test.ko:9:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "B"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "B"))
 						)
 					)
 					effect: (
@@ -429,7 +429,7 @@ expected() {
 					source: "test.ko:8:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "A"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "A"))
 						)
 					)
 					effect: (
@@ -449,7 +449,7 @@ expected() {
 					source: "test.ko:9:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "B"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "B"))
 						)
 					)
 					effect: (
@@ -469,7 +469,7 @@ expected() {
 					source: "test.ko:8:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "A"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "A"))
 						)
 					)
 					effect: (
@@ -489,7 +489,7 @@ expected() {
 					source: "test.ko:9:7"
 					returns: (
 						figure: WeaveFigure(
-							functional: WeaveFunctional(func: WeaveFunc(pkg: "test", name: "B"))
+							transform: WeaveTransform(func: WeaveFunc(pkg: "test", name: "B"))
 						)
 					)
 					effect: (

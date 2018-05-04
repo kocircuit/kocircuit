@@ -17,11 +17,11 @@ func (b *WeaveController) Figure(weaveSpan *Span, figure Figure) (Shape, Effect,
 	case String:
 		fig.String = &u.Value_
 	case *WeaveFuncMacro: // from Interpret()
-		fig.Functional = &WeaveFunctional{
+		fig.Transform = &WeaveTransform{
 			Func: &WeaveFunc{Pkg: u.Func.Pkg, Name: u.Func.Name},
 		}
 	case *WeaveOperatorMacro: // from faculty of operators
-		fig.Functional = &WeaveFunctional{
+		fig.Transform = &WeaveTransform{
 			Operator: &WeaveOperator{Pkg: u.Ideal.Pkg, Name: u.Ideal.Name},
 		}
 	default:

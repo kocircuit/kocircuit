@@ -38,16 +38,16 @@ UnifyUnionUnion(place, leftUnionType?, rightUnionType) {
 		set.Union(
 			leftObjects: types.UnionTypeVarieties(leftUnionType)
 			rightObjects: types.UnionTypeVarieties(rightUnionType)
-			ObjectKey: types.VarietyTypeFunctional
-			MergeObjects: unifyVarietiesWithSameFunctional[place: place]
+			ObjectKey: types.VarietyTypeTransform
+			MergeObjects: unifyVarietiesWithSameTransform[place: place]
 		)
 	)
 }
 
-// leftObject and rightObject are variety types, with the same functional.
-unifyVarietiesWithSameFunctional(place, leftObject, rightObject) {
+// leftObject and rightObject are variety types, with the same transform.
+unifyVarietiesWithSameTransform(place, leftObject, rightObject) {
 	return: types.VarietyType(
-		functional: types.VarietyTypeFunctional(leftObject)
+		transform: types.VarietyTypeTransform(leftObject)
 		fields: UnifyFields(
 			place: place
 			leftFields: types.VarietyTypeFields(leftObject)

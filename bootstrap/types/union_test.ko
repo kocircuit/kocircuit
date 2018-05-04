@@ -11,7 +11,7 @@ TestUnionType() {
 testValidUnionAugment() {
 	union: UnionType(
 		VarietyType(
-			functional: "Functional"
+			transform: "Transform"
 			fields: Field(name: "a1", type: BoolType())
 			fields: Field(name: "a2", type: IntegerType())
 		)
@@ -28,7 +28,7 @@ testValidUnionAugment() {
 				varieties: (
 					(
 						variety: (
-							functional: "Functional"
+							transform: "Transform"
 							fields: (
 								(name: "a1", type: (bool: ()))
 								(name: "a2", type: (integer: ()))
@@ -46,7 +46,7 @@ testValidUnionAugment() {
 testInvalidUnionAugment() {
 	union: UnionType(
 		VarietyType(
-			functional: "Functional"
+			transform: "Transform"
 			fields: Field(name: "a1", type: BoolType())
 			fields: Field(name: "a2", type: IntegerType())
 		)

@@ -45,16 +45,21 @@ message Union {
 }
 
 message Variety {
-	required Functional functional = 1;
+	required Transform transform = 1;
 	repeated Field fields = 2;
 }
 
-message Functional {
-	optional Address func = 1;
-	optional Address reserve = 2;
+message Transform {
+	optional Operator operator = 1;
+	optional Func func = 2;
 }
 
-message Address {
+message Operator {
+	required string pkg = 1;
+	required string name = 2;
+}
+
+message Func {
 	required string pkg = 1;
 	required string name = 2;
 }

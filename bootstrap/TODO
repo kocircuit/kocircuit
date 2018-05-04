@@ -1,4 +1,3 @@
-+ fix Reserve/Func naming in weaver/types.go and update .proto
 + proto fixtures in boot/types + test
 -------------------------
 * add size to: integer, floating

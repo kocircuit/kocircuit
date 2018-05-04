@@ -11,7 +11,7 @@ import (
 
 func init() {
 	RegisterEvalGateAt("", "WeaveFigure", new(WeaveFigure))
-	RegisterEvalGateAt("", "WeaveFunctional", new(WeaveFunctional))
+	RegisterEvalGateAt("", "WeaveTransform", new(WeaveTransform))
 	RegisterEvalGateAt("", "WeaveFunc", new(WeaveFunc))
 	RegisterEvalGateAt("", "WeaveOperator", new(WeaveOperator))
 }
@@ -70,23 +70,23 @@ func (bf WeaveFields) Deconstruct(span *Span) (Symbol, error) {
 }
 
 type WeaveFigure struct {
-	Int64      *int64           `ko:"name=int64"`
-	String     *string          `ko:"name=string"`
-	Bool       *bool            `ko:"name=bool"`
-	Float64    *float64         `ko:"name=float64"`
-	Functional *WeaveFunctional `ko:"name=functional"`
+	Int64     *int64          `ko:"name=int64"`
+	String    *string         `ko:"name=string"`
+	Bool      *bool           `ko:"name=bool"`
+	Float64   *float64        `ko:"name=float64"`
+	Transform *WeaveTransform `ko:"name=transform"`
 }
 
 func (fig *WeaveFigure) Play(*runtime.Context) *WeaveFigure {
 	return fig
 }
 
-type WeaveFunctional struct {
+type WeaveTransform struct {
 	Operator *WeaveOperator `ko:"name=operator"`
 	Func     *WeaveFunc     `ko:"name=func"`
 }
 
-func (w *WeaveFunctional) Play(*runtime.Context) *WeaveFunctional {
+func (w *WeaveTransform) Play(*runtime.Context) *WeaveTransform {
 	return w
 }
 

@@ -21,12 +21,12 @@ TestUnify() {
 	leftStructure: types.StructureType(fields0)
 	rightStructure: types.StructureType(fields1)
 	leftUnion: types.UnionType(
-		types.VarietyType(functional: "M1", fields: fields0)
-		types.VarietyType(functional: "M2", fields: fields1)
+		types.VarietyType(transform: "M1", fields: fields0)
+		types.VarietyType(transform: "M2", fields: fields1)
 	)
 	rightUnion: types.UnionType(
-		types.VarietyType(functional: "M1", fields: fields1)
-		types.VarietyType(functional: "M3", fields: fields0)
+		types.VarietyType(transform: "M1", fields: fields1)
+		types.VarietyType(transform: "M3", fields: fields0)
 	)
 	//
 	return: And(
@@ -71,7 +71,7 @@ expectUnifiedUnion() {
 			varieties: (
 				(
 					variety: (
-						functional: "M1"
+						transform: "M1"
 						fields: (
 							(name: "f1", type: (optional: (elemType: (integer: ()))))
 							(name: "f2", type: (optional: (elemType: (integer: ()))))
@@ -81,7 +81,7 @@ expectUnifiedUnion() {
 				)
 				(
 					variety: (
-						functional: "M3"
+						transform: "M3"
 						fields: (
 							(name: "f1", type: (integer: ()))
 							(name: "f2", type: (optional: (elemType: (integer: ()))))
@@ -90,7 +90,7 @@ expectUnifiedUnion() {
 				)
 				(
 					variety: (
-						functional: "M2"
+						transform: "M2"
 						fields: (
 							(name: "f1", type: (optional: (elemType: (integer: ()))))
 							(name: "f3", type: (series: (elemType: (integer: ()))))
