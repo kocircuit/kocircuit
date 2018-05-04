@@ -1,0 +1,13 @@
+import "proto/ko.bootstrap.source" as pb
+
+Proto(source?) {
+	return: pb.ProtoFixture(source: source).source
+}
+
+Marshal(source?) {
+	return: pb.MarshalSource(proto: source)
+}
+
+Unmarshal(blob?) {
+	return: pb.UnmarshalSource(bytes: blob)
+}

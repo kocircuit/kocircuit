@@ -4,6 +4,10 @@ package ko.bootstrap.source;
 
 option go_package = "proto";
 
+message Fixture {
+	required Source source = 1;
+}
+
 message Source {
 	required string file = 1;
 	required Position start = 2;
