@@ -1,9 +1,13 @@
 import "github.com/kocircuit/kocircuit/bootstrap/testutil"
 import "github.com/kocircuit/kocircuit/bootstrap/context/place" as ko_place
 import "github.com/kocircuit/kocircuit/bootstrap/types"
+import "github.com/kocircuit/kocircuit/bootstrap/integrate/shapers"
 
 TestAll() {
-	return: TestIntegrate()
+	return: And(
+		TestIntegrate()
+		shapers.TestProto()
+	)
 }
 
 // ko play github.com/kocircuit/kocircuit/bootstrap/integrate/TestIntegrate

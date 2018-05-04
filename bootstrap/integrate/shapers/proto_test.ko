@@ -1,14 +1,39 @@
 import "github.com/kocircuit/kocircuit/bootstrap/types"
-//XXX: link test
 
 // ko play github.com/kocircuit/kocircuit/bootstrap/integrate/shapers/TestProto
 TestProto() {
 	emptyType: types.EmptyType()
 	boolType: types.BoolType()
+	stringType: types.StringType()
 	integerType: types.IntegerType()
 	optionalIntegerType: types.OptionalType(integerType)
-	integerSeriesType: types.SeriesType(integerType)
 	emptySeriesType: types.SeriesType(emptyType)
+	stringSeriesType: types.SeriesType(stringType)
+	integerSeriesType: types.SeriesType(integerType)
+	f1: (
+		types.Field(name: "g1", type: boolType)
+		types.Field(name: "g2", type: stringType)
+	)
+	f2: (
+		types.Field(name: "g1", type: boolType)
+		types.Field(name: "g2", type: stringSeriesType)
+	)
+	s1: types.StructureType(f1)
+	s2: types.StructureType(f2)
+	transform: types.Operator(pkg: "pkg", name: "M")
+	v1: types.VarietyType(transform: transform, fields: f1)
+	v2: types.VarietyType(transform: transform, fields: f2)
+	fieldShapers12: (
+		Field(name: "g1", shaper: Identity(forType: boolType))
+		Field(
+			name: "g2"
+			shaper: AnySeries(
+				elemShaper: Identity(forType: stringType)
+				fromType: stringType
+				toType: stringSeriesType
+			)
+		)
+	)
 	return: And(
 		testShaperProto(Identity(forType: boolType))
 		testShaperProto(AnyEmpty(fromType: integerType, toType: emptyType))
@@ -49,8 +74,21 @@ TestProto() {
 				toType: integerSeriesType
 			)
 		)
-		//XXX
-	)
+		testShaperProto(
+			StructureStructure(
+				fieldShapers: fieldShapers12
+				fromType: s1
+				toType: s2
+			)
+		)
+		testShaperProto(
+			UnionUnion(
+				varietyShapers: Variety(transform: transform, fieldShapers: fieldShapers12)
+				fromType: types.UnionType(v1)
+				toType: types.UnionType(v2)
+			)
+		)
+	) // and
 }
 
 testShaperProto(shaper?) {
