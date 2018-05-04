@@ -27,7 +27,7 @@ func (m EvalEqualMacro) Doc() string {
 }
 
 func (EvalEqualMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	series := arg.(*StructSymbol).SelectMonadic().LiftToSeries(span)
+	series := arg.(*StructSymbol).LinkField("value", true).LiftToSeries(span)
 	for i := 1; i < len(series.Elem); i++ {
 		if !series.Elem[i-1].Equal(span, series.Elem[i]) {
 			return BasicFalse, nil, nil

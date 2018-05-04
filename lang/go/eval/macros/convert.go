@@ -200,7 +200,7 @@ func (EvalFloat64Macro) Invoke(span *Span, arg Arg) (returns Return, effect Effe
 // shared
 
 func convert(span *Span, arg Arg, to BasicType) (returns Return, effect Effect, err error) {
-	if x := arg.(*StructSymbol).SelectMonadic(); x != nil {
+	if x := arg.(*StructSymbol).LinkField("value", true); x != nil {
 		if basic, ok := x.(BasicSymbol); ok {
 			if converted, err := basic.ConvertTo(span, to); err != nil {
 				return nil, nil, err

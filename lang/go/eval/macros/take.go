@@ -63,7 +63,7 @@ func ExtractNamed(arg Arg, name string) Symbol {
 
 func ExtractMonadicOrNamed(arg Arg, name string) Symbol {
 	a := arg.(*StructSymbol)
-	if v := a.SelectMonadic(); !IsEmptySymbol(v) {
+	if v := a.LinkField("value", true); !IsEmptySymbol(v) {
 		return v
 	} else {
 		return a.Walk(name)

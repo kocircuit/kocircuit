@@ -5,7 +5,7 @@ import (
 )
 
 func ExtractMonadicNonEmptyIntegerSeries(span *Span, from *StructSymbol) (_ Symbols, signed bool, _ error) {
-	series := from.SelectMonadic().LiftToSeries(span)
+	series := from.LinkField("value", true).LiftToSeries(span)
 	if series.IsEmpty() {
 		return nil, false, span.Errorf(nil, "series is empty")
 	}

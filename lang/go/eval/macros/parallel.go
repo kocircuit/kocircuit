@@ -33,7 +33,7 @@ func (m EvalSequentialMacro) Doc() string {
 }
 
 func (EvalSequentialMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	a := arg.(*StructSymbol).SelectMonadic()
+	a := arg.(*StructSymbol).LinkField("value", true)
 	if vty, ok := a.(*VarietySymbol); !ok {
 		return nil, nil, span.Errorf(nil, "sequential cannot be applied to a non-variety %v", a)
 	} else {
@@ -93,7 +93,7 @@ func (m EvalParallelMacro) Doc() string {
 }
 
 func (EvalParallelMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	a := arg.(*StructSymbol).SelectMonadic()
+	a := arg.(*StructSymbol).LinkField("value", true)
 	if vty, ok := a.(*VarietySymbol); !ok {
 		return nil, nil, span.Errorf(nil, "parallel cannot be applied to a non-variety %v", a)
 	} else {

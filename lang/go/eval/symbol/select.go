@@ -14,24 +14,19 @@ func (ss *StructSymbol) GetMonadic() (Symbol, bool) {
 	return nil, false
 }
 
-func (ss *StructSymbol) SelectMonadic() Symbol {
-	for _, field := range ss.Field {
-		if field.Monadic {
-			return field.Value
+func (ss *StructSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+	return ss.LinkField(name, monadic), nil, nil
+}
+
+func (ss *StructSymbol) LinkField(name string, monadic bool) Symbol {
+	if found := ss.FindName(name); found != nil {
+		return found.Value
+	} else if monadic {
+		if found := ss.FindMonadic(); found != nil {
+			return found.Value
 		}
 	}
 	return EmptySymbol{}
-}
-
-func (ss *StructSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
-	if found := ss.FindName(name); found != nil {
-		return found.Value, nil, nil
-	} else if monadic {
-		if found := ss.FindMonadic(); found != nil {
-			return found.Value, nil, nil
-		}
-	}
-	return EmptySymbol{}, nil, nil
 }
 
 func (ss *StructSymbol) Select(span *Span, path Path) (_ Shape, _ Effect, err error) {

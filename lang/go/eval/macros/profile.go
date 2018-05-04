@@ -32,7 +32,7 @@ func (m EvalProfileMacro) Doc() string {
 }
 
 func (EvalProfileMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	a := arg.(*StructSymbol).SelectMonadic()
+	a := arg.(*StructSymbol).LinkField("value", true)
 	if vty, ok := a.(*VarietySymbol); !ok {
 		return nil, nil, span.Errorf(nil, "profile cannot be applied to a non-variety %v", vty)
 	} else {

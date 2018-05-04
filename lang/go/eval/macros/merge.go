@@ -29,7 +29,7 @@ func (m EvalMergeMacro) Doc() string {
 func (EvalMergeMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
 	// filter subseries that are not empty
 	ss := Symbols{}
-	for _, a := range arg.(*StructSymbol).SelectMonadic().LiftToSeries(span).Elem {
+	for _, a := range arg.(*StructSymbol).LinkField("value", true).LiftToSeries(span).Elem {
 		for _, e := range a.LiftToSeries(span).Elem {
 			if IsEmptySymbol(e) {
 				panic("o")

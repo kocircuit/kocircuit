@@ -41,7 +41,7 @@ func (m EvalSpinMacro) Help() string { return "Spin" }
 func (m EvalSpinMacro) Doc() string { return spinDoc }
 
 func (EvalSpinMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	if vty, ok := arg.(*StructSymbol).SelectMonadic().(*VarietySymbol); !ok {
+	if vty, ok := arg.(*StructSymbol).LinkField("value", true).(*VarietySymbol); !ok {
 		return nil, nil, span.Errorf(nil, "spin expects a variety, got %v", arg)
 	} else {
 		done := make(chan *waitResult, 1)
