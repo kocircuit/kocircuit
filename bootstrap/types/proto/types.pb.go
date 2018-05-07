@@ -25,6 +25,8 @@
 		Operator
 		Func
 		Optional
+		Alias
+		Refer
 */
 package proto
 
@@ -88,17 +90,23 @@ func (m *Address) GetName() string {
 }
 
 type Type struct {
-	Empty            *Empty     `protobuf:"bytes,1,opt,name=empty" json:"empty,omitempty"`
-	Bool             *Bool      `protobuf:"bytes,11,opt,name=bool" json:"bool,omitempty"`
-	String_          *String    `protobuf:"bytes,12,opt,name=string" json:"string,omitempty"`
-	Integer          *Integer   `protobuf:"bytes,13,opt,name=integer" json:"integer,omitempty"`
-	Floating         *Floating  `protobuf:"bytes,14,opt,name=floating" json:"floating,omitempty"`
-	Series           *Series    `protobuf:"bytes,21,opt,name=series" json:"series,omitempty"`
-	Structure        *Structure `protobuf:"bytes,22,opt,name=structure" json:"structure,omitempty"`
-	Union            *Union     `protobuf:"bytes,31,opt,name=union" json:"union,omitempty"`
-	Variety          *Variety   `protobuf:"bytes,32,opt,name=variety" json:"variety,omitempty"`
-	Optional         *Optional  `protobuf:"bytes,41,opt,name=optional" json:"optional,omitempty"`
-	XXX_unrecognized []byte     `json:"-"`
+	Empty    *Empty    `protobuf:"bytes,1,opt,name=empty" json:"empty,omitempty"`
+	Bool     *Bool     `protobuf:"bytes,11,opt,name=bool" json:"bool,omitempty"`
+	String_  *String   `protobuf:"bytes,12,opt,name=string" json:"string,omitempty"`
+	Integer  *Integer  `protobuf:"bytes,13,opt,name=integer" json:"integer,omitempty"`
+	Floating *Floating `protobuf:"bytes,14,opt,name=floating" json:"floating,omitempty"`
+	//
+	Series    *Series    `protobuf:"bytes,21,opt,name=series" json:"series,omitempty"`
+	Structure *Structure `protobuf:"bytes,22,opt,name=structure" json:"structure,omitempty"`
+	//
+	Union   *Union   `protobuf:"bytes,31,opt,name=union" json:"union,omitempty"`
+	Variety *Variety `protobuf:"bytes,32,opt,name=variety" json:"variety,omitempty"`
+	//
+	Optional *Optional `protobuf:"bytes,41,opt,name=optional" json:"optional,omitempty"`
+	//
+	Alias            *Alias `protobuf:"bytes,51,opt,name=alias" json:"alias,omitempty"`
+	Refer            *Refer `protobuf:"bytes,52,opt,name=refer" json:"refer,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Type) Reset()                    { *m = Type{} }
@@ -172,6 +180,20 @@ func (m *Type) GetVariety() *Variety {
 func (m *Type) GetOptional() *Optional {
 	if m != nil {
 		return m.Optional
+	}
+	return nil
+}
+
+func (m *Type) GetAlias() *Alias {
+	if m != nil {
+		return m.Alias
+	}
+	return nil
+}
+
+func (m *Type) GetRefer() *Refer {
+	if m != nil {
+		return m.Refer
 	}
 	return nil
 }
@@ -414,6 +436,48 @@ func (m *Optional) GetElemType() *Type {
 	return nil
 }
 
+type Alias struct {
+	Address          *Address `protobuf:"bytes,1,req,name=address" json:"address,omitempty"`
+	ElemType         *Type    `protobuf:"bytes,2,req,name=elemType" json:"elemType,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Alias) Reset()                    { *m = Alias{} }
+func (m *Alias) String() string            { return proto1.CompactTextString(m) }
+func (*Alias) ProtoMessage()               {}
+func (*Alias) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{17} }
+
+func (m *Alias) GetAddress() *Address {
+	if m != nil {
+		return m.Address
+	}
+	return nil
+}
+
+func (m *Alias) GetElemType() *Type {
+	if m != nil {
+		return m.ElemType
+	}
+	return nil
+}
+
+type Refer struct {
+	Address          *Address `protobuf:"bytes,1,req,name=address" json:"address,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Refer) Reset()                    { *m = Refer{} }
+func (m *Refer) String() string            { return proto1.CompactTextString(m) }
+func (*Refer) ProtoMessage()               {}
+func (*Refer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{18} }
+
+func (m *Refer) GetAddress() *Address {
+	if m != nil {
+		return m.Address
+	}
+	return nil
+}
+
 func init() {
 	proto1.RegisterType((*Fixture)(nil), "ko.bootstrap.types.Fixture")
 	proto1.RegisterType((*Address)(nil), "ko.bootstrap.types.Address")
@@ -432,6 +496,8 @@ func init() {
 	proto1.RegisterType((*Operator)(nil), "ko.bootstrap.types.Operator")
 	proto1.RegisterType((*Func)(nil), "ko.bootstrap.types.Func")
 	proto1.RegisterType((*Optional)(nil), "ko.bootstrap.types.Optional")
+	proto1.RegisterType((*Alias)(nil), "ko.bootstrap.types.Alias")
+	proto1.RegisterType((*Refer)(nil), "ko.bootstrap.types.Refer")
 }
 func (m *Fixture) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -627,6 +693,30 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n11
+	}
+	if m.Alias != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Alias.Size()))
+		n12, err := m.Alias.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	if m.Refer != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Refer.Size()))
+		n13, err := m.Refer.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -834,11 +924,11 @@ func (m *Field) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Type.Size()))
-		n12, err := m.Type.MarshalTo(dAtA[i:])
+		n14, err := m.Type.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n14
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -900,11 +990,11 @@ func (m *Variety) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Transform.Size()))
-		n13, err := m.Transform.MarshalTo(dAtA[i:])
+		n15, err := m.Transform.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n13
+		i += n15
 	}
 	if len(m.Fields) > 0 {
 		for _, msg := range m.Fields {
@@ -943,21 +1033,21 @@ func (m *Transform) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Operator.Size()))
-		n14, err := m.Operator.MarshalTo(dAtA[i:])
+		n16, err := m.Operator.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n14
+		i += n16
 	}
 	if m.Func != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Func.Size()))
-		n15, err := m.Func.MarshalTo(dAtA[i:])
+		n17, err := m.Func.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n17
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1060,11 +1150,89 @@ func (m *Optional) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ElemType.Size()))
-		n16, err := m.ElemType.MarshalTo(dAtA[i:])
+		n18, err := m.ElemType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n18
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Alias) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Alias) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Address == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Address.Size()))
+		n19, err := m.Address.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	if m.ElemType == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ElemType.Size()))
+		n20, err := m.ElemType.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Refer) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Refer) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Address == nil {
+		return 0, new(proto1.RequiredNotSetError)
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Address.Size()))
+		n21, err := m.Address.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1152,6 +1320,14 @@ func (m *Type) Size() (n int) {
 	}
 	if m.Optional != nil {
 		l = m.Optional.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Alias != nil {
+		l = m.Alias.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Refer != nil {
+		l = m.Refer.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1342,6 +1518,36 @@ func (m *Optional) Size() (n int) {
 	_ = l
 	if m.ElemType != nil {
 		l = m.ElemType.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Alias) Size() (n int) {
+	var l int
+	_ = l
+	if m.Address != nil {
+		l = m.Address.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ElemType != nil {
+		l = m.ElemType.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Refer) Size() (n int) {
+	var l int
+	_ = l
+	if m.Address != nil {
+		l = m.Address.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1928,6 +2134,72 @@ func (m *Type) Unmarshal(dAtA []byte) error {
 				m.Optional = &Optional{}
 			}
 			if err := m.Optional.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 51:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Alias", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Alias == nil {
+				m.Alias = &Alias{}
+			}
+			if err := m.Alias.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 52:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Refer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Refer == nil {
+				m.Refer = &Refer{}
+			}
+			if err := m.Refer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3143,6 +3415,221 @@ func (m *Optional) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *Alias) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Alias: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Alias: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Address == nil {
+				m.Address = &Address{}
+			}
+			if err := m.Address.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElemType", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ElemType == nil {
+				m.ElemType = &Type{}
+			}
+			if err := m.ElemType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000002)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+	if hasFields[0]&uint64(0x00000002) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Refer) Unmarshal(dAtA []byte) error {
+	var hasFields [1]uint64
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Refer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Refer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Address == nil {
+				m.Address = &Address{}
+			}
+			if err := m.Address.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+			hasFields[0] |= uint64(0x00000001)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return new(proto1.RequiredNotSetError)
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3251,40 +3738,43 @@ var (
 func init() { proto1.RegisterFile("types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 547 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0xcb, 0x8e, 0xd3, 0x3c,
-	0x14, 0xc7, 0xbf, 0x64, 0xd2, 0xa6, 0x39, 0xfd, 0x40, 0xc8, 0x12, 0x60, 0x6e, 0xa5, 0xf2, 0x6a,
-	0x90, 0x46, 0x19, 0xa8, 0xb8, 0x49, 0x48, 0x03, 0x8c, 0x44, 0xa5, 0x59, 0x21, 0x99, 0xc2, 0x82,
-	0x5d, 0xa6, 0x75, 0xab, 0x68, 0xd2, 0x38, 0xb2, 0x1d, 0x44, 0xde, 0x84, 0x0d, 0xef, 0xc3, 0x92,
-	0x47, 0x40, 0xe5, 0x45, 0x90, 0x2f, 0x49, 0x11, 0x24, 0x43, 0x76, 0x91, 0xf3, 0x3b, 0x8e, 0xf3,
-	0x3b, 0xff, 0x63, 0x18, 0xab, 0xaa, 0x60, 0x32, 0x2e, 0x04, 0x57, 0x1c, 0xa1, 0x0b, 0x1e, 0x9f,
-	0x73, 0xae, 0xa4, 0x12, 0x49, 0x11, 0x9b, 0x37, 0xe4, 0x19, 0x84, 0xf3, 0xf4, 0xb3, 0x2a, 0x05,
-	0x43, 0x47, 0x10, 0xe8, 0x35, 0xec, 0x4d, 0xfd, 0xc3, 0xf1, 0x0c, 0xc7, 0x7f, 0xd3, 0xf1, 0xa2,
-	0x2a, 0x18, 0x35, 0x14, 0x39, 0x86, 0xf0, 0xf5, 0x6a, 0x25, 0x98, 0x94, 0xe8, 0x1a, 0x1c, 0x14,
-	0x17, 0x1b, 0x53, 0x17, 0x51, 0xfd, 0x88, 0x10, 0x04, 0x79, 0xb2, 0x65, 0xd8, 0x37, 0x4b, 0xe6,
-	0x99, 0x7c, 0x0d, 0x20, 0xd0, 0xf5, 0xe8, 0x18, 0x06, 0x6c, 0x5b, 0xa8, 0x0a, 0x7b, 0x53, 0xef,
-	0x70, 0x3c, 0xbb, 0xd5, 0xf6, 0xa1, 0x37, 0x1a, 0xa0, 0x96, 0xd3, 0x07, 0x3b, 0xe7, 0x3c, 0xc3,
-	0x63, 0xc3, 0xb7, 0x1e, 0xec, 0x94, 0xf3, 0x8c, 0x1a, 0x0a, 0xcd, 0x60, 0x28, 0x95, 0x48, 0xf3,
-	0x0d, 0xfe, 0xdf, 0xf0, 0xb7, 0xdb, 0xf8, 0x77, 0x86, 0xa0, 0x8e, 0x44, 0x4f, 0x20, 0x4c, 0x73,
-	0xc5, 0x36, 0x4c, 0xe0, 0x2b, 0xa6, 0xe8, 0x4e, 0x5b, 0xd1, 0x99, 0x45, 0x68, 0xcd, 0xa2, 0xe7,
-	0x30, 0x5a, 0x67, 0x3c, 0x51, 0xfa, 0x63, 0x57, 0x4d, 0xdd, 0xdd, 0xb6, 0xba, 0xb9, 0x63, 0x68,
-	0x43, 0x9b, 0x43, 0x32, 0x91, 0x32, 0x89, 0xaf, 0x5f, 0x72, 0x48, 0x43, 0x50, 0x47, 0xa2, 0x17,
-	0x10, 0x49, 0x25, 0xca, 0xa5, 0x6e, 0x16, 0xbe, 0x61, 0xca, 0xee, 0x75, 0xfc, 0x9b, 0x85, 0xe8,
-	0x9e, 0xd7, 0xd2, 0xcb, 0x3c, 0xe5, 0x39, 0xbe, 0xdf, 0x2d, 0xfd, 0xbd, 0x06, 0xa8, 0xe5, 0xb4,
-	0x92, 0x4f, 0x89, 0x48, 0x99, 0xaa, 0xf0, 0xb4, 0x5b, 0xc9, 0x07, 0x8b, 0xd0, 0x9a, 0xd5, 0x4a,
-	0x78, 0xa1, 0x52, 0x9e, 0x27, 0x19, 0x7e, 0xd0, 0xad, 0xe4, 0xad, 0x63, 0x68, 0x43, 0x93, 0x10,
-	0x06, 0xa6, 0xeb, 0x64, 0x08, 0x81, 0x6e, 0x27, 0x19, 0xc1, 0xd0, 0xb6, 0x89, 0x44, 0x10, 0x3a,
-	0xf7, 0x04, 0x60, 0x54, 0xeb, 0x24, 0x27, 0x30, 0xb4, 0x8a, 0xd0, 0x63, 0x18, 0xb1, 0x8c, 0x6d,
-	0x17, 0x36, 0xbe, 0x07, 0x97, 0xc6, 0xb7, 0x21, 0xc9, 0x09, 0x44, 0x8d, 0x2b, 0xf4, 0x08, 0x86,
-	0xeb, 0x94, 0x65, 0x2b, 0xe9, 0x36, 0x68, 0x35, 0x34, 0xd7, 0x04, 0x75, 0x20, 0x39, 0x83, 0x81,
-	0x59, 0x68, 0xe2, 0xee, 0xed, 0xe3, 0xde, 0x4c, 0x93, 0xdf, 0x6b, 0x9a, 0x5e, 0xc2, 0xc0, 0xd8,
-	0x47, 0x4f, 0x21, 0xb2, 0x2a, 0x75, 0x36, 0xfe, 0xf5, 0x2b, 0x7b, 0x94, 0x54, 0x10, 0xba, 0x5e,
-	0xe8, 0x9c, 0x28, 0x91, 0xe4, 0x72, 0xcd, 0xc5, 0xd6, 0x0d, 0x73, 0x6b, 0x4e, 0x16, 0x35, 0x44,
-	0xf7, 0xfc, 0x6f, 0x1a, 0xfc, 0xbe, 0x1a, 0x24, 0x44, 0xcd, 0x56, 0xb6, 0xff, 0x4c, 0x24, 0x8a,
-	0x0b, 0x37, 0xdf, 0x1d, 0xfd, 0xb7, 0x0c, 0x6d, 0x68, 0x2d, 0x6c, 0x5d, 0xe6, 0x4b, 0xec, 0x77,
-	0x4f, 0xf9, 0xbc, 0xcc, 0x97, 0xd4, 0x50, 0xe4, 0x21, 0x8c, 0xea, 0x3d, 0x7a, 0xde, 0x3f, 0x47,
-	0x10, 0xe8, 0xfa, 0x9e, 0xf4, 0x2b, 0xbd, 0xbf, 0x4d, 0xe6, 0x1f, 0xe9, 0xf2, 0xfb, 0xa5, 0xeb,
-	0xf4, 0xe6, 0xb7, 0xdd, 0xc4, 0xfb, 0xbe, 0x9b, 0x78, 0x3f, 0x76, 0x13, 0xef, 0xcb, 0xcf, 0xc9,
-	0x7f, 0x1f, 0x07, 0xe6, 0x1a, 0xfe, 0x15, 0x00, 0x00, 0xff, 0xff, 0xa5, 0xd5, 0x78, 0xa2, 0x94,
-	0x05, 0x00, 0x00,
+	// 607 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x95, 0xdf, 0x6e, 0xd3, 0x30,
+	0x14, 0xc6, 0x49, 0x96, 0x34, 0xcd, 0x29, 0x20, 0x64, 0x09, 0x30, 0xff, 0xca, 0xe4, 0xab, 0x21,
+	0x4d, 0x1d, 0x8c, 0xf1, 0x47, 0x42, 0x1a, 0x6c, 0x12, 0x95, 0x76, 0x85, 0x64, 0x06, 0x17, 0xdc,
+	0x65, 0xad, 0x5b, 0x45, 0x4b, 0xe3, 0xc8, 0x71, 0x11, 0x7d, 0x13, 0x1e, 0x89, 0x4b, 0x1e, 0x01,
+	0x95, 0x07, 0x01, 0x1d, 0xdb, 0x49, 0x99, 0x48, 0x46, 0xc4, 0x5d, 0x94, 0xfe, 0x3e, 0xfb, 0xe4,
+	0x9c, 0xef, 0x3b, 0x85, 0x81, 0x5e, 0x15, 0xa2, 0x1c, 0x15, 0x4a, 0x6a, 0x49, 0xc8, 0xb9, 0x1c,
+	0x9d, 0x49, 0xa9, 0x4b, 0xad, 0x92, 0x62, 0x64, 0x7e, 0x61, 0x2f, 0x20, 0x1a, 0xa7, 0x5f, 0xf4,
+	0x52, 0x09, 0xb2, 0x0b, 0x01, 0xbe, 0xa3, 0xde, 0xb6, 0xbf, 0x33, 0xd8, 0xa7, 0xa3, 0xbf, 0xe9,
+	0xd1, 0xe9, 0xaa, 0x10, 0xdc, 0x50, 0x6c, 0x0f, 0xa2, 0xa3, 0xe9, 0x54, 0x89, 0xb2, 0x24, 0x37,
+	0x60, 0xab, 0x38, 0x9f, 0x1b, 0x5d, 0xcc, 0xf1, 0x91, 0x10, 0x08, 0xf2, 0x64, 0x21, 0xa8, 0x6f,
+	0x5e, 0x99, 0x67, 0xf6, 0x2b, 0x80, 0x00, 0xf5, 0x64, 0x0f, 0x42, 0xb1, 0x28, 0xf4, 0x8a, 0x7a,
+	0xdb, 0xde, 0xce, 0x60, 0xff, 0x4e, 0xd3, 0x45, 0x6f, 0x11, 0xe0, 0x96, 0xc3, 0xc2, 0xce, 0xa4,
+	0xcc, 0xe8, 0xc0, 0xf0, 0x8d, 0x85, 0x1d, 0x4b, 0x99, 0x71, 0x43, 0x91, 0x7d, 0xe8, 0x95, 0x5a,
+	0xa5, 0xf9, 0x9c, 0x5e, 0x35, 0xfc, 0xdd, 0x26, 0xfe, 0xbd, 0x21, 0xb8, 0x23, 0xc9, 0x33, 0x88,
+	0xd2, 0x5c, 0x8b, 0xb9, 0x50, 0xf4, 0x9a, 0x11, 0xdd, 0x6b, 0x12, 0x9d, 0x58, 0x84, 0x57, 0x2c,
+	0x79, 0x09, 0xfd, 0x59, 0x26, 0x13, 0x8d, 0x97, 0x5d, 0x37, 0xba, 0xfb, 0x4d, 0xba, 0xb1, 0x63,
+	0x78, 0x4d, 0x9b, 0x22, 0x85, 0x4a, 0x45, 0x49, 0x6f, 0x5e, 0x52, 0xa4, 0x21, 0xb8, 0x23, 0xc9,
+	0x2b, 0x88, 0x4b, 0xad, 0x96, 0x13, 0x1c, 0x16, 0xbd, 0x65, 0x64, 0x0f, 0x5a, 0xbe, 0xcd, 0x42,
+	0x7c, 0xc3, 0x63, 0xd3, 0x97, 0x79, 0x2a, 0x73, 0xfa, 0xb0, 0xbd, 0xe9, 0x1f, 0x10, 0xe0, 0x96,
+	0xc3, 0x96, 0x7c, 0x4e, 0x54, 0x2a, 0xf4, 0x8a, 0x6e, 0xb7, 0xb7, 0xe4, 0xa3, 0x45, 0x78, 0xc5,
+	0x62, 0x4b, 0x64, 0xa1, 0x53, 0x99, 0x27, 0x19, 0x7d, 0xd4, 0xde, 0x92, 0x77, 0x8e, 0xe1, 0x35,
+	0x8d, 0x15, 0x26, 0x59, 0x9a, 0x94, 0xf4, 0x69, 0x7b, 0x85, 0x47, 0x08, 0x70, 0xcb, 0xa1, 0x40,
+	0x89, 0x99, 0x50, 0xf4, 0xa0, 0x5d, 0xc0, 0x11, 0xe0, 0x96, 0x63, 0x11, 0x84, 0xc6, 0x57, 0xac,
+	0x07, 0x01, 0x1a, 0x86, 0xf5, 0xa1, 0x67, 0x8d, 0xc0, 0x62, 0x88, 0xdc, 0x74, 0x19, 0x40, 0xbf,
+	0x1a, 0x18, 0x3b, 0x84, 0x9e, 0x1d, 0x02, 0x39, 0x80, 0xbe, 0xc8, 0xc4, 0xe2, 0xd4, 0x06, 0x64,
+	0xeb, 0xd2, 0x80, 0xd4, 0x24, 0x3b, 0x84, 0xb8, 0x9e, 0x06, 0x79, 0x02, 0xbd, 0x59, 0x2a, 0xb2,
+	0x69, 0xe9, 0x0e, 0x68, 0x2c, 0x78, 0x8c, 0x04, 0x77, 0x20, 0x3b, 0x81, 0xd0, 0xbc, 0xa8, 0x03,
+	0xe5, 0x6d, 0x02, 0x55, 0xe7, 0xd5, 0xef, 0x94, 0xd7, 0xd7, 0x10, 0x9a, 0xf9, 0x92, 0xe7, 0x10,
+	0xdb, 0x61, 0xa1, 0xfb, 0xfe, 0xf5, 0x29, 0x1b, 0x94, 0xad, 0x20, 0x72, 0xd3, 0x46, 0x27, 0x6a,
+	0x95, 0xe4, 0xe5, 0x4c, 0xaa, 0x85, 0x5b, 0x17, 0x8d, 0x4e, 0x3c, 0xad, 0x20, 0xbe, 0xe1, 0xff,
+	0x68, 0x83, 0xdf, 0xb5, 0x0d, 0x25, 0xc4, 0xf5, 0x51, 0xd6, 0x61, 0x42, 0x25, 0x5a, 0x2a, 0xb7,
+	0x41, 0x5a, 0x1c, 0x66, 0x19, 0x5e, 0xd3, 0xd8, 0xb0, 0xd9, 0x32, 0x9f, 0x50, 0xbf, 0x7d, 0x8f,
+	0x8c, 0x97, 0xf9, 0x84, 0x1b, 0x8a, 0x3d, 0x86, 0x7e, 0x75, 0x46, 0xc7, 0x0d, 0xb7, 0x0b, 0x01,
+	0xea, 0x3b, 0xd2, 0x6f, 0xf0, 0x7c, 0xe7, 0xfd, 0x8b, 0xee, 0xf2, 0x3b, 0xba, 0x4b, 0x43, 0x68,
+	0x02, 0x81, 0x59, 0x4d, 0xec, 0x2e, 0x76, 0xea, 0xc6, 0xac, 0xba, 0x75, 0xcd, 0x2b, 0xf6, 0xc2,
+	0xad, 0x7e, 0xe7, 0x5b, 0x0f, 0x21, 0x34, 0xa9, 0xfa, 0xcf, 0x5b, 0x8f, 0x6f, 0x7f, 0x5b, 0x0f,
+	0xbd, 0xef, 0xeb, 0xa1, 0xf7, 0x63, 0x3d, 0xf4, 0xbe, 0xfe, 0x1c, 0x5e, 0xf9, 0x14, 0x9a, 0xbf,
+	0xa7, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xae, 0xf7, 0x1f, 0x25, 0xac, 0x06, 0x00, 0x00,
 }

@@ -19,11 +19,17 @@ message Type {
 	optional String string = 12;
 	optional Integer integer = 13;
 	optional Floating floating = 14;
+	//
 	optional Series series = 21;
 	optional Structure structure = 22;
+	//
 	optional Union union = 31;
 	optional Variety variety = 32;
+	//
 	optional Optional optional = 41;
+	// 
+	optional Alias alias = 51;
+	optional Refer refer = 52;
 }
 
 message Empty {}
@@ -75,4 +81,13 @@ message Func {
 
 message Optional {
 	required Type elemType = 1;
+}
+
+message Alias {
+	required Address address = 1;
+	required Type elemType = 2;
+}
+
+message Refer {
+	required Address address = 1;
 }
