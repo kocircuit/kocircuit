@@ -1,7 +1,3 @@
-Address(pkg, name) {
-	return: (pkg: String(pkg), name: String(name))
-}
-
 AliasType(address, type) {
 	return: ( // type
 		alias: ( // alias type

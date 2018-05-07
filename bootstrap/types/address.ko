@@ -1,0 +1,3 @@
+Address(pkg, name) {
+	return: (pkg: String(pkg), name: String(name))
+}

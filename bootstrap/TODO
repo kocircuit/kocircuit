@@ -1,6 +1,4 @@
-* AddressSet with Add/Find
-	* can Set be implemented as a macro?
-* unifyingCtx: span + place + currently_unifying_pairs
+* implement red-black trees
 
 * AliasType: not allowed in unify (rename somehow as not type)
 	* unify returns a non-alias type (e.g. refer) + generated types:

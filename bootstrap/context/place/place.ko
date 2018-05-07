@@ -2,6 +2,14 @@ import "github.com/kocircuit/kocircuit/lib/strings"
 
 import "github.com/kocircuit/kocircuit/bootstrap/context/span" as ko_span
 
+_Place(parent, span, step) {
+	return: (
+		parent: parent
+		span: Expect(span)
+		step: step
+	)
+}
+
 Root(span?) {
 	return: _Place(span: span)
 }
@@ -30,12 +38,4 @@ PathTo(place?) {
 
 appendPathToParent(parent?, step) {
 	return: Merge(PathTo(parent), step)
-}
-
-_Place(parent, span, step) {
-	return: (
-		parent: parent
-		span: Expect(span)
-		step: step
-	)
 }

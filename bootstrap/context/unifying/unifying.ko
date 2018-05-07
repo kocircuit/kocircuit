@@ -1,0 +1,66 @@
+import "github.com/kocircuit/kocircuit/lib/strings"
+import "github.com/kocircuit/kocircuit/bootstrap/context/span" as ko_span
+
+Ctx(parent, span, step, unifying) {
+	return: (
+		parent: parent
+		span: Expect(span)
+		step: String(step)
+		unifying: unifying // sequence of (left, right) address pairs
+	)
+}
+
+// Root
+Root(span?) {
+	return: Ctx(span: span, step: "")
+}
+
+// Walk
+Walk(ctx, step) {
+	return: Ctx(
+		span: ctx.span
+		parent: ctx
+		step: String(step)
+		unifying: ctx.unifying
+	)
+}
+
+AddUnifyingAddressPair(ctx, leftAddress, rightAddress) {
+	return: Ctx(
+		span: ctx.span
+		parent: ctx
+		step: String(step)
+		unifying: Merge(ctx.unifying, (left: leftAddress, right: rightAddress))//XXX: use red-black trees
+	)
+}
+
+IsUnifyingAddressPair(ctx, leftAddress, rightAddress) {
+	return: When(
+		have: redblack.FindXXX(XXX) //XXX: need series.Find
+		then: Return[pass: true]
+		else: Return[pass: false]
+	)
+}
+
+// Error
+Error(ctx, error) {
+	return: ko_span.Error(
+		span: ctx.span
+		error: (
+			typeError: Expect(error)
+			ctx: strings.Join(string: PathTo(ctx), delimiter: ".")
+		)
+	)
+}
+
+PathTo(ctx?) {
+	return: When(
+		have: ctx.parent
+		then: appendPathToParent[step: ctx.step]
+		else: Return[ctx.step]
+	)
+}
+
+appendPathToParent(parent?, step) {
+	return: Merge(PathTo(parent), step)
+}
