@@ -14,16 +14,11 @@ message Program {
 }
 
 message Func {
-	required Address address = 1;
+	required types.Address address = 1;
 	required types.Type arg = 2;
 	required types.Type returns = 3;
 	repeated Step step = 4;
 	optional source.Source source = 5;
-}
-
-message Address {
-	required string pkg = 1;
-	required string name = 2;
 }
 
 message Step {
@@ -93,6 +88,6 @@ message Figure {
 }
 
 message Transform {
-	optional Address operator = 1;
-	optional Address func = 2;
+	optional types.Address operator = 1;
+	optional types.Address func = 2;
 }
