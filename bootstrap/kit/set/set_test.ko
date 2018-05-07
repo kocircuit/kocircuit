@@ -1,0 +1,15 @@
+// ko play github.com/kocircuit/kocircuit/bootstrap/kit/set/TestSet
+TestSet() {
+	set0: Add(set: Empty(), Eq: testEq, elem: 1)
+	set1: Add(set: set0, Eq: testEq, elem: 2)
+	set2: Add(set: set1, Eq: testEq, elem: 1)
+	set3: Add(set: set2, Eq: testEq, elem: 3)
+	return: Equal(
+		Find(set: set3, Eq: testEq, query: 2)
+		2
+	)
+}
+
+testEq(left, right) {
+	return: Equal(left, right)
+}

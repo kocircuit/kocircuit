@@ -1,8 +1,25 @@
-+ proto fixtures in boot/types + test
+* AddressSet with Add/Find
+	* can Set be implemented as a macro?
+* unifyingCtx: span + place + currently_unifying_pairs
+
+* AliasType: not allowed in unify (rename somehow as not type)
+	* unify returns a non-alias type (e.g. refer) + generated types:
+		(unified: XXX, generated: AliasTypes)
+
+* unify remove NamedType -> add ReferType
+
+
+
+
+
+
+
 -------------------------
 * add size to: integer, floating
 * add value to: integer, floating, string, bool
 
 * attach Panic to place objects
 * attach Panic to span objects
+
+* /set -> /series/set
 * /integer -> /integers

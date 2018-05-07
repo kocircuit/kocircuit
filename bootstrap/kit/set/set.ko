@@ -1,0 +1,30 @@
+mkSet(head, rest) {
+	return: (head: Expect(head), rest: rest)
+}
+
+// Find returns either an empty value or the element in set matching query via Eq.
+// Eq(left, right) -> bool.
+Find(set, Eq, query?) {
+	return: When(
+		have: set
+		then: findInNonEmpty[Eq: Eq, query: query]
+	)
+}
+
+findInNonEmpty(nonEmptySet?, Eq, query) {
+	return: Branch(
+		if: Eq(left: nonEmptySet.head, right: query)
+		then: Return[nonEmptySet.head]
+		else: Find[set: nonEmptySet.rest, Eq: Eq, query: query]
+	)
+}
+
+// Add returns a new set.
+Add(set, Eq, elem?) {
+	found: Find(set: set, Eq: Eq, query: elem)
+	return: When(
+		have: found
+		then: Return[pass: set]
+		else: mkSet[head: elem, rest: set]
+	)
+}
