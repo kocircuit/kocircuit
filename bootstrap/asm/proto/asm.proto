@@ -8,6 +8,11 @@ import "github.com/kocircuit/kocircuit/bootstrap/types/proto/types.proto";
 
 option go_package = "proto";
 
+message Program {
+	repeated Func func = 1;
+	// repeated Service service = 2;
+}
+
 message Func {
 	required Address address = 1;
 	required types.Type arg = 2;

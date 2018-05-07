@@ -1,0 +1,29 @@
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabSucc
+CodelabSucc() {
+	one: (parity: true)
+	two: Succ(one)
+	return: Succ(two)
+}
+
+Succ(n?) {
+	return: Branch(
+		if: n.parity
+		then: succOdd[tail: n.tail]
+		else: succEven[tail: n.tail]
+	)
+}
+
+succOdd(tail) {
+	return: (
+		parity: false
+		tail: When(have: tail, then: Succ, else: one)
+	)
+}
+
+one() {
+	return: (parity: true)
+}
+
+succEven(tail) {
+	return: (parity: true, tail: tail)
+}
