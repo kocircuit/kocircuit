@@ -85,7 +85,7 @@ message Optional {
 
 message Alias {
 	required Address address = 1;
-	required Type elemType = 2;
+	required Type type = 2;
 }
 
 message Refer {

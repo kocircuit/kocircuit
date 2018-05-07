@@ -1,0 +1,19 @@
+
+ReferType(address?) {
+	return: ( // type
+		refer: ( // refer type
+			address: Expect(address)
+		)
+	)
+}
+
+WhenRefer(type?, then, else) {
+	return: When(
+		have: All(refer: Expect(type).refer)
+		then: then, else: else
+	)
+}
+
+ReferTypeAddress(referType?) {
+	return: referType.refer.address
+}

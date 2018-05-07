@@ -1,0 +1,27 @@
+Address(pkg, name) {
+	return: (pkg: String(pkg), name: String(name))
+}
+
+AliasType(address, type) {
+	return: ( // type
+		alias: ( // alias type
+			address: Expect(address)
+			type: Expect(type)
+		)
+	)
+}
+
+WhenAlias(type?, then, else) {
+	return: When(
+		have: All(alias: Expect(type).alias)
+		then: then, else: else
+	)
+}
+
+AliasTypeAddress(aliasType?) {
+	return: aliasType.alias.address
+}
+
+AliasTypeType(aliasType?) {
+	return: aliasType.type.address
+}

@@ -8,6 +8,7 @@ TestProto() {
 		VarietyType(transform: Func(pkg: "pkg", name: "func"), fields: fields)
 		VarietyType(transform: Operator(pkg: "pkg", name: "operator"), fields: fields)
 	)
+	address: Address(pkg: "pkg", name: "name")
 	return: And(
 		testTypeProto(EmptyType())
 		testTypeProto(BoolType())
@@ -18,6 +19,8 @@ TestProto() {
 		testTypeProto(StructureType(fields))
 		testTypeProto(UnionType(varieties))
 		testTypeProto(OptionalType(UnionType(varieties)))
+		testTypeProto(ReferType(address: address))
+		testTypeProto(AliasType(address: address, type: StringType()))
 	)
 }
 
