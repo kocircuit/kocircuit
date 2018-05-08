@@ -45,7 +45,7 @@ optional types and map types. This type system is already familiar to most progr
 a [high-level intermediate representation](https://github.com/kocircuit/kocircuit/blob/master/bootstrap/asm/proto/asm.proto) (IR) which can be used to code-generate an actual implementation in
 any language (e.g. Go, Java, C++, etc.) with relatively little effort.
 The IR produced by the Ko compiler is a collection of functions in SSA form,
-with deep (type annotations)[https://github.com/kocircuit/kocircuit/blob/master/bootstrap/types/proto/types.proto] everywhere.
+with deep [type annotations](https://github.com/kocircuit/kocircuit/blob/master/bootstrap/types/proto/types.proto) everywhere.
 
 * __Integrations__. The Ko interpreter, being built on top of Go, can
 gain access to any technology available in Go by binding dynamically to it
