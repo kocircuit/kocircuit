@@ -11,10 +11,42 @@ import (
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
+type keyValues []*keyValue
+
+func (kvs keyValues) Find(span *Span, key Symbol) *keyValue {
+	for _, kv := range kvs {
+		if key.Equal(span, kv.key) {
+			return kv
+		}
+	}
+	return nil
+}
+
+func (kvs keyValues) Remove(span *Span, key Symbol) keyValues {
+	filtered := make(keyValues, 0, len(kvs))
+	for _, kv := range kvs {
+		if !key.Equal(span, kv.key) {
+			filtered = append(filtered, kv)
+		}
+	}
+	return filtered
+}
+
+func (kvs keyValues) Add(span *Span, key, value Symbol) keyValues {
+	updated := make(keyValues, 0, len(kvs)+1)
+	for _, kv := range kvs {
+		if !key.Equal(span, kv.key) {
+			updated = append(updated, kv)
+		}
+	}
+	updated = append(updated, &keyValue{key: key, value: value})
+	return updated
+}
+
 type memory struct {
 	origin *Span
 	sync.Mutex
-	seen map[ID]*keyValue
+	seen map[ID]keyValues
 }
 
 type keyValue struct {
@@ -23,7 +55,7 @@ type keyValue struct {
 }
 
 func newMemory(origin *Span) *memory {
-	return &memory{origin: origin, seen: map[ID]*keyValue{}}
+	return &memory{origin: origin, seen: map[ID]keyValues{}}
 }
 
 func (m *memory) ID() ID {
@@ -34,13 +66,17 @@ func (m *memory) Remember(span *Span, key, value Symbol) Symbol {
 	m.Lock()
 	defer m.Unlock()
 	keyHash := key.Hash(span)
-	old := m.seen[keyHash]
+	oldKeyValues := m.seen[keyHash]
 	if IsEmptySymbol(value) {
-		delete(m.seen, keyHash)
+		if u := oldKeyValues.Remove(span, key); len(u) == 0 {
+			delete(m.seen, keyHash)
+		} else {
+			m.seen[keyHash] = u
+		}
 	} else {
-		m.seen[keyHash] = &keyValue{key: key, value: value}
+		m.seen[keyHash] = oldKeyValues.Add(span, key, value)
 	}
-	if old == nil {
+	if old := oldKeyValues.Find(span, key); old == nil {
 		return EmptySymbol{}
 	} else {
 		return old.value
@@ -50,26 +86,29 @@ func (m *memory) Remember(span *Span, key, value Symbol) Symbol {
 func (m *memory) Recall(span *Span, key Symbol) Symbol {
 	m.Lock()
 	defer m.Unlock()
-	if keyValue, found := m.seen[key.Hash(span)]; found {
-		return keyValue.value
-	} else {
-		return EmptySymbol{}
+	if keyValues, found := m.seen[key.Hash(span)]; found {
+		if kv := keyValues.Find(span, key); kv != nil {
+			return kv.value
+		}
 	}
+	return EmptySymbol{}
 }
 
 func (m *memory) Flush(span *Span) (Symbol, error) {
 	m.Lock()
 	defer m.Unlock()
 	kvElems := make(Symbols, 0, len(m.seen))
-	for _, kv := range m.seen {
-		kvElems = append(kvElems,
-			MakeStructSymbol(
-				FieldSymbols{
-					&FieldSymbol{Name: "key", Value: kv.key},
-					&FieldSymbol{Name: "value", Value: kv.value},
-				},
-			),
-		)
+	for _, kvs := range m.seen {
+		for _, kv := range kvs {
+			kvElems = append(kvElems,
+				MakeStructSymbol(
+					FieldSymbols{
+						&FieldSymbol{Name: "key", Value: kv.key},
+						&FieldSymbol{Name: "value", Value: kv.value},
+					},
+				),
+			)
+		}
 	}
 	return MakeSeriesSymbol(span, kvElems)
 }
