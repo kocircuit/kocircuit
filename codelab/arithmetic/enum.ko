@@ -1,0 +1,17 @@
+// Functional identities can be used as opaque unique constants.
+// In the example below, the functions Red and Black are declared
+// purely to be used as unique constants. This is demonstrated in the
+// implementation of CodelabEnum.
+
+// ko play github.com/kocircuit/kocircuit/codelab/arithmetic/CodelabEnum
+CodelabEnum() {
+	return: And(
+		Equal(Red, Red)
+		Equal(Black, Black)
+		Not(Equal(Red, Black))
+	)
+}
+
+Red() { return: Empty() }
+
+Black() { return: Empty() }
