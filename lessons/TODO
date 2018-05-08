@@ -1,11 +1,6 @@
-overview and why-ko
----
-Memory, Remember, Recall, Flush (example with union computation)
----
-Range example create numbers 1,...,n
-Sort
----
-Parallel
-Timeout?
----
-Template
+* doc Memory, Remember, Recall, Flush (example with union computation)
+* Range example create numbers 1,...,n
+* doc Sort
+* doc Parallel
+* impl/doc Timeout'd invoke macro
+* doc Template
