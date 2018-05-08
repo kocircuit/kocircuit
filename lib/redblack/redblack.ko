@@ -1,0 +1,41 @@
+// node constructs a red-black binary search tree node.
+node(value, color, left, right) {
+	return: (
+		value: Expect(value) // any user type
+		color: Expect(color) // Red or Black
+		left: left // optional left child node
+		right: right // optional right child node
+	)
+}
+
+Red() { return: Empty() }
+
+Black() { return: Empty() }
+
+RotateLeft(node?) {
+	return: When(
+		have: All(
+			a: node.left
+			b: node
+			c: node.right.left
+			d: node.right
+			e: node.right.right
+		)
+		then: rotateLeft
+		else: Panic["node cannot be rotated"]
+	)
+}
+
+rotateLeft(abcde?) {
+	return: node(
+		value: abcde.d.value
+		color: abcde.b.color
+		left: node(
+			value: abcde.b.value
+			color: abcde.d.color
+			left: abcde.a
+			right: abcde.c
+		)
+		right: abcde.e
+	)
+}

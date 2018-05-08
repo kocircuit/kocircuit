@@ -1,0 +1,19 @@
+
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestRotateLeft
+TestRotateLeft() {
+	return: RotateLeft(testABCDE())
+}
+
+testABCDE() {
+	return: node(
+		value: 2
+		color: Black
+		left: 1
+		right: node(
+			value: 4
+			color: Red
+			left: node(value: 3, color: Black)
+			right: node(value: 5, color: Black)
+		)
+	)
+}
