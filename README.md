@@ -1,7 +1,6 @@
 
 [![Build Status](https://travis-ci.org/kocircuit/kocircuit.svg?branch=master)](https://travis-ci.org/kocircuit/kocircuit)
 
-
 # Ko
 
 Ko is a concurrent, immutable, functional language.
@@ -17,12 +16,18 @@ Existing Go libraries and clients can be "exposed" in Ko with little relative ef
 Protocol definitions, like Protocol Buffers or OpenAPI, can also be exposed in Ko
 using simple code-generation.
 
-## LEARNING KO
+## Learning Ko
 
 Perhaps the best way to learn the language is by reading sequentially through
 our [step-by-step lessons](https://github.com/kocircuit/kocircuit/tree/master/lessons).
 
-## DESIGN AND THEORY
+## Design, specifications and theory
 
 An initial formal specification of the language (its underlying computational model,
 its syntax and its type system) can be found in the evolving [Ko Handbook](https://kocircuit.github.io/).
+
+## Why use Ko?
+
+There are three main aspects of Ko which make it an interesting proposal:
+
+* __Language.__
