@@ -51,8 +51,6 @@ with deep [type annotations](https://github.com/kocircuit/kocircuit/blob/master/
 gain access to any technology available in Go by binding dynamically to it
 with little effort. This includes libraries and clients written in Go,
 as well as standards like Protocol Buffers and OpenAPI which
-have bindings for Go.
-
-The forthcoming Ko compiler, being a code-generation technology,
+have bindings for Go. The forthcoming Ko compiler, being a code-generation technology,
 can benefit from integrations with any target language, as described in
 the architecture bullet (above).
