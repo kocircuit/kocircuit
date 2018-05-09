@@ -1,5 +1,5 @@
-// node constructs a red-black binary search tree node.
-node(value, color, left, right) {
+// Node constructs a red-black binary search tree node.
+Node(value, color, left, right) {
 	return: (
 		value: Expect(value) // any user type
 		color: Expect(color) // Red or Black
@@ -27,10 +27,10 @@ RotateLeft(node?) {
 }
 
 rotateLeft(abcde?) {
-	return: node(
+	return: Node(
 		value: abcde.d.value
 		color: abcde.b.color
-		left: node(
+		left: Node(
 			value: abcde.b.value
 			color: abcde.d.color
 			left: abcde.a
@@ -55,15 +55,49 @@ RotateRight(node?) {
 }
 
 rotateRight(abcde?) {
-	return: node(
+	return: Node(
 		value: abcde.b.value
 		color: abcde.d.color
 		left: abcde.a
-		right: node(
+		right: Node(
 			value: abcde.d.value
 			color: abcde.b.color
 			left: abcde.c
 			right: abcde.e
 		)
+	)
+}
+
+Flip(node?) {
+	return: When(
+		have: All(a: node.left, b: node, c: node.right)
+		then: flip
+		else: Panic[msg: "node cannot be flipped", node: node]
+	)
+}
+
+flip(abc?) {
+	return: Node(
+		value: abc.b.value
+		color: flipColor(abc.b.color)
+		left: flipNodeColor(abc.a)
+		right: flipNodeColor(abc.c)
+	)
+}
+
+flipColor(color?) {
+	return: Switch(
+		case: Yield[if: Equal(color, Red), then: Black]
+		case: Yield[if: Equal(color, Black), then: Red]
+		otherwise: Panic[msg: "unknown color", color: color]
+	)
+}
+
+flipNodeColor(node?) {
+	return: Node(
+		value: node.value
+		color: flipColor(node.color)
+		left: node.left
+		right: node.right
 	)
 }

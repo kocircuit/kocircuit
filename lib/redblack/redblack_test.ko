@@ -9,16 +9,22 @@ TestRotate() {
 	)
 }
 
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestFlip
+TestFlip() {
+	rightLeaning: testRightLeaningNode()
+	return: Equal(Flip(Flip(rightLeaning)), rightLeaning)
+}
+
 testRightLeaningNode() {
-	return: node(
+	return: Node(
 		value: 2
 		color: Black
-		left:  node(value: 1, color: Red)
-		right: node(
+		left:  Node(value: 1, color: Red)
+		right: Node(
 			value: 4
 			color: Red
-			left: node(value: 3, color: Black)
-			right: node(value: 5, color: Black)
+			left: Node(value: 3, color: Black)
+			right: Node(value: 5, color: Black)
 		)
 	)
 }
