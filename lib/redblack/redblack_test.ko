@@ -1,3 +1,10 @@
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestAll
+TestAll() {
+	return: And(
+		TestRotate()
+		TestFlip()
+	)
+}
 
 // ko play github.com/kocircuit/kocircuit/lib/redblack/TestRotate
 TestRotate() {
