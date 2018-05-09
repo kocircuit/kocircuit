@@ -1,14 +1,19 @@
 
-// ko play github.com/kocircuit/kocircuit/lib/redblack/TestRotateLeft
-TestRotateLeft() {
-	return: RotateLeft(testABCDE())
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestRotate
+TestRotate() {
+	rightLeaning: testRightLeaningNode()
+	leftLeaning: RotateLeft(rightLeaning)
+	return: And(
+		Equal(RotateRight(leftLeaning), rightLeaning)
+		Equal(RotateLeft(rightLeaning), leftLeaning)
+	)
 }
 
-testABCDE() {
+testRightLeaningNode() {
 	return: node(
 		value: 2
 		color: Black
-		left: 1
+		left:  node(value: 1, color: Red)
 		right: node(
 			value: 4
 			color: Red

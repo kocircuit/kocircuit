@@ -22,7 +22,7 @@ RotateLeft(node?) {
 			e: node.right.right
 		)
 		then: rotateLeft
-		else: Panic["node cannot be rotated"]
+		else: Panic[msg: "node cannot be rotated left", node: node]
 	)
 }
 
@@ -37,5 +37,33 @@ rotateLeft(abcde?) {
 			right: abcde.c
 		)
 		right: abcde.e
+	)
+}
+
+RotateRight(node?) {
+	return: When(
+		have: All(
+			a: node.left.left
+			b: node.left
+			c: node.left.right
+			d: node
+			e: node.right
+		)
+		then: rotateRight
+		else: Panic[msg: "node cannot be rotated right", node: node]
+	)
+}
+
+rotateRight(abcde?) {
+	return: node(
+		value: abcde.b.value
+		color: abcde.d.color
+		left: abcde.a
+		right: node(
+			value: abcde.d.value
+			color: abcde.b.color
+			left: abcde.c
+			right: abcde.e
+		)
 	)
 }
