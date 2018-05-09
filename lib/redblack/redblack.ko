@@ -14,56 +14,40 @@ Black() { return: Empty() }
 
 RotateLeft(node?) {
 	return: When(
-		have: All(
-			a: node.left
-			b: node
-			c: node.right.left
-			d: node.right
-			e: node.right.right
-		)
+		have: All(a: node, b: node.right)
 		then: rotateLeft
 		else: Panic[msg: "node cannot be rotated left", node: node]
 	)
 }
 
-rotateLeft(abcde?) {
+rotateLeft(ab?) {
 	return: Node(
-		value: abcde.d.value
-		color: abcde.b.color
+		value: ab.b.value
+		color: ab.a.color
 		left: Node(
-			value: abcde.b.value
-			color: abcde.d.color
-			left: abcde.a
-			right: abcde.c
+			value: ab.a.value, color: ab.b.color
+			left: ab.a.left, right: ab.b.left
 		)
-		right: abcde.e
+		right: ab.b.right
 	)
 }
 
 RotateRight(node?) {
 	return: When(
-		have: All(
-			a: node.left.left
-			b: node.left
-			c: node.left.right
-			d: node
-			e: node.right
-		)
+		have: All(a: node.left, b: node)
 		then: rotateRight
 		else: Panic[msg: "node cannot be rotated right", node: node]
 	)
 }
 
-rotateRight(abcde?) {
+rotateRight(ab?) {
 	return: Node(
-		value: abcde.b.value
-		color: abcde.d.color
-		left: abcde.a
+		value: ab.a.value
+		color: ab.b.color
+		left: ab.a.left
 		right: Node(
-			value: abcde.d.value
-			color: abcde.b.color
-			left: abcde.c
-			right: abcde.e
+			value: ab.b.value, color: ab.a.color
+			left: ab.a.right, right: ab.b.right
 		)
 	)
 }
@@ -101,3 +85,53 @@ flipNodeColor(node?) {
 		right: node.right
 	)
 }
+
+/*
+Insert(node, value, Less) {
+	return: When(
+		have: node
+		then: insert[value: value, Less: Less]
+		else: Node[value: value, color: Red]
+	)
+}
+
+insert(node?, value, Less) {
+	step1: RedRedFlip(node)
+	step2: XXX
+	step3: BlackRedRotateLeft(step2)
+	return: XXX
+}
+
+// RedRedFlip implements "if (isRed(h.left) && isRed(h.right)), then colorFlip(h)"
+RedRedFlip(node?) {
+	return: When(
+		have: All(a: node.left, b: node, c: node.right)
+		then: redRedFlip[node: node]
+		else: Return[node]
+	)
+}
+
+redRedFlip(node, abc?) {
+	return: Yield(
+		if: And(Equal(a.color, Red), Equal(c.color, Red))
+		then: flip(abc)
+		else: node
+	)
+}
+
+BlackRedRotateLeft(node?) {
+	return: When(
+		have: All(a: node.left, b: node, c: node.right)
+		then: blackRedRotateLeft[node: node]
+		else: Return[node]
+	)
+}
+
+blackRedRotateLeft(node, abc?) {
+	return: Yield(
+		if: And(Equal(a.color, Black), Equal(c.color, Red))
+		then: XXX
+		else: node
+	)
+}
+*/
