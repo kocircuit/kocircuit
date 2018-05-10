@@ -95,18 +95,22 @@ func (vty *VarietySymbol) Type() Type {
 }
 
 func (vty *VarietySymbol) Splay() Tree {
-	nameTrees := make([]NameTree, len(vty.Arg))
-	for i, field := range vty.Arg {
-		nameTrees[i] = NameTree{
-			Name:    gate.KoGoName{Ko: field.Name},
-			Monadic: field.Monadic,
-			Tree:    field.Value.Splay(),
+	if len(vty.Arg) == 0 {
+		return NoQuote{vty.Macro.Help()}
+	} else {
+		nameTrees := make([]NameTree, len(vty.Arg))
+		for i, field := range vty.Arg {
+			nameTrees[i] = NameTree{
+				Name:    gate.KoGoName{Ko: field.Name},
+				Monadic: field.Monadic,
+				Tree:    field.Value.Splay(),
+			}
 		}
-	}
-	return Parallel{
-		Label:   Label{Name: vty.Macro.Help()},
-		Bracket: "[]",
-		Elem:    nameTrees,
+		return Parallel{
+			Label:   Label{Name: vty.Macro.Help()},
+			Bracket: "[]",
+			Elem:    nameTrees,
+		}
 	}
 }
 

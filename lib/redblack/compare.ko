@@ -1,0 +1,14 @@
+
+Compare(Less, left, right) {
+	smaller: Less(left: left, right: right)
+	bigger: Less(left: right, right: left)
+	return: Switch(
+		case: Branch[if: smaller, then: Return[IsSmaller]]
+		case: Branch[if: bigger, then: Return[IsBigger]]
+		otherwise: Return[IsEqual]
+	)
+}
+
+IsSmaller() { return: Empty() }
+IsEqual() { return: Empty() }
+IsBigger() { return: Empty() }

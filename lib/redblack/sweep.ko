@@ -1,0 +1,15 @@
+// Sweeper: (carry, value) -> carry
+Sweep(carry, node, Sweeper) {
+	return: When(
+		have: node
+		then: sweep[carry: carry, Sweeper: Sweeper]
+		else: Return[carry]
+	)
+}
+
+sweep(carry, node?, Sweeper) {
+	leftCarry: Sweep(carry: carry, node: node.left, Sweeper: Sweeper)
+	middleCarry: Sweeper(carry: leftCarry, value: node.value)
+	rightCarry: Sweep(carry: middleCarry, node: node.right, Sweeper: Sweeper)
+	return: rightCarry
+}

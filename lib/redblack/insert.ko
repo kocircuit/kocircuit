@@ -1,0 +1,104 @@
+Insert(node, value, Less) {
+	return: When(
+		have: node
+		then: insert[value: value, Less: Less]
+		else: Node[value: value, color: Red]
+	)
+}
+
+insert(node?, value, Less) {
+	step1: IfRedRedThenFlip(node: node)
+	step2: PlaceValue(node: step1, value: value, Less: Less)
+	step3: IfBlackRedThenRotateLeft(node: step2)
+	return: IfLeftRedRedThenRotateRight(node: step3)
+}
+
+// If node has a left and a right node, and they are both red, then
+// IfRedRedThenFlip flips the colors of all three nodes and returns the resulting node.
+IfRedRedThenFlip(node?) {
+	return: When(
+		have: All(nodeLeft: node.left, node: node, nodeRight: node.right)
+		then: redRedFlip(all?) {
+			return: Branch(
+				if: And(
+					Equal(all.nodeLeft.color, Red)
+					Equal(all.nodeRight.color, Red)
+				)
+				then: flip[all]
+				else: Return[all.node]
+			)
+		}
+		else: Return[node]
+	)
+}
+
+IfBlackRedThenRotateLeft(node?) {
+	return: When(
+		have: All(nodeLeft: node.left, node: node, nodeRight: node.right)
+		then: blackRedRotateLeft(all?) {
+			return: Branch(
+				if: And(
+					Equal(all.nodeLeft.color, Black)
+					Equal(all.nodeRight.color, Red)
+				)
+				then: rotateLeft[all]
+				else: Return[all.node]
+			)
+		}
+		else: Return[node]
+	)
+}
+
+IfLeftRedRedThenRotateRight(node?) {
+	return: When(
+		have: All(nodeLeftLeft: node.left.left, nodeLeft: node.left, node: node)
+		then: leftRedRedRotateRight(all?) {
+			return: Branch(
+				if: And(
+					Equal(all.nodeLeftLeft.color, Red)
+					Equal(all.nodeLeft.color, Red)
+				)
+				then: rotateRight[all]
+				else: Return[all.node]
+			)
+		}
+		else: Return[node]
+	)
+}
+
+PlaceValue(node, value, Less) {
+	compared: Compare(Less: Less, left: value, right: node.value)
+	return: Switch(
+		case: Branch[
+			if: Equal(compared, IsSmaller)
+			then: placeLeft[node: node, value: value, Less: Less]
+		]
+		case: Branch[
+			if: Equal(compared, IsEqual)
+			then: Node[value: value, color: node.color, left: node.left, right: node.right]
+		]
+		case: Branch[
+			if: Equal(compared, IsBigger)
+			then: placeRight[node: node, value: value, Less: Less]
+		]
+		otherwise: Panic[msg: "unknown comparison result", compared: compared]
+	)
+}
+
+placeLeft(node, value, Less) {
+	return: Node(
+		value: node.value
+		color: node.color
+		left: Insert(node: node.left, value: value, Less: Less)
+		right: node.right
+	)
+}
+
+placeRight(node, value, Less) {
+	return: Node(
+		value: node.value
+		color: node.color
+		left: node.left
+		right: Insert(node: node.right, value: value, Less: Less)
+	)
+}

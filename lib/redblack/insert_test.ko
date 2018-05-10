@@ -1,0 +1,20 @@
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestInsert
+TestInsert() {
+	tree1: Insert(value: 0, Less: testLess)
+	tree2: Insert(node: tree1, value: -1, Less: testLess)
+	tree3: Insert(node: tree2, value: -2, Less: testLess)
+	tree4: Insert(node: tree3, value: -3, Less: testLess)
+	_: Show(tree4)
+	return: Equal(
+		Sweep(node: tree4, Sweeper: testSweeper)
+		(-3, -2, -1, 0)
+	)
+}
+
+testLess(left, right) {
+	return: Less(left, right)
+}
+
+testSweeper(carry, value) {
+	return: Merge(carry, value)
+}
