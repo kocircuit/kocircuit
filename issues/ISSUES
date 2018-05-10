@@ -1,12 +1,12 @@
 CI
+* go 1.10 compliance
 * travis integration with ko tests
 
 LANG
-* extend Less to work on strings
+* accept left/right calling convention in arithmetic macros
+* extend Less, Sum to work on strings
 * extend arithmetic functions to work on floats
-* Range with argument:
-	* rename to step
-	* pass carry-and-elem to a default argument of step (for consistency with other macros)
+
 * disallow user functions named after macros (Panic, Range, etc)
 * Memoize(memory, key, variety) function
 

@@ -1,0 +1,22 @@
+Depth(current, node?) {
+	return: When(
+		have: node
+		then: depth[current: current]
+		else: Return[current]
+	)
+}
+
+depth(current, node?) {
+	d: Sum(current, 1)
+	leftDepth: Depth(current: d, node: node.left)
+	rightDepth: Depth(current: d, node: node.right)
+	return: Max(left: leftDepth, right: rightDepth)
+}
+
+Max(left, right) {
+	return: Yield(
+		if: Less(left, right)
+		then: right
+		else: left
+	)
+}

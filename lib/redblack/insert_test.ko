@@ -4,10 +4,12 @@ TestInsert() {
 	tree2: Insert(node: tree1, value: -1, Less: testLess)
 	tree3: Insert(node: tree2, value: -2, Less: testLess)
 	tree4: Insert(node: tree3, value: -3, Less: testLess)
-	_: Show(tree4)
-	return: Equal(
-		Sweep(node: tree4, Sweeper: testSweeper)
-		(-3, -2, -1, 0)
+	return: And(
+		Equal(
+			Sweep(node: tree4, Sweeper: testSweeper)
+			(-3, -2, -1, 0)
+		)
+		Equal(Depth(tree4), 3)
 	)
 }
 
