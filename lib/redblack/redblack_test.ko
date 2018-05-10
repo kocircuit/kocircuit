@@ -35,3 +35,15 @@ testRightLeaningNode() {
 		)
 	)
 }
+
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestInsert
+TestInsert() {
+	tree1: Insert(value: 0, Less: testLess)
+	tree2: Insert(node: tree1, value: -1, Less: testLess)
+	tree3: Insert(node: tree2, value: -2, Less: testLess)
+	return: tree3
+}
+
+testLess(left, right) {
+	return: Less(left, right)
+}
