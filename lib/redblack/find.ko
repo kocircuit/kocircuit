@@ -1,0 +1,25 @@
+Find(node, value, Less) {
+	return: When(
+		have: node
+		then: find[value: value, Less: Less]
+	)
+}
+
+find(node?, value, Less) {
+	compared: Compare(Less: Less, left: value, right: node.value)
+	return: Switch(
+		case: Branch[
+			if: Equal(compared, IsSmaller)
+			then: Find[node: node.left, value: value, Less: Less]
+		]
+		case: Branch[
+			if: Equal(compared, IsEqual)
+			then: Return[node.value]
+		]
+		case: Branch[
+			if: Equal(compared, IsBigger)
+			then: Find[node: node.right, value: value, Less: Less]
+		]
+		otherwise: Panic[msg: "unknown comparison result", compared: compared]
+	)
+}

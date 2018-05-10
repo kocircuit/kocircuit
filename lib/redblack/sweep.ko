@@ -1,3 +1,4 @@
+// Sweep traverses the tree nodes in ascending order, invoking Sweeper at each node.
 // Sweeper: (carry, value) -> carry
 Sweep(carry, node, Sweeper) {
 	return: When(
