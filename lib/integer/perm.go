@@ -12,7 +12,7 @@ func init() {
 }
 
 type GoPermuteInt64 struct {
-	Len  int64 `ko:"name=len,monadic"`
+	Len  int64 `ko:"name=len"`
 	Seed int64 `ko:"name=seed"`
 }
 

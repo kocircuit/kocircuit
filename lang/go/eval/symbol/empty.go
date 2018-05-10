@@ -61,7 +61,7 @@ func (empty EmptySymbol) Type() Type {
 }
 
 func (empty EmptySymbol) Splay() Tree {
-	return NoQuote{"empty"}
+	return NoQuote{String_: "empty"}
 }
 
 type EmptyType struct{}
@@ -73,5 +73,5 @@ func (EmptyType) String() string {
 }
 
 func (EmptyType) Splay() Tree {
-	return NoQuote{"Empty"}
+	return NoQuote{String_: "Empty"}
 }

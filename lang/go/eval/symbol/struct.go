@@ -159,7 +159,7 @@ func (ss *StructSymbol) Splay() Tree {
 		}
 	}
 	return Parallel{
-		Label:   Label{"", ""},
+		Label:   Label{Path: "", Name: ""},
 		Bracket: "()",
 		Elem:    nameTrees,
 	}
@@ -231,7 +231,7 @@ func (st *StructType) Splay() Tree {
 		}
 	}
 	return Parallel{
-		Label:   Label{"", ""},
+		Label:   Label{Path: "", Name: ""},
 		Bracket: "()",
 		Elem:    nameTrees,
 	}

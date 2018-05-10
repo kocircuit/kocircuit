@@ -15,7 +15,7 @@ func (ot *OptionalType) String() string {
 }
 
 func (ot *OptionalType) Splay() Tree {
-	return Sometimes{ot.Elem.Splay()}
+	return Sometimes{Elem: ot.Elem.Splay()}
 }
 
 // Optionally makes a type optional, unless it is already optional or series.

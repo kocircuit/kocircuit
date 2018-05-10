@@ -33,7 +33,7 @@ func (span *Span) Attach(h Hypervisor) *Span {
 }
 
 func (span *Span) Splay() Tree {
-	return Quote{span.SourceLine()}
+	return Quote{String_: span.SourceLine()}
 }
 
 // Sheaths are *Func, *Step, MacroSheath, Outline, Chamber, *AssignCache, *GoWeavingCtx

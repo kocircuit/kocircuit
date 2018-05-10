@@ -69,7 +69,7 @@ func (g *grafting) graftTerm(label string, labelRegion Region, term Term) ([]*St
 			g.add(
 				Step{
 					Label:  g.takeLabel(label),
-					Logic:  Number{u.Value}, // LexString, LexInteger, LexFloat
+					Logic:  Number{Value: u.Value}, // LexString, LexInteger, LexFloat
 					Syntax: labelRegion,
 				},
 			),
@@ -81,7 +81,7 @@ func (g *grafting) graftTerm(label string, labelRegion Region, term Term) ([]*St
 					g.add(
 						Step{
 							Label:  g.takeLabel(label),
-							Logic:  Number{true},
+							Logic:  Number{Value: true},
 							Syntax: labelRegion,
 						},
 					),
@@ -92,7 +92,7 @@ func (g *grafting) graftTerm(label string, labelRegion Region, term Term) ([]*St
 					g.add(
 						Step{
 							Label:  g.takeLabel(label),
-							Logic:  Number{false},
+							Logic:  Number{Value: false},
 							Syntax: labelRegion,
 						},
 					),

@@ -53,7 +53,7 @@ func (blob *BlobSymbol) Equal(span *Span, sym Symbol) bool {
 }
 
 func (blob *BlobSymbol) Splay() Tree {
-	return NoQuote{blob.String()}
+	return NoQuote{String_: blob.String()}
 }
 
 func (blob *BlobSymbol) Hash(span *Span) ID {
@@ -106,5 +106,5 @@ func (blob BlobType) String() string {
 }
 
 func (blob BlobType) Splay() Tree {
-	return NoQuote{"Blob"}
+	return NoQuote{String_: "Blob"}
 }

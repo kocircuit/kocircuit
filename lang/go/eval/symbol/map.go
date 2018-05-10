@@ -168,7 +168,7 @@ func (ms *MapSymbol) Splay() Tree {
 		}
 	}
 	return Parallel{
-		Label:   Label{"", ""},
+		Label:   Label{Path: "", Name: ""},
 		Bracket: "{}",
 		Elem:    nameTrees,
 	}
@@ -185,5 +185,5 @@ func (mt *MapType) String() string {
 }
 
 func (mt *MapType) Splay() Tree {
-	return NoQuote{fmt.Sprintf("Map<String:%v>", mt.Value)}
+	return NoQuote{String_: fmt.Sprintf("Map<String:%v>", mt.Value)}
 }

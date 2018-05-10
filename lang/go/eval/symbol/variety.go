@@ -96,7 +96,7 @@ func (vty *VarietySymbol) Type() Type {
 
 func (vty *VarietySymbol) Splay() Tree {
 	if len(vty.Arg) == 0 {
-		return NoQuote{vty.Macro.Help()}
+		return NoQuote{String_: vty.Macro.Help()}
 	} else {
 		nameTrees := make([]NameTree, len(vty.Arg))
 		for i, field := range vty.Arg {
@@ -123,5 +123,5 @@ func (VarietyType) String() string {
 }
 
 func (VarietyType) Splay() Tree {
-	return NoQuote{"Variety"}
+	return NoQuote{String_: "Variety"}
 }

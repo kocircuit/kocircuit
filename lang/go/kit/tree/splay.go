@@ -39,7 +39,7 @@ func (ctx *SplayCtx) SplayValue(v reflect.Value) Tree {
 	}
 	switch v.Kind() {
 	case reflect.Invalid:
-		return NoQuote{"empty"}
+		return NoQuote{String_: "empty"}
 	case reflect.Ptr: // cache pointers
 		if ctx.Seen.Count(v.Interface()) > 0 {
 			return Cycle{}
@@ -64,7 +64,7 @@ func (ctx *SplayCtx) SplayValue(v reflect.Value) Tree {
 			)
 		}
 		if len(series.Elem) == 0 {
-			return NoQuote{"empty"}
+			return NoQuote{String_: "empty"}
 		}
 		return series
 	case reflect.Struct:
@@ -76,9 +76,9 @@ func (ctx *SplayCtx) SplayValue(v reflect.Value) Tree {
 			if f.IsGoExported() {
 				parallel.Elem = append(parallel.Elem,
 					NameTree{
-						Name: f.Name(),
+						Name:    f.Name(),
 						Monadic: f.IsMonadic(),
-						Tree: ctx.SplayValue(v.FieldByName(f.GoName())),
+						Tree:    ctx.SplayValue(v.FieldByName(f.GoName())),
 					},
 				)
 			}
@@ -96,14 +96,14 @@ func (ctx *SplayCtx) SplayValue(v reflect.Value) Tree {
 			key := KoGoName{Ko: k.String(), Go: k.String()}
 			parallel.Elem = append(parallel.Elem,
 				NameTree{
-					Name: key,
+					Name:    key,
 					Monadic: false,
-					Tree: ctx.SplayValue(v.MapIndex(k)),
+					Tree:    ctx.SplayValue(v.MapIndex(k)),
 				},
 			)
 		}
 		if len(parallel.Elem) == 0 {
-			return NoQuote{"empty"}
+			return NoQuote{String_: "empty"}
 		}
 		return parallel
 	case reflect.String:

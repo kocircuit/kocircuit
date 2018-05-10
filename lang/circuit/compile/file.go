@@ -43,7 +43,7 @@ func GraftFile(pkgPath string, file File) (pkg Package, err error) {
 	for _, parsedFunc := range file.Design {
 		if _, ok := pkg[parsedFunc.Name.Name()]; ok {
 			return nil, fmt.Errorf(
-				"function %s.%s (%s) already grafted in the same package", 
+				"function %s.%s (%s) already grafted in the same package",
 				pkgPath, parsedFunc.Name.Name(),
 				parsedFunc.RegionString(),
 			)
@@ -78,7 +78,7 @@ func rewritePkgAliasRef(filePath string, asPkg map[string]string, u *Step) error
 			if !ok {
 				return fmt.Errorf("%s not known at %s", ref.Path[0], u.RegionString())
 			}
-			u.Logic = PkgFunc{pkg, ref.Path[1]}
+			u.Logic = PkgFunc{Pkg: pkg, Func: ref.Path[1]}
 		}
 	}
 	return nil

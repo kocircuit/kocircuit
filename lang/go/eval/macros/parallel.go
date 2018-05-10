@@ -18,7 +18,7 @@ func init() {
 
 type EvalSequentialMacro struct{}
 
-func (m EvalSequentialMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalSequentialMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalSequentialMacro) MacroID() string { return m.Help() }
 
@@ -49,7 +49,7 @@ type evalSequentialMacro struct {
 	Macro Macro `ko:"name=macro"`
 }
 
-func (m evalSequentialMacro) Splay() Tree { return Quote{m.Help()} }
+func (m evalSequentialMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m evalSequentialMacro) MacroID() string { return m.Help() }
 
@@ -76,7 +76,7 @@ func (m evalSequentialMacro) Invoke(span *Span, arg Arg) (returns Return, effect
 
 type EvalParallelMacro struct{}
 
-func (m EvalParallelMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalParallelMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalParallelMacro) MacroID() string { return m.Help() }
 
@@ -109,7 +109,7 @@ type evalParallelMacro struct {
 	Macro Macro `ko:"name=macro"`
 }
 
-func (m evalParallelMacro) Splay() Tree { return Quote{m.Help()} }
+func (m evalParallelMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m evalParallelMacro) MacroID() string { return m.Help() }
 

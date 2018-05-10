@@ -100,8 +100,8 @@ func (b *Weaver) Link(ctx *WeaveStepCtx, object Symbol, name string, monadic boo
 		Fields{
 			{Name: "stepCtx", Shape: ctx.Deconstruct(delegatedSpan)},
 			{Name: "object", Shape: object},
-			{Name: "name", Shape: BasicSymbol{name}},
-			{Name: "monadic", Shape: BasicSymbol{monadic}},
+			{Name: "name", Shape: BasicSymbol{Value: name}},
+			{Name: "monadic", Shape: BasicSymbol{Value: monadic}},
 		},
 	)
 }

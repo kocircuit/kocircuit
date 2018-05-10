@@ -18,7 +18,7 @@ type EvalCallMacro struct {
 	Gate gate.Gate `ko:"name=gate"`
 }
 
-func (m *EvalCallMacro) Splay() Tree { return Quote{m.Help()} }
+func (m *EvalCallMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m *EvalCallMacro) Label() string { return "call" }
 

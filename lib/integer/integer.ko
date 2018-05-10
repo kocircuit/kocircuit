@@ -6,8 +6,8 @@
 import "integer"
 import "github.com/kocircuit/kocircuit/lib/integer" as gointeger
 
-PermuteInt64(len?) {
-	return: gointeger.GoPermuteInt64(len: len)
+PermuteInt64(len, seed) {
+	return: gointeger.GoPermuteInt64(len: len, seed: seed)
 }
 
 FormatInt64(int64?, base) {

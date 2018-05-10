@@ -21,7 +21,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 	"github.com/kocircuit/kocircuit/lang/go/sys"

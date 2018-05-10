@@ -17,7 +17,7 @@ func init() {
 
 type EvalProfileMacro struct{}
 
-func (m EvalProfileMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalProfileMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalProfileMacro) MacroID() string { return m.Help() }
 

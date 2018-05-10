@@ -85,5 +85,5 @@ func (opaque *OpaqueType) String() string {
 }
 
 func (opaque *OpaqueType) Splay() Tree {
-	return NoQuote{fmt.Sprintf("Opaque<%v>", opaque.Type)}
+	return NoQuote{String_: fmt.Sprintf("Opaque<%v>", opaque.Type)}
 }

@@ -14,7 +14,7 @@ func init() {
 
 type EvalPlaceholderMacro struct{}
 
-func (m EvalPlaceholderMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalPlaceholderMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalPlaceholderMacro) MacroID() string { return m.Help() }
 

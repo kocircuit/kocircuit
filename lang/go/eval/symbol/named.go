@@ -106,5 +106,5 @@ func (named NamedType) String() string {
 }
 
 func (named NamedType) Splay() Tree {
-	return NoQuote{fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
+	return NoQuote{String_: fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
 }

@@ -33,11 +33,11 @@ func (ctx *WeaveStepCtx) DelegateSpan() *Span {
 func (ctx *WeaveStepCtx) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
-			{Name: "pkg", Value: BasicSymbol{ctx.Pkg}},
-			{Name: "func", Value: BasicSymbol{ctx.Func}},
-			{Name: "step", Value: BasicSymbol{ctx.Step}},
-			{Name: "logic", Value: BasicSymbol{ctx.Logic}},
-			{Name: "source", Value: BasicSymbol{ctx.Source}},
+			{Name: "pkg", Value: BasicSymbol{Value: ctx.Pkg}},
+			{Name: "func", Value: BasicSymbol{Value: ctx.Func}},
+			{Name: "step", Value: BasicSymbol{Value: ctx.Step}},
+			{Name: "logic", Value: BasicSymbol{Value: ctx.Logic}},
+			{Name: "source", Value: BasicSymbol{Value: ctx.Source}},
 			{Name: "ctx", Value: ctx.Ctx},
 		},
 	)
@@ -52,8 +52,8 @@ type WeaveField struct {
 func (field *WeaveField) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
-			{Name: "name", Value: BasicSymbol{field.Name}},
-			{Name: "monadic", Value: BasicSymbol{field.Monadic}},
+			{Name: "name", Value: BasicSymbol{Value: field.Name}},
+			{Name: "monadic", Value: BasicSymbol{Value: field.Monadic}},
 			{Name: "objects", Value: field.Objects},
 		},
 	)
@@ -123,9 +123,9 @@ type WeaveResidue struct {
 func (residue *WeaveResidue) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
-			{Name: "step", Value: BasicSymbol{residue.Step}},
-			{Name: "logic", Value: BasicSymbol{residue.Logic}},
-			{Name: "source", Value: BasicSymbol{residue.Source}},
+			{Name: "step", Value: BasicSymbol{Value: residue.Step}},
+			{Name: "logic", Value: BasicSymbol{Value: residue.Logic}},
+			{Name: "source", Value: BasicSymbol{Value: residue.Source}},
 			{Name: "returns", Value: residue.Returns},
 			{Name: "effect", Value: residue.Effect},
 		},
@@ -159,9 +159,9 @@ func (summary *WeaveSummary) CombineSpan() *Span {
 func (summary *WeaveSummary) Deconstruct(span *Span) Symbol {
 	return MakeStructSymbol(
 		FieldSymbols{
-			{Name: "pkg", Value: BasicSymbol{summary.Pkg}},
-			{Name: "func", Value: BasicSymbol{summary.Func}},
-			{Name: "source", Value: BasicSymbol{summary.Source}},
+			{Name: "pkg", Value: BasicSymbol{Value: summary.Pkg}},
+			{Name: "func", Value: BasicSymbol{Value: summary.Func}},
+			{Name: "source", Value: BasicSymbol{Value: summary.Source}},
 			{Name: "ctx", Value: summary.Ctx},
 			{Name: "arg", Value: summary.Arg},
 			{Name: "returns", Value: summary.Returns},

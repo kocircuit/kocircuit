@@ -153,7 +153,7 @@ func (basic BasicSymbol) Type() Type {
 }
 
 func (basic BasicSymbol) Splay() Tree {
-	return GoValue{reflect.ValueOf(basic.Value)}
+	return GoValue{Value: reflect.ValueOf(basic.Value)}
 }
 
 func BasicFromKind(kind reflect.Kind) BasicType {
@@ -191,7 +191,7 @@ type BasicType int
 func (BasicType) IsType() {}
 
 func (basic BasicType) Splay() Tree {
-	return NoQuote{basic.String()}
+	return NoQuote{String_: basic.String()}
 }
 
 var (

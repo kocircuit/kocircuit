@@ -5,7 +5,6 @@ import (
 
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/proto/testdata"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	. "github.com/kocircuit/kocircuit/lang/go/eval/test"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"

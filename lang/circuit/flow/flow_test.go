@@ -68,14 +68,18 @@ var testFlowPlayer = []struct {
 		Flow: func() *testFlow {
 			main := &testFlow{}
 			_, _ = main.Enter(newTestFrame("0_enter", Enter{}))
-			three, _ := main.Make(newTestFrame("1", Number{int64(3)}), int64(3))
-			dfunc, _ := main.MakePkgFunc(newTestFrame("call", PkgFunc{"test", "Returns8"}), "test", "Returns8")
+			three, _ := main.Make(newTestFrame("1", Number{Value: int64(3)}), int64(3))
+			dfunc, _ := main.MakePkgFunc(
+				newTestFrame("call", PkgFunc{Pkg: "test", Func: "Returns8"}), "test", "Returns8",
+			)
 			dfunc.Augment(newTestFrame("2", Augment{}), []GatherFlow{{Field: "unnecessary_argument", Flow: three}})
 			result, _ := dfunc.(*testFlow).InvokeReturn(
 				newTestFrame("return", Invoke{}),
 				func(frame *Span, envelope *testFlow) (Flow, error) {
 					_, _ = envelope.Enter(newTestFrame("0_enter", Enter{}))
-					eight, _ := envelope.Make(newTestFrame("1", Number{LexInteger{Int64: 8}}), LexInteger{Int64: 8})
+					eight, _ := envelope.Make(
+						newTestFrame("1", Number{Value: LexInteger{Int64: 8}}), LexInteger{Int64: 8},
+					)
 					return eight.Leave(newTestFrame("0_leave", Leave{}))
 				},
 			)

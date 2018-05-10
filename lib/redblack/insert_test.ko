@@ -1,3 +1,5 @@
+import "github.com/kocircuit/kocircuit/lib/integer"
+
 // ko play github.com/kocircuit/kocircuit/lib/redblack/TestInsert
 TestInsert() {
 	tree1: Insert(value: 0, Less: testLess)
@@ -19,4 +21,24 @@ testLess(left, right) {
 
 testSweeper(carry, value) {
 	return: Merge(carry, value)
+}
+
+// ko play github.com/kocircuit/kocircuit/lib/redblack/TestPermuteInsert
+TestPermuteInsert() {
+	return: Loop(
+		start: (
+			pending: integer.PermuteInt64(len: 10, seed: 0)
+			node: Empty()
+		)
+		step: testPermuteInsertStep(carry?) {
+			taken: Take(carry.pending)
+			return: (
+				pending: taken.remainder
+				node: Insert(node: carry.node, value: taken.first, Less: testLess)
+			)
+		}
+		stop: testPermuteInsertStop(carry?) {
+			return: Equal(Len(carry.pending), 0)
+		}
+	)
 }

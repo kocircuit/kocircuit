@@ -41,7 +41,7 @@ type evalFixedFuncMacro struct {
 }
 
 func (m *evalFixedFuncMacro) Splay() Tree {
-	return Quote{m.Help()}
+	return Quote{String_: m.Help()}
 }
 
 func (m *evalFixedFuncMacro) MacroID() string { return m.Help() }

@@ -74,13 +74,13 @@ type EvalBoundary struct{}
 func (EvalBoundary) Figure(span *Span, figure Figure) (Shape, Effect, error) {
 	switch u := figure.(type) {
 	case Bool:
-		return BasicSymbol{u.Value_}, nil, nil
+		return BasicSymbol{Value: u.Value_}, nil, nil
 	case Integer:
-		return BasicSymbol{u.Value_}, nil, nil
+		return BasicSymbol{Value: u.Value_}, nil, nil
 	case Float:
-		return BasicSymbol{u.Value_}, nil, nil
+		return BasicSymbol{Value: u.Value_}, nil, nil
 	case String:
-		return BasicSymbol{u.Value_}, nil, nil
+		return BasicSymbol{Value: u.Value_}, nil, nil
 	case Macro:
 		// macro is either a macro from registry, or from Interpret()
 		return MakeVarietySymbol(u, nil), nil, nil
@@ -123,7 +123,7 @@ func (m *EvalInterpretMacro) InterpretFunc() (pkgPath, funcName string) {
 }
 
 func (m *EvalInterpretMacro) Splay() Tree {
-	return Quote{m.Help()}
+	return Quote{String_: m.Help()}
 }
 
 func (m *EvalInterpretMacro) MacroID() string { return m.Help() }

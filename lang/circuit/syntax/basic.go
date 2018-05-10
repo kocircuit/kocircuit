@@ -26,7 +26,7 @@ func matchKeyword(key string, suffix []Lex) (remain []Lex, err error) {
 	if !ok {
 		return suffix, SyntaxError{Remainder: suffix, Msg: "not a token"}
 	}
-	nameKey := Name{key}
+	nameKey := Name{String: key}
 	if tok.Char != nameKey {
 		return suffix, SyntaxError{Remainder: suffix, Msg: fmt.Sprintf("not %q", key)}
 	}
@@ -60,7 +60,7 @@ func isPunc(key string, z Lex) bool {
 	if !ok {
 		return false
 	}
-	puncKey := Punc{key}
+	puncKey := Punc{String: key}
 	return tok.Char == puncKey
 }
 

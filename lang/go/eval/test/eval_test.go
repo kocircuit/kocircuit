@@ -3,7 +3,6 @@ package test
 import (
 	"testing"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
 	_ "github.com/kocircuit/kocircuit/lang/go/eval/macros"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"

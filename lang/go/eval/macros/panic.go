@@ -16,7 +16,7 @@ func init() {
 
 type EvalPanicMacro struct{}
 
-func (m EvalPanicMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalPanicMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalPanicMacro) MacroID() string { return m.Help() }
 
@@ -53,7 +53,7 @@ func (EvalPanicMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect
 
 type EvalRecoverMacro struct{}
 
-func (m EvalRecoverMacro) Splay() Tree { return Quote{m.Help()} }
+func (m EvalRecoverMacro) Splay() Tree { return Quote{String_: m.Help()} }
 
 func (m EvalRecoverMacro) MacroID() string { return m.Help() }
 
