@@ -6,6 +6,10 @@
 import "integer"
 import "github.com/kocircuit/kocircuit/lib/integer" as gointeger
 
+PermuteInt64(len?) {
+	return: gointeger.GoPermuteInt64(len: len)
+}
+
 FormatInt64(int64?, base) {
 	return: gointeger.GoFormatInt64(int64: int64, base: base)
 }

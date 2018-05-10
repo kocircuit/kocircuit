@@ -1,3 +1,7 @@
+// This package provides an implementation of Red-Black Binary Search Trees,
+// according to the algorith here:
+// 	http://www.cs.princeton.edu/~rs/talks/LLRB/LLRB.pdf
+
 // Node constructs a red-black binary search tree node.
 Node(value, color, left, right) {
 	return: (
