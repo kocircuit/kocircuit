@@ -19,3 +19,7 @@ Hour(scale?) {
 FormatDurationSeconds(duration?) {
 	return: time.GoFormatDurationSeconds(duration: duration)
 }
+
+FormatDurationMilliseconds(duration?) {
+	return: time.GoFormatDurationMilliseconds(duration: duration)
+}

@@ -15,6 +15,7 @@ func init() {
 	RegisterEvalGate(new(GoMinute))
 	RegisterEvalGate(new(GoHour))
 	RegisterEvalGate(new(GoFormatDurationSeconds))
+	RegisterEvalGate(new(GoFormatDurationMilliseconds))
 }
 
 type GoSleep struct {
@@ -56,4 +57,12 @@ type GoFormatDurationSeconds struct {
 
 func (g GoFormatDurationSeconds) Play(ctx *runtime.Context) string {
 	return fmt.Sprintf("%1.3fs", float64(g.Duration)/1e9)
+}
+
+type GoFormatDurationMilliseconds struct {
+	Duration int64 `ko:"name=duration,monadic"` // nanoseconds
+}
+
+func (g GoFormatDurationMilliseconds) Play(ctx *runtime.Context) string {
+	return fmt.Sprintf("%1.3fms", float64(g.Duration)/1e6)
 }

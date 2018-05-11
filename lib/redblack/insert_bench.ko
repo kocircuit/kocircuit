@@ -1,25 +1,37 @@
+import "github.com/kocircuit/kocircuit/lib/time"
+
 // ko play github.com/kocircuit/kocircuit/lib/redblack/BenchmarkInsert
 BenchmarkInsert() {
 	return: benchmarkPermuteInsert(10)
 }
 
 benchmarkPermuteInsert(n?) {
-	//XXX
-	return: Loop(
+	result: Loop(
 		start: (
-			XXX//XXX
+			totalDuration: 0
+			count: 0
 			pending: integer.PermuteInt64(len: n, seed: 0)
 			node: Empty()
 		)
-		step: testPermuteInsertStep(carry?) {
-			taken: Take(carry.pending)
-			return: (
-				pending: taken.remainder
-				node: Insert(node: carry.node, value: taken.first, Less: testLess)
-			)
-		}
+		step: benchmarkPermuteInsertStep
 		stop: testPermuteInsertStop(carry?) {
 			return: Equal(Len(carry.pending), 0)
 		}
 	).node
+	_: Show(
+		insert_count: result.count
+		avg_insert_time: time.FormatDurationMilliseconds(Ratio(result.totalDuration, result.count))
+	)
+	return: result
+}
+
+benchmarkPermuteInsertStep(carry?) {
+	taken: Take(carry.pending) // XXX: what if taken is empty?
+	profiledInsert: Profile(Insert[node: carry.node, value: taken.first, Less: testLess])
+	return: (
+		totalDuration: Sum(carry.totalDuration, 1)
+		count: Sum(carry.count, 1)
+		pending: taken.remainder
+		node: profiledInsert.returns
+	)
 }
