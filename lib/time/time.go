@@ -1,6 +1,7 @@
 package time
 
 import (
+	"fmt"
 	"time"
 
 	. "github.com/kocircuit/kocircuit/lang/go/eval"
@@ -13,6 +14,7 @@ func init() {
 	RegisterEvalGate(new(GoSecond))
 	RegisterEvalGate(new(GoMinute))
 	RegisterEvalGate(new(GoHour))
+	RegisterEvalGate(new(GoFormatDurationSeconds))
 }
 
 type GoSleep struct {
@@ -46,4 +48,12 @@ type GoHour struct {
 
 func (g GoHour) Play(ctx *runtime.Context) time.Duration {
 	return time.Duration(OptInt64(g.Scale, 1) * int64(time.Hour))
+}
+
+type GoFormatDurationSeconds struct {
+	Duration int64 `ko:"name=duration,monadic"` // nanoseconds
+}
+
+func (g GoFormatDurationSeconds) Play(ctx *runtime.Context) string {
+	return fmt.Sprintf("%1.3fs\n", float64(g.Duration)/1e9)
 }

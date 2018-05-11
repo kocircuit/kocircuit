@@ -1,0 +1,25 @@
+// ko play github.com/kocircuit/kocircuit/lib/redblack/BenchmarkInsert
+BenchmarkInsert() {
+	return: benchmarkPermuteInsert(10)
+}
+
+benchmarkPermuteInsert(n?) {
+	//XXX
+	return: Loop(
+		start: (
+			XXX//XXX
+			pending: integer.PermuteInt64(len: n, seed: 0)
+			node: Empty()
+		)
+		step: testPermuteInsertStep(carry?) {
+			taken: Take(carry.pending)
+			return: (
+				pending: taken.remainder
+				node: Insert(node: carry.node, value: taken.first, Less: testLess)
+			)
+		}
+		stop: testPermuteInsertStop(carry?) {
+			return: Equal(Len(carry.pending), 0)
+		}
+	).node
+}

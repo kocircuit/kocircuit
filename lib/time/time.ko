@@ -15,3 +15,7 @@ Minute(scale?) {
 Hour(scale?) {
 	return: time.GoHour(scale: scale)
 }
+
+FormatDurationSeconds(duration?) {
+	return: time.GoFormatDurationSeconds(duration: duration)
+}

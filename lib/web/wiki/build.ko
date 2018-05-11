@@ -4,6 +4,7 @@ import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
 import "github.com/kocircuit/kocircuit/lib/net/http"
 import "github.com/kocircuit/kocircuit/lib/series"
 import "github.com/kocircuit/kocircuit/lib/shell"
+import "github.com/kocircuit/kocircuit/lib/time"
 
 BuildLocallyThenServe(
 	topChapter // top-level chapter
@@ -68,9 +69,10 @@ Build(
 
 syncChapterFiles(siteDir, renderingCtx, topChapter) {
 	siteFS: file.LocalFileSystem(root: siteDir)
+	profiledBuild: Profile(buildChapter[renderingCtx: renderingCtx, chapter: topChapter])
+	_: Show(build_duration: time.FormatDurationSeconds(profiledBuild.duration))
 	return: series.ParMap(
-		//over: buildChapter(renderingCtx: renderingCtx, chapter: topChapter)
-		over: Profile(buildChapter[renderingCtx: renderingCtx, chapter: topChapter])
+		over: profiledBuild.returns
 		with: syncFile(siteFS, file?) {
 			return: file.Sync(siteFS)
 		} [siteFS: siteFS]

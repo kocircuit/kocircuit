@@ -25,9 +25,13 @@ testSweeper(carry, value) {
 
 // ko play github.com/kocircuit/kocircuit/lib/redblack/TestPermuteInsert
 TestPermuteInsert() {
+	return: testPermuteInsert(10)
+}
+
+testPermuteInsert(n?) {
 	return: Loop(
 		start: (
-			pending: integer.PermuteInt64(len: 10, seed: 0)
+			pending: integer.PermuteInt64(len: n, seed: 0)
 			node: Empty()
 		)
 		step: testPermuteInsertStep(carry?) {
@@ -40,5 +44,5 @@ TestPermuteInsert() {
 		stop: testPermuteInsertStop(carry?) {
 			return: Equal(Len(carry.pending), 0)
 		}
-	)
+	).node
 }

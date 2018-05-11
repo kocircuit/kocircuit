@@ -1,5 +1,4 @@
 CI
-* go 1.10 compliance
 * travis integration with ko tests
 
 LANG

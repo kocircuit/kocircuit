@@ -40,9 +40,11 @@ func (EvalProfileMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effe
 		returns, effect, err = vty.Invoke(span)
 		t1 := time.Now()
 		dur := t1.Sub(t0)
-		if err == nil {
-			span.Printf("%1.3fs\n", dur.Seconds())
-		}
-		return returns, effect, err
+		return MakeStructSymbol(
+			FieldSymbols{
+				&FieldSymbol{Name: "returns", Value: returns.(Symbol)},
+				&FieldSymbol{Name: "duration", Value: BasicSymbol{Value: int64(dur)}},
+			},
+		), effect, err
 	}
 }
