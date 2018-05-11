@@ -55,5 +55,5 @@ type GoFormatDurationSeconds struct {
 }
 
 func (g GoFormatDurationSeconds) Play(ctx *runtime.Context) string {
-	return fmt.Sprintf("%1.3fs\n", float64(g.Duration)/1e9)
+	return fmt.Sprintf("%1.3fs", float64(g.Duration)/1e9)
 }
