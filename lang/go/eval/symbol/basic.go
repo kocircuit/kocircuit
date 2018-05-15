@@ -56,6 +56,14 @@ func AsBasicBool(sym Symbol) (value bool, ok bool) {
 	return b, ok
 }
 
+func AsBool(sym Symbol) bool {
+	b, ok := AsBasicBool(sym)
+	if !ok {
+		panic("expecting bool")
+	}
+	return b
+}
+
 type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
