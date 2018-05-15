@@ -40,6 +40,13 @@ func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 }
 
 func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
+	if v.IsValid() && v.Type() == typeOfSymbol {
+		if v.IsNil() {
+			return EmptySymbol{}, nil
+		} else {
+			return v.Interface().(Symbol), nil
+		}
+	}
 	switch v.Kind() {
 	case reflect.Invalid:
 		return EmptySymbol{}, nil

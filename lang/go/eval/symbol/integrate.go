@@ -61,6 +61,9 @@ func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, e
 }
 
 func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, error) {
+	if t == typeOfSymbol {
+		return reflect.ValueOf(s), nil
+	}
 	switch t.Kind() {
 	case reflect.Invalid:
 		panic("o")

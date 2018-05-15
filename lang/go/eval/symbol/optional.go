@@ -27,7 +27,7 @@ func Optionally(t Type) Type {
 		return t
 	case *SeriesType:
 		return t
-	case BasicType, *StructType, VarietyType, NamedType:
+	case BasicType, *StructType, VarietyType, NamedType, *OpaqueType:
 		return &OptionalType{Elem: t}
 	}
 	panic("o")
