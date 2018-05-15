@@ -1,0 +1,9 @@
+import "github.com/kocircuit/kocircuit/lib/redblack/fast" as go_fast
+
+Insert(node, value, Less) {
+	return: go_fast.GoInsert(node: node, value: value, Less: Less)
+}
+
+Find(node, value, Less) {
+	return: go_fast.GoFind(node: node, value: value, Less: Less)
+}

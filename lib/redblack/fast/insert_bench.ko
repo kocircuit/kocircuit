@@ -1,0 +1,64 @@
+import "github.com/kocircuit/kocircuit/lib/integer"
+import "github.com/kocircuit/kocircuit/lib/time"
+
+// ko play github.com/kocircuit/kocircuit/lib/redblack/fast/BenchmarkInsert
+BenchmarkInsert() {
+	return: benchmarkInsert(1000)
+}
+
+benchmarkInsert(n?) {
+	result: Loop(
+		start: (
+			totalDuration: 0
+			count: 0
+			pending: integer.PermuteInt64(len: n, seed: 0)
+			node: Empty()
+		)
+		step: benchmarkInsertStep
+		stop: benchmarkInsertStop(carry?) {
+			return: Equal(Len(carry.pending), 0)
+		}
+	)
+	_: Show(
+		// insert_count: result.count
+		avg_insert_time: time.FormatDurationMilliseconds(Ratio(result.totalDuration, result.count))
+	)
+	return: "ok"
+}
+
+benchmarkInsertStep(carry?) {
+	return: WhenTake(
+		seq: carry.pending
+		then: benchmarkInsertTaken[carry: carry]
+		else: Return[carry]
+	)
+}
+
+benchmarkInsertTaken(carry, first, remainder) {
+	profiledInsert: Profile(Insert[node: carry.node, value: first, Less: testLess])
+	return: (
+		totalDuration: Sum(carry.totalDuration, profiledInsert.duration)
+		count: Sum(carry.count, 1)
+		pending: remainder
+		node: profiledInsert.returns
+	)
+}
+
+// WhenTake invokes Take on seq.
+// then: (first, remainder) -> any
+WhenTake(seq, then, else) {
+	taken: Take(seq)
+	return: When(
+		have: taken.first
+		then: whenTakeThen[remainder: taken.remainder, then: then]
+		else: else
+	)
+}
+
+whenTakeThen(then, first?, remainder) {
+	return: then(first: first, remainder: remainder)
+}
+
+testLess(left, right) {
+	return: Less(left, right)
+}
