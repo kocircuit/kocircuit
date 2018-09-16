@@ -25,7 +25,7 @@ testSweeper(carry, value) {
 
 // ko play github.com/kocircuit/kocircuit/lib/redblack/TestPermuteInsert
 TestPermuteInsert() {
-	return: testPermuteInsert(10)
+	return: Depth(testPermuteInsert(1000))
 }
 
 testPermuteInsert(n?) {
