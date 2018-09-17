@@ -57,7 +57,7 @@ func DecodeArg(span *Span, asm VarietyAssembler, argBytes []byte) (*StructSymbol
 	}
 	sym, err := DecodeSymbol(span, asm, argBytes)
 	if err != nil {
-		return nil, span.Errorf(err, "decoding arg (%v)")
+		return nil, span.Errorf(err, "decoding arg")
 	}
 	switch u := sym.(type) {
 	case nil:
