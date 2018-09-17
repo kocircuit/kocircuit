@@ -62,7 +62,7 @@ func parseImportOrDesign(needsLine bool, suffix []Lex) (parsed []Syntax, remain 
 	}
 	return nil, suffix, SyntaxError{
 		Remainder: suffix,
-		Msg:       "expecting import or design",
+		Msg:       "syntax error",
 		Cause:     []SyntaxError{err1.(SyntaxError), err2.(SyntaxError)},
 	}
 }
