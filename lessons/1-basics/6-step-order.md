@@ -15,14 +15,16 @@ then step A will be executed before step B.
 
 We already saw an example before:
 
-	DoubleGreeting(name1, name2) {
-		firstGreeting: CustomFormalGreeting(firstName: name1)
-		secondGreeting: CustomFormalGreeting(firstName: name2)
-		return: strings.Join(
-			string: (firstGreeting, "and", secondGreeting)
-			delimiter: " "
-		)
-	}
+```ko
+DoubleGreeting(name1, name2) {
+  firstGreeting: CustomFormalGreeting(firstName: name1)
+  secondGreeting: CustomFormalGreeting(firstName: name2)
+  return: strings.Join(
+    string: (firstGreeting, "and", secondGreeting)
+    delimiter: " "
+  )
+}
+```
 
 In this example, the values computed by the steps `firstGreeting` and `secondGreeting`
 are needed by the formula for the `return` step.
@@ -35,7 +37,7 @@ There is no guarantee on the relative order of execution of the steps `firstGree
 and `secondGreeting`, as they have no dependence on each other. This is
 a key difference from other programming languages!
 
-# FORCING EXECUTION ORDER EXPLICITLY
+## FORCING EXECUTION ORDER EXPLICITLY
 
 In some applications, one needs to enforce an execution order between
 steps that don't depend on each other's values.
@@ -48,17 +50,19 @@ For instance, if we want to make sure that step `firstGreeting` is
 computed before `secondGreeting`, we could make the formula
 for `secondGreeting` depend on it "artificially":
 
-	DoubleGreeting(name1, name2) {
-		firstGreeting: CustomFormalGreeting(firstName: name1)
-		secondGreeting: CustomFormalGreeting(
-			firstName: name2
-			_after: firstGreeting
-		)
-		return: strings.Join(
-			string: (firstGreeting, "and", secondGreeting)
-			delimiter: " "
-		)
-	}
+```ko
+DoubleGreeting(name1, name2) {
+  firstGreeting: CustomFormalGreeting(firstName: name1)
+  secondGreeting: CustomFormalGreeting(
+    firstName: name2
+    _after: firstGreeting
+  )
+  return: strings.Join(
+    string: (firstGreeting, "and", secondGreeting)
+    delimiter: " "
+  )
+}
+```
 
 The formula for `secondGreeting`, which used to be
 `CustomFormalGreeting(firstName: name2)`, now takes an additional

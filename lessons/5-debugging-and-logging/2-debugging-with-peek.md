@@ -14,24 +14,30 @@ For instance, executing `PeekTypeExample` below will invoke `PeekType`
 from within the subroutine call to `peekTypeSubroutine`. You will see this
 reflect in the print out.
 
-	PeekTypeExample() {
-		return: peekTypeSubroutine(arg: 3.14)
-	}
+```ko
+PeekTypeExample() {
+  return: peekTypeSubroutine(arg: 3.14)
+}
 
-	peekTypeSubroutine(arg) {
-		return: PeekType(arg)
-	}
+peekTypeSubroutine(arg) {
+  return: PeekType(arg)
+}
+```
 
 You can run this example from the repo with:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/PeekTypeExample
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/PeekTypeExample
+```
 
 It will produce an output like this:
 
-	[0] span:37a4j2u, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:42:10, PeekTypeExample:return
-	[1] span:276hkds, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, peekTypeSubroutine:return
-	[2] span:33y9q36, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, PeekType
-	(span:33y9q36, kocircuit/lang/go/eval/symbol/invoke.go:9, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10) Float64
+```text
+[0] span:37a4j2u, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:42:10, PeekTypeExample:return
+[1] span:276hkds, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, peekTypeSubroutine:return
+[2] span:33y9q36, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10, PeekType
+(span:33y9q36, kocircuit/lang/go/eval/symbol/invoke.go:9, github.com/kocircuit/kocircuit/lessons/examples/debug.ko:46:10) Float64
+```
 
 Notice that you can simply "erase" the invocation of `PeekType` from the implementation of `peekTypeSubroutine`
 without affecting the result. This makes it easy to temporarily

@@ -18,69 +18,78 @@ augmentation with a default (aka monadic) argument.
 
 An augmentation formula with named arguments is expressed in the form:
 
-	<function_formula>[
-		<arg_name_1>: <formula_1>
-		...
-		<arg_name_n>: <formula_n>
-	]
+```ko
+<function_formula>[
+  <arg_name_1>: <formula_1>
+  ...
+  <arg_name_n>: <formula_n>
+]
+```
 
 Note the square brackets.
 
 Let's use this in an example:
 
-	import "github.com/kocircuit/kocircuit/lib/strings"
+```ko
+import "github.com/kocircuit/kocircuit/lib/strings"
 
-	// MakeGreeter returns a functional value, which
-	// when invoked will return a greeting string, customized to the 
-	// given name argument.
-	MakeGreeter(name) {
-		return: strings.Join[ // augment the function Join
-			string: ("Hello", name)
-			delimiter: " "
-		]
-	}
+// MakeGreeter returns a functional value, which
+// when invoked will return a greeting string, customized to the 
+// given name argument.
+MakeGreeter(name) {
+  return: strings.Join[ // augment the function Join
+    string: ("Hello", name)
+    delimiter: " "
+  ]
+}
 
-	Greet(name) {
-		greeter: MakeGreeter(name: name) // create a function that returns greetings to name
-		return: greeter() // call the function from step greeter to return the actual greeting string
-	}
+Greet(name) {
+  greeter: MakeGreeter(name: name) // create a function that returns greetings to name
+  return: greeter() // call the function from step greeter to return the actual greeting string
+}
 
-	GreetTom() {
-		return: Greet(name: "Tom") // this will return "Hello Tom"
-	}
+GreetTom() {
+  return: Greet(name: "Tom") // this will return "Hello Tom"
+}
+```
 
-This example can be found in:
-
-	github.com/kocircuit/kocircuit/lessons/examples/augment.ko
+This example can be found in
+[github.com/kocircuit/kocircuit/lessons/examples/augment.ko](github.com/kocircuit/kocircuit/lessons/examples/augment.ko).
 
 Run with:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/GreetTom
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/GreetTom
+```
 
 ## AUGMENTATION WITH A DEFAULT ARGUMENT
 
 Functions that can be invoked with a default argument can be augmented
 with a default argument. The syntax for such augmentation formulas is:
 
-	<function_formula>[<default_arg_formula>]
+```ko
+<function_formula>[<default_arg_formula>]
+```
 
 Again, note the use of square brackets , `[]`, instead of round ones, `()`, which are used for invocation.
 
 As an example usage, we change the previous example to use default argument augmentation
 of the `strings.Join` function:
 
-	import "github.com/kocircuit/kocircuit/lib/strings"
+```ko
+import "github.com/kocircuit/kocircuit/lib/strings"
 
-	MakeGreeter(name) {
-		// augment Join by setting its default argument to the list ("Hello", name)
-		return: strings.Join[("Hello", name)]
-	}
+MakeGreeter(name) {
+  // augment Join by setting its default argument to the list ("Hello", name)
+  return: strings.Join[("Hello", name)]
+}
 
-	Greet(name) {
-		greeter: MakeGreeter(name: name) // create a function that returns greetings to name
-		return: greeter() // call the function from step greeter to return the actual greeting string
-	}
+Greet(name) {
+  greeter: MakeGreeter(name: name) // create a function that returns greetings to name
+  return: greeter() // call the function from step greeter to return the actual greeting string
+}
 
-	GreetTom() {
-		return: Greet(name: "Tom") // this will return "Hello Tom"
-	}
+GreetTom() {
+  return: Greet(name: "Tom") // this will return "Hello Tom"
+}
+```

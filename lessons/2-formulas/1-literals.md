@@ -16,26 +16,32 @@ following the Go definition of those:
 _Double-quoted_ string literals can span a single source line and they interpret
 standard ASCII escape sequences (like, `\n`, `\t`, `\r`, etc.) For example:
 
-	ExampleDoubleQuoted() {
-		return: "\tHello\nworld."
-	}
+```ko
+ExampleDoubleQuoted() {
+  return: "\tHello\nworld."
+}
+```
 
 _Back-quoted_ string literals can span multiple lines and their contents is interpreted
 verbatim (ASCII escape sequences are not interpreted). For example:
 
-	ExampleBackQuoted() {
-		return: `
-	This is a longer text,
-	which spans multiple lines.`
-	}
+```ko
+ExampleBackQuoted() {
+  return: `
+This is a longer text,
+which spans multiple lines.`
+}
+```
 
 ## Integer literals
 
 Integer constants are expressed using Go-style integers, e.g. 
 
-	ExampleInteger() {
-		return: -314
-	}
+```ko
+ExampleInteger() {
+  return: -314
+}
+```
 
 Ko interprets all integer literals as a 64-bit signed integer type (Int64).
 (The can be explicitly converted to other integral types.)
@@ -44,9 +50,11 @@ Ko interprets all integer literals as a 64-bit signed integer type (Int64).
 
 Floating-point constants are expressed using Go-style floating-point numbers, e.g.
 
-	ExampleFloat() {
-		return: -3.14e+11
-	}
+```ko
+ExampleFloat() {
+  return: -3.14e+11
+}
+```
 
 Ko interprets all floating-point literals as 64-bit floats (Float64).
 (The can be explicitly converted to 32-bit floats, Float32.)
@@ -60,33 +68,41 @@ in Ko is called a _variety_ type).
 There are three types of functional literals:
 
 1. A functional literal which refers to another function defined
-in the same package is the name identifier of this function. E.g.
+   in the same package is the name identifier of this function. E.g.
 
-	F() { return: "Hello" }
+```ko
+F() { return: "Hello" }
 
-	ReturnF() {
-		return: F // F is a functional literal refering to F (above)
-	}
+ReturnF() {
+  return: F // F is a functional literal refering to F (above)
+}
+```
 
 2. A functional literal which refers to a function defined in another
-package is written in the form
+   package is written in the form
 
-	<pkg_alias>.<func_name>
+```ko
+<pkg_alias>.<func_name>
+```
 
 For instance,
 
-	import "github.com/kocircuit/kocircuit/lib/strings"
+```ko
+import "github.com/kocircuit/kocircuit/lib/strings"
 
-	ReturnJoin() {
-		return: strings.Join // strings.Join refers to a function defined in package strings
-	}
+ReturnJoin() {
+  return: strings.Join // strings.Join refers to a function defined in package strings
+}
+```
 
 3. A functional literal which refers to a builtin function is the name identifier of the function.
-For context, Ko supplies a number of builtin functions (like, `Print`, `Yield`, `Range`, etc.)
-which can be referred to from any source file (without importing any packages).
+  For context, Ko supplies a number of builtin functions (like, `Print`, `Yield`, `Range`, etc.)
+  which can be referred to from any source file (without importing any packages).
 
-For instance,
+  For instance,
 
-	ReturnYield() {
-		return: Yield // returns a functional value pointing to the builtin Yield function
-	}
+```ko
+ReturnYield() {
+  return: Yield // returns a functional value pointing to the builtin Yield function
+}
+```

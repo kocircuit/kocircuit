@@ -15,9 +15,11 @@ Let's start with a simple function, call it `Greeting`, which
 takes no arguments and returns a greeting message string.
 Place this function in `helloworld.ko`:
 
-	Greeting() {
-		return: "Hello, there."
-	}
+```ko
+Greeting() {
+  return: "Hello, there."
+}
+```
 
 This function demonstrates the required elements of a function definition.
 A function name (any valid identifier),
@@ -26,18 +28,24 @@ followed by a function body between curly brackets.
 
 Every function body has a mandatory return statement, which takes the form
 
-	return: <formula>
+```ko
+return: <formula>
+```
 
 In this example, `<formula>` is the string literal "Hello, there.", which
 represents the string value "Hello, there." (Formulas are discussed later.)
 
 You can execute the `Greeting` function using:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/Greeting
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/Greeting
+```
 
 You should see a printout:
 
-	"Hello, there."
+```text
+"Hello, there."
+```
 
 The Ko interpreter always prints the returned value of the interpreted function to standard output.
 You will notice that the printout is quoted:

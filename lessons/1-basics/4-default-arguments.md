@@ -2,12 +2,14 @@
 
 Recall the function `CustomFormalGreeting` from a previous example:
 
-	CustomFormalGreeting(firstName, familyName) {
-		return: strings.Join(
-			string: ("Hello", firstName, familyName)
-			delimiter: " "
-		)
-	}
+```ko
+CustomFormalGreeting(firstName, familyName) {
+  return: strings.Join(
+    string: ("Hello", firstName, familyName)
+    delimiter: " "
+  )
+}
+```
 
 Ko does not require that all declared arguments are passed.
 (This is why the named argument calling convention is necessary.)
@@ -22,14 +24,16 @@ be reported.
 The missing argument will simply be removed from the list of values
 passed to the `string` argument of the call to `strings.Join`.
 
-# DEFAULT (aka MONADIC) ARGUMENTS
+## DEFAULT (aka MONADIC) ARGUMENTS
 
 Suppose we frequently call `CustomFormalGreeting` using only
 the `firstName`. E.g.
 
+```ko
 TypicalGreetingForJohn() {
-	return: CustomFormalGreeting(firstName: "John")
+  return: CustomFormalGreeting(firstName: "John")
 }
+```
 
 If a function is frequently called with one of its argument alone,
 it improves readability to be able to skip the argument name in the calling syntax.
@@ -41,18 +45,24 @@ of the argument.
 
 Let's make `firstName` a default argument:
 
-	CustomFormalGreeting2(firstName?, familyName) {
-		return: strings.Join(
-			string: ("Hello", firstName, familyName)
-			delimiter: " "
-		)
-	}
+```ko
+CustomFormalGreeting2(firstName?, familyName) {
+  return: strings.Join(
+    string: ("Hello", firstName, familyName)
+    delimiter: " "
+  )
+}
+```
 
 We can still call the function using named calling convention, as before, for instance:
 
-	CustomFormalGreeting2(firstName: "John")
+```ko
+CustomFormalGreeting2(firstName: "John")
+```
 
 But we can alsos call the function with a single unnamed argument value, which will
 be assigned to the default argument. Thus the following call is also equivalent:
 
-	CustomFormalGreeting2("John")
+```ko
+CustomFormalGreeting2("John")
+```

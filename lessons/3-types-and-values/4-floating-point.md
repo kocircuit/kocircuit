@@ -12,6 +12,8 @@ floating-point argument.
 
 For instance:
 
-	ConvertToFloat32(x) {
-		return: Float32(x) // if the value of x is not Float32 or Float64, a type panic will be issued
-	}
+```ko
+ConvertToFloat32(x) {
+  return: Float32(x) // if the value of x is not Float32 or Float64, a type panic will be issued
+}
+```
