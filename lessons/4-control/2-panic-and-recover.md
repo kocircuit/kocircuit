@@ -21,29 +21,35 @@ passed to it, and attaches it as a _panic value_ to the panic itself.
 For example, the function `AgeDifference` below computes and returns the
 difference between the ages of a father and his child, passed as arguments.
 
-`AgeDifference` also checks whether the age of the child is smaller than 
-that of the father. If it is not, it will panic with the structure value 
+`AgeDifference` also checks whether the age of the child is smaller than
+that of the father. If it is not, it will panic with the structure value
 `(ageDifferenceError: "a father cannot be older than his child")`.
 
-	AgeDifference(childAge, fatherAge) {
-		check: Yield(
-			if: Not(Less(childAge, fatherAge))
-			then: Panic[ageDifferenceError: "a father cannot be older than his child"]
-			else: []
-		) () // invoke whichever variety was yielded
-		return: Sum(fatherAge, Negative(childAge))
-	}
+```ko
+AgeDifference(childAge, fatherAge) {
+  check: Yield(
+    if: Not(Less(childAge, fatherAge))
+    then: Panic[ageDifferenceError: "a father cannot be older than his child"]
+    else: []
+  ) () // invoke whichever variety was yielded
+  return: Sum(fatherAge, Negative(childAge))
+}
+```
 
 You can try calling `AgeDifference` with invalid arguments, for instance,
 by running the function:
 
-	InvalidAgeDifference() {
-		return: AgeDifference(childAge: 21, fatherAge: 19)
-	}
+```ko
+InvalidAgeDifference() {
+  return: AgeDifference(childAge: 21, fatherAge: 19)
+}
+```
 
 You can run this with:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/InvalidAgeDifference
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/InvalidAgeDifference
+```
 
 ## RECOVER: HANDLING PANICS
 
@@ -57,25 +63,29 @@ caused by runtime conditions.
 * If the invocation succeeds in returning a value without panicking, `Recover` will return that value.
 
 * If the invocation panics, `Recover` will capture the panic and invoke
-the functional value of the `panic` argument, while alsp passing the panic value
-as a default (aka monadic) argument to `panic`. Whatever the call to `panic` returns,
-will be returned by `Recover`.
+  the functional value of the `panic` argument, while also passing the panic value
+  as a default (aka monadic) argument to `panic`. Whatever the call to `panic` returns,
+  will be returned by `Recover`.
 
 For example, function `RecoverInvalidAgeDifference` below upgrades our
 previous example `InvalidAgeDifference` to handle the panic and return
 a message to the user.
 
-	RecoverInvalidAgeDifference() {
-		return: Recover(
-			invoke: AgeDifference[childAge: 21, fatherAge: 19]
-			panic: recoverFromAgeDifferencePanic
-		)
-	}
+```ko
+RecoverInvalidAgeDifference() {
+  return: Recover(
+    invoke: AgeDifference[childAge: 21, fatherAge: 19]
+    panic: recoverFromAgeDifferencePanic
+  )
+}
 
-	recoverFromAgeDifferencePanic(panicValue?) {
-		return: (age_difference_failed_with_message: panicValue.ageDifferenceError)
-	}
+recoverFromAgeDifferencePanic(panicValue?) {
+  return: (age_difference_failed_with_message: panicValue.ageDifferenceError)
+}
+```
 
 You can run this with:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/RecoverInvalidAgeDifference
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/RecoverInvalidAgeDifference
+```

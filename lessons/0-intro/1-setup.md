@@ -9,8 +9,12 @@ package directories is rooted at `GOPATH/src`.
 
 The Ko interpreter can be installed using `go get`:
 
-	go get -u github.com/kocircuit/kocircuit/lang/ko
+```bash
+go get -u github.com/kocircuit/kocircuit/lang/ko
+```
 
 To make sure your setup succeeded, try running:
 
-	ko play github.com/kocircuit/kocircuit/codelab/HelloWorld
+```bash
+ko play github.com/kocircuit/kocircuit/codelab/HelloWorld
+```

@@ -9,14 +9,16 @@ used as the return value of the function itself.
 
 For instance, we looked at the function `DoubleGreeting`:
 
-	DoubleGreeting(name1, name2) {
-		firstGreeting: CustomFormalGreeting(firstName: name1)
-		secondGreeting: CustomFormalGreeting(firstName: name2)
-		return: strings.Join(
-			string: (firstGreeting, "and", secondGreeting)
-			delimiter: " "
-		)
-	}
+```ko
+DoubleGreeting(name1, name2) {
+  firstGreeting: CustomFormalGreeting(firstName: name1)
+  secondGreeting: CustomFormalGreeting(firstName: name2)
+  return: strings.Join(
+    string: (firstGreeting, "and", secondGreeting)
+    delimiter: " "
+  )
+}
+```
 
 This function has three steps, named `firstGreeting`, `secondGreeting` and `return`,
 respectively.
@@ -24,7 +26,9 @@ respectively.
 In general, every step definition begins on a new line (within the function body)
 and conforms to the syntax rule:
 
-	<label>: <formula>
+```ko
+<label>: <formula>
+```
 
 The expression `<label>` is the unique idenitifier of the step,
 whereas the expression `<formula>` describes how the step value is computed.

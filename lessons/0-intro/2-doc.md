@@ -14,36 +14,50 @@ and packages.
 The Ko `list` command lists all functions that are built into the compiler
 (this excludes user-defined functions):
 
-	ko list
+```bash
+ko list
+```
 
 ## PACKAGE DOCUMENTATION
 
 To view the contents and documentation of a package, use a command of the form:
 
-	ko doc <pkg_path>...
+```bash
+ko doc <pkg_path>...
+```
 
 For instance, to display the documentation for
 package `"github.com/kocircuit/kocircuit/lib/strings"`, run:
 
-	ko doc github.com/kocircuit/kocircuit/lib/strings...
+```bash
+ko doc github.com/kocircuit/kocircuit/lib/strings...
+```
 
 ## FUNCTION DOCUMENTATION
 
 To view the documentation for any function, use a command of the form:
 
-	ko doc <pkg_path>/<func_name>
+```bash
+ko doc <pkg_path>/<func_name>
+```
 
 For instance, to display the documentation for function `Join`
 in package `"github.com/kocircuit/kocircuit/lib/strings"`, run:
 
-	ko doc github.com/kocircuit/kocircuit/lib/strings/Join
+```bash
+ko doc github.com/kocircuit/kocircuit/lib/strings/Join
+```
 
 A few builtin functions belong to the empty string, `""`, package,
 such as `Range`, `Yield`, etc. To view the documentation for those,
 use a command of the form:
 
-	ko doc <func_name>
+```bash
+ko doc <func_name>
+```
 
 For instance, to display the documentation for `Yield`, run:
 
-	ko doc Yield
+```bash
+ko doc Yield
+```

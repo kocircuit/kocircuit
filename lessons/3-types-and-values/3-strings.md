@@ -8,9 +8,11 @@ For example, the following function returns its argument unchanged,
 while also asserting that it is a string. If it is not, a panic is produced
 (resulting in an error message, unless it is recovered from):
 
+```ko
 PassString(x) {
-	return: String(x) // String returns x unchanged and panics if it is not a string
+  return: String(x) // String returns x unchanged and panics if it is not a string
 }
+```
 
 ## STRING MANIPULATIONS
 

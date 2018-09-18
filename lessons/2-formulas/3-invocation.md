@@ -15,11 +15,13 @@ invocation with a default (aka monadic) argument.
 
 An invocation formula with named arguments is expressed in the form:
 
-	<function_formula>(
-		<arg_name_1>: <formula_1>
-		...
-		<arg_name_n>: <formula_n>
-	)
+```ko
+<function_formula>(
+  <arg_name_1>: <formula_1>
+  ...
+  <arg_name_n>: <formula_n>
+)
+```
 
 Here `<function_formula>` is any formula that evaluates to a functional value.
 Typically it is simply a functional reference literal (described in an earlier section).
@@ -33,14 +35,16 @@ function `FormatInt64` from package `"github.com/kocircuit/kocircuit/lib/integer
 This functions expects two arguments, named `int64` and `base`, respectively,
 both of type `Int64`.
 
-	import "github.com/kocircuit/kocircuit/lib/integer" // provides integer.FormatInt64
+```ko
+import "github.com/kocircuit/kocircuit/lib/integer" // provides integer.FormatInt64
 
-	FormatInt64InBase36(int64Arg) {
-		return: integer.FormatInt64( // "integer.FormatInt64" is a functional reference
-			int64: int64Arg // assign the value of the local argument "int64Arg" to the target argument "int64"
-			base: 36 // and assign the constant 36 to argument "base"
-		)
-	}
+FormatInt64InBase36(int64Arg) {
+  return: integer.FormatInt64( // "integer.FormatInt64" is a functional reference
+    int64: int64Arg // assign the value of the local argument "int64Arg" to the target argument "int64"
+    base: 36 // and assign the constant 36 to argument "base"
+  )
+}
+```
 
 ## INVOCATION WITH A DEFAULT ARGUMENT
 
@@ -48,23 +52,29 @@ User-defined functions that have a default argument were covered in an earlier c
 Such functions can be invoked using named argument invocation (as above), while
 they can also be called using the shorthand form:
 
-	<function_formula>(<default_arg_formula>)
+```ko
+<function_formula>(<default_arg_formula>)
+```
 
 For instance, the function `Join` from package `"github.com/kocircuit/kocircuit/lib/strings"`
 has the signature
 
-	Join(string?, delimiter) { ... }
+```ko
+Join(string?, delimiter) { ... }
+```
 
 Argument `string` is marked as default, and the documentation of the function
 reveals that it can be a single string or a sequence of strings.
 
 Consider the following example of calling `Join` with default argument invocation syntax:
 
-	import "github.com/kocircuit/kocircuit/lib/strings"
+```ko
+import "github.com/kocircuit/kocircuit/lib/strings"
 
-	Greet(name) {
-		returns: strings.Join(("Hello ", name)) // pass ("Hello ", name) to argument "string" of Join
-	}
+Greet(name) {
+  returns: strings.Join(("Hello ", name)) // pass ("Hello ", name) to argument "string" of Join
+}
+```
 
 This example calls `strings.Join`, passing the string sequence value `("Hello ", name)`
 to the default argument of `strings.Join` (which happens to be called `string`).
@@ -74,9 +84,11 @@ to the default argument of `strings.Join` (which happens to be called `string`).
 In cases when a sequence construction (like `("Hello", name)` in the previous example)
 is passed as a default invocation argument, one can use single round brackes instead of double:
 
-	Greet(name) {
-		returns: strings.Join("Hello ", name) // single brackets used here
-	}
+```ko
+Greet(name) {
+  returns: strings.Join("Hello ", name) // single brackets used here
+}
+```
 
 (This simplification arises because Ko automatically converts between
 nested sequence values like `(1, 2, 3)`, `((1, 2, 3))` or `(((1, 2, 3)))`,

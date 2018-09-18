@@ -17,28 +17,33 @@ When it does, `Wait` returns the value returned by the spawned function.
 If the spawned execution panics, `Wait` will reproduce that same panic (and its value).
 
 The following example computes two Fibonacci numbers, placing each computation
-in a separate co-routine. 
+in a separate co-routine.
 
-	ComputeTwoFibonacciNumbers(n1, n2) {
-		handle1: Spin(IterativeFib[n1])
-		handle2: Spin(IterativeFib[n2])
-		return: (
-			fib1: handle1.Wait()
-			fib2: handle2.Wait()
-		)
-	}
+```ko
+ComputeTwoFibonacciNumbers(n1, n2) {
+  handle1: Spin(IterativeFib[n1])
+  handle2: Spin(IterativeFib[n2])
+  return: (
+    fib1: handle1.Wait()
+    fib2: handle2.Wait()
+  )
+}
+```
 
 The function `IterativeFib` for computing a Fibonacci number was covered in a previous
-article, and its source can be found in:
-
-	github.com/kocircuit/kocircuit/lessons/examples/loop.ko
+article, and its source can be found in
+[github.com/kocircuit/kocircuit/lessons/examples/loop.ko](github.com/kocircuit/kocircuit/lessons/examples/loop.ko).
 
 You can try `ComputeTwoFibonacciNumbers` by running, for instance:
 
-	ComputeFib17AndFib42() {
-		return: ComputeTwoFibonacciNumbers(n1: 17, n2: 42)
-	}
+```ko
+ComputeFib17AndFib42() {
+  return: ComputeTwoFibonacciNumbers(n1: 17, n2: 42)
+}
+```
 
 Run this with:
 
-	ko play github.com/kocircuit/kocircuit/lessons/examples/ComputeFib17AndFib42
+```bash
+ko play github.com/kocircuit/kocircuit/lessons/examples/ComputeFib17AndFib42
+```
