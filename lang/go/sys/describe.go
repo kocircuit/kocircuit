@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"fmt"
 
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
+	"github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
 func init() {
-	RegisterEvalGateAt("", "Print", new(GoPrint))
-	RegisterEvalGateAt("", "Println", new(GoPrintln))
+	eval.RegisterEvalGateAt("", "Print", new(GoPrint))
+	eval.RegisterEvalGateAt("", "Println", new(GoPrintln))
 }
 
 type GoPrint struct {

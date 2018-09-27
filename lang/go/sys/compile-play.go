@@ -1,21 +1,21 @@
 package sys
 
 import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/ir"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/macros"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/ir"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/go/eval/macros"
+	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
 type CompilePlay struct {
-	Repo    string        `ko:"name=repo"`
-	Pkg     string        `ko:"name=pkg"`
-	Func    string        `ko:"name=func"`
-	Faculty Faculty       `ko:"name=faculty"`
-	Arg     *StructSymbol `ko:"name=arg"` // arg can be nil
-	Show    bool          `ko:"name=show"`
+	Repo    string               `ko:"name=repo"`
+	Pkg     string               `ko:"name=pkg"`
+	Func    string               `ko:"name=func"`
+	Faculty eval.Faculty         `ko:"name=faculty"`
+	Arg     *symbol.StructSymbol `ko:"name=arg"` // arg can be nil
+	Show    bool                 `ko:"name=show"`
 }
 
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
@@ -38,16 +38,16 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	return w.Play(ctx)
 }
 
-func PostCompileFaculty(baseFaculty Faculty, repoPath string, repo Repo) Faculty {
-	repoProto, repoProtoBytes, err := SerializeEncodeRepo(repo)
+func PostCompileFaculty(baseFaculty eval.Faculty, repoPath string, repo model.Repo) eval.Faculty {
+	repoProto, repoProtoBytes, err := ir.SerializeEncodeRepo(repo)
 	if err != nil {
 		panic(err)
 	}
-	return MergeFaculty(
-		Faculty{
-			Ideal{Pkg: "repo", Name: "Path"}:       &EvalGoValueMacro{Value: repoPath},
-			Ideal{Pkg: "repo", Name: "Proto"}:      &EvalGoValueMacro{Value: repoProto},
-			Ideal{Pkg: "repo", Name: "ProtoBytes"}: &EvalGoValueMacro{Value: repoProtoBytes},
+	return eval.MergeFaculty(
+		eval.Faculty{
+			eval.Ideal{Pkg: "repo", Name: "Path"}:       &macros.EvalGoValueMacro{Value: repoPath},
+			eval.Ideal{Pkg: "repo", Name: "Proto"}:      &macros.EvalGoValueMacro{Value: repoProto},
+			eval.Ideal{Pkg: "repo", Name: "ProtoBytes"}: &macros.EvalGoValueMacro{Value: repoProtoBytes},
 		},
 		baseFaculty,
 	)

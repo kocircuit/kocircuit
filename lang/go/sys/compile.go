@@ -1,8 +1,8 @@
 package sys
 
 import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/compile"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/compile"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
@@ -13,15 +13,15 @@ type Compile struct {
 }
 
 type CompileResult struct {
-	Compile *Compile   `ko:"name=compile"`
-	Repo    Repo       `ko:"name=repo"`
-	Stats   *RepoStats `ko:"name=stats"`
-	Error   error      `ko:"name=error"`
+	Compile *Compile         `ko:"name=compile"`
+	Repo    model.Repo       `ko:"name=repo"`
+	Stats   *model.RepoStats `ko:"name=stats"`
+	Error   error            `ko:"name=error"`
 }
 
 func (c *Compile) Play(ctx *runtime.Context) *CompileResult {
 	r := &CompileResult{Compile: c}
-	if r.Repo, r.Error = CompileRepo(
+	if r.Repo, r.Error = compile.CompileRepo(
 		c.RepoDir,
 		c.PkgPath,
 	); r.Error != nil {
