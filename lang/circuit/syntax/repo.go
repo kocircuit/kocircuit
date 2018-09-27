@@ -15,22 +15,29 @@ type Repository interface {
 	NotFound() []string
 }
 
-func NewLocalRepository(rootDir string) Repository {
-	return &localRepository{root: rootDir}
+func NewLocalRepository(rootDirs []string) Repository {
+	return &localRepository{roots: rootDirs}
 }
 
 type localRepository struct {
-	root string
+	roots []string
 	sync.Mutex
 	notFound []string
 }
 
 func (repo *localRepository) Read(filePath string) (string, error) {
-	buf, err := ioutil.ReadFile(path.Join(repo.root, filePath))
-	if err != nil {
-		return "", err
+	var firstErr error
+	for _, root := range repo.roots {
+		buf, err := ioutil.ReadFile(path.Join(root, filePath))
+		if err != nil {
+			if firstErr == nil {
+				firstErr = err
+			}
+			continue
+		}
+		return string(buf), nil
 	}
-	return string(buf), nil
+	return "", firstErr
 }
 
 func (repo *localRepository) NotFound() []string {
@@ -44,26 +51,29 @@ func (repo *localRepository) addNotFound(dirPath string) {
 }
 
 func (repo *localRepository) List(dirPath string) (file, subdir []string, err error) {
-	d, err := os.Open(path.Join(repo.root, dirPath))
-	if err != nil {
-		repo.addNotFound(dirPath)
-		return nil, nil, nil
-	}
-	defer d.Close()
-	ff, err := d.Readdir(0)
-	if err != nil {
-		return nil, nil, err
-	}
-	for _, f := range ff {
-		if f.IsDir() {
-			subdir = append(subdir, path.Join(dirPath, f.Name()))
-		} else {
-			if path.Ext(f.Name()) == ".ko" { // so that GOPATH = KOPATH is ok
-				file = append(file, path.Join(dirPath, f.Name()))
+	for _, root := range repo.roots {
+		d, err := os.Open(path.Join(root, dirPath))
+		if err != nil {
+			continue
+		}
+		defer d.Close()
+		ff, err := d.Readdir(0)
+		if err != nil {
+			return nil, nil, err
+		}
+		for _, f := range ff {
+			if f.IsDir() {
+				subdir = append(subdir, path.Join(dirPath, f.Name()))
+			} else {
+				if path.Ext(f.Name()) == ".ko" { // so that GOPATH = KOPATH is ok
+					file = append(file, path.Join(dirPath, f.Name()))
+				}
 			}
 		}
+		return file, subdir, nil
 	}
-	return file, subdir, nil
+	repo.addNotFound(dirPath)
+	return nil, nil, nil
 }
 
 // SrcDir is repository.
