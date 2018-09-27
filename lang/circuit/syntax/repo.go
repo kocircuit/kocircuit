@@ -6,13 +6,11 @@ import (
 	"os"
 	"path"
 	"strings"
-	"sync"
 )
 
 type Repository interface {
 	Read(filePath string) (content string, err error)
 	List(dirPath string) (file, subdir []string, err error)
-	NotFound() []string
 }
 
 func NewLocalRepository(rootDirs []string) Repository {
@@ -21,8 +19,6 @@ func NewLocalRepository(rootDirs []string) Repository {
 
 type localRepository struct {
 	roots []string
-	sync.Mutex
-	notFound []string
 }
 
 func (repo *localRepository) Read(filePath string) (string, error) {
@@ -38,16 +34,6 @@ func (repo *localRepository) Read(filePath string) (string, error) {
 		return string(buf), nil
 	}
 	return "", firstErr
-}
-
-func (repo *localRepository) NotFound() []string {
-	return repo.notFound
-}
-
-func (repo *localRepository) addNotFound(dirPath string) {
-	repo.Lock()
-	defer repo.Unlock()
-	repo.notFound = append(repo.notFound, dirPath)
 }
 
 func (repo *localRepository) List(dirPath string) (file, subdir []string, err error) {
@@ -72,7 +58,6 @@ func (repo *localRepository) List(dirPath string) (file, subdir []string, err er
 		}
 		return file, subdir, nil
 	}
-	repo.addNotFound(dirPath)
 	return nil, nil, nil
 }
 
