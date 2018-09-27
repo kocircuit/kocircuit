@@ -3,6 +3,12 @@
 
 # Ko
 
+## Experimental
+
+The Ko language, library & tools are in active development, so do expect things to change.
+
+## Introduction
+
 Ko is a concurrent, immutable, functional language.
 
 Ko is both generic (function arguments and return values do not declare types)
