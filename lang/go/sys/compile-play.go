@@ -10,7 +10,7 @@ import (
 )
 
 type CompilePlay struct {
-	Repo    string        `ko:"name=repo"`
+	Repo    []string      `ko:"name=repo"`
 	Pkg     string        `ko:"name=pkg"`
 	Func    string        `ko:"name=func"`
 	Faculty Faculty       `ko:"name=faculty"`
@@ -20,9 +20,9 @@ type CompilePlay struct {
 
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
-		RepoDir: arg.Repo,
-		PkgPath: arg.Pkg,
-		Show:    arg.Show,
+		RepoDirs: arg.Repo,
+		PkgPath:  arg.Pkg,
+		Show:     arg.Show,
 	}
 	compiled := c.Play(ctx)
 	if compiled.Error != nil {
@@ -38,14 +38,15 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	return w.Play(ctx)
 }
 
-func PostCompileFaculty(baseFaculty Faculty, repoPath string, repo Repo) Faculty {
+func PostCompileFaculty(baseFaculty Faculty, repoPaths []string, repo Repo) Faculty {
 	repoProto, repoProtoBytes, err := SerializeEncodeRepo(repo)
 	if err != nil {
 		panic(err)
 	}
 	return MergeFaculty(
 		Faculty{
-			Ideal{Pkg: "repo", Name: "Path"}:       &EvalGoValueMacro{Value: repoPath},
+			Ideal{Pkg: "repo", Name: "Path"}:       &EvalGoValueMacro{Value: repoPaths[0]},
+			Ideal{Pkg: "repo", Name: "Roots"}:      &EvalGoValueMacro{Value: repoPaths},
 			Ideal{Pkg: "repo", Name: "Proto"}:      &EvalGoValueMacro{Value: repoProto},
 			Ideal{Pkg: "repo", Name: "ProtoBytes"}: &EvalGoValueMacro{Value: repoProtoBytes},
 		},

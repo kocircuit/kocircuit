@@ -17,7 +17,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"path"
 
 	"github.com/spf13/cobra"
 
@@ -38,7 +37,7 @@ var playCmd = &cobra.Command{
 		}
 		koPkg, koFunc := parsePkgFunc(args[0])
 		b := &sys.CompilePlay{
-			Repo:    path.Join(tools.GOPATH, "src"),
+			Repo:    tools.PkgRoots(),
 			Pkg:     koPkg,
 			Func:    koFunc,
 			Faculty: EvalFaculty(),

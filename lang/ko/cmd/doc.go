@@ -17,7 +17,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"path"
 
 	"github.com/spf13/cobra"
 
@@ -44,9 +43,9 @@ Usage:
 		}
 		pf := parsePkgOrPkgFunc(args[0])
 		b := &sys.Compile{
-			RepoDir: path.Join(tools.GOPATH, "src"),
-			PkgPath: pf.Pkg,
-			Show:    false,
+			RepoDirs: tools.PkgRoots(),
+			PkgPath:  pf.Pkg,
+			Show:     false,
 		}
 		compileResult := b.Play(runtime.CompilerContext())
 		if compileResult.Error != nil {
