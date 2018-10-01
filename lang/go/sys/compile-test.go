@@ -17,10 +17,14 @@
 package sys
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	go_eval "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
@@ -45,30 +49,72 @@ func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 	if compiled.Error != nil {
 		return &PlayResult{Error: compiled.Error}
 	}
-	// Find test functions
-	tests := &symbol.FieldSymbol{
-		Name:    "tests",
-		Monadic: true,
-		Value:   nil,
+	// Build play service
+	ev := go_eval.NewEvaluator(arg.Faculty, compiled.Repo)
+	w := &PlayFuncEval{
+		Func: ev.Program.Idiom.Lookup("idiom", "RunTests"),
+		Eval:ev,
 	}
+	if (w.Func == nil ) {
+		return &PlayResult{Error: fmt.Errorf("cannot find idiom.RunTests")}
+	}
+	// Find test functions
+	var testsValue symbol.Symbols
 	for _, pkgName := range compiled.Repo.SortedPackagePaths() {
 		pkg := compiled.Repo[pkgName]
 		for _, fName := range pkg.SortedFuncNames() {
 			if strings.HasPrefix(fName, "Test") {
-				//f := pkg[fName] // of type model.Func
-				// How to make a Variety Symbol from `f` ?
-				//vSym := symbol.MakeVarietySymbol(f, nil)
-				// TODO add vSym as (name: fName, func: vSym) pair to tests.Value.
+				f := pkg[fName] // of type model.Func
+				vSym := symbol.MakeVarietySymbol(&evalTestFuncMacro{
+					Func:   f,
+					Parent: w.Eval.Program,
+				}, nil)
+				entry := symbol.MakeStructSymbol(symbol.FieldSymbols{
+					&symbol.FieldSymbol{Name: "name", Value: symbol.MakeBasicSymbol(model.NewSpan(), fName)},
+					&symbol.FieldSymbol{Name: "func", Value: vSym},
+				})
+				testsValue = append(testsValue, entry)
 			}
 		}
 	}
-	// Run the tests
-	w := &Play{
-		Pkg:     "idiom",
-		Func:    "RunTests",
-		Repo:    compiled.Repo,
-		Faculty: arg.Faculty,
-		Arg:     symbol.MakeStructSymbol(symbol.FieldSymbols{tests}),
+	testsValueSym, err := symbol.MakeSeriesSymbol(model.NewSpan(), testsValue)
+	if err != nil {
+		return &PlayResult{Error: err}
 	}
+	tests := &symbol.FieldSymbol{
+		Name:    "tests",
+		Monadic: true,
+		Value:   testsValueSym,
+	}
+	// Run the tests
+	w.Arg = symbol.MakeStructSymbol(symbol.FieldSymbols{tests})
 	return w.Play(ctx)
+}
+
+// evalTestFuncMacro is a macro that plays an underlying test function with the parent evaluator.
+type evalTestFuncMacro struct {
+	Func   *model.Func
+	Parent eval.Evaluator
+}
+
+func (m *evalTestFuncMacro) Splay() tree.Tree {
+	return tree.Quote{String_: m.Help()}
+}
+
+func (m *evalTestFuncMacro) MacroID() string { return m.Help() }
+
+func (m *evalTestFuncMacro) MacroSheathString() *string { return nil }
+
+func (m *evalTestFuncMacro) Label() string { return "evaltest" }
+
+func (m *evalTestFuncMacro) Help() string {
+	return fmt.Sprintf("Test(%s)", m.Func.FullPath())
+}
+
+func (m *evalTestFuncMacro) Doc() string {
+	return m.Func.DocLong()
+}
+
+func (m *evalTestFuncMacro) Invoke(span *model.Span, arg eval.Arg) (eval.Return, eval.Effect, error) {
+	return m.Parent.EvalSeq(span, m.Func, arg)
 }
