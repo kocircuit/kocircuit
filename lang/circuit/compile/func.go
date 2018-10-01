@@ -1,15 +1,31 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package compile
 
 import (
 	"fmt"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/syntax"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 // Step logics include Operator.
-func graftFunc(pkg string, parsed Design) (f *Func, err error) {
+func graftFunc(pkg string, parsed syntax.Design) (f *model.Func, err error) {
 	g := newGrafting()
 	if err = g.graftArgs(parsed); err != nil {
 		return nil, fmt.Errorf("grafting fields of %s.%v (%v)", pkg, parsed.Name, err)
@@ -21,23 +37,23 @@ func graftFunc(pkg string, parsed Design) (f *Func, err error) {
 	if !ok {
 		return nil, fmt.Errorf(
 			"missing return in %s of %s",
-			Sprint(pkg),
-			Sprint(parsed.Name),
+			tree.Sprint(pkg),
+			tree.Sprint(parsed.Name),
 		)
 	}
-	var gatherReturned []*Gather
+	var gatherReturned []*model.Gather
 	for _, s := range returned {
-		gatherReturned = append(gatherReturned, &Gather{Field: MainFlowLabel, Step: s})
+		gatherReturned = append(gatherReturned, &model.Gather{Field: model.MainFlowLabel, Step: s})
 	}
-	f = &Func{
+	f = &model.Func{
 		Doc:     parsed.Comment,
-		ID:      FuncID(pkg, parsed.Name.Name()),
+		ID:      model.FuncID(pkg, parsed.Name.Name()),
 		Name:    parsed.Name.Name(),
 		Pkg:     pkg,
 		Enter:   g.in,
 		Field:   g.arg,
 		Monadic: g.monadic,
-		Leave:   g.add(Step{Label: "0_leave", Gather: gatherReturned, Logic: Leave{}, Syntax: parsed}),
+		Leave:   g.add(model.Step{Label: "0_leave", Gather: gatherReturned, Logic: model.Leave{}, Syntax: parsed}),
 		Step:    sortStep(g.all),
 		Spread:  nil, // filled later
 		Syntax:  parsed,
@@ -49,8 +65,8 @@ func graftFunc(pkg string, parsed Design) (f *Func, err error) {
 	return f, nil
 }
 
-func BacklinkFunc(fu *Func) {
-	fu.Spread = map[*Step][]*Step{}
+func BacklinkFunc(fu *model.Func) {
+	fu.Spread = map[*model.Step][]*model.Step{}
 	for _, s := range fu.Step {
 		s.Func = fu // add backlink to the func
 		for _, g := range s.Gather {
@@ -59,7 +75,7 @@ func BacklinkFunc(fu *Func) {
 	}
 }
 
-func computeStepIDs(f *Func) error {
+func computeStepIDs(f *model.Func) error {
 	label := map[string]bool{}
 	for _, s := range f.Step {
 		if label[s.Label] {
@@ -71,13 +87,13 @@ func computeStepIDs(f *Func) error {
 	return nil
 }
 
-func StepID(label string) ID {
-	return StringID(label)
+func StepID(label string) model.ID {
+	return model.StringID(label)
 }
 
-func (g *grafting) graftArgs(parsed Design) error {
-	g.in = g.add(Step{Label: "0_enter", Logic: Enter{}, Syntax: parsed})
-	g.arg = map[string]*Step{}
+func (g *grafting) graftArgs(parsed syntax.Design) error {
+	g.in = g.add(model.Step{Label: "0_enter", Logic: model.Enter{}, Syntax: parsed})
+	g.arg = map[string]*model.Step{}
 	for _, factor := range parsed.Factor {
 		if factor.Monadic {
 			g.monadic = factor.Name.Name()
@@ -86,10 +102,10 @@ func (g *grafting) graftArgs(parsed Design) error {
 			return fmt.Errorf("duplicate field name %s", factor.Name.Name())
 		}
 		g.arg[factor.Name.Name()] = g.add(
-			Step{
+			model.Step{
 				Label:  fmt.Sprintf("0_enter_%s", factor.Name.Name()),
-				Gather: []*Gather{{Field: MainFlowLabel, Step: g.in}},
-				Logic:  Link{Name: factor.Name.Name(), Monadic: factor.Monadic},
+				Gather: []*model.Gather{{Field: model.MainFlowLabel, Step: g.in}},
+				Logic:  model.Link{Name: factor.Name.Name(), Monadic: factor.Monadic},
 				Syntax: parsed,
 			},
 		)
@@ -97,7 +113,7 @@ func (g *grafting) graftArgs(parsed Design) error {
 	return nil
 }
 
-func (g *grafting) graftBody(asm Assembly) error {
+func (g *grafting) graftBody(asm syntax.Assembly) error {
 	if len(asm.Sign.Path) != 0 || asm.Type != "{}" {
 		return fmt.Errorf("function body syntax near %v", asm)
 	}
@@ -118,7 +134,7 @@ func (g *grafting) graftBody(asm Assembly) error {
 	return nil
 }
 
-func (g *grafting) graftLabel(l string) (step []*Step, err error) {
+func (g *grafting) graftLabel(l string) (step []*model.Step, err error) {
 	// caching and cyclical references
 	if step, ok := g.labelStep[l]; ok {
 		return step, nil

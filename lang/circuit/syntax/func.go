@@ -1,25 +1,39 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package syntax
 
-import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/lex"
-)
+import "github.com/kocircuit/kocircuit/lang/circuit/lex"
 
 type Design struct {
 	Comment string   `ko:"name=comment"`
 	Name    Ref      `ko:"name=name"`
 	Factor  []Factor `ko:"name=factor"`
 	Returns Assembly `ko:"name=returns"`
-	Lex     `ko:"name=lex"`
+	lex.Lex `ko:"name=lex"`
 }
 
 type Factor struct {
 	Comment string          `ko:"name=comment"`
 	Name    Ref             `ko:"name=name"`
 	Monadic bool            `ko:"name=monadic"`
-	Lex     `ko:"name=lex"` // comment and name tokens for this factor
+	lex.Lex `ko:"name=lex"` // comment and name tokens for this factor
 }
 
-func parseDesign(needsLine bool, suffix []Lex) (parsed []Design, remain []Lex, err error) {
+func parseDesign(needsLine bool, suffix []lex.Lex) (parsed []Design, remain []lex.Lex, err error) {
 	remain = suffix
 	var lines int
 	parsing := Design{}
@@ -42,11 +56,11 @@ func parseDesign(needsLine bool, suffix []Lex) (parsed []Design, remain []Lex, e
 	}
 	// attach all inline terms (arising from series) to function body
 	parsing.Returns.Term = append(parsing.Returns.Term, inline.Series...)
-	parsing.Lex = LexUnion(postComment[:len(postComment)-len(remain)]...)
+	parsing.Lex = lex.LexUnion(postComment[:len(postComment)-len(remain)]...)
 	return append([]Design{parsing}, inline.Design...), remain, nil
 }
 
-func parseFactorBlock(suffix []Lex) (factor []Factor, remain []Lex, err error) {
+func parseFactorBlock(suffix []lex.Lex) (factor []Factor, remain []lex.Lex, err error) {
 	var bra Bracket
 	if bra, remain, err = parseBracket(suffix); err != nil {
 		return nil, suffix, err
@@ -60,7 +74,7 @@ func parseFactorBlock(suffix []Lex) (factor []Factor, remain []Lex, err error) {
 	return factor, suffix[1:], nil
 }
 
-func parseFactorBody(suffix []Lex) (factor []Factor, err error) {
+func parseFactorBody(suffix []lex.Lex) (factor []Factor, err error) {
 	monadic := false
 	for len(suffix) > 0 {
 		var f Factor
@@ -84,7 +98,7 @@ func parseFactorBody(suffix []Lex) (factor []Factor, err error) {
 	return factor, nil
 }
 
-func parseFactor(needsLine bool, suffix []Lex) (factor Factor, remain []Lex, err error) {
+func parseFactor(needsLine bool, suffix []lex.Lex) (factor Factor, remain []lex.Lex, err error) {
 	remain = suffix
 	var lines int
 	lines, factor.Comment, remain = parseCommentBlock(remain)
@@ -98,7 +112,7 @@ func parseFactor(needsLine bool, suffix []Lex) (factor Factor, remain []Lex, err
 	if remain, err = matchPunc("?", remain); err == nil {
 		factor.Monadic = true
 	}
-	factor.Lex = LexUnion(postComment[:len(postComment)-len(remain)]...)
+	factor.Lex = lex.LexUnion(postComment[:len(postComment)-len(remain)]...)
 	return factor, remain, nil
 }
 

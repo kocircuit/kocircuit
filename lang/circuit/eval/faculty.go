@@ -1,3 +1,19 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package eval
 
 import (
@@ -6,8 +22,8 @@ import (
 	"path"
 	"sort"
 
-	. "github.com/kocircuit/kocircuit/lang/go/kit/hash"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
+	"github.com/kocircuit/kocircuit/lang/go/kit/hash"
+	"github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
 type Ideals []Ideal
@@ -75,13 +91,13 @@ func (f Faculty) StringTable(header string) [][]string {
 			macro.Help(),
 		})
 	}
-	return SortStringTable(ss)
+	return util.SortStringTable(ss)
 }
 
 func (f Faculty) ID() string {
 	id := ""
 	for k, v := range f {
-		id = Mix(id, k.Pkg, k.Name, Mix(v.Help()))
+		id = hash.Mix(id, k.Pkg, k.Name, hash.Mix(v.Help()))
 	}
 	return id
 }
