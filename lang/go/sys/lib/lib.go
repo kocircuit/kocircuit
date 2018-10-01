@@ -12,6 +12,7 @@ import (
 	_ "github.com/kocircuit/kocircuit/lib/file/path"
 	_ "github.com/kocircuit/kocircuit/lib/integer"
 	_ "github.com/kocircuit/kocircuit/lib/net/http"
+	_ "github.com/kocircuit/kocircuit/lib/os"
 	_ "github.com/kocircuit/kocircuit/lib/redblack/fast"
 	_ "github.com/kocircuit/kocircuit/lib/shell"
 	_ "github.com/kocircuit/kocircuit/lib/strings"

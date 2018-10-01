@@ -8,6 +8,10 @@ Env(name?) {
 	return: os.GoEnv(name)
 }
 
+Exit(code?) {
+	return: os.GoExit(code)
+}
+
 TempDir() {
 	return: os.GoTempDir()
 }
@@ -22,3 +26,4 @@ Task(name, binary, arg, env, dir, after) {
 		after: after
 	)
 }
+

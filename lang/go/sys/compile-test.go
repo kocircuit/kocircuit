@@ -37,11 +37,15 @@ type CompileTest struct {
 	Show    bool         `ko:"name=show"`
 }
 
+const (
+	testingPkg = "github.com/kocircuit/kocircuit/lib/testing"
+)
+
 // Play runs the service.
 func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
 		RepoDirs: arg.Repo,
-		PkgPaths: arg.Pkgs,
+		PkgPaths: append(arg.Pkgs, testingPkg),
 		Show:     arg.Show,
 	}
 	compiled := c.Play(ctx)
@@ -51,11 +55,11 @@ func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 	// Build play service
 	ev := go_eval.NewEvaluator(arg.Faculty, compiled.Repo)
 	w := &PlayFuncEval{
-		Func: ev.Program.Idiom.Lookup("idiom", "RunTests"),
+		Func: compiled.Repo.Lookup(testingPkg, "RunTests"),
 		Eval: ev,
 	}
 	if w.Func == nil {
-		return &PlayResult{Error: fmt.Errorf("cannot find idiom.RunTests")}
+		return &PlayResult{Error: fmt.Errorf("cannot find %s/RunTests", testingPkg)}
 	}
 	// Find test functions
 	var pkgsValue symbol.Symbols
