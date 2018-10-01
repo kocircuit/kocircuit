@@ -8,12 +8,8 @@ env:
   global:
     - GO111MODULE=on
 
-install:
-  - go get github.com/golang/protobuf/proto
-  - go get github.com/golang/protobuf/protoc-gen-go/descriptor
-  - go build github.com/kocircuit/kocircuit/lang/ko
-
 script:
+  - go build github.com/kocircuit/kocircuit/lang/ko
   - go test ./...
   - ko test 
     github.com/kocircuit/kocircuit/lib
