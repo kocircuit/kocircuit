@@ -1,4 +1,5 @@
-// Copyright © 2017 Aljabr, Inc.
+//
+// Copyright © 2018 Aljabr, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
 
 package cmd
 
@@ -21,7 +23,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
+	"github.com/kocircuit/kocircuit/lang/go/eval"
 )
 
 // listCmd represents the list command
@@ -35,8 +37,8 @@ Usage:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		tables := [][]string{}
-		tables = append(tables, EvalFaculty().StringTable("Builtin")...)
-		tables = append(tables, EvalIdiomRepo.StringTable("Idiomatic")...)
+		tables = append(tables, eval.EvalFaculty().StringTable("Builtin")...)
+		tables = append(tables, eval.EvalIdiomRepo.StringTable("Idiomatic")...)
 		printTable(os.Stdout, tables)
 	},
 }

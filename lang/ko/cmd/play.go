@@ -1,4 +1,5 @@
-// Copyright © 2017 Aljabr, Inc.
+//
+// Copyright © 2018 Aljabr, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
 
 package cmd
 
@@ -20,7 +22,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
+	"github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 	"github.com/kocircuit/kocircuit/lang/go/sys"
 )
@@ -40,7 +42,7 @@ var playCmd = &cobra.Command{
 			Repo:    tools.PkgRoots(),
 			Pkg:     koPkg,
 			Func:    koFunc,
-			Faculty: EvalFaculty(),
+			Faculty: eval.EvalFaculty(),
 			Show:    false, // show compiled ko functions
 		}
 		if result := b.Play(runtime.CompilerContext()); result.Error != nil {

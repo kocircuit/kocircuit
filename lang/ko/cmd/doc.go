@@ -1,4 +1,5 @@
-// Copyright © 2017 Aljabr, Inc.
+//
+// Copyright © 2018 Aljabr, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
 
 package cmd
 
@@ -20,8 +22,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 	"github.com/kocircuit/kocircuit/lang/go/sys"
 )
@@ -52,8 +54,8 @@ Usage:
 			log.Fatalln(compileResult.Error)
 		}
 		//
-		repo := CombineRepo(EvalIdiomRepo, compileResult.Repo)
-		faculty := EvalFaculty()
+		repo := model.CombineRepo(eval.EvalIdiomRepo, compileResult.Repo)
+		faculty := eval.EvalFaculty()
 		//
 		if pf.Func == nil { // package doc
 			fmt.Printf("package %q\n\n", pf.Pkg)

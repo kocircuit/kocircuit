@@ -1,4 +1,5 @@
-// Copyright © 2017 Aljabr, Inc.
+//
+// Copyright © 2018 Aljabr, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
 
 package cmd
 
@@ -19,8 +21,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	. "github.com/kocircuit/kocircuit"
-	. "github.com/kocircuit/kocircuit/lang/go/eval"
+	ko "github.com/kocircuit/kocircuit"
+	"github.com/kocircuit/kocircuit/lang/go/eval"
 )
 
 // versionCmd represents the version command
@@ -30,8 +32,8 @@ var versionCmd = &cobra.Command{
 	Long: `Print information identifying this Ko binary and its origin.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Version: %s\n", KoVersion)
-		fmt.Printf("EvalFacultyID: %s\n", EvalFaculty().ID())
+		fmt.Printf("Version: %s\n", ko.KoVersion)
+		fmt.Printf("EvalFacultyID: %s\n", eval.EvalFaculty().ID())
 	},
 }
 
