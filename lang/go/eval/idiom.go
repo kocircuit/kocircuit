@@ -88,7 +88,7 @@ Inc(number?) {
 }
 
 // RunTests runs a set of test varieties.
-// ``tests`` is a series of ``name``, ``func`` pairs.
+// tests is a series of (name, func) pairs.
 RunTests(tests?) {
 	ranged: Range(
 		over: tests                   // range of all tests
@@ -112,7 +112,7 @@ runTestIterator(carry, elem) {
 
 runTestRunner(testFunc, testName) {
 	s1: testFunc()
-	s2: Show(Join("PASS: ", testName), _after: s1)
+	s2: Show(pass: testName, _after: s1)
 	return: (
 		passed: 1
 		failed: 0
@@ -120,9 +120,9 @@ runTestRunner(testFunc, testName) {
 }
 
 runTestFailRecover(panicValue?, testName) {
-	_: Show(Join("FAIL: ", testName)
+	s1: Show(fail: testName)
 	return: (
-		passed: 0,
+		passed: 0
 		failed: 1
 	)
 }

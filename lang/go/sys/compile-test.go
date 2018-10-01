@@ -55,9 +55,10 @@ func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 		pkg := compiled.Repo[pkgName]
 		for _, fName := range pkg.SortedFuncNames() {
 			if strings.HasPrefix(fName, "Test") {
-				f := pkg[fName] // of type model.Func
+				//f := pkg[fName] // of type model.Func
 				// How to make a Variety Symbol from `f` ?
-				vSym := symbol.MakeVarietySymbol(f, nil)
+				//vSym := symbol.MakeVarietySymbol(f, nil)
+				// TODO add vSym as (name: fName, func: vSym) pair to tests.Value.
 			}
 		}
 	}

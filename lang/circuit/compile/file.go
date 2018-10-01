@@ -29,7 +29,7 @@ import (
 func MustCompileString(forPkg, fileName, fileText string) model.Repo {
 	repo, err := CompileString(forPkg, fileName, fileText)
 	if err != nil {
-		panic("o")
+		panic(fmt.Sprintf("Compile failed: %s", err))
 	}
 	return repo
 }
