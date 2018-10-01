@@ -1,15 +1,15 @@
 package eval
 
 import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/compile"
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/compile"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 )
 
 var EvalIdiomRepo = compileIdiomRepo()
 
-func compileIdiomRepo() Repo {
-	repo := MustCompileString(IdiomRootPkg, "idiom.ko", EvalIdiomSrc) // package "idiom"
+func compileIdiomRepo() model.Repo {
+	repo := compile.MustCompileString(eval.IdiomRootPkg, "idiom.ko", EvalIdiomSrc) // package "idiom"
 	return repo
 }
 

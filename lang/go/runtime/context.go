@@ -6,7 +6,7 @@ import (
 	"log"
 	"runtime"
 
-	. "github.com/kocircuit/kocircuit"
+	ko "github.com/kocircuit/kocircuit"
 )
 
 func NewContext() *Context {
@@ -18,7 +18,7 @@ func NewContext() *Context {
 
 func CompilerContext() *Context {
 	return &Context{
-		Source:  fmt.Sprintf("ko/%s", KoVersion),
+		Source:  fmt.Sprintf("ko/%s", ko.KoVersion),
 		Context: context.Background(),
 	}
 }
@@ -35,7 +35,7 @@ func errorfSkip(skip int, ctx string, format string, arg ...interface{}) string 
 	_, file, line, _ := runtime.Caller(1 + skip)
 	return fmt.Sprintf(
 		"(%s:%d) (%s) %s",
-		SanitizeKoCompilerSourcePath(file),
+		ko.SanitizeKoCompilerSourcePath(file),
 		line,
 		ctx,
 		fmt.Sprintf(format, arg...),
