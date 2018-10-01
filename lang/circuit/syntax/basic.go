@@ -1,13 +1,29 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package syntax
 
 import (
 	"fmt"
 	"strings"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/lex"
+	"github.com/kocircuit/kocircuit/lang/circuit/lex"
 )
 
-func parseBracket(suffix []Lex) (bra Bracket, remain []Lex, err error) {
+func parseBracket(suffix []lex.Lex) (bra Bracket, remain []lex.Lex, err error) {
 	if len(suffix) < 1 {
 		return Bracket{}, suffix, ErrUnexpectedEnd
 	}
@@ -18,22 +34,22 @@ func parseBracket(suffix []Lex) (bra Bracket, remain []Lex, err error) {
 	return bra, suffix[1:], nil
 }
 
-func matchKeyword(key string, suffix []Lex) (remain []Lex, err error) {
+func matchKeyword(key string, suffix []lex.Lex) (remain []lex.Lex, err error) {
 	if len(suffix) < 1 {
 		return suffix, ErrUnexpectedEnd
 	}
-	tok, ok := suffix[0].(Token)
+	tok, ok := suffix[0].(lex.Token)
 	if !ok {
 		return suffix, SyntaxError{Remainder: suffix, Msg: "not a token"}
 	}
-	nameKey := Name{String: key}
+	nameKey := lex.Name{String: key}
 	if tok.Char != nameKey {
 		return suffix, SyntaxError{Remainder: suffix, Msg: fmt.Sprintf("not %q", key)}
 	}
 	return suffix[1:], nil
 }
 
-func matchPunc(key string, suffix []Lex) (remain []Lex, err error) {
+func matchPunc(key string, suffix []lex.Lex) (remain []lex.Lex, err error) {
 	if len(suffix) < 1 {
 		return suffix, ErrUnexpectedEnd
 	}
@@ -43,36 +59,36 @@ func matchPunc(key string, suffix []Lex) (remain []Lex, err error) {
 	return suffix[1:], nil
 }
 
-func isWhitespace(z Lex) (string, bool) {
-	tok, ok := z.(Token)
+func isWhitespace(z lex.Lex) (string, bool) {
+	tok, ok := z.(lex.Token)
 	if !ok {
 		return "", false
 	}
-	white, ok := tok.Char.(White)
+	white, ok := tok.Char.(lex.White)
 	if !ok {
 		return "", false
 	}
 	return white.String, true
 }
 
-func isPunc(key string, z Lex) bool {
-	tok, ok := z.(Token)
+func isPunc(key string, z lex.Lex) bool {
+	tok, ok := z.(lex.Token)
 	if !ok {
 		return false
 	}
-	puncKey := Punc{String: key}
+	puncKey := lex.Punc{String: key}
 	return tok.Char == puncKey
 }
 
-func parseString(suffix []Lex) (parsed string, remain []Lex, err error) {
+func parseString(suffix []lex.Lex) (parsed string, remain []lex.Lex, err error) {
 	if len(suffix) < 1 {
 		return "", suffix, ErrUnexpectedEnd
 	}
-	tok, ok := suffix[0].(Token)
+	tok, ok := suffix[0].(lex.Token)
 	if !ok {
 		return "", suffix, SyntaxError{Remainder: suffix, Msg: "not a token"}
 	}
-	s, ok := tok.Char.(LexString)
+	s, ok := tok.Char.(lex.LexString)
 	if !ok {
 		return "", suffix, SyntaxError{Remainder: suffix, Msg: "not a string"}
 	}
@@ -81,11 +97,11 @@ func parseString(suffix []Lex) (parsed string, remain []Lex, err error) {
 
 // Literal is Syntax.
 type Literal struct {
-	Value Char `ko:"name=value"` // String, Int64, or Float64
-	Lex   `ko:"name=lex"`
+	Value   lex.Char `ko:"name=value"` // String, Int64, or Float64
+	lex.Lex `ko:"name=lex"`
 }
 
-func parseLiteral(suffix []Lex) (literal Literal, remain []Lex, err error) {
+func parseLiteral(suffix []lex.Lex) (literal Literal, remain []lex.Lex, err error) {
 	negative := false
 	remain = suffix
 	if remain, err = matchPunc("-", remain); err == nil {
@@ -94,24 +110,24 @@ func parseLiteral(suffix []Lex) (literal Literal, remain []Lex, err error) {
 	if len(remain) < 1 {
 		return Literal{}, suffix, ErrUnexpectedEnd
 	}
-	tok, ok := remain[0].(Token)
+	tok, ok := remain[0].(lex.Token)
 	if !ok {
 		return Literal{}, suffix, SyntaxError{Remainder: remain, Msg: "not a token"}
 	}
 	switch char := tok.Char.(type) {
-	case LexInteger:
+	case lex.LexInteger:
 		if negative {
 			return Literal{Value: char.Negative(), Lex: tok}, remain[1:], nil
 		} else {
 			return Literal{Value: char, Lex: tok}, remain[1:], nil
 		}
-	case LexFloat:
+	case lex.LexFloat:
 		if negative {
 			return Literal{Value: char.Negative(), Lex: tok}, remain[1:], nil
 		} else {
 			return Literal{Value: char, Lex: tok}, remain[1:], nil
 		}
-	case LexString:
+	case lex.LexString:
 		if negative {
 			return Literal{}, suffix, SyntaxError{Remainder: remain, Msg: "negating a string literal"}
 		} else {
@@ -121,7 +137,7 @@ func parseLiteral(suffix []Lex) (literal Literal, remain []Lex, err error) {
 	return Literal{}, suffix, SyntaxError{Remainder: remain, Msg: "not a literal"}
 }
 
-func parseName(suffix []Lex) (parsed Ref, remain []Lex, err error) {
+func parseName(suffix []lex.Lex) (parsed Ref, remain []lex.Lex, err error) {
 	if len(suffix) < 1 {
 		return Ref{}, suffix, ErrUnexpectedEnd
 	}
@@ -136,12 +152,12 @@ func parseName(suffix []Lex) (parsed Ref, remain []Lex, err error) {
 	}, suffix[1:], nil
 }
 
-func isName(z Lex) (name string, ok bool) {
-	tok, ok := z.(Token)
+func isName(z lex.Lex) (name string, ok bool) {
+	tok, ok := z.(lex.Token)
 	if !ok {
 		return "", false
 	}
-	n, ok := tok.Char.(Name)
+	n, ok := tok.Char.(lex.Name)
 	if !ok {
 		return "", false
 	}
@@ -149,8 +165,8 @@ func isName(z Lex) (name string, ok bool) {
 }
 
 type Ref struct {
-	Lex  `ko:"name=lex"`
-	Path []string `ko:"name=path"`
+	lex.Lex `ko:"name=lex"`
+	Path    []string `ko:"name=path"`
 }
 
 func (ref Ref) IsEmpty() bool {
@@ -165,7 +181,7 @@ func (ref Ref) Join(with string) string {
 	return strings.Join(ref.Path, with)
 }
 
-func ParseRef(suffix []Lex) (ref Ref, remain []Lex, err error) {
+func ParseRef(suffix []lex.Lex) (ref Ref, remain []lex.Lex, err error) {
 	remain = suffix
 	if ref, remain, err = parseName(remain); err != nil {
 		return Ref{}, suffix, err
@@ -180,7 +196,7 @@ func ParseRef(suffix []Lex) (ref Ref, remain []Lex, err error) {
 			break
 		}
 		ref = Ref{
-			Lex:  RegionUnion(ref.Lex, remain[0], remain[1]),
+			Lex:  lex.RegionUnion(ref.Lex, remain[0], remain[1]),
 			Path: append(ref.Path, name),
 		}
 		remain = remain[2:]

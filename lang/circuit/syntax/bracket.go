@@ -1,27 +1,43 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package syntax
 
 import (
 	"fmt"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/lex"
+	"github.com/kocircuit/kocircuit/lang/circuit/lex"
 )
 
 // Bracket is a Lex.
 type Bracket struct {
-	Left  Token `ko:"name=left"`
-	Right Token `ko:"name=right"`
-	Body  []Lex `ko:"name=body"` // []Token
+	Left  lex.Token `ko:"name=left"`
+	Right lex.Token `ko:"name=right"`
+	Body  []lex.Lex `ko:"name=body"` // []Token
 }
 
 func (bra Bracket) FilePath() string {
 	return bra.Left.FilePath()
 }
 
-func (bra Bracket) StartPosition() Position {
+func (bra Bracket) StartPosition() lex.Position {
 	return bra.Left.StartPosition()
 }
 
-func (bra Bracket) EndPosition() Position {
+func (bra Bracket) EndPosition() lex.Position {
 	return bra.Right.EndPosition()
 }
 
@@ -30,21 +46,21 @@ func (bra Bracket) RegionString() string {
 }
 
 func (bra Bracket) Type() string { // "{}" or "[]" or "()"
-	return bra.Left.Char.(Punc).String + bra.Right.Char.(Punc).String
+	return bra.Left.Char.(lex.Punc).String + bra.Right.Char.(lex.Punc).String
 }
 
 // An alternative parallel global algorithm for bracket folding:
 //	(a) filter non-brackets
 //	(b) greedily collapse matching brackets, resulting in bracket structures, recurse
 
-func FoldBracket(suffix []Lex) (r []Lex, err error) { // [](Token or Bracket)
+func FoldBracket(suffix []lex.Lex) (r []lex.Lex, err error) { // [](Token or Bracket)
 	for len(suffix) > 0 {
-		var block []Lex
+		var block []lex.Lex
 		if block, suffix = sliceBlock(suffix); len(block) > 0 {
 			r = append(r, block...)
 			continue
 		}
-		var bracket []Lex
+		var bracket []lex.Lex
 		if bracket, suffix, err = sliceBracket(suffix); err != nil {
 			return nil, err
 		} else if len(bracket) > 0 {
@@ -53,8 +69,8 @@ func FoldBracket(suffix []Lex) (r []Lex, err error) { // [](Token or Bracket)
 			} else {
 				r = append(r,
 					Bracket{
-						Left:  bracket[0].(Token),
-						Right: bracket[len(bracket)-1].(Token),
+						Left:  bracket[0].(lex.Token),
+						Right: bracket[len(bracket)-1].(lex.Token),
 						Body:  fold,
 					},
 				)
@@ -68,9 +84,9 @@ func FoldBracket(suffix []Lex) (r []Lex, err error) { // [](Token or Bracket)
 // sliceBlock splits suffix into two pieces: block and tail.
 // The block captures all tokens before the first bracket token,
 // The tail captures the rest.
-func sliceBlock(suffix []Lex) (block, tail []Lex) {
+func sliceBlock(suffix []lex.Lex) (block, tail []lex.Lex) {
 	for i, z := range suffix {
-		if len(isBracketChar(z.(Token).Char)) > 0 {
+		if len(isBracketChar(z.(lex.Token).Char)) > 0 {
 			return suffix[:i], suffix[i:]
 		}
 	}
@@ -78,8 +94,8 @@ func sliceBlock(suffix []Lex) (block, tail []Lex) {
 }
 
 // isBracketChar returns a non-empty bracket string if z is Punc{bracket}.
-func isBracketChar(z Char) string {
-	p, ok := z.(Punc)
+func isBracketChar(z lex.Char) string {
+	p, ok := z.(lex.Punc)
 	if !ok {
 		return ""
 	}
@@ -90,13 +106,13 @@ func isBracketChar(z Char) string {
 	return ""
 }
 
-func sliceBracket(suffix []Lex) (bracket, tail []Lex, err error) {
+func sliceBracket(suffix []lex.Lex) (bracket, tail []lex.Lex, err error) {
 	if len(suffix) == 0 {
 		return nil, nil, nil
 	}
 	var stack []string // stack of brackets
 	for i, z := range suffix {
-		tok := z.(Token)
+		tok := z.(lex.Token)
 		if bra := isBracketChar(tok.Char); len(bra) > 0 {
 			if len(stack) == 0 || !cancelBracket(stack[len(stack)-1], bra) {
 				stack = append(stack, bra)
@@ -111,7 +127,7 @@ func sliceBracket(suffix []Lex) (bracket, tail []Lex, err error) {
 	if len(stack) == 0 {
 		panic("unexpected")
 	}
-	return nil, nil, fmt.Errorf("bracket imbalance within %s", LexUnion(suffix...).RegionString())
+	return nil, nil, fmt.Errorf("bracket imbalance within %s", lex.LexUnion(suffix...).RegionString())
 }
 
 func cancelBracket(left, right string) bool {

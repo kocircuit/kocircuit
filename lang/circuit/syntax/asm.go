@@ -1,40 +1,56 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package syntax
 
 import (
 	"fmt"
 	"strings"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/lex"
+	"github.com/kocircuit/kocircuit/lang/circuit/lex"
 )
 
 type Syntax interface {
-	Region
+	lex.Region
 }
 
-type EmptySyntax struct{ 
-	EmptyRegion `ko:"name=emptyRegion"`
+type EmptySyntax struct {
+	lex.EmptyRegion `ko:"name=emptyRegion"`
 }
 
 type Assembly struct {
-	Sign    Ref    `ko:"name=ref"`
-	Type    string `ko:"name=type"` // "{}" or "[]" or "()"
-	Term    []Term `ko:"name=term"`
-	Bracket Lex    `ko:"name=bracket"`
+	Sign    Ref     `ko:"name=ref"`
+	Type    string  `ko:"name=type"` // "{}" or "[]" or "()"
+	Term    []Term  `ko:"name=term"`
+	Bracket lex.Lex `ko:"name=bracket"`
 }
 
-func (asm Assembly) Syntax() Region {
-	return RegionUnion(asm.Sign, asm.Bracket)
+func (asm Assembly) Syntax() lex.Region {
+	return lex.RegionUnion(asm.Sign, asm.Bracket)
 }
 
 func (asm Assembly) FilePath() string {
 	return asm.Syntax().FilePath()
 }
 
-func (asm Assembly) StartPosition() Position {
+func (asm Assembly) StartPosition() lex.Position {
 	return asm.Syntax().StartPosition()
 }
 
-func (asm Assembly) EndPosition() Position {
+func (asm Assembly) EndPosition() lex.Position {
 	return asm.Syntax().EndPosition()
 }
 
@@ -52,11 +68,11 @@ func (term Term) FilePath() string {
 	return term.Hitch.FilePath()
 }
 
-func (term Term) StartPosition() Position {
+func (term Term) StartPosition() lex.Position {
 	return term.Hitch.StartPosition()
 }
 
-func (term Term) EndPosition() Position {
+func (term Term) EndPosition() lex.Position {
 	return term.Hitch.EndPosition()
 }
 
@@ -73,7 +89,7 @@ func (ctx *asmCtx) Append(ref Ref) *asmCtx {
 	return &asmCtx{
 		SeriesDepth: 0,
 		SeriesLabel: Ref{
-			Lex: RegionUnion(ctx.SeriesLabel.Lex, ref.Lex),
+			Lex: lex.RegionUnion(ctx.SeriesLabel.Lex, ref.Lex),
 			Path: append(
 				ctx.SeriesLabel.Path,
 				fmt.Sprintf("%d_%s", ctx.SeriesDepth, ref.Join("_")),
@@ -95,7 +111,7 @@ func (ctx *asmCtx) InlineSeriesLabelRef() Ref {
 	}
 }
 
-func parseAssembly(ctx *asmCtx, suffix []Lex) (parsed Assembly, inline Inline, remain []Lex, err error) {
+func parseAssembly(ctx *asmCtx, suffix []lex.Lex) (parsed Assembly, inline Inline, remain []lex.Lex, err error) {
 	if len(suffix) == 0 {
 		return Assembly{}, Inline{}, suffix, SyntaxError{Remainder: remain, Msg: "end of source"}
 	}
@@ -122,14 +138,14 @@ func parseAssembly(ctx *asmCtx, suffix []Lex) (parsed Assembly, inline Inline, r
 	return parsed, inline, remain, nil
 }
 
-func parseTermHitch(ctx *asmCtx, suffix []Lex) (term []Term, inline Inline, err error) {
+func parseTermHitch(ctx *asmCtx, suffix []lex.Lex) (term []Term, inline Inline, err error) {
 	if term, inline, err = parseColonTermHitch(ctx, suffix); err == nil {
 		return term, inline, nil
 	}
 	return parseNoColonTermHitch(ctx, suffix)
 }
 
-func parseColonTermHitch(ctx *asmCtx, suffix []Lex) (term []Term, inline Inline, err error) {
+func parseColonTermHitch(ctx *asmCtx, suffix []lex.Lex) (term []Term, inline Inline, err error) {
 	for len(suffix) > 0 {
 		t, termInline := Term{}, Inline{}
 		if t, termInline, suffix, err = parseColonTerm(ctx, len(term) > 0, suffix); err != nil {
@@ -144,7 +160,7 @@ func parseColonTermHitch(ctx *asmCtx, suffix []Lex) (term []Term, inline Inline,
 	return term, inline, nil
 }
 
-func parseColonTerm(ctx *asmCtx, needsLine bool, suffix []Lex) (parsed Term, inline Inline, remain []Lex, err error) {
+func parseColonTerm(ctx *asmCtx, needsLine bool, suffix []lex.Lex) (parsed Term, inline Inline, remain []lex.Lex, err error) {
 	remain = suffix
 	var lines int
 	lines, parsed.Comment, remain = parseCommentBlock(remain)
@@ -161,7 +177,7 @@ func parseColonTerm(ctx *asmCtx, needsLine bool, suffix []Lex) (parsed Term, inl
 	return parsed, inline, remain, nil
 }
 
-func parseNoColonTermHitch(ctx *asmCtx, suffix []Lex) (term []Term, inline Inline, err error) {
+func parseNoColonTermHitch(ctx *asmCtx, suffix []lex.Lex) (term []Term, inline Inline, err error) {
 	for len(suffix) > 0 {
 		t, termInline := Term{}, Inline{}
 		if t, termInline, suffix, err = parseNoColonTerm(ctx, len(term) > 0, suffix); err != nil {
@@ -179,7 +195,7 @@ func parseNoColonTermHitch(ctx *asmCtx, suffix []Lex) (term []Term, inline Inlin
 
 const NoLabel = ""
 
-func parseNoColonTerm(ctx *asmCtx, needsLine bool, suffix []Lex) (parsed Term, inline Inline, remain []Lex, err error) {
+func parseNoColonTerm(ctx *asmCtx, needsLine bool, suffix []lex.Lex) (parsed Term, inline Inline, remain []lex.Lex, err error) {
 	if len(suffix) == 0 {
 		return Term{}, Inline{}, suffix, SyntaxError{Remainder: suffix, Msg: "unexpected end of source"}
 	}
@@ -194,7 +210,7 @@ func parseNoColonTerm(ctx *asmCtx, needsLine bool, suffix []Lex) (parsed Term, i
 	}
 	parsed.Label = Ref{
 		Path: []string{NoLabel},
-		Lex:  RegionStart(remain[0]),
+		Lex:  lex.RegionStart(remain[0]),
 	}
 	if parsed.Hitch, inline, remain, err = parseHitchSeries(ctx.Append(parsed.Label), remain); err != nil {
 		return Term{}, Inline{}, suffix, err
@@ -202,14 +218,14 @@ func parseNoColonTerm(ctx *asmCtx, needsLine bool, suffix []Lex) (parsed Term, i
 	return parsed, inline, remain, nil
 }
 
-func parseHitchSeries(ctx *asmCtx, suffix []Lex) (parsed Syntax, inline Inline, remain []Lex, err error) {
+func parseHitchSeries(ctx *asmCtx, suffix []lex.Lex) (parsed Syntax, inline Inline, remain []lex.Lex, err error) {
 	if len(suffix) == 0 {
 		return nil, Inline{}, suffix, SyntaxError{Remainder: suffix, Msg: "unexpected end of source"}
 	}
 	ctx = ctx.Append(
 		Ref{
 			Path: []string{"series"},
-			Lex:  RegionStart(suffix[0]),
+			Lex:  lex.RegionStart(suffix[0]),
 		},
 	)
 	remain = suffix
@@ -242,7 +258,7 @@ func parseHitchSeries(ctx *asmCtx, suffix []Lex) (parsed Syntax, inline Inline, 
 	return pastCtx.InlineSeriesLabelRef(), inline, remain, nil
 }
 
-func parseAssemblyTail(pastCtx, presentCtx *asmCtx, lex []Lex) (parsed Term, inline Inline, remain []Lex, err error) {
+func parseAssemblyTail(pastCtx, presentCtx *asmCtx, lex []lex.Lex) (parsed Term, inline Inline, remain []lex.Lex, err error) {
 	remain = lex
 	asm, asmInline, asmRemain, err := parseAssembly(presentCtx, remain)
 	if err != nil {
@@ -258,27 +274,27 @@ func parseAssemblyTail(pastCtx, presentCtx *asmCtx, lex []Lex) (parsed Term, inl
 	}, asmInline, asmRemain, nil
 }
 
-func parseSelectTail(pastCtx, presentCtx *asmCtx, lex []Lex) (Term, Inline, []Lex, error) {
-	if len(lex) < 2 {
-		return Term{}, Inline{}, lex, fmt.Errorf("not a tail selection")
+func parseSelectTail(pastCtx, presentCtx *asmCtx, l []lex.Lex) (Term, Inline, []lex.Lex, error) {
+	if len(l) < 2 {
+		return Term{}, Inline{}, l, fmt.Errorf("not a tail selection")
 	}
-	if !isPunc(".", lex[0]) {
-		return Term{}, Inline{}, lex, fmt.Errorf("tail selection starts with a \".\"")
+	if !isPunc(".", l[0]) {
+		return Term{}, Inline{}, l, fmt.Errorf("tail selection starts with a \".\"")
 	}
-	if ref, remain, err := ParseRef(lex[1:]); err != nil {
-		return Term{}, Inline{}, lex, fmt.Errorf("not a tail selection (%v)", err)
+	if ref, remain, err := ParseRef(l[1:]); err != nil {
+		return Term{}, Inline{}, l, fmt.Errorf("not a tail selection (%v)", err)
 	} else {
 		return Term{
 			Label: presentCtx.InlineSeriesLabelRef(),
 			Hitch: Ref{
-				Lex:  LexUnion(lex[:len(lex)-len(remain)]...),
+				Lex:  lex.LexUnion(l[:len(l)-len(remain)]...),
 				Path: append([]string{pastCtx.InlineSeriesLabelRef().Path[0]}, ref.Path...),
 			},
 		}, Inline{}, remain, nil
 	}
 }
 
-func parseHitch(ctx *asmCtx, suffix []Lex) (parsed Syntax, inline Inline, remain []Lex, err error) {
+func parseHitch(ctx *asmCtx, suffix []lex.Lex) (parsed Syntax, inline Inline, remain []lex.Lex, err error) {
 	remain = suffix
 	funcBag := []Design{}
 	if funcBag, remain, err = parseDesign(false, suffix); err == nil { // if hitch is an inline function definition

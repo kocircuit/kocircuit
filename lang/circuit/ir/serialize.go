@@ -1,15 +1,31 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package ir
 
 import (
 	"github.com/golang/protobuf/proto"
 
 	pb "github.com/kocircuit/kocircuit/lang/circuit/ir/proto"
-	. "github.com/kocircuit/kocircuit/lang/circuit/lex"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/circuit/syntax"
+	"github.com/kocircuit/kocircuit/lang/circuit/lex"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/syntax"
 )
 
-func SerializeRepo(repo Repo) *pb.Repo {
+func SerializeRepo(repo model.Repo) *pb.Repo {
 	pbRepo := &pb.Repo{
 		Package: make([]*pb.Package, 0, len(repo)),
 	}
@@ -19,7 +35,7 @@ func SerializeRepo(repo Repo) *pb.Repo {
 	return pbRepo
 }
 
-func serializePackage(pkgPath string, pkg Package) *pb.Package {
+func serializePackage(pkgPath string, pkg model.Package) *pb.Package {
 	pbPackage := &pb.Package{
 		Path: proto.String(pkgPath),
 		Func: make([]*pb.Func, 0, len(pkg)),
@@ -30,7 +46,7 @@ func serializePackage(pkgPath string, pkg Package) *pb.Package {
 	return pbPackage
 }
 
-func serializeFunc(fu *Func) *pb.Func {
+func serializeFunc(fu *model.Func) *pb.Func {
 	pbFunc := &pb.Func{
 		Doc:     proto.String(fu.Doc),
 		Id:      SerializeID(fu.ID),
@@ -46,7 +62,7 @@ func serializeFunc(fu *Func) *pb.Func {
 	return pbFunc
 }
 
-func serializeSteps(steps []*Step) []*pb.Step {
+func serializeSteps(steps []*model.Step) []*pb.Step {
 	pbSteps := make([]*pb.Step, len(steps))
 	for i, step := range steps {
 		pbSteps[i] = &pb.Step{
@@ -62,7 +78,7 @@ func serializeSteps(steps []*Step) []*pb.Step {
 	return pbSteps
 }
 
-func serializeGather(gather []*Gather) []*pb.Gather {
+func serializeGather(gather []*model.Gather) []*pb.Gather {
 	pbGather := make([]*pb.Gather, len(gather))
 	for i, g := range gather {
 		pbGather[i] = &pb.Gather{Arg: proto.String(g.Field), Step: proto.String(g.Step.Label)}
@@ -70,7 +86,7 @@ func serializeGather(gather []*Gather) []*pb.Gather {
 	return pbGather
 }
 
-func serializeArg(arg map[string]*Step) []*pb.Arg {
+func serializeArg(arg map[string]*model.Step) []*pb.Arg {
 	pbArg := make([]*pb.Arg, 0, len(arg))
 	for name, step := range arg {
 		pbArg = append(pbArg, &pb.Arg{Name: proto.String(name), Step: proto.String(step.Label)})
@@ -78,11 +94,11 @@ func serializeArg(arg map[string]*Step) []*pb.Arg {
 	return pbArg
 }
 
-func SerializeID(id ID) *pb.ID {
+func SerializeID(id model.ID) *pb.ID {
 	return &pb.ID{Data: proto.Uint64(id.ProtoData())}
 }
 
-func SerializeSyntax(syntax Syntax) *pb.Source {
+func SerializeSyntax(syntax syntax.Syntax) *pb.Source {
 	return &pb.Source{
 		File:  proto.String(syntax.FilePath()),
 		Start: SerializePosition(syntax.StartPosition()),
@@ -90,7 +106,7 @@ func SerializeSyntax(syntax Syntax) *pb.Source {
 	}
 }
 
-func SerializePosition(pos Position) *pb.Position {
+func SerializePosition(pos lex.Position) *pb.Position {
 	return &pb.Position{
 		Offset: proto.Int64(int64(pos.Offset)),
 		Line:   proto.Int64(int64(pos.Line)),
@@ -98,9 +114,9 @@ func SerializePosition(pos Position) *pb.Position {
 	}
 }
 
-func SerializeLogic(logic Logic) *pb.Logic {
+func SerializeLogic(logic model.Logic) *pb.Logic {
 	switch u := logic.(type) {
-	case Operator:
+	case model.Operator:
 		return &pb.Logic{
 			Logic: &pb.Logic_Operator{
 				Operator: &pb.LogicOperator{
@@ -108,7 +124,7 @@ func SerializeLogic(logic Logic) *pb.Logic {
 				},
 			},
 		}
-	case PkgFunc:
+	case model.PkgFunc:
 		return &pb.Logic{
 			Logic: &pb.Logic_PkgFunc{
 				PkgFunc: &pb.LogicPkgFunc{
@@ -117,19 +133,19 @@ func SerializeLogic(logic Logic) *pb.Logic {
 				},
 			},
 		}
-	case Enter:
+	case model.Enter:
 		return &pb.Logic{
 			Logic: &pb.Logic_Enter{
 				Enter: &pb.LogicEnter{},
 			},
 		}
-	case Leave:
+	case model.Leave:
 		return &pb.Logic{
 			Logic: &pb.Logic_Leave{
 				Leave: &pb.LogicLeave{},
 			},
 		}
-	case Link:
+	case model.Link:
 		return &pb.Logic{
 			Logic: &pb.Logic_Link{
 				Link: &pb.LogicLink{
@@ -138,7 +154,7 @@ func SerializeLogic(logic Logic) *pb.Logic {
 				},
 			},
 		}
-	case Select:
+	case model.Select:
 		return &pb.Logic{
 			Logic: &pb.Logic_Select{
 				Select: &pb.LogicSelect{
@@ -146,25 +162,25 @@ func SerializeLogic(logic Logic) *pb.Logic {
 				},
 			},
 		}
-	case Augment:
+	case model.Augment:
 		return &pb.Logic{
 			Logic: &pb.Logic_Augment{
 				Augment: &pb.LogicAugment{},
 			},
 		}
-	case Invoke:
+	case model.Invoke:
 		return &pb.Logic{
 			Logic: &pb.Logic_Invoke{
 				Invoke: &pb.LogicInvoke{},
 			},
 		}
-	case Number:
+	case model.Number:
 		return SerializeNumberLogic(u)
 	}
 	panic("o")
 }
 
-func SerializeNumberLogic(n Number) *pb.Logic {
+func SerializeNumberLogic(n model.Number) *pb.Logic {
 	switch u := n.Value.(type) {
 	case bool:
 		return &pb.Logic{
@@ -174,7 +190,7 @@ func SerializeNumberLogic(n Number) *pb.Logic {
 				},
 			},
 		}
-	case LexInteger:
+	case lex.LexInteger:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{
@@ -182,7 +198,7 @@ func SerializeNumberLogic(n Number) *pb.Logic {
 				},
 			},
 		}
-	case LexString:
+	case lex.LexString:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{
@@ -190,7 +206,7 @@ func SerializeNumberLogic(n Number) *pb.Logic {
 				},
 			},
 		}
-	case LexFloat:
+	case lex.LexFloat:
 		return &pb.Logic{
 			Logic: &pb.Logic_Number{
 				Number: &pb.LogicNumber{

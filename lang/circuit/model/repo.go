@@ -1,3 +1,19 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package model
 
 import (
@@ -5,9 +21,13 @@ import (
 	"fmt"
 	"sort"
 
-	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
+	"github.com/kocircuit/kocircuit/lang/go/kit/util"
 )
 
+// CombineRepo creates a new Repo containing all packages
+// from the given Repo's combined.
+// If a package is contained in both Repo's, the package from
+// the second repo wins.
 func CombineRepo(first, second Repo) Repo {
 	r := Repo{}
 	for k, v := range first {
@@ -22,6 +42,7 @@ func CombineRepo(first, second Repo) Repo {
 // Repo captures the chain transform: package path -> function name -> function.
 type Repo map[string]Package
 
+// PkgNames returns all package names in the given Repo.
 func (repo Repo) PkgNames() []string {
 	r := make([]string, 0, len(repo))
 	for s := range repo {
@@ -30,6 +51,8 @@ func (repo Repo) PkgNames() []string {
 	return r
 }
 
+// Has returns true if the given package is contained in the given Repo
+// or false otherwise.
 func (repo Repo) Has(pkg string) bool {
 	_, has := repo[pkg]
 	return has
@@ -42,9 +65,12 @@ func (repo Repo) StringTable(header string) [][]string {
 			ss = append(ss, []string{header, p, f, "circuit"})
 		}
 	}
-	return SortStringTable(ss)
+	return util.SortStringTable(ss)
 }
 
+// DocPackage returns the documentation for the package with given name
+// in the given repo.
+// The returned boolean is true when the package is found or false otherwise.
 func (repo Repo) DocPackage(pkgPath string) (string, bool) {
 	if pkg, ok := repo[pkgPath]; ok {
 		return pkg.DocPackage(), true
@@ -53,6 +79,9 @@ func (repo Repo) DocPackage(pkgPath string) (string, bool) {
 	}
 }
 
+// DocFunc returns the documentation for the function with given name in the package with given name
+// in the given repo.
+// The returned boolean is true when the function is found or false otherwise.
 func (repo Repo) DocFunc(pkgPath, funcName string) (string, bool) {
 	if pkg, ok := repo[pkgPath]; ok {
 		return pkg.DocFunc(funcName)
@@ -61,13 +90,12 @@ func (repo Repo) DocFunc(pkgPath, funcName string) (string, bool) {
 	}
 }
 
+// SortedPackagePaths returns a sorted list of the names of all package
+// contained in the given Repo.
 func (repo Repo) SortedPackagePaths() []string {
-	pkgPath := make([]string, 0, len(repo))
-	for p := range repo {
-		pkgPath = append(pkgPath, p)
-	}
-	sort.Strings(pkgPath)
-	return pkgPath
+	list := repo.PkgNames()
+	sort.Strings(list)
+	return list
 }
 
 func (repo Repo) String() string {
@@ -86,6 +114,8 @@ func (repo Repo) BodyString() string {
 	return w.String()
 }
 
+// Lookup a function with given package name and given function name.
+// Returns nil if not found.
 func (repo Repo) Lookup(pkg string, fu string) *Func {
 	if repo == nil {
 		return nil
@@ -97,8 +127,10 @@ func (repo Repo) Lookup(pkg string, fu string) *Func {
 	}
 }
 
+// Package is a collection of functions identified by name.
 type Package map[string]*Func
 
+// DocPackage returns the documentation of the given package.
 func (pkg Package) DocPackage() string {
 	var w bytes.Buffer
 	for _, name := range pkg.SortedFuncNames() {
@@ -108,14 +140,16 @@ func (pkg Package) DocPackage() string {
 	return w.String()
 }
 
+// DocFunc returns the documentation for the function with given name in the given package.
+// The returned boolean is true when the function is found or false otherwise.
 func (pkg Package) DocFunc(name string) (string, bool) {
-	if fu := pkg[name]; fu == nil {
-		return "", false
-	} else {
+	if fu := pkg[name]; fu != nil {
 		return fu.DocLong(), true
 	}
+	return "", false
 }
 
+// SortedFuncNames returns a sort list of function names in the given package.
 func (pkg Package) SortedFuncNames() []string {
 	names := make([]string, 0, len(pkg))
 	for n := range pkg {
