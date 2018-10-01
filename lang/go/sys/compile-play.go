@@ -39,7 +39,7 @@ type CompilePlay struct {
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
 		RepoDirs: arg.Repo,
-		PkgPath:  arg.Pkg,
+		PkgPaths:  []string{arg.Pkg},
 		Show:     arg.Show,
 	}
 	compiled := c.Play(ctx)

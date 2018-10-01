@@ -32,8 +32,7 @@ import (
 // in it afterward.
 type CompileTest struct {
 	Repo    []string     `ko:"name=repo"`
-	Pkg     string       `ko:"name=pkg"`
-	Func    string       `ko:"name=func"`
+	Pkgs    []string     `ko:"name=pkg"`
 	Faculty eval.Faculty `ko:"name=faculty"`
 	Show    bool         `ko:"name=show"`
 }
@@ -42,7 +41,7 @@ type CompileTest struct {
 func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
 		RepoDirs: arg.Repo,
-		PkgPath:  arg.Pkg,
+		PkgPaths: arg.Pkgs,
 		Show:     arg.Show,
 	}
 	compiled := c.Play(ctx)
@@ -53,38 +52,61 @@ func (arg *CompileTest) Play(ctx *runtime.Context) *PlayResult {
 	ev := go_eval.NewEvaluator(arg.Faculty, compiled.Repo)
 	w := &PlayFuncEval{
 		Func: ev.Program.Idiom.Lookup("idiom", "RunTests"),
-		Eval:ev,
+		Eval: ev,
 	}
-	if (w.Func == nil ) {
+	if w.Func == nil {
 		return &PlayResult{Error: fmt.Errorf("cannot find idiom.RunTests")}
 	}
 	// Find test functions
-	var testsValue symbol.Symbols
-	for _, pkgName := range compiled.Repo.SortedPackagePaths() {
-		pkg := compiled.Repo[pkgName]
-		for _, fName := range pkg.SortedFuncNames() {
-			if strings.HasPrefix(fName, "Test") {
-				f := pkg[fName] // of type model.Func
-				vSym := symbol.MakeVarietySymbol(&evalTestFuncMacro{
-					Func:   f,
-					Parent: w.Eval.Program,
-				}, nil)
-				entry := symbol.MakeStructSymbol(symbol.FieldSymbols{
-					&symbol.FieldSymbol{Name: "name", Value: symbol.MakeBasicSymbol(model.NewSpan(), fName)},
-					&symbol.FieldSymbol{Name: "func", Value: vSym},
-				})
-				testsValue = append(testsValue, entry)
+	var pkgsValue symbol.Symbols
+	for _, pkgName := range arg.Pkgs {
+		if pkg, found := compiled.Repo[pkgName]; found {
+			var testsValue symbol.Symbols
+			for _, fName := range pkg.SortedFuncNames() {
+				// Test functions must have a name that starts with `Test` and
+				// have no arguments.
+				if strings.HasPrefix(fName, "Test") {
+					f := pkg[fName] // of type model.Func
+					if len(f.Args()) == 0 {
+						// We found a function that we want to test
+						vSym := symbol.MakeVarietySymbol(&evalTestFuncMacro{
+							Func:   f,
+							Parent: w.Eval.Program,
+						}, nil)
+						entry := symbol.MakeStructSymbol(symbol.FieldSymbols{
+							&symbol.FieldSymbol{Name: "name", Value: symbol.MakeBasicSymbol(model.NewSpan(), fName)},
+							&symbol.FieldSymbol{Name: "func", Value: vSym},
+						})
+						testsValue = append(testsValue, entry)
+					}
+				}
 			}
+			if len(testsValue) > 0 {
+				testsSym, err := symbol.MakeSeriesSymbol(model.NewSpan(), testsValue)
+				if err != nil {
+					return &PlayResult{Error: err}
+				}
+				entry := symbol.MakeStructSymbol(symbol.FieldSymbols{
+					&symbol.FieldSymbol{Name: "name", Value: symbol.MakeBasicSymbol(model.NewSpan(), pkgName)},
+					&symbol.FieldSymbol{Name: "tests", Value: testsSym},
+				})
+				pkgsValue = append(pkgsValue, entry)
+			} else {
+				fmt.Printf("No tests found in package %s\n", pkgName)
+			}
+		} else {
+			fmt.Printf("Package %s not found\n", pkgName)
 		}
 	}
-	testsValueSym, err := symbol.MakeSeriesSymbol(model.NewSpan(), testsValue)
+	// Build the argument to `RunTests`
+	packagesValueSym, err := symbol.MakeSeriesSymbol(model.NewSpan(), pkgsValue)
 	if err != nil {
 		return &PlayResult{Error: err}
 	}
 	tests := &symbol.FieldSymbol{
-		Name:    "tests",
+		Name:    "packages",
 		Monadic: true,
-		Value:   testsValueSym,
+		Value:   packagesValueSym,
 	}
 	// Run the tests
 	w.Arg = symbol.MakeStructSymbol(symbol.FieldSymbols{tests})

@@ -48,7 +48,7 @@ TestBuild() {
 }
 
 // ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestBuildLocallyThenServe
-TestBuildLocallyThenServe() {
+TestBuildLocallyThenServe(dummy?) {
 	return: BuildLocallyThenServe(
 		topChapter: testTOC()
 		siteDir: testSiteDir()

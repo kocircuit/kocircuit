@@ -46,7 +46,7 @@ Usage:
 		pf := parsePkgOrPkgFunc(args[0])
 		b := &sys.Compile{
 			RepoDirs: tools.PkgRoots(),
-			PkgPath:  pf.Pkg,
+			PkgPaths: []string{pf.Pkg},
 			Show:     false,
 		}
 		compileResult := b.Play(runtime.CompilerContext())
