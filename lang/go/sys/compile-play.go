@@ -38,14 +38,15 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	return w.Play(ctx)
 }
 
-func PostCompileFaculty(baseFaculty eval.Faculty, repoPath []string, repo model.Repo) eval.Faculty {
+func PostCompileFaculty(baseFaculty eval.Faculty, repoPaths []string, repo model.Repo) eval.Faculty {
 	repoProto, repoProtoBytes, err := ir.SerializeEncodeRepo(repo)
 	if err != nil {
 		panic(err)
 	}
 	return eval.MergeFaculty(
 		eval.Faculty{
-			eval.Ideal{Pkg: "repo", Name: "Path"}:       &macros.EvalGoValueMacro{Value: repoPath},
+			eval.Ideal{Pkg: "repo", Name: "Path"}:       &macros.EvalGoValueMacro{Value: repoPaths[0]},
+			eval.Ideal{Pkg: "repo", Name: "Roots"}:      &macros.EvalGoValueMacro{Value: repoPaths},
 			eval.Ideal{Pkg: "repo", Name: "Proto"}:      &macros.EvalGoValueMacro{Value: repoProto},
 			eval.Ideal{Pkg: "repo", Name: "ProtoBytes"}: &macros.EvalGoValueMacro{Value: repoProtoBytes},
 		},
