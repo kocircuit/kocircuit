@@ -11,4 +11,8 @@ env:
 script:
   - go get github.com/kocircuit/kocircuit/lang/ko
   - go test ./...
-  - ko test github.com/kocircuit/kocircuit/lib
+  - ko test 
+    github.com/kocircuit/kocircuit/lib
+    github.com/kocircuit/kocircuit/lib/set
+    github.com/kocircuit/kocircuit/lib/sync
+    github.com/kocircuit/kocircuit/lib/web
