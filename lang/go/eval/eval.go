@@ -4,24 +4,24 @@ package eval
 import (
 	"fmt"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 type Evaluate struct {
-	Repo    Repo    `ko:"name=repo"`
-	Program Program `ko:"name=program"`
+	Repo    model.Repo   `ko:"name=repo"`
+	Program eval.Program `ko:"name=program"`
 }
 
-func NewEvaluator(faculty Faculty, repo Repo) *Evaluate {
+func NewEvaluator(faculty eval.Faculty, repo model.Repo) *Evaluate {
 	return &Evaluate{
 		Repo: repo,
-		Program: Program{
+		Program: eval.Program{
 			Idiom: EvalIdiomRepo,
 			Repo:  repo,
-			System: System{
+			System: eval.System{
 				Faculty:  faculty,
 				Boundary: EvalBoundary{},
 				Combiner: EvalCombiner{},
@@ -31,15 +31,15 @@ func NewEvaluator(faculty Faculty, repo Repo) *Evaluate {
 }
 
 type EvalPanic struct {
-	Origin *Span  `ko:"name=origin"`
-	Panic  Symbol `ko:"name=panic"`
+	Origin *model.Span   `ko:"name=origin"`
+	Panic  symbol.Symbol `ko:"name=panic"`
 }
 
-func NewEvalPanic(origin *Span, panik Symbol) *EvalPanic {
+func NewEvalPanic(origin *model.Span, panik symbol.Symbol) *EvalPanic {
 	return &EvalPanic{Origin: origin, Panic: panik}
 }
 
-func (eval *Evaluate) AssembleMacro(span *Span, pkgPath, funcName string) (Macro, error) {
+func (eval *Evaluate) AssembleMacro(span *model.Span, pkgPath, funcName string) (eval.Macro, error) {
 	if fu := eval.Repo.Lookup(pkgPath, funcName); fu == nil {
 		return nil, span.Errorf(nil, "function %s.%s not found", pkgPath, funcName)
 	} else {
@@ -47,7 +47,7 @@ func (eval *Evaluate) AssembleMacro(span *Span, pkgPath, funcName string) (Macro
 	}
 }
 
-func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, panicked Symbol, eff Effect, err error) {
+func (eval *Evaluate) Eval(span *model.Span, f *model.Func, arg symbol.Symbol) (returned symbol.Symbol, panicked symbol.Symbol, eff eval.Effect, err error) {
 	// catch unrecovered evaluator panics
 	defer func() {
 		if r := recover(); r != nil {
@@ -61,7 +61,7 @@ func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, pa
 	if shape, effect, err := eval.Program.EvalSeq(span, f, arg); err != nil {
 		return nil, nil, nil, err
 	} else {
-		if sym, ok := shape.(Symbol); ok {
+		if sym, ok := shape.(symbol.Symbol); ok {
 			return sym, nil, effect, nil
 		} else {
 			return nil, nil, effect, nil
@@ -71,50 +71,50 @@ func (eval *Evaluate) Eval(span *Span, f *Func, arg Symbol) (returned Symbol, pa
 
 type EvalBoundary struct{}
 
-func (EvalBoundary) Figure(span *Span, figure Figure) (Shape, Effect, error) {
+func (EvalBoundary) Figure(span *model.Span, figure eval.Figure) (eval.Shape, eval.Effect, error) {
 	switch u := figure.(type) {
-	case Bool:
-		return BasicSymbol{Value: u.Value_}, nil, nil
-	case Integer:
-		return BasicSymbol{Value: u.Value_}, nil, nil
-	case Float:
-		return BasicSymbol{Value: u.Value_}, nil, nil
-	case String:
-		return BasicSymbol{Value: u.Value_}, nil, nil
-	case Macro:
+	case eval.Bool:
+		return symbol.BasicSymbol{Value: u.Value_}, nil, nil
+	case eval.Integer:
+		return symbol.BasicSymbol{Value: u.Value_}, nil, nil
+	case eval.Float:
+		return symbol.BasicSymbol{Value: u.Value_}, nil, nil
+	case eval.String:
+		return symbol.BasicSymbol{Value: u.Value_}, nil, nil
+	case eval.Macro:
 		// macro is either a macro from registry, or from Interpret()
-		return MakeVarietySymbol(u, nil), nil, nil
+		return symbol.MakeVarietySymbol(u, nil), nil, nil
 	}
 	panic("unknown figure")
 }
 
-func (EvalBoundary) Enter(span *Span, arg Arg) (Shape, Effect, error) {
-	return arg.(Symbol), nil, nil
+func (EvalBoundary) Enter(span *model.Span, arg eval.Arg) (eval.Shape, eval.Effect, error) {
+	return arg.(symbol.Symbol), nil, nil
 }
 
-func (EvalBoundary) Leave(span *Span, shape Shape) (Return, Effect, error) {
+func (EvalBoundary) Leave(span *model.Span, shape eval.Shape) (eval.Return, eval.Effect, error) {
 	return shape, nil, nil
 }
 
 type EvalCombiner struct{}
 
-func (EvalCombiner) Interpret(eval Evaluator, f *Func) Macro {
+func (EvalCombiner) Interpret(eval eval.Evaluator, f *model.Func) eval.Macro {
 	return &EvalInterpretMacro{Evaluator: eval, Func: f}
 }
 
 func (EvalCombiner) Combine(
-	span *Span,
-	f *Func,
-	arg Arg,
-	returned Return,
-	stepResidue StepResidues,
-) (Effect, error) {
+	span *model.Span,
+	f *model.Func,
+	arg eval.Arg,
+	returned eval.Return,
+	stepResidue eval.StepResidues,
+) (eval.Effect, error) {
 	return nil, nil
 }
 
 type EvalInterpretMacro struct {
-	Evaluator Evaluator `ko:"name=evaluator"`
-	Func      *Func     `ko:"name=func"`
+	Evaluator eval.Evaluator `ko:"name=evaluator"`
+	Func      *model.Func    `ko:"name=func"`
 }
 
 // InterpretFunc communicates to Variety.Disassemble the underlying function identity.
@@ -122,8 +122,8 @@ func (m *EvalInterpretMacro) InterpretFunc() (pkgPath, funcName string) {
 	return m.Func.Pkg, m.Func.Name
 }
 
-func (m *EvalInterpretMacro) Splay() Tree {
-	return Quote{String_: m.Help()}
+func (m *EvalInterpretMacro) Splay() tree.Tree {
+	return tree.Quote{String_: m.Help()}
 }
 
 func (m *EvalInterpretMacro) MacroID() string { return m.Help() }
@@ -140,16 +140,16 @@ func (m *EvalInterpretMacro) Doc() string {
 	return m.Func.DocLong()
 }
 
-func (m *EvalInterpretMacro) Invoke(span *Span, arg Arg) (Return, Effect, error) {
+func (m *EvalInterpretMacro) Invoke(span *model.Span, arg eval.Arg) (eval.Return, eval.Effect, error) {
 	return m.InvokeSeq(span, arg) // default circuit execution mode
 }
 
-func (m *EvalInterpretMacro) InvokeSeq(span *Span, arg Arg) (Return, Effect, error) {
-	ss := arg.(*StructSymbol)
+func (m *EvalInterpretMacro) InvokeSeq(span *model.Span, arg eval.Arg) (eval.Return, eval.Effect, error) {
+	ss := arg.(*symbol.StructSymbol)
 	return m.Evaluator.EvalSeq(span, m.Func, ss)
 }
 
-func (m *EvalInterpretMacro) InvokePar(span *Span, arg Arg) (Return, Effect, error) {
-	ss := arg.(*StructSymbol)
+func (m *EvalInterpretMacro) InvokePar(span *model.Span, arg eval.Arg) (eval.Return, eval.Effect, error) {
+	ss := arg.(*symbol.StructSymbol)
 	return m.Evaluator.EvalPar(span, m.Func, ss)
 }

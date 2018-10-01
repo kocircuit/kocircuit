@@ -6,11 +6,11 @@ import (
 	"reflect"
 	// goruntime "runtime"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/eval/symbol"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
@@ -18,7 +18,7 @@ type EvalCallMacro struct {
 	Gate gate.Gate `ko:"name=gate"`
 }
 
-func (m *EvalCallMacro) Splay() Tree { return Quote{String_: m.Help()} }
+func (m *EvalCallMacro) Splay() tree.Tree { return tree.Quote{String_: m.Help()} }
 
 func (m *EvalCallMacro) Label() string { return "call" }
 
@@ -34,10 +34,10 @@ func (m *EvalCallMacro) Doc() string {
 	return fmt.Sprintf("Run: go doc %s.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
 }
 
-func (call *EvalCallMacro) Invoke(span *Span, arg Arg) (returns Return, effect Effect, err error) {
-	ss := arg.(*StructSymbol)
+func (call *EvalCallMacro) Invoke(span *model.Span, arg eval.Arg) (returns eval.Return, effect eval.Effect, err error) {
+	ss := arg.(*symbol.StructSymbol)
 	var receiver reflect.Value
-	if receiver, err = Integrate(span, ss, call.Gate.Receiver); err != nil {
+	if receiver, err = symbol.Integrate(span, ss, call.Gate.Receiver); err != nil {
 		return nil, nil, err
 	} else {
 		defer func() {
@@ -52,11 +52,11 @@ func (call *EvalCallMacro) Invoke(span *Span, arg Arg) (returns Return, effect E
 		// lift result to declared return value
 		m, _ := call.Gate.Receiver.MethodByName("Play")
 		result[0] = result[0].Convert(m.Type.Out(0))
-		return Deconstruct(span, result[0]), nil, nil
+		return symbol.Deconstruct(span, result[0]), nil, nil
 	}
 }
 
-func NewEvalRuntimeContext(span *Span) *runtime.Context {
+func NewEvalRuntimeContext(span *model.Span) *runtime.Context {
 	return &runtime.Context{
 		Parent:  nil,
 		Source:  span.CommentLine(),
