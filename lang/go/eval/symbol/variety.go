@@ -1,16 +1,32 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"github.com/golang/protobuf/proto"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func MakeVarietySymbol(macro Macro, arg FieldSymbols) *VarietySymbol {
+func MakeVarietySymbol(macro eval.Macro, arg FieldSymbols) *VarietySymbol {
 	return &VarietySymbol{Macro: macro, Arg: arg}
 }
 
@@ -20,11 +36,11 @@ func IsVarietySymbol(sym Symbol) bool {
 }
 
 type VarietySymbol struct {
-	Macro Macro        `ko:"name=macro"`
+	Macro eval.Macro   `ko:"name=macro"`
 	Arg   FieldSymbols `ko:"name=arg"`
 }
 
-func (vty *VarietySymbol) Dismentle(span *Span) (pkgPath, funcName string, arg *StructSymbol, err error) {
+func (vty *VarietySymbol) Dismentle(span *model.Span) (pkgPath, funcName string, arg *StructSymbol, err error) {
 	if interpretFu, ok := vty.Macro.(InterpretMacro); !ok { // if vty points to a circuit
 		return "", "", nil, span.Errorf(nil, "variety is not underlied by a function")
 	} else {
@@ -38,7 +54,7 @@ type InterpretMacro interface {
 	InterpretFunc() (pkgPath, funcName string)
 }
 
-func (vty *VarietySymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (vty *VarietySymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	if pkgPath, funcName, _, err := vty.Dismentle(span); err != nil {
 		return nil, span.Errorf(err, "dismentling variety")
 	} else {
@@ -58,10 +74,10 @@ func (vty *VarietySymbol) Disassemble(span *Span) (*pb.Symbol, error) {
 }
 
 func (vty *VarietySymbol) String() string {
-	return Sprint(vty)
+	return tree.Sprint(vty)
 }
 
-func (vty *VarietySymbol) Equal(span *Span, sym Symbol) bool {
+func (vty *VarietySymbol) Equal(span *model.Span, sym Symbol) bool {
 	if other, ok := sym.(*VarietySymbol); ok {
 		return vty.Macro.MacroID() == other.Macro.MacroID() &&
 			FieldSymbolsEqual(span, vty.Arg, other.Arg)
@@ -70,19 +86,19 @@ func (vty *VarietySymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (vty *VarietySymbol) Hash(span *Span) ID {
-	return Blend(StringID(vty.Macro.MacroID()), FieldSymbolsHash(span, vty.Arg))
+func (vty *VarietySymbol) Hash(span *model.Span) model.ID {
+	return model.Blend(model.StringID(vty.Macro.MacroID()), FieldSymbolsHash(span, vty.Arg))
 }
 
-func (vty *VarietySymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (vty *VarietySymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	return singletonSeries(vty)
 }
 
-func (vty *VarietySymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (vty *VarietySymbol) Link(span *model.Span, name string, monadic bool) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "linking argument to variety")
 }
 
-func (vty *VarietySymbol) Select(span *Span, path Path) (Shape, Effect, error) {
+func (vty *VarietySymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return vty, nil, nil
 	} else {
@@ -94,20 +110,20 @@ func (vty *VarietySymbol) Type() Type {
 	return VarietyType{}
 }
 
-func (vty *VarietySymbol) Splay() Tree {
+func (vty *VarietySymbol) Splay() tree.Tree {
 	if len(vty.Arg) == 0 {
-		return NoQuote{String_: vty.Macro.Help()}
+		return tree.NoQuote{String_: vty.Macro.Help()}
 	} else {
-		nameTrees := make([]NameTree, len(vty.Arg))
+		nameTrees := make([]tree.NameTree, len(vty.Arg))
 		for i, field := range vty.Arg {
-			nameTrees[i] = NameTree{
+			nameTrees[i] = tree.NameTree{
 				Name:    gate.KoGoName{Ko: field.Name},
 				Monadic: field.Monadic,
 				Tree:    field.Value.Splay(),
 			}
 		}
-		return Parallel{
-			Label:   Label{Name: vty.Macro.Help()},
+		return tree.Parallel{
+			Label:   tree.Label{Name: vty.Macro.Help()},
 			Bracket: "[]",
 			Elem:    nameTrees,
 		}
@@ -119,9 +135,9 @@ type VarietyType struct{}
 func (VarietyType) IsType() {}
 
 func (VarietyType) String() string {
-	return Sprint(VarietyType{})
+	return tree.Sprint(VarietyType{})
 }
 
-func (VarietyType) Splay() Tree {
-	return NoQuote{String_: "Variety"}
+func (VarietyType) Splay() tree.Tree {
+	return tree.NoQuote{String_: "Variety"}
 }

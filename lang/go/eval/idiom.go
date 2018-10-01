@@ -86,4 +86,44 @@ switchRangeCases(case?) {
 Inc(number?) {
 	return: Sum(number, 1)
 }
+
+// RunTests runs a set of test varieties.
+// ``tests`` is a series of ``name``, ``func`` pairs.
+RunTests(tests?) {
+	ranged: Range(
+		over: tests                   // range of all tests
+		with: runTestIterator         // iterator function
+		start: (passed: 0, failed: 0) // initial carry
+	)
+	return: ranged
+}
+
+runTestIterator(carry, elem) {
+	testName: elem.name
+	testResult: Recover(
+		invoke: runTestRunner[testFunc: elem.func, testName: testName]
+		panic: runTestFailRecover[testName: testName]
+	)
+	return: (
+		passed: Sum(carry.passed, testResult.passed)
+		failed: Sum(carry.failed, testResult.failed)
+	)
+}
+
+runTestRunner(testFunc, testName) {
+	s1: testFunc()
+	s2: Show(Join("PASS: ", testName), _after: s1)
+	return: (
+		passed: 1
+		failed: 0
+	)
+}
+
+runTestFailRecover(panicValue?, testName) {
+	_: Show(Join("FAIL: ", testName)
+	return: (
+		passed: 0,
+		failed: 1
+	)
+}
 `
