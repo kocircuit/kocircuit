@@ -8,8 +8,10 @@ env:
   global:
     - GO111MODULE=on
 
-script:
+install:
   - go build github.com/kocircuit/kocircuit/lang/ko
+
+script:
   - go test ./...
   - ./ko test 
     github.com/kocircuit/kocircuit/lib
