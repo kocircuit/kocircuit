@@ -6,15 +6,16 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	. "github.com/kocircuit/kocircuit/lang/go/kit/util"
 	koos "github.com/kocircuit/kocircuit/lib/os"
 )
 
 type GoToolchain struct {
-	GOROOT string `ko:"name=GOROOT"`
-	GOPATH string `ko:"name=GOPATH"`
-	Binary string `ko:"name=binary"`
+	GOROOT string   `ko:"name=GOROOT"`
+	GOPATH []string `ko:"name=GOPATH"`
+	Binary string   `ko:"name=binary"`
 }
 
 func NewGoToolchain() *GoToolchain {
@@ -28,31 +29,46 @@ func NewGoToolchain() *GoToolchain {
 	}
 	return &GoToolchain{
 		GOROOT: os.Getenv("GOROOT"),
-		GOPATH: goPath,
+		GOPATH: strings.Split(goPath, ":"),
 		Binary: binary,
 	}
 }
 
+// PkgDir returns the directory containing the given package path.
+// If will take the first element of the GOPATH that contains such a package.
 func (x *GoToolchain) PkgDir(pkgPath string) string {
-	return path.Join(x.PkgRoot(), pkgPath)
+	roots := x.PkgRoots()
+	for _, p := range roots {
+		result := path.Join(p, pkgPath)
+		if _, err := os.Stat(result); err == nil {
+			return result
+		}
+	}
+	// Not found, return path in first GOPATH element
+	return path.Join(x.GOPATH[0], pkgPath)
 }
 
-func (x *GoToolchain) PkgRoot() string {
-	return path.Join(x.GOPATH, "src")
+// PkgRoots returns all source folders that may contain packages.
+func (x *GoToolchain) PkgRoots() []string {
+	result := make([]string, len(x.GOPATH))
+	for i, p := range x.GOPATH {
+		result[i] = path.Join(p, "src")
+	}
+	return result
 }
 
 func (x *GoToolchain) BinaryInstallPath(pkg string) string {
-	return path.Join(x.GOPATH, "bin", path.Base(pkg))
+	return path.Join(x.GOPATH[0], "bin", path.Base(pkg))
 }
 
 func (x *GoToolchain) BinaryBuildPath(pkg string) string {
-	return path.Join(x.GOPATH, "src", pkg, path.Base(pkg))
+	return path.Join(x.GOPATH[0], "src", pkg, path.Base(pkg))
 }
 
 func (x *GoToolchain) Env() []string {
 	return []string{
 		fmt.Sprintf("GOROOT=%s", x.GOROOT),
-		fmt.Sprintf("GOPATH=%s", x.GOPATH),
+		fmt.Sprintf("GOPATH=%s", strings.Join(x.GOPATH, ":")),
 	}
 }
 
@@ -67,7 +83,7 @@ func (gc *GoClean) Task(after ...*koos.GoTask) *koos.GoTask {
 		Binary: gc.Go.Binary,
 		Arg:    []string{"clean", gc.PkgPath},
 		Env:    gc.Go.Env(),
-		Dir:    PtrString(gc.Go.GOPATH),
+		Dir:    PtrString(gc.Go.GOPATH[0]),
 		After:  after,
 	}
 }

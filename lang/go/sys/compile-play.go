@@ -10,7 +10,7 @@ import (
 )
 
 type CompilePlay struct {
-	Repo    string               `ko:"name=repo"`
+	Repo    []string             `ko:"name=repo"`
 	Pkg     string               `ko:"name=pkg"`
 	Func    string               `ko:"name=func"`
 	Faculty eval.Faculty         `ko:"name=faculty"`
@@ -20,9 +20,9 @@ type CompilePlay struct {
 
 func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	c := &Compile{
-		RepoDir: arg.Repo,
-		PkgPath: arg.Pkg,
-		Show:    arg.Show,
+		RepoDirs: arg.Repo,
+		PkgPath:  arg.Pkg,
+		Show:     arg.Show,
 	}
 	compiled := c.Play(ctx)
 	if compiled.Error != nil {
@@ -38,7 +38,7 @@ func (arg *CompilePlay) Play(ctx *runtime.Context) *PlayResult {
 	return w.Play(ctx)
 }
 
-func PostCompileFaculty(baseFaculty eval.Faculty, repoPath string, repo model.Repo) eval.Faculty {
+func PostCompileFaculty(baseFaculty eval.Faculty, repoPath []string, repo model.Repo) eval.Faculty {
 	repoProto, repoProtoBytes, err := ir.SerializeEncodeRepo(repo)
 	if err != nil {
 		panic(err)

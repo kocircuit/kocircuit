@@ -3,6 +3,12 @@
 
 # Ko
 
+## Experimental
+
+The Ko language, library & tools are in active development, so do expect things to change.
+
+## Introduction
+
 Ko is a concurrent, immutable, functional language.
 
 Ko is both generic (function arguments and return values do not declare types)
@@ -36,7 +42,7 @@ value types, which makes them highly reusable. At the same time, when entire
 Ko programs are compiled against external protocols, services or types,
 they are fully-verified for type compliance.
 
-* __Types.__ Ko uses an type-system which is the common denominator of
+* __Types.__ Ko uses a type-system which is the common denominator of
 industry protocol standards, like Protocol Buffers, Thrift, OpenAPI, and so on.
 These type systems are captured by structures, sequences (repeated types), primitive types,
 optional types and map types. This type system is already familiar to most programmers.

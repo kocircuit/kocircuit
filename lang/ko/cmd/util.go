@@ -62,7 +62,7 @@ var (
 func newToolchain() *toolchain.GoToolchain {
 	return &toolchain.GoToolchain{
 		GOROOT: flagGOROOT,
-		GOPATH: flagGOPATH,
+		GOPATH: strings.Split(flagGOPATH, ":"),
 		Binary: flagGoBinary,
 	}
 }

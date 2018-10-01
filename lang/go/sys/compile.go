@@ -7,9 +7,9 @@ import (
 )
 
 type Compile struct {
-	RepoDir string `ko:"name=repoDir"`
-	PkgPath string `ko:"name=pkgPath"`
-	Show    bool   `ko:"name=show"`
+	RepoDirs []string `ko:"name=repoDir"`
+	PkgPath  string   `ko:"name=pkgPath"`
+	Show     bool     `ko:"name=show"`
 }
 
 type CompileResult struct {
@@ -22,7 +22,7 @@ type CompileResult struct {
 func (c *Compile) Play(ctx *runtime.Context) *CompileResult {
 	r := &CompileResult{Compile: c}
 	if r.Repo, r.Error = compile.CompileRepo(
-		c.RepoDir,
+		c.RepoDirs,
 		c.PkgPath,
 	); r.Error != nil {
 		return r
