@@ -15,12 +15,20 @@ Ko is both generic (function arguments and return values do not declare types)
 and type-safe (a new static-type inference algorithm ensures deep static type
 safety everywhere).
 
-Ko is built on top of the Go runtime, in order to benefit from Go's rich ecosystem of 
+Ko is built on top of the Go runtime, in order to benefit from Go's rich ecosystem of
 integrations with industrial technologies.
 
 Existing Go libraries and clients can be "exposed" in Ko with little relative effort.
 Protocol definitions, like Protocol Buffers or OpenAPI, can also be exposed in Ko
 using simple code-generation.
+
+## Getting started
+
+To install the Ko interpreter, run:
+
+```bash
+go get -u github.com/kocircuit/kocircuit/lang/ko
+```
 
 ## Learning Ko
 
