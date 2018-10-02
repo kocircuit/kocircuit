@@ -25,7 +25,7 @@ import (
 // Compile is a service to compile a Ko repository.
 type Compile struct {
 	RepoDirs []string `ko:"name=repoDir"`
-	PkgPath  string   `ko:"name=pkgPath"`
+	PkgPaths []string `ko:"name=pkgPaths"`
 	Show     bool     `ko:"name=show"`
 }
 
@@ -42,7 +42,7 @@ func (c *Compile) Play(ctx *runtime.Context) *CompileResult {
 	r := &CompileResult{Compile: c}
 	if r.Repo, r.Error = compile.CompileRepo(
 		c.RepoDirs,
-		c.PkgPath,
+		c.PkgPaths,
 	); r.Error != nil {
 		return r
 	}

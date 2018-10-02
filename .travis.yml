@@ -9,6 +9,10 @@ env:
     - GO111MODULE=on
 
 script:
-  - go get github.com/kocircuit/kocircuit/lang/ko
+  - go build github.com/kocircuit/kocircuit/lang/ko
   - go test ./...
-  - ko play github.com/kocircuit/kocircuit/lib/TestAll
+  - ko test 
+    github.com/kocircuit/kocircuit/lib
+    github.com/kocircuit/kocircuit/lib/set
+    github.com/kocircuit/kocircuit/lib/sync
+    github.com/kocircuit/kocircuit/lib/web

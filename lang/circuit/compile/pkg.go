@@ -23,11 +23,11 @@ import (
 	"github.com/kocircuit/kocircuit/lang/circuit/syntax"
 )
 
-// CompileRepo compiles all files in a package with given name in a repository
+// CompileRepo compiles all files in the given packages in a repository
 // contained in given directories into a Repo.
-func CompileRepo(repoDirs []string, pkgPath string) (repo model.Repo, err error) {
+func CompileRepo(repoDirs []string, pkgPaths []string) (repo model.Repo, err error) {
 	local := syntax.NewLocalRepository(repoDirs)
-	parsedPkgFiles, err := syntax.ParseRepo(local, pkgPath)
+	parsedPkgFiles, err := syntax.ParseRepo(local, pkgPaths)
 	if err != nil {
 		return nil, err
 	}

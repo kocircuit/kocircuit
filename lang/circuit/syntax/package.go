@@ -21,11 +21,14 @@ import (
 	"sort"
 )
 
-// ParseRepo returns a map from package path to a set of parsed files from the package direcrtory.
-func ParseRepo(repo Repository, pkgPath string) (map[string][]File, error) {
-	pending := map[string]bool{pkgPath: true} // pending is a set of paths to unparsed package directories
-	parsed := map[string]bool{}               // parsed is a set of paths to parsed packages
-	prog := map[string][]File{}               // package path -> parsed package files
+// ParseRepo returns a map from package path to a set of parsed files from the package directory.
+func ParseRepo(repo Repository, pkgPaths []string) (map[string][]File, error) {
+	pending := make(map[string]bool) // pending is a set of paths to unparsed package directories
+	for _, pkgPath := range pkgPaths {
+		pending[pkgPath] = true
+	}
+	parsed := map[string]bool{} // parsed is a set of paths to parsed packages
+	prog := map[string][]File{} // package path -> parsed package files
 	for len(pending) > 0 {
 		order := make([]string, 0, len(pending))
 		for pkg := range pending {
