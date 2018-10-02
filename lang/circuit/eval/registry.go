@@ -49,6 +49,14 @@ func (r *Registry) RegisterGate(stub interface{}) {
 	r.RegisterPkgMacro(gate.GoPkgPath(), gate.GoName(), r.GateMacro.GateMacro(gate))
 }
 
+func (r *Registry) RegisterNamedGate(name string, stub interface{}) {
+	gate, err := gate.BindGate(reflect.TypeOf(stub))
+	if err != nil {
+		panic(err)
+	}
+	r.RegisterPkgMacro(gate.GoPkgPath(), name, r.GateMacro.GateMacro(gate))
+}
+
 func (r *Registry) RegisterGateAt(pkg, name string, stub interface{}) {
 	gate, err := gate.BindGate(reflect.TypeOf(stub))
 	if err != nil {

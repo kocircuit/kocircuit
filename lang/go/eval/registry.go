@@ -17,6 +17,7 @@ func NewEvalRegistry() *EvalRegistry {
 	}
 }
 
+// evalGateMacro is a helper to create a Macro from a Gate.
 type evalGateMacro struct{}
 
 func (evalGateMacro) GateMacro(g gate.Gate) eval.Macro {
@@ -25,6 +26,10 @@ func (evalGateMacro) GateMacro(g gate.Gate) eval.Macro {
 
 func (r *EvalRegistry) RegisterEvalGate(stub interface{}) {
 	r.Registry.RegisterGate(stub)
+}
+
+func (r *EvalRegistry) RegisterNamedEvalGate(name string, stub interface{}) {
+	r.Registry.RegisterNamedGate(name, stub)
 }
 
 func (r *EvalRegistry) RegisterEvalGateAt(pkg, name string, stub interface{}) {
@@ -49,6 +54,10 @@ func EvalFaculty() eval.Faculty {
 
 func RegisterEvalGate(stub interface{}) {
 	registry.RegisterEvalGate(stub)
+}
+
+func RegisterNamedEvalGate(name string, stub interface{}) {
+	registry.RegisterNamedEvalGate(name, stub)
 }
 
 func RegisterEvalGateAt(pkg, name string, stub interface{}) {
