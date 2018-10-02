@@ -17,16 +17,26 @@ func NewEvalRegistry() *EvalRegistry {
 	}
 }
 
+// evalGateMacro is a helper to create a Macro from a Gate.
 type evalGateMacro struct{}
 
 func (evalGateMacro) GateMacro(g gate.Gate) eval.Macro {
 	return &EvalCallMacro{Gate: g}
 }
 
+// RegisterEvalGate registers an evaluation gate with the name and
+// package of the given stub.
 func (r *EvalRegistry) RegisterEvalGate(stub interface{}) {
 	r.Registry.RegisterGate(stub)
 }
 
+// RegisterNamedEvalGate registers an evaluation gate with the given name in
+// the package of the given stub.
+func (r *EvalRegistry) RegisterNamedEvalGate(name string, stub interface{}) {
+	r.Registry.RegisterNamedGate(name, stub)
+}
+
+// RegisterEvalGateAt registers an evaluation gate with given name in the given package.
 func (r *EvalRegistry) RegisterEvalGateAt(pkg, name string, stub interface{}) {
 	r.Registry.RegisterGateAt(pkg, name, stub)
 }
@@ -47,10 +57,20 @@ func EvalFaculty() eval.Faculty {
 	return registry.Snapshot()
 }
 
+// RegisterEvalGate registers an evaluation gate in the default registry
+// with the name and package of the given stub.
 func RegisterEvalGate(stub interface{}) {
 	registry.RegisterEvalGate(stub)
 }
 
+// RegisterNamedEvalGate registers an evaluation gate in the default registry
+// with the given name in the package of the given stub.
+func RegisterNamedEvalGate(name string, stub interface{}) {
+	registry.RegisterNamedEvalGate(name, stub)
+}
+
+// RegisterEvalGateAt registers an evaluation gate in the default registry
+// with given name in the given package.
 func RegisterEvalGateAt(pkg, name string, stub interface{}) {
 	registry.RegisterEvalGateAt(pkg, name, stub)
 }

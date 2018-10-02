@@ -1,3 +1,19 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package eval
 
 import (
@@ -14,6 +30,7 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
+// EvalCallMacro is a macro that calls a Gate.
 type EvalCallMacro struct {
 	Gate gate.Gate `ko:"name=gate"`
 }
@@ -26,11 +43,27 @@ func (m *EvalCallMacro) MacroID() string { return m.Help() }
 
 func (m *EvalCallMacro) MacroSheathString() *string { return nil }
 
+// Help returns the a short help message of the macro
 func (m *EvalCallMacro) Help() string {
+	if helpMethod, found := m.Gate.Receiver.MethodByName("Help"); found && helpMethod.Type.NumIn() == 1 {
+		instance := reflect.New(m.Gate.Receiver).Elem()
+		result := helpMethod.Func.Call([]reflect.Value{instance})
+		if len(result) == 1 {
+			return result[0].String()
+		}
+	}
 	return fmt.Sprintf("%q.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
 }
 
+// Doc returns the usage documentation of the macro
 func (m *EvalCallMacro) Doc() string {
+	if docMethod, found := m.Gate.Receiver.MethodByName("Doc"); found && docMethod.Type.NumIn() == 1 {
+		instance := reflect.New(m.Gate.Receiver).Elem()
+		result := docMethod.Func.Call([]reflect.Value{instance})
+		if len(result) == 1 {
+			return result[0].String()
+		}
+	}
 	return fmt.Sprintf("Run: go doc %s.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
 }
 

@@ -59,7 +59,7 @@ runTestRunner(testFunc, testName) {
 }
 
 runTestFailRecover(panicValue?, testName) {
-	s1: Show(fail: testName)
+	s1: Show(fail: testName, error: panicValue)
 	return: (
 		passed: 0
 		failed: 1
