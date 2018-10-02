@@ -15,4 +15,6 @@ script:
     github.com/kocircuit/kocircuit/lib
     github.com/kocircuit/kocircuit/lib/set
     github.com/kocircuit/kocircuit/lib/sync
-    github.com/kocircuit/kocircuit/lib/web
+    github.com/kocircuit/kocircuit/lib/web/xml
+    github.com/kocircuit/kocircuit/lib/web/html
+    github.com/kocircuit/kocircuit/lib/web/wiki

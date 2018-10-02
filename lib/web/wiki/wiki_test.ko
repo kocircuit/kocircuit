@@ -1,17 +1,25 @@
+// 
+// Copyright © 2018 Aljabr, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// 
+
 import "circuit"
 import "github.com/kocircuit/kocircuit/lib/os"
 import "github.com/kocircuit/kocircuit/lib/file"
 import "github.com/kocircuit/kocircuit/lib/file/path" as filepath
+import "github.com/kocircuit/kocircuit/lib/testing"
 import "github.com/kocircuit/kocircuit/lib/web/html"
-
-// ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestAll
-TestAll() {
-	return: (
-		t1: TestContentNodes()
-		t2: TestWiki()
-		t3: TestBuild()
-	)
-}
 
 // ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestContentNodes
 TestContentNodes() {
@@ -21,18 +29,22 @@ TestContentNodes() {
 		Text("днес?")
 		cited
 	)
-	return: Print(html.Render(doc.RenderHTML(renderingCtx: testRenderingCtx())))
+	return: testing.AssertEqual(
+		html.Render(doc.RenderHTML(renderingCtx: testRenderingCtx()))
+		"<P ><SPAN >Как се чуствате</SPAN> <SPAN >днес?</SPAN> <BLOCKQUOTE ><SPAN class=\"math\"><SPAN >some math here</SPAN></SPAN></BLOCKQUOTE></P>"
+	)
 }
 
 // ko play github.com/kocircuit/kocircuit/lib/web/wiki/TestWiki
 TestWiki() {
-	return: Print(
+	return: testing.AssertEqual(
 		html.Render(
 			ChapterPageHTML(
 				chapter: testTOC()
 				renderingCtx: testRenderingCtx()
 			)
 		)
+		"<!DOCTYPE html> <HTML ><HEAD ><TITLE >Root chapter</TITLE></HEAD> <BODY ><DL class=\"rows\"><DT class=\"row\"><STRONG ><SPAN ></SPAN> <SPAN >Root chapter</SPAN></STRONG></DT></DL> <DL class=\"rows\"><DT class=\"row\"><STRONG class=\"has-text-weight-semibold is-size-3\"><SPAN ></SPAN> <SPAN >Root chapter</SPAN></STRONG></DT> <DT class=\"row\"><DIV style=\"padding-left: 1rem\"><DL class=\"rows\"><DT class=\"row\"><A href=\"/chapter_1/index.html\"><SPAN >1.</SPAN> <SPAN >Chapter 1</SPAN></A></DT></DL></DIV></DT> <DT class=\"row\"><DIV style=\"padding-left: 1rem\"><DL class=\"rows\"><DT class=\"row\"><A href=\"/chapter_2/index.html\"><SPAN >2.</SPAN> <SPAN >Chapter 2</SPAN></A></DT></DL></DIV></DT></DL> <P ><SPAN >hello</SPAN> <SPAN class=\"math\"><SPAN >world</SPAN></SPAN></P></BODY></HTML>"
 	)
 }
 
