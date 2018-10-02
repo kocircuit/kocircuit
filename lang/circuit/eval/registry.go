@@ -41,6 +41,8 @@ func NewRegistry(gateMacro GateMacro) *Registry {
 	}
 }
 
+// RegisterGate registers a gate with the name and
+// package of the given stub.
 func (r *Registry) RegisterGate(stub interface{}) {
 	gate, err := gate.BindGate(reflect.TypeOf(stub))
 	if err != nil {
@@ -49,6 +51,8 @@ func (r *Registry) RegisterGate(stub interface{}) {
 	r.RegisterPkgMacro(gate.GoPkgPath(), gate.GoName(), r.GateMacro.GateMacro(gate))
 }
 
+// RegisterNamedGate registers a gate with the given name in
+// the package of the given stub.
 func (r *Registry) RegisterNamedGate(name string, stub interface{}) {
 	gate, err := gate.BindGate(reflect.TypeOf(stub))
 	if err != nil {
@@ -57,6 +61,7 @@ func (r *Registry) RegisterNamedGate(name string, stub interface{}) {
 	r.RegisterPkgMacro(gate.GoPkgPath(), name, r.GateMacro.GateMacro(gate))
 }
 
+// RegisterGateAt registers a gate with given name in the given package.
 func (r *Registry) RegisterGateAt(pkg, name string, stub interface{}) {
 	gate, err := gate.BindGate(reflect.TypeOf(stub))
 	if err != nil {
