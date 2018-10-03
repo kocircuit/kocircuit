@@ -1,14 +1,32 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"reflect"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func IntegrateInterface(span *Span, s Symbol, t reflect.Type) (interface{}, error) {
+// IntegrateInterface integrates a Ko value into a Go value of given type,
+// returning the Go value as interface{}.
+func IntegrateInterface(span *model.Span, s Symbol, t reflect.Type) (interface{}, error) {
 	if v, err := Integrate(span, s, t); err != nil {
 		return nil, err
 	} else {
@@ -16,7 +34,8 @@ func IntegrateInterface(span *Span, s Symbol, t reflect.Type) (interface{}, erro
 	}
 }
 
-func Integrate(span *Span, s Symbol, t reflect.Type) (reflect.Value, error) {
+// Integrate a Ko value into a Go value of given type.
+func Integrate(span *model.Span, s Symbol, t reflect.Type) (reflect.Value, error) {
 	ctx := &typingCtx{Span: span}
 	return ctx.Integrate(s, t)
 }
@@ -37,7 +56,7 @@ func (ctx *typingCtx) Integrate(s Symbol, t reflect.Type) (reflect.Value, error)
 }
 
 func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, error) {
-	tName := TypeName(t)
+	tName := tree.TypeName(t)
 	if tName == "" {
 		return reflect.Value{}, ctx.Errorf(nil, "to-type is not named")
 	}
@@ -55,7 +74,7 @@ func (ctx *typingCtx) integrateNamed(s Symbol, t reflect.Type) (reflect.Value, e
 	} else {
 		return reflect.Value{}, ctx.Errorf(nil,
 			"cannot integrate named type %s to named type %s",
-			TypeName(sGoType), TypeName(t),
+			tree.TypeName(sGoType), tree.TypeName(t),
 		)
 	}
 }
@@ -145,7 +164,7 @@ func (ctx *typingCtx) IntegrateKind(s Symbol, t reflect.Type) (reflect.Value, er
 	case *NamedSymbol:
 		return ctx.IntegrateFromNamed(u, t)
 	}
-	return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %s into %v", Sprint(s), t)
+	return reflect.Value{}, ctx.Errorf(nil, "cannot integrate %s into %v", tree.Sprint(s), t)
 }
 
 var TypeOfInterface = reflect.TypeOf((*interface{})(nil)).Elem()

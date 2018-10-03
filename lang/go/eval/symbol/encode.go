@@ -1,3 +1,19 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
@@ -7,11 +23,11 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 )
 
-func EncodeSymbol(span *Span, symbol Symbol) ([]byte, error) {
+func EncodeSymbol(span *model.Span, symbol Symbol) ([]byte, error) {
 	pbDisassembled, err := symbol.Disassemble(span)
 	if err != nil {
 		return nil, span.Errorf(err, "disassemble symbol")
@@ -31,7 +47,7 @@ func EncodeSymbol(span *Span, symbol Symbol) ([]byte, error) {
 	return w.Bytes(), nil
 }
 
-func DecodeSymbol(span *Span, asm VarietyAssembler, gzipped []byte) (Symbol, error) {
+func DecodeSymbol(span *model.Span, asm VarietyAssembler, gzipped []byte) (Symbol, error) {
 	r := bytes.NewBuffer(gzipped)
 	gr, err := gzip.NewReader(r)
 	if err != nil {
@@ -51,7 +67,7 @@ func DecodeSymbol(span *Span, asm VarietyAssembler, gzipped []byte) (Symbol, err
 	return AssembleWithError(span, asm, pbSymbol)
 }
 
-func DecodeArg(span *Span, asm VarietyAssembler, argBytes []byte) (*StructSymbol, error) {
+func DecodeArg(span *model.Span, asm VarietyAssembler, argBytes []byte) (*StructSymbol, error) {
 	if argBytes == nil {
 		return MakeStructSymbol(nil), nil
 	}

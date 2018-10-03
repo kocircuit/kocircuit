@@ -1,12 +1,28 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"reflect"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 var (
@@ -14,7 +30,7 @@ var (
 	BasicFalse = BasicSymbol{false}
 )
 
-func MakeBasicSymbol(span *Span, v interface{}) BasicSymbol {
+func MakeBasicSymbol(span *model.Span, v interface{}) BasicSymbol {
 	return Deconstruct(span, reflect.ValueOf(v)).(BasicSymbol)
 }
 
@@ -68,7 +84,7 @@ type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
 
-func (basic BasicSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (basic BasicSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	dis := &pb.SymbolBasic{}
 	switch u := basic.Value.(type) {
 	case bool:
@@ -108,10 +124,10 @@ func (basic BasicSymbol) GoValue() reflect.Value {
 }
 
 func (basic BasicSymbol) String() string {
-	return Sprint(basic)
+	return tree.Sprint(basic)
 }
 
-func (basic BasicSymbol) Equal(span *Span, sym Symbol) bool {
+func (basic BasicSymbol) Equal(span *model.Span, sym Symbol) bool {
 	if other, ok := sym.(BasicSymbol); ok {
 		return basic.Value == other.Value
 	} else {
@@ -119,11 +135,11 @@ func (basic BasicSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (basic BasicSymbol) Hash(span *Span) ID {
-	return InterfaceID(basic.Value)
+func (basic BasicSymbol) Hash(span *model.Span) model.ID {
+	return model.InterfaceID(basic.Value)
 }
 
-func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error) {
+func (basic BasicSymbol) ConvertTo(span *model.Span, to BasicType) (BasicSymbol, error) {
 	v := reflect.ValueOf(basic.Value)
 	if v.Type().ConvertibleTo(to.GoType()) {
 		return BasicSymbol{v.Convert(to.GoType()).Interface()}, nil
@@ -132,15 +148,15 @@ func (basic BasicSymbol) ConvertTo(span *Span, to BasicType) (BasicSymbol, error
 	}
 }
 
-func (basic BasicSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (basic BasicSymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	return singletonSeries(basic)
 }
 
-func (basic BasicSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (basic BasicSymbol) Link(span *model.Span, name string, monadic bool) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "linking argument to basic")
 }
 
-func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
+func (basic BasicSymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return basic, nil, nil
 	} else {
@@ -148,11 +164,11 @@ func (basic BasicSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (basic BasicSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
+func (basic BasicSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "basic value %v cannot be augmented", basic)
 }
 
-func (basic BasicSymbol) Invoke(span *Span) (Shape, Effect, error) {
+func (basic BasicSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "basic value %v cannot be invoked", basic)
 }
 
@@ -160,8 +176,8 @@ func (basic BasicSymbol) Type() Type {
 	return BasicFromKind(reflect.TypeOf(basic.Value).Kind())
 }
 
-func (basic BasicSymbol) Splay() Tree {
-	return GoValue{Value: reflect.ValueOf(basic.Value)}
+func (basic BasicSymbol) Splay() tree.Tree {
+	return tree.GoValue{Value: reflect.ValueOf(basic.Value)}
 }
 
 func BasicFromKind(kind reflect.Kind) BasicType {
@@ -198,8 +214,8 @@ type BasicType int
 
 func (BasicType) IsType() {}
 
-func (basic BasicType) Splay() Tree {
-	return NoQuote{String_: basic.String()}
+func (basic BasicType) Splay() tree.Tree {
+	return tree.NoQuote{String_: basic.String()}
 }
 
 var (

@@ -1,3 +1,19 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
@@ -5,11 +21,11 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 func MakeStructSymbol(fields FieldSymbols) *StructSymbol {
@@ -55,7 +71,7 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
-func DisassembleFieldSymbols(span *Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
+func DisassembleFieldSymbols(span *model.Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
 	filtered := FilterEmptyFieldSymbols(fields)
 	dis := make([]*pb.SymbolField, 0, len(filtered))
 	for _, field := range filtered {
@@ -76,7 +92,7 @@ func DisassembleFieldSymbols(span *Span, fields FieldSymbols) ([]*pb.SymbolField
 	return dis, nil
 }
 
-func (ss *StructSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (ss *StructSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	fields, err := DisassembleFieldSymbols(span, ss.Field)
 	if err != nil {
 		return nil, err
@@ -92,10 +108,10 @@ func (ss *StructSymbol) IsEmpty() bool {
 }
 
 func (ss *StructSymbol) String() string {
-	return Sprint(ss)
+	return tree.Sprint(ss)
 }
 
-func (ss *StructSymbol) Equal(span *Span, sym Symbol) bool {
+func (ss *StructSymbol) Equal(span *model.Span, sym Symbol) bool {
 	if other, ok := sym.(*StructSymbol); ok {
 		return FieldSymbolsEqual(span, ss.Field, other.Field)
 	} else {
@@ -103,7 +119,7 @@ func (ss *StructSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func FieldSymbolsEqual(span *Span, x, y FieldSymbols) bool {
+func FieldSymbolsEqual(span *model.Span, x, y FieldSymbols) bool {
 	x, y = FilterEmptyFieldSymbols(x), FilterEmptyFieldSymbols(y)
 	if len(x) != len(y) {
 		return false
@@ -119,29 +135,29 @@ func FieldSymbolsEqual(span *Span, x, y FieldSymbols) bool {
 	return true
 }
 
-func (ss *StructSymbol) Hash(span *Span) ID {
+func (ss *StructSymbol) Hash(span *model.Span) model.ID {
 	return FieldSymbolsHash(span, ss.Field)
 }
 
-func FieldSymbolsHash(span *Span, fields FieldSymbols) ID {
+func FieldSymbolsHash(span *model.Span, fields FieldSymbols) model.ID {
 	fields = FilterEmptyFieldSymbols(fields)
-	h := make([]ID, 2*len(fields))
+	h := make([]model.ID, 2*len(fields))
 	for i, field := range fields {
-		h[2*i] = StringID(field.Name)
+		h[2*i] = model.StringID(field.Name)
 		h[2*i+1] = field.Value.Hash(span)
 	}
-	return Blend(h...)
+	return model.Blend(h...)
 }
 
-func (ss *StructSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (ss *StructSymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	return singletonSeries(ss)
 }
 
-func (ss *StructSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
+func (ss *StructSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "structure %v cannot be augmented", ss)
 }
 
-func (ss *StructSymbol) Invoke(span *Span) (Shape, Effect, error) {
+func (ss *StructSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "structure %v cannot be invoked", ss)
 }
 
@@ -149,17 +165,17 @@ func (ss *StructSymbol) Type() Type {
 	return ss.Type_
 }
 
-func (ss *StructSymbol) Splay() Tree {
-	nameTrees := make([]NameTree, len(ss.Field))
+func (ss *StructSymbol) Splay() tree.Tree {
+	nameTrees := make([]tree.NameTree, len(ss.Field))
 	for i, field := range ss.Field {
-		nameTrees[i] = NameTree{
+		nameTrees[i] = tree.NameTree{
 			Name:    gate.KoGoName{Ko: field.Name},
 			Monadic: field.Monadic,
 			Tree:    field.Value.Splay(),
 		}
 	}
-	return Parallel{
-		Label:   Label{Path: "", Name: ""},
+	return tree.Parallel{
+		Label:   tree.Label{Path: "", Name: ""},
 		Bracket: "()",
 		Elem:    nameTrees,
 	}
@@ -219,19 +235,19 @@ type FieldType struct {
 func (*StructType) IsType() {}
 
 func (st *StructType) String() string {
-	return Sprint(st)
+	return tree.Sprint(st)
 }
 
-func (st *StructType) Splay() Tree {
-	nameTrees := make([]NameTree, len(st.Field))
+func (st *StructType) Splay() tree.Tree {
+	nameTrees := make([]tree.NameTree, len(st.Field))
 	for i, field := range st.Field {
-		nameTrees[i] = NameTree{
+		nameTrees[i] = tree.NameTree{
 			Name: gate.KoGoName{Ko: field.Name},
 			Tree: field.Type_.Splay(),
 		}
 	}
-	return Parallel{
-		Label:   Label{Path: "", Name: ""},
+	return tree.Parallel{
+		Label:   tree.Label{Path: "", Name: ""},
 		Bracket: "()",
 		Elem:    nameTrees,
 	}

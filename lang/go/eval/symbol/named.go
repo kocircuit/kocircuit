@@ -1,29 +1,45 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"fmt"
 	"reflect"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 type NamedSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
-func (named *NamedSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (named *NamedSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	return DeconstructKind(span, named.Value).Disassemble(span)
 }
 
 func (named *NamedSymbol) String() string {
-	return Sprint(named.Value.Interface())
+	return tree.Sprint(named.Value.Interface())
 }
 
-func (named *NamedSymbol) Equal(span *Span, sym Symbol) bool {
+func (named *NamedSymbol) Equal(span *model.Span, sym Symbol) bool {
 	if other, ok := sym.(*NamedSymbol); ok {
 		return reflect.DeepEqual(named.Value.Interface(), other.Value.Interface())
 	} else {
@@ -31,11 +47,11 @@ func (named *NamedSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (named *NamedSymbol) Splay() Tree {
-	return Splay(named.Value.Interface())
+func (named *NamedSymbol) Splay() tree.Tree {
+	return tree.Splay(named.Value.Interface())
 }
 
-func (named *NamedSymbol) Hash(span *Span) ID {
+func (named *NamedSymbol) Hash(span *model.Span) model.ID {
 	return DeconstructKind(span, named.Value).Hash(span)
 }
 
@@ -49,15 +65,15 @@ func (named *NamedSymbol) Type() Type {
 	}
 }
 
-func (named *NamedSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (named *NamedSymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	return singletonSeries(named)
 }
 
-func (named *NamedSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (named *NamedSymbol) Link(span *model.Span, name string, monadic bool) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "linking argument to named")
 }
 
-func (named *NamedSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
+func (named *NamedSymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return named, nil, nil
 	} else {
@@ -69,7 +85,7 @@ func (named *NamedSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
+func (named *NamedSymbol) Walk(span *model.Span, field string) (Symbol, error) {
 	v := named.Value
 	for v.Kind() == reflect.Ptr {
 		v = v.Elem()
@@ -87,11 +103,11 @@ func (named *NamedSymbol) Walk(span *Span, field string) (Symbol, error) {
 	}
 }
 
-func (named *NamedSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
+func (named *NamedSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "named value %v cannot be augmented", named)
 }
 
-func (named *NamedSymbol) Invoke(span *Span) (Shape, Effect, error) {
+func (named *NamedSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "named value %v cannot be invoked", named)
 }
 
@@ -102,9 +118,9 @@ type NamedType struct {
 func (named NamedType) IsType() {}
 
 func (named NamedType) String() string {
-	return Sprint(named)
+	return tree.Sprint(named)
 }
 
-func (named NamedType) Splay() Tree {
-	return NoQuote{String_: fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
+func (named NamedType) Splay() tree.Tree {
+	return tree.NoQuote{String_: fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
 }

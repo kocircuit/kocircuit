@@ -1,18 +1,34 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"reflect"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/gate"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func DeconstructInterface(span *Span, any interface{}) Symbol {
+func DeconstructInterface(span *model.Span, any interface{}) Symbol {
 	return Deconstruct(span, reflect.ValueOf(any))
 }
 
-func Deconstruct(span *Span, v reflect.Value) Symbol {
+func Deconstruct(span *model.Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
 	if symbol, err := ctx.Deconstruct(v); err != nil {
 		panic(err)
@@ -21,7 +37,7 @@ func Deconstruct(span *Span, v reflect.Value) Symbol {
 	}
 }
 
-func DeconstructKind(span *Span, v reflect.Value) Symbol {
+func DeconstructKind(span *model.Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
 	if symbol, err := ctx.DeconstructKind(v); err != nil {
 		panic(err)
@@ -32,7 +48,7 @@ func DeconstructKind(span *Span, v reflect.Value) Symbol {
 
 func (ctx *typingCtx) Deconstruct(v reflect.Value) (Symbol, error) {
 	if v.IsValid() {
-		if typeName := TypeName(v.Type()); typeName != "" && v.Kind() != reflect.Interface {
+		if typeName := tree.TypeName(v.Type()); typeName != "" && v.Kind() != reflect.Interface {
 			return &NamedSymbol{Value: v}, nil
 		}
 	}

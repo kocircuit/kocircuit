@@ -1,16 +1,32 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
-func Unify(span *Span, x, y Type) (Type, error) {
+func Unify(span *model.Span, x, y Type) (Type, error) {
 	ctx := &typingCtx{Span: span}
 	return ctx.Unify(x, y)
 }
 
-func UnifyTypes(span *Span, tt []Type) (Type, error) {
+func UnifyTypes(span *model.Span, tt []Type) (Type, error) {
 	ctx := &typingCtx{Span: span}
 	return ctx.UnifyTypes(tt)
 }
@@ -102,14 +118,14 @@ func (ctx *typingCtx) Unify(x, y Type) (Type, error) {
 			return ctx.UnifyNamed(xt, yt)
 		}
 	}
-	return nil, ctx.Errorf(nil, "%s and %s cannot be unified", Sprint(x), Sprint(y))
+	return nil, ctx.Errorf(nil, "%s and %s cannot be unified", tree.Sprint(x), tree.Sprint(y))
 }
 
 func (ctx *typingCtx) UnifyBasic(x, y BasicType) (Type, error) {
 	if unified, ok := unifyBasic(x, y); ok {
 		return unified, nil
 	} else {
-		return nil, ctx.Errorf(nil, "basic types %s and %s cannot be unified", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "basic types %s and %s cannot be unified", tree.Sprint(x), tree.Sprint(y))
 	}
 }
 
@@ -117,13 +133,13 @@ func (ctx *typingCtx) UnifyOpaque(x, y *OpaqueType) (Type, error) {
 	if x.Type == y.Type {
 		return x, nil
 	} else {
-		return nil, ctx.Errorf(nil, "opaque types %s and %s cannot be unified", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "opaque types %s and %s cannot be unified", tree.Sprint(x), tree.Sprint(y))
 	}
 }
 
 func (ctx *typingCtx) UnifySeries(x, y *SeriesType) (*SeriesType, error) {
 	if xyElem, err := ctx.Refine("()").Unify(x.Elem, y.Elem); err != nil {
-		return nil, ctx.Errorf(nil, "cannot unify sequences %s and %s", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "cannot unify sequences %s and %s", tree.Sprint(x), tree.Sprint(y))
 	} else {
 		return &SeriesType{Elem: xyElem}, nil
 	}
@@ -133,7 +149,7 @@ func (ctx *typingCtx) UnifyNamed(x, y NamedType) (Type, error) {
 	if x.Type == y.Type {
 		return x, nil
 	} else {
-		return nil, ctx.Errorf(nil, "named types %s and %s cannot be unified", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "named types %s and %s cannot be unified", tree.Sprint(x), tree.Sprint(y))
 	}
 }
 
@@ -141,6 +157,6 @@ func (ctx *typingCtx) UnifyMap(x, y *MapType) (Type, error) {
 	if unified, err := ctx.Unify(x.Value, y.Value); err == nil {
 		return &MapType{Value: unified}, nil
 	} else {
-		return nil, ctx.Errorf(nil, "map types %s and %s cannot be unified", Sprint(x), Sprint(y))
+		return nil, ctx.Errorf(nil, "map types %s and %s cannot be unified", tree.Sprint(x), tree.Sprint(y))
 	}
 }

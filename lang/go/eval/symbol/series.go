@@ -1,10 +1,26 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 type SeriesSymbol struct {
@@ -12,7 +28,7 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-func (ss *SeriesSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (ss *SeriesSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
 	dis := &pb.SymbolSeries{
 		Element: make([]*pb.Symbol, 0, len(filtered)),
@@ -44,10 +60,10 @@ func (ss *SeriesSymbol) Len() int {
 }
 
 func (ss *SeriesSymbol) String() string {
-	return Sprint(ss)
+	return tree.Sprint(ss)
 }
 
-func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
+func (ss *SeriesSymbol) Equal(span *model.Span, sym Symbol) bool {
 	other := sym.LiftToSeries(span)
 	if len(ss.Elem) != len(other.Elem) {
 		return false
@@ -60,8 +76,8 @@ func (ss *SeriesSymbol) Equal(span *Span, sym Symbol) bool {
 	return true
 }
 
-func (ss *SeriesSymbol) Hash(span *Span) ID {
-	h := make([]ID, 0, len(ss.Elem))
+func (ss *SeriesSymbol) Hash(span *model.Span) model.ID {
+	h := make([]model.ID, 0, len(ss.Elem))
 	for _, e := range ss.Elem {
 		h = append(h, e.Hash(span))
 	}
@@ -71,19 +87,19 @@ func (ss *SeriesSymbol) Hash(span *Span) ID {
 	case 1:
 		return h[0]
 	default:
-		return Blend(h...)
+		return model.Blend(h...)
 	}
 }
 
-func (ss *SeriesSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (ss *SeriesSymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	return ss
 }
 
-func (ss *SeriesSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (ss *SeriesSymbol) Link(span *model.Span, name string, monadic bool) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "linking argument to series")
 }
 
-func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
+func (ss *SeriesSymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return ss, nil, nil
 	} else {
@@ -91,11 +107,11 @@ func (ss *SeriesSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (ss *SeriesSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
+func (ss *SeriesSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "sequence %v cannot be augmented", ss)
 }
 
-func (ss *SeriesSymbol) Invoke(span *Span) (Shape, Effect, error) {
+func (ss *SeriesSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "sequence %v cannot be invoked", ss)
 }
 
@@ -103,13 +119,13 @@ func (ss *SeriesSymbol) Type() Type {
 	return ss.Type_
 }
 
-func (ss *SeriesSymbol) Splay() Tree {
-	indexTrees := make([]IndexTree, len(ss.Elem))
+func (ss *SeriesSymbol) Splay() tree.Tree {
+	indexTrees := make([]tree.IndexTree, len(ss.Elem))
 	for i, elemSym := range ss.Elem {
-		indexTrees[i] = IndexTree{Index: i, Tree: elemSym.Splay()}
+		indexTrees[i] = tree.IndexTree{Index: i, Tree: elemSym.Splay()}
 	}
-	return Series{
-		Label:   Label{Path: "", Name: ""},
+	return tree.Series{
+		Label:   tree.Label{Path: "", Name: ""},
 		Bracket: "()",
 		Elem:    indexTrees,
 	}
@@ -122,18 +138,18 @@ type SeriesType struct {
 func (*SeriesType) IsType() {}
 
 func (st *SeriesType) String() string {
-	return Sprint(st)
+	return tree.Sprint(st)
 }
 
-func (st *SeriesType) Splay() Tree {
-	return Series{
-		Label:   Label{Path: "", Name: ""},
+func (st *SeriesType) Splay() tree.Tree {
+	return tree.Series{
+		Label:   tree.Label{Path: "", Name: ""},
 		Bracket: "()",
-		Elem:    []IndexTree{{Index: 0, Tree: st.Elem.Splay()}},
+		Elem:    []tree.IndexTree{{Index: 0, Tree: st.Elem.Splay()}},
 	}
 }
 
-func MakeStringsSymbol(span *Span, ss []string) Symbol {
+func MakeStringsSymbol(span *model.Span, ss []string) Symbol {
 	switch len(ss) {
 	case 0:
 		return EmptySymbol{}
@@ -148,7 +164,7 @@ func MakeStringsSymbol(span *Span, ss []string) Symbol {
 	}
 }
 
-func MakeSeriesSymbol(span *Span, elem Symbols) (Symbol, error) {
+func MakeSeriesSymbol(span *model.Span, elem Symbols) (Symbol, error) {
 	elem = FilterEmptySymbols(elem)
 	if len(elem) == 0 {
 		return EmptySymbol{}, nil
@@ -167,7 +183,7 @@ var EmptySeries = &SeriesSymbol{
 	Type_: &SeriesType{Elem: EmptyType{}},
 }
 
-func makeSeriesDontUnify(span *Span, elem Symbols, elemType Type) *SeriesSymbol {
+func makeSeriesDontUnify(span *model.Span, elem Symbols, elemType Type) *SeriesSymbol {
 	return &SeriesSymbol{
 		Type_: &SeriesType{Elem: elemType},
 		Elem:  elem,

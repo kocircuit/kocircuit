@@ -1,13 +1,29 @@
+//
+// Copyright © 2018 Aljabr, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package symbol
 
 import (
 	"fmt"
 	"reflect"
 
-	. "github.com/kocircuit/kocircuit/lang/circuit/eval"
-	. "github.com/kocircuit/kocircuit/lang/circuit/model"
+	"github.com/kocircuit/kocircuit/lang/circuit/eval"
+	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
-	. "github.com/kocircuit/kocircuit/lang/go/kit/tree"
+	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 func MakeBlobSymbol(b []byte) *BlobSymbol {
@@ -18,7 +34,7 @@ type BlobSymbol struct {
 	Value reflect.Value `ko:"name=value"` // []byte
 }
 
-func (blob *BlobSymbol) Disassemble(span *Span) (*pb.Symbol, error) {
+func (blob *BlobSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Blob{
 			Blob: &pb.SymbolBlob{Bytes: blob.Bytes()},
@@ -34,7 +50,7 @@ func (blob *BlobSymbol) String() string {
 	return fmt.Sprintf("Blob<%d>", blob.Value.Len())
 }
 
-func (blob *BlobSymbol) Equal(span *Span, sym Symbol) bool {
+func (blob *BlobSymbol) Equal(span *model.Span, sym Symbol) bool {
 	if other, ok := sym.(*BlobSymbol); ok {
 		left, right := blob.Bytes(), other.Bytes()
 		if len(left) != len(right) {
@@ -52,19 +68,19 @@ func (blob *BlobSymbol) Equal(span *Span, sym Symbol) bool {
 	}
 }
 
-func (blob *BlobSymbol) Splay() Tree {
-	return NoQuote{String_: blob.String()}
+func (blob *BlobSymbol) Splay() tree.Tree {
+	return tree.NoQuote{String_: blob.String()}
 }
 
-func (blob *BlobSymbol) Hash(span *Span) ID {
-	return BytesID(blob.Bytes())
+func (blob *BlobSymbol) Hash(span *model.Span) model.ID {
+	return model.BytesID(blob.Bytes())
 }
 
 func (blob *BlobSymbol) Type() Type {
 	return BlobType{}
 }
 
-func (blob *BlobSymbol) LiftToSeries(span *Span) *SeriesSymbol {
+func (blob *BlobSymbol) LiftToSeries(span *model.Span) *SeriesSymbol {
 	goBytes := blob.Bytes()
 	if len(goBytes) == 0 {
 		return EmptySeries
@@ -77,11 +93,11 @@ func (blob *BlobSymbol) LiftToSeries(span *Span) *SeriesSymbol {
 	}
 }
 
-func (blob *BlobSymbol) Link(span *Span, name string, monadic bool) (Shape, Effect, error) {
+func (blob *BlobSymbol) Link(span *model.Span, name string, monadic bool) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "linking argument to blob")
 }
 
-func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
+func (blob *BlobSymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return blob, nil, nil
 	} else {
@@ -89,11 +105,11 @@ func (blob *BlobSymbol) Select(span *Span, path Path) (Shape, Effect, error) {
 	}
 }
 
-func (blob *BlobSymbol) Augment(span *Span, _ Fields) (Shape, Effect, error) {
+func (blob *BlobSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "blob value %v cannot be augmented", blob)
 }
 
-func (blob *BlobSymbol) Invoke(span *Span) (Shape, Effect, error) {
+func (blob *BlobSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error) {
 	return nil, nil, span.Errorf(nil, "blob value %v cannot be invoked", blob)
 }
 
@@ -105,6 +121,6 @@ func (blob BlobType) String() string {
 	return "Blob"
 }
 
-func (blob BlobType) Splay() Tree {
-	return NoQuote{String_: "Blob"}
+func (blob BlobType) Splay() tree.Tree {
+	return tree.NoQuote{String_: "Blob"}
 }
