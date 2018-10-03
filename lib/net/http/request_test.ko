@@ -29,3 +29,19 @@ TestRequest() {
 		t2: testing.Assert(strings.Contains(string: http.BodyAsString(resp), subString: "<html"))
 	)
 }
+
+TestGet() {
+	resp: http.Get("https://www.google.com")
+	return: (
+		t1: testing.AssertEqual(resp.statusCode, 200)
+		t2: testing.Assert(strings.Contains(string: http.BodyAsString(resp), subString: "<html"))
+	)
+}
+
+TestHead() {
+	resp: http.Head("https://www.google.com")
+	return: (
+		t1: testing.AssertEqual(resp.statusCode, 200)
+		t2: testing.Assert(Not(strings.Contains(string: http.BodyAsString(resp), subString: "<html")))
+	)
+}
