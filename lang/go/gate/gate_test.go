@@ -17,6 +17,7 @@
 package gate
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -42,6 +43,12 @@ func (testGateOk) Play(*runtime.Context) *complex128 {
 
 func (testGateSimple) Play(*runtime.Context) error {
 	return nil
+}
+
+type testGateError struct{}
+
+func (testGateError) Play(*runtime.Context) (string, error) {
+	return "", fmt.Errorf("Some error")
 }
 
 func TestBindGate(t *testing.T) {
@@ -86,4 +93,10 @@ func TestGateFieldName(t *testing.T) {
 
 	_, found = g.Struct.FieldByKoName("notFound")
 	assert.False(t, found)
+}
+
+func TestBindGateError(t *testing.T) {
+	if _, err := BindGate(reflect.TypeOf(&testGateError{})); err != nil {
+		t.Errorf("bind (%v)", err)
+	}
 }

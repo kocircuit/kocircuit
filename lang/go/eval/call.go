@@ -67,6 +67,10 @@ func (m *EvalCallMacro) Doc() string {
 	return fmt.Sprintf("Run: go doc %s.%s", m.Gate.GoPkgPath(), m.Gate.GoName())
 }
 
+var (
+	goErrorType = reflect.TypeOf((*error)(nil)).Elem()
+)
+
 func (call *EvalCallMacro) Invoke(span *model.Span, arg eval.Arg) (returns eval.Return, effect eval.Effect, err error) {
 	ss := arg.(*symbol.StructSymbol)
 	var receiver reflect.Value
@@ -82,6 +86,15 @@ func (call *EvalCallMacro) Invoke(span *model.Span, arg eval.Arg) (returns eval.
 		}()
 		ctx := NewEvalRuntimeContext(span)
 		result := receiver.MethodByName("Play").Call([]reflect.Value{reflect.ValueOf(ctx)})
+		// test error response
+		if len(result) > 1 {
+			errVal := result[len(result)-1]
+			if errVal.Kind() == reflect.Interface && !errVal.IsNil() {
+				if err := errVal.Convert(goErrorType).Interface().(error); err != nil {
+					return nil, nil, err
+				}
+			}
+		}
 		// lift result to declared return value
 		m, _ := call.Gate.Receiver.MethodByName("Play")
 		result[0] = result[0].Convert(m.Type.Out(0))
