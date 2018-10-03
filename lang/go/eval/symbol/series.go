@@ -17,6 +17,8 @@
 package symbol
 
 import (
+	"reflect"
+
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
 	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
@@ -28,8 +30,32 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-var _ Symbol = &SeriesSymbol{}
+var (
+	_            Symbol = &SeriesSymbol{}
+	seriesGoType        = reflect.TypeOf([]interface{}{})
+)
 
+// DisassembleToGo converts a Ko value into a Go value
+func (ss *SeriesSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	filtered := FilterEmptySymbols(ss.Elem)
+	elements := make([]reflect.Value, 0, len(filtered))
+	for _, elem := range filtered {
+		value, err := elem.DisassembleToGo(span)
+		if err != nil {
+			return reflect.Value{}, err
+		}
+		if !isNil(value) {
+			elements = append(elements, value)
+		}
+	}
+	if len(elements) == 0 {
+		return reflect.Zero(seriesGoType), nil
+	}
+	slice := reflect.MakeSlice(seriesGoType, 0, len(elements))
+	return reflect.Append(slice, elements...), nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (ss *SeriesSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
 	dis := &pb.SymbolSeries{
