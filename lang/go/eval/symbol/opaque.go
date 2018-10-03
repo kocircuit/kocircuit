@@ -38,7 +38,7 @@ func (opaque *OpaqueSymbol) Interface() interface{} {
 
 // DisassembleToGo converts a Ko value into a Go value
 func (opaque *OpaqueSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
-	return reflect.Value{}, span.Errorf(nil, "cannot disassemble opaque symbol %v", opaque)
+	return opaque.Value, nil
 }
 
 // DisassembleToPB converts a Ko value into a protobuf
