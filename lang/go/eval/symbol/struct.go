@@ -17,6 +17,7 @@
 package symbol
 
 import (
+	"reflect"
 	"sort"
 
 	"github.com/golang/protobuf/proto"
@@ -73,6 +74,21 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
+func disassembleFieldSymbolsToGo(span *model.Span, fields FieldSymbols) (map[string]interface{}, error) {
+	filtered := FilterEmptyFieldSymbols(fields)
+	m := make(map[string]interface{})
+	for _, field := range filtered {
+		value, err := field.Value.DisassembleToGo(span)
+		if err != nil {
+			return nil, err
+		}
+		if !isNil(value) {
+			m[field.Name] = value.Interface()
+		}
+	}
+	return m, nil
+}
+
 func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
 	filtered := FilterEmptyFieldSymbols(fields)
 	dis := make([]*pb.SymbolField, 0, len(filtered))
@@ -94,6 +110,17 @@ func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.S
 	return dis, nil
 }
 
+// DisassembleToGo converts a Ko value into a Go value
+func (ss *StructSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	// TODO use actual struct type
+	fields, err := disassembleFieldSymbolsToGo(span, ss.Field)
+	if err != nil {
+		return reflect.Value{}, err
+	}
+	return reflect.ValueOf(fields), nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (ss *StructSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	fields, err := disassembleFieldSymbolsToPB(span, ss.Field)
 	if err != nil {

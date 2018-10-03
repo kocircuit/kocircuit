@@ -36,6 +36,12 @@ type BlobSymbol struct {
 
 var _ Symbol = &BlobSymbol{}
 
+// DisassembleToGo converts a Ko value into a Go value
+func (blob *BlobSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	return reflect.ValueOf(blob.Bytes()), nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (blob *BlobSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Blob{

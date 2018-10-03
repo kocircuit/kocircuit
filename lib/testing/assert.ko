@@ -25,5 +25,5 @@ Assert(value?, messageBuilder) {
 }
 
 AssertEqual(values?, messageBuilder) {
-	return: Assert(value: Equal(values), messageBuilder: Pick(either: messageBuilder, or: Return["Expected values to be equal"]))
+	return: Assert(value: Equal(values), messageBuilder: Pick(either: messageBuilder, or: Show[message: "Expected values to be equal", values: values]))
 }

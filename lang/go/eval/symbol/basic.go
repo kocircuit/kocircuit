@@ -86,6 +86,12 @@ type BasicSymbol struct {
 
 var _ Symbol = BasicSymbol{}
 
+// DisassembleToGo converts a Ko value into a Go value
+func (basic BasicSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	return basic.GoValue(), nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (basic BasicSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	dis := &pb.SymbolBasic{}
 	switch u := basic.Value.(type) {
