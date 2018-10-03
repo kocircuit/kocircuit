@@ -13,6 +13,8 @@ script:
   - go test ./...
   - ko test 
     github.com/kocircuit/kocircuit/lib
+    github.com/kocircuit/kocircuit/lib/encoding/json
+    github.com/kocircuit/kocircuit/lib/encoding/yaml
     github.com/kocircuit/kocircuit/lib/net/http
     github.com/kocircuit/kocircuit/lib/set
     github.com/kocircuit/kocircuit/lib/strings

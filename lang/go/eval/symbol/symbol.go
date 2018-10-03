@@ -38,6 +38,8 @@ type Symbol interface {
 	Hash(*model.Span) model.ID
 	Equal(*model.Span, Symbol) bool
 	LiftToSeries(*model.Span) *SeriesSymbol
+	// DisassembleToGo converts a Ko value into a Go value
+	DisassembleToGo(*model.Span) (reflect.Value, error)
 	// DisassembleToPB converts a Ko value into a protobuf
 	DisassembleToPB(*model.Span) (*pb.Symbol, error)
 }

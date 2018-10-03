@@ -33,6 +33,12 @@ type NamedSymbol struct {
 
 var _ Symbol = &NamedSymbol{}
 
+// DisassembleToGo converts a Ko value into a Go value
+func (named *NamedSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	return named.Value, nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (named *NamedSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	return DeconstructKind(span, named.Value).DisassembleToPB(span)
 }

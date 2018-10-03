@@ -1,9 +1,0 @@
-import "github.com/kocircuit/kocircuit/lib/encoding/json"
-
-Marshal(value?) {
-	return: json.GoMarshal(value: value)
-}
-
-MarshalIndent(value?, prefix, indent) {
-	return: json.GoMarshalIndent(value: value, prefix: prefix, indent: indent)
-}

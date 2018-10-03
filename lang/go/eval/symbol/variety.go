@@ -17,7 +17,9 @@
 package symbol
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/proto"
+	"reflect"
 
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
 	"github.com/kocircuit/kocircuit/lang/circuit/model"
@@ -56,6 +58,28 @@ type InterpretMacro interface {
 	InterpretFunc() (pkgPath, funcName string)
 }
 
+// DisassembleToGo converts a Ko value into a Go value
+func (vty *VarietySymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	if pkgPath, funcName, _, err := vty.Dismentle(span); err != nil {
+		return reflect.Value{}, span.Errorf(err, "dismentling variety")
+	} else {
+		/*fields*/ _, err := disassembleFieldSymbolsToGo(span, vty.Arg)
+		if err != nil {
+			return reflect.Value{}, err
+		}
+		/*dis := &pb.SymbolVariety{
+			PkgPath:  proto.String(pkgPath),
+			FuncName: proto.String(funcName),
+			Arg:      fields,
+		}
+		return &pb.Symbol{
+			Symbol: &pb.Symbol_Variety{Variety: dis},
+		}, nil*/
+		return reflect.Value{}, fmt.Errorf("TODO convert variety %s/%s to go", pkgPath, funcName)
+	}
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (vty *VarietySymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	if pkgPath, funcName, _, err := vty.Dismentle(span); err != nil {
 		return nil, span.Errorf(err, "dismentling variety")

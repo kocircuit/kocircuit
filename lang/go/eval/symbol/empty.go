@@ -17,6 +17,8 @@
 package symbol
 
 import (
+	"reflect"
+
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
 	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	pb "github.com/kocircuit/kocircuit/lang/go/eval/symbol/proto"
@@ -35,8 +37,17 @@ func IsEmptyType(t Type) bool {
 
 type EmptySymbol struct{}
 
-var _ Symbol = EmptySymbol{}
+var (
+	_           Symbol = EmptySymbol{}
+	emptyGoType        = reflect.TypeOf((*interface{})(nil)).Elem()
+)
 
+// DisassembleToGo converts a Ko value into a Go value
+func (empty EmptySymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	return reflect.Zero(emptyGoType), nil
+}
+
+// DisassembleToPB converts a Ko value into a protobuf
 func (empty EmptySymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	return nil, nil
 }
