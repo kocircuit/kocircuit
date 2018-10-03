@@ -35,7 +35,9 @@ func IsEmptyType(t Type) bool {
 
 type EmptySymbol struct{}
 
-func (empty EmptySymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+var _ Symbol = EmptySymbol{}
+
+func (empty EmptySymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	return nil, nil
 }
 

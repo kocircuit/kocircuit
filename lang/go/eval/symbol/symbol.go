@@ -38,11 +38,11 @@ type Symbol interface {
 	Hash(*model.Span) model.ID
 	Equal(*model.Span, Symbol) bool
 	LiftToSeries(*model.Span) *SeriesSymbol
-	Disassemble(*model.Span) (*pb.Symbol, error)
+	// DisassembleToPB converts a Ko value into a protobuf
+	DisassembleToPB(*model.Span) (*pb.Symbol, error)
 }
 
 var (
-	symbolPtr    *Symbol
 	typeOfSymbol = reflect.TypeOf((*Symbol)(nil)).Elem()
 )
 

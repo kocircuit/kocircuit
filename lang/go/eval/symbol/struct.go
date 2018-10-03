@@ -65,17 +65,19 @@ type StructSymbol struct {
 	Field FieldSymbols `ko:"name=field"`
 }
 
+var _ Symbol = &StructSymbol{}
+
 type FieldSymbol struct {
 	Name    string `ko:"name=name"`
 	Monadic bool   `ko:"name=monadic"`
 	Value   Symbol `ko:"name=value"`
 }
 
-func DisassembleFieldSymbols(span *model.Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
+func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
 	filtered := FilterEmptyFieldSymbols(fields)
 	dis := make([]*pb.SymbolField, 0, len(filtered))
 	for _, field := range filtered {
-		value, err := field.Value.Disassemble(span)
+		value, err := field.Value.DisassembleToPB(span)
 		if err != nil {
 			return nil, err
 		}
@@ -92,8 +94,8 @@ func DisassembleFieldSymbols(span *model.Span, fields FieldSymbols) ([]*pb.Symbo
 	return dis, nil
 }
 
-func (ss *StructSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
-	fields, err := DisassembleFieldSymbols(span, ss.Field)
+func (ss *StructSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
+	fields, err := disassembleFieldSymbolsToPB(span, ss.Field)
 	if err != nil {
 		return nil, err
 	}

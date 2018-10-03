@@ -25,7 +25,7 @@ func TestReassembly(t *testing.T) {
 		t.Fatalf("eval pre-disassembly (%v)", err)
 	}
 	// disassemble
-	pbDisassembled, err := preReturned.Disassemble(span)
+	pbDisassembled, err := preReturned.DisassembleToPB(span)
 	if err != nil {
 		t.Fatalf("disassembly (%v)", err)
 	}
