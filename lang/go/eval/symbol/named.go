@@ -35,7 +35,7 @@ var _ Symbol = &NamedSymbol{}
 
 // DisassembleToGo converts a Ko value into a Go value
 func (named *NamedSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
-	return DeconstructKind(span, named.Value).DisassembleToGo(span)
+	return named.Value, nil
 }
 
 // DisassembleToPB converts a Ko value into a protobuf

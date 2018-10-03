@@ -112,6 +112,7 @@ func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.S
 
 // DisassembleToGo converts a Ko value into a Go value
 func (ss *StructSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
+	// TODO use actual struct type
 	fields, err := disassembleFieldSymbolsToGo(span, ss.Field)
 	if err != nil {
 		return reflect.Value{}, err

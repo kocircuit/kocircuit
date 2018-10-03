@@ -67,6 +67,7 @@ var (
 // DisassembleToGo converts a Ko value into a Go value
 func (ms *MapSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
 	filtered := filterMap(ms.Map)
+	// TODO use actual map type
 	m := make(map[string]interface{})
 	for _, key := range sortedMapKeys(filtered) {
 		value, err := filtered[key].DisassembleToGo(span)

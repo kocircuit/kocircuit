@@ -38,21 +38,21 @@ var (
 // DisassembleToGo converts a Ko value into a Go value
 func (ss *SeriesSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
-	elements := make([]reflect.Value, 0, len(filtered))
+	// TODO use actual type of series
+	slice := reflect.MakeSlice(seriesGoType, 0, len(filtered))
 	for _, elem := range filtered {
 		value, err := elem.DisassembleToGo(span)
 		if err != nil {
 			return reflect.Value{}, err
 		}
 		if !isNil(value) {
-			elements = append(elements, value)
+			slice = reflect.Append(slice, value)
 		}
 	}
-	if len(elements) == 0 {
+	if slice.Len() == 0 {
 		return reflect.Zero(seriesGoType), nil
 	}
-	slice := reflect.MakeSlice(seriesGoType, 0, len(elements))
-	return reflect.Append(slice, elements...), nil
+	return slice, nil
 }
 
 // DisassembleToPB converts a Ko value into a protobuf
