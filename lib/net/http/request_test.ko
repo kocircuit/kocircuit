@@ -15,6 +15,7 @@
 //
 
 import "github.com/kocircuit/kocircuit/lib/net/http"
+import "github.com/kocircuit/kocircuit/lib/strings"
 import "github.com/kocircuit/kocircuit/lib/testing"
 
 TestNewClient() {
@@ -25,6 +26,6 @@ TestRequest() {
 	resp: http.Request(url: "https://www.google.com")
 	return: (
 		t1: testing.AssertEqual(resp.statusCode, 200)
-		t2: Show(http.BodyAsString(resp))
+		t2: testing.Assert(strings.Contains(string: http.BodyAsString(resp), subString: "<html"))
 	)
 }
