@@ -58,13 +58,15 @@ type MapSymbol struct {
 	Map   map[string]Symbol `ko:"name=map"`
 }
 
-func (ms *MapSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+var _ Symbol = &MapSymbol{}
+
+func (ms *MapSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	filtered := filterMap(ms.Map)
 	dis := &pb.SymbolMap{
 		KeyValue: make([]*pb.SymbolKeyValue, 0, len(filtered)),
 	}
 	for _, key := range sortedMapKeys(filtered) {
-		value, err := filtered[key].Disassemble(span)
+		value, err := filtered[key].DisassembleToPB(span)
 		if err != nil {
 			return nil, err
 		}

@@ -40,6 +40,8 @@ type VarietySymbol struct {
 	Arg   FieldSymbols `ko:"name=arg"`
 }
 
+var _ Symbol = &VarietySymbol{}
+
 func (vty *VarietySymbol) Dismentle(span *model.Span) (pkgPath, funcName string, arg *StructSymbol, err error) {
 	if interpretFu, ok := vty.Macro.(InterpretMacro); !ok { // if vty points to a circuit
 		return "", "", nil, span.Errorf(nil, "variety is not underlied by a function")
@@ -54,11 +56,11 @@ type InterpretMacro interface {
 	InterpretFunc() (pkgPath, funcName string)
 }
 
-func (vty *VarietySymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+func (vty *VarietySymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	if pkgPath, funcName, _, err := vty.Dismentle(span); err != nil {
 		return nil, span.Errorf(err, "dismentling variety")
 	} else {
-		fields, err := DisassembleFieldSymbols(span, vty.Arg)
+		fields, err := disassembleFieldSymbolsToPB(span, vty.Arg)
 		if err != nil {
 			return nil, err
 		}

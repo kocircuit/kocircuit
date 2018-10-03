@@ -28,7 +28,7 @@ import (
 )
 
 func EncodeSymbol(span *model.Span, symbol Symbol) ([]byte, error) {
-	pbDisassembled, err := symbol.Disassemble(span)
+	pbDisassembled, err := symbol.DisassembleToPB(span)
 	if err != nil {
 		return nil, span.Errorf(err, "disassemble symbol")
 	}

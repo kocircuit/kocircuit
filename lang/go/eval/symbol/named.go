@@ -31,8 +31,10 @@ type NamedSymbol struct {
 	Value reflect.Value `ko:"name=value"`
 }
 
-func (named *NamedSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
-	return DeconstructKind(span, named.Value).Disassemble(span)
+var _ Symbol = &NamedSymbol{}
+
+func (named *NamedSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
+	return DeconstructKind(span, named.Value).DisassembleToPB(span)
 }
 
 func (named *NamedSymbol) String() string {

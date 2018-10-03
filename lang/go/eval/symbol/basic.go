@@ -84,7 +84,9 @@ type BasicSymbol struct {
 	Value interface{} `ko:"name=value"`
 }
 
-func (basic BasicSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+var _ Symbol = BasicSymbol{}
+
+func (basic BasicSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	dis := &pb.SymbolBasic{}
 	switch u := basic.Value.(type) {
 	case bool:

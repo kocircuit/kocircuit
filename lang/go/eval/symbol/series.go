@@ -28,13 +28,15 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-func (ss *SeriesSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+var _ Symbol = &SeriesSymbol{}
+
+func (ss *SeriesSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
 	dis := &pb.SymbolSeries{
 		Element: make([]*pb.Symbol, 0, len(filtered)),
 	}
 	for _, elem := range filtered {
-		value, err := elem.Disassemble(span)
+		value, err := elem.DisassembleToPB(span)
 		if err != nil {
 			return nil, err
 		}

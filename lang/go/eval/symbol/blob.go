@@ -34,7 +34,9 @@ type BlobSymbol struct {
 	Value reflect.Value `ko:"name=value"` // []byte
 }
 
-func (blob *BlobSymbol) Disassemble(span *model.Span) (*pb.Symbol, error) {
+var _ Symbol = &BlobSymbol{}
+
+func (blob *BlobSymbol) DisassembleToPB(span *model.Span) (*pb.Symbol, error) {
 	return &pb.Symbol{
 		Symbol: &pb.Symbol_Blob{
 			Blob: &pb.SymbolBlob{Bytes: blob.Bytes()},
