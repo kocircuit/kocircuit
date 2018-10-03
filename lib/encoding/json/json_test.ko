@@ -28,6 +28,13 @@ TestMarshal() {
 	)
 }
 
-/*MarshalIndent(value?, prefix, indent) {
-	return: json.GoMarshalIndent(value: value, prefix: prefix, indent: indent)
-}*/
+TestMarshalIndent() {
+	return: (
+		t1: testing.AssertEqual(json.MarshalIndent((x:5)), "{\n\t\"x\": 5\n}")
+		t2: testing.AssertEqual(json.MarshalIndent((x:5.6)), "{\n\t\"x\": 5.6\n}")
+		t3: testing.AssertEqual(json.MarshalIndent(value: (x:true), indent: " "), "{\n \"x\": true\n}")
+		t4: testing.AssertEqual(json.MarshalIndent(value: (x:"foo"), indent: "#", prefix: "-"), "{\n-#\"x\": \"foo\"\n-}")
+		t5: testing.AssertEqual(json.MarshalIndent((x:("a","b","c"))), "{\n\t\"x\": [\n\t\t\"a\",\n\t\t\"b\",\n\t\t\"c\"\n\t]\n}")
+		t6: testing.AssertEqual(json.MarshalIndent((x:56, y:("a","b","c"))), "{\n\t\"x\": 56,\n\t\"y\": [\n\t\t\"a\",\n\t\t\"b\",\n\t\t\"c\"\n\t]\n}")
+	)
+}
