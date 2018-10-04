@@ -104,10 +104,27 @@ func mapsToStructs(v reflect.Value) reflect.Value {
 		}
 		return mapsToStructs(v.Elem()).Addr()
 	case reflect.Slice:
+		var elemType reflect.Type
+		allElementsSameType := true
 		for i := 0; i < v.Len(); i++ {
 			sv := v.Index(i)
 			sv = mapsToStructs(sv)
+			if elemType == nil {
+				elemType = sv.Type()
+			} else {
+				if sv.Type() != elemType {
+					allElementsSameType = false
+				}
+			}
 			v.Index(i).Set(sv)
+		}
+		if elemType != nil && allElementsSameType && v.Type().Elem() != elemType {
+			// Convert slice type to []elemType
+			typedV := reflect.MakeSlice(reflect.SliceOf(elemType), 0, v.Cap())
+			for i := 0; i < v.Len(); i++ {
+				typedV = reflect.Append(typedV, mapsToStructs(v.Index(i)).Convert(elemType))
+			}
+			return typedV
 		}
 		return v
 	case reflect.Struct:
