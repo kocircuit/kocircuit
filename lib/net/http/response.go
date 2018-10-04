@@ -169,6 +169,20 @@ func mapsToStructs(v reflect.Value) reflect.Value {
 			return v
 		}
 		return mapsToStructs(v.Elem()).Addr()
+	case reflect.Slice:
+		for i := 0; i < v.Len(); i++ {
+			sv := v.Index(i)
+			sv = mapsToStructs(sv)
+			v.Index(i).Set(sv)
+		}
+		return v
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			fv := v.Field(i)
+			fv = mapsToStructs(fv)
+			v.Field(i).Set(fv)
+		}
+		return v
 	default:
 		return v
 	}
