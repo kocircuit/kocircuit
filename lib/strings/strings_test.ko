@@ -35,6 +35,16 @@ TestJoin() {
 	)
 }
 
+// TestSplit tests the Split function
+TestSplit() {
+	return: (
+		t0: testing.AssertEqual(strings.Split(), "")
+		t1: testing.AssertEqual(strings.Split("a/b"), ("a", "b"))
+		t2: testing.AssertEqual(strings.Split(string: ("a/b/c/d"), separator: "/"), ("a", "b", "c", "d"))
+		t2: testing.AssertEqual(strings.Split(string: ("a,b,c,d"), separator: ","), ("a", "b", "c", "d"))
+	)
+}
+
 // TestLen tests the Len function
 TestLen() {
 	return: (

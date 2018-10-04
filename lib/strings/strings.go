@@ -30,6 +30,7 @@ func init() {
 	go_eval.RegisterNamedEvalGate("Equal", new(goEqualStrings))
 	go_eval.RegisterNamedEvalGate("Len", new(goLenStrings))
 	go_eval.RegisterNamedEvalGate("Join", new(goJoinStrings))
+	go_eval.RegisterNamedEvalGate("Split", new(goSplitString))
 	go_eval.RegisterNamedEvalGate("Tree", new(goStringTree))
 	go_eval.RegisterNamedEvalGate("Flush", new(goFlush))
 	go_eval.RegisterNamedEvalGate("Quote", new(goQuote))
@@ -146,6 +147,24 @@ func (g *goJoinStrings) Help() string {
 
 func (g *goJoinStrings) Doc() string {
 	return "Join(string?, delimiter) concatenates all given strings with an optional delimited between all strings"
+}
+
+// goSplitString implements the Split(string?, separator) function
+type goSplitString struct {
+	String    string  `ko:"name=string,monadic"`
+	Separator *string `ko:"name=separator"`
+}
+
+func (g *goSplitString) Play(ctx *runtime.Context) []string {
+	return strings.Split(g.String, util.OptString(g.Separator, "/"))
+}
+
+func (g *goSplitString) Help() string {
+	return "Split(string?, separator)"
+}
+
+func (g *goSplitString) Doc() string {
+	return "Split(string?, separator) splits the given string around the given separator"
 }
 
 // goLenStrings implements the Len(string?) function
