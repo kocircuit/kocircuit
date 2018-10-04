@@ -38,3 +38,31 @@ TestMarshalIndent() {
 		t6: testing.AssertEqual(json.MarshalIndent((x:56, y:("a","b","c"))), "{\n\t\"x\": 56,\n\t\"y\": [\n\t\t\"a\",\n\t\t\"b\",\n\t\t\"c\"\n\t]\n}")
 	)
 }
+
+TestUnmarshal() {
+	return: (
+		t1: testing.AssertEqual(json.Unmarshal("{\"x\":5}"), (x:5.0))
+		t2: testing.AssertEqual(json.Unmarshal("{\"x\":5.6}"), (x:5.6))
+		t3: testing.AssertEqual(json.Unmarshal("{\"x\":true}"), (x:true))
+		t4: testing.AssertEqual(json.Unmarshal("{\"x\":\"foo\"}"), (x:"foo"))
+		t5: testing.AssertEqual(json.Unmarshal("{\"x\":[\"a\",\"b\",\"c\"]}"), (x:("a","b","c")))
+		t6: testing.AssertEqual(json.Unmarshal("{\"x\":56,\"y\":[\"a\",\"b\",\"c\"]}"), (x:56.0, y:("a","b","c")))
+	)
+}
+
+TestUnmarshalAndMarshal() {
+	return: (
+		t1: assertUnmarshalAndMarshal("{\"x\":5}")
+		t2: assertUnmarshalAndMarshal("{\"x\":5.6}")
+		t3: assertUnmarshalAndMarshal("{\"x\":true}")
+		t4: assertUnmarshalAndMarshal("{\"x\":\"foo\"}")
+		t5: assertUnmarshalAndMarshal("{\"x\":[\"a\",\"b\",\"c\"]}")
+		t6: assertUnmarshalAndMarshal("{\"x\":56,\"y\":[\"a\",\"b\",\"c\"]}")
+	)
+}
+
+assertUnmarshalAndMarshal(jsonStr?) {
+	decoded: json.Unmarshal(jsonStr)
+	encoded: json.Marshal(decoded)
+	return: testing.AssertEqual(String(encoded), String(jsonStr))
+}
