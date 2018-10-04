@@ -17,6 +17,8 @@
 package symbol
 
 import (
+	"reflect"
+
 	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
@@ -28,9 +30,16 @@ import (
 // VarietyType
 // BlobType
 type Type interface {
+	// String returns a string representation of the type
 	String() string
 	tree.Splayer
+
+	// IsType is only used to enforce the implementation of Type
 	IsType()
+
+	// GoType returns the Go equivalent of the type.
+	GoType() reflect.Type
 }
 
+// Types is a list of Type's
 type Types []Type

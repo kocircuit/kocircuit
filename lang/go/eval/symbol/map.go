@@ -59,27 +59,24 @@ type MapSymbol struct {
 	Map   map[string]Symbol `ko:"name=map"`
 }
 
-var (
-	_         Symbol = &MapSymbol{}
-	mapGoType        = reflect.TypeOf(map[string]interface{}{})
-)
+var	_         Symbol = &MapSymbol{}
 
 // DisassembleToGo converts a Ko value into a Go value
 func (ms *MapSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
 	filtered := filterMap(ms.Map)
-	// TODO use actual map type
-	m := make(map[string]interface{})
+	mapType := ms.Type_.GoType()
+	m := reflect.MakeMap(mapType)
 	for _, key := range sortedMapKeys(filtered) {
 		value, err := filtered[key].DisassembleToGo(span)
 		if err != nil {
 			return reflect.Value{}, err
 		}
 		if !isNil(value) {
-			m[key] = value.Interface()
+			m.SetMapIndex(reflect.ValueOf(key), value)
 		}
 	}
-	if len(m) == 0 {
-		return reflect.Zero(mapGoType), nil
+	if m.Len() == 0 {
+		return reflect.Zero(mapType), nil
 	}
 	return reflect.ValueOf(m), nil
 }
@@ -217,9 +214,12 @@ func (ms *MapSymbol) Splay() tree.Tree {
 	}
 }
 
+// MapType is the type capturing map[string]T
 type MapType struct {
 	Value Type `ko:"name=type"`
 }
+
+var _ Type = &MapType{}
 
 func (mt *MapType) IsType() {}
 
@@ -229,4 +229,9 @@ func (mt *MapType) String() string {
 
 func (mt *MapType) Splay() tree.Tree {
 	return tree.NoQuote{String_: fmt.Sprintf("Map<String:%v>", mt.Value)}
+}
+
+// GoType returns the Go equivalent of the type.
+func (mt *MapType) GoType() reflect.Type {
+	return reflect.MapOf(goString, mt.Value.GoType())
 }

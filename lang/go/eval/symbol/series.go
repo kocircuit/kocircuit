@@ -30,16 +30,13 @@ type SeriesSymbol struct {
 	Elem  Symbols     `ko:"name=elem"`
 }
 
-var (
-	_            Symbol = &SeriesSymbol{}
-	seriesGoType        = reflect.TypeOf([]interface{}{})
-)
+var _ Symbol = &SeriesSymbol{}
 
 // DisassembleToGo converts a Ko value into a Go value
 func (ss *SeriesSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
 	filtered := FilterEmptySymbols(ss.Elem)
-	// TODO use actual type of series
-	slice := reflect.MakeSlice(seriesGoType, 0, len(filtered))
+	seriesType := ss.Type_.GoType()
+	slice := reflect.MakeSlice(seriesType, 0, len(filtered))
 	for _, elem := range filtered {
 		value, err := elem.DisassembleToGo(span)
 		if err != nil {
@@ -50,7 +47,7 @@ func (ss *SeriesSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error)
 		}
 	}
 	if slice.Len() == 0 {
-		return reflect.Zero(seriesGoType), nil
+		return reflect.Zero(seriesType), nil
 	}
 	return slice, nil
 }
@@ -163,6 +160,8 @@ type SeriesType struct {
 	Elem Type `ko:"name=elem"`
 }
 
+var _ Type = &SeriesType{}
+
 func (*SeriesType) IsType() {}
 
 func (st *SeriesType) String() string {
@@ -175,6 +174,11 @@ func (st *SeriesType) Splay() tree.Tree {
 		Bracket: "()",
 		Elem:    []tree.IndexTree{{Index: 0, Tree: st.Elem.Splay()}},
 	}
+}
+
+// GoType returns the Go equivalent of the type.
+func (st *SeriesType) GoType() reflect.Type {
+	return reflect.SliceOf(st.Elem.GoType())
 }
 
 func MakeStringsSymbol(span *model.Span, ss []string) Symbol {

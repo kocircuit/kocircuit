@@ -63,11 +63,11 @@ func (vty *VarietySymbol) DisassembleToGo(span *model.Span) (reflect.Value, erro
 	if pkgPath, funcName, _, err := vty.Dismentle(span); err != nil {
 		return reflect.Value{}, span.Errorf(err, "dismentling variety")
 	} else {
-		/*fields*/ _, err := disassembleFieldSymbolsToGo(span, vty.Arg)
+		/*fields _, err := disassembleFieldSymbolsToGo(span, vty.Arg)
 		if err != nil {
 			return reflect.Value{}, err
 		}
-		/*dis := &pb.SymbolVariety{
+		dis := &pb.SymbolVariety{
 			PkgPath:  proto.String(pkgPath),
 			FuncName: proto.String(funcName),
 			Arg:      fields,
@@ -156,7 +156,10 @@ func (vty *VarietySymbol) Splay() tree.Tree {
 	}
 }
 
+// VarietyType captures a function type
 type VarietyType struct{}
+
+var _ Type = VarietyType{}
 
 func (VarietyType) IsType() {}
 
@@ -166,4 +169,9 @@ func (VarietyType) String() string {
 
 func (VarietyType) Splay() tree.Tree {
 	return tree.NoQuote{String_: "Variety"}
+}
+
+// GoType returns the Go equivalent of the type.
+func (nt VarietyType) GoType() reflect.Type {
+	panic("VarietyType.GoType not implemented")
 }

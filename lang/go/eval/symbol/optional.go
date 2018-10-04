@@ -17,12 +17,16 @@
 package symbol
 
 import (
+	"reflect"
+
 	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
 type OptionalType struct {
 	Elem Type `ko:"name=elem"`
 }
+
+var _ Type = &OptionalType{}
 
 func (*OptionalType) IsType() {}
 
@@ -32,6 +36,11 @@ func (ot *OptionalType) String() string {
 
 func (ot *OptionalType) Splay() tree.Tree {
 	return tree.Sometimes{Elem: ot.Elem.Splay()}
+}
+
+// GoType returns the Go equivalent of the type.
+func (ot *OptionalType) GoType() reflect.Type {
+	return reflect.PtrTo(ot.Elem.GoType())
 }
 
 // Optionally makes a type optional, unless it is already optional or series.
