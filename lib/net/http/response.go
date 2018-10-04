@@ -17,16 +17,15 @@
 package http
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
 
-	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	go_eval "github.com/kocircuit/kocircuit/lang/go/eval"
 	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
+	"github.com/kocircuit/kocircuit/lib/encoding/json"
 )
 
 func init() {
@@ -107,11 +106,11 @@ func (g *goBodyAsJSON) Play(ctx *runtime.Context) (symbol.Symbol, error) {
 	if err != nil {
 		return nil, err
 	}
-	var value interface{}
-	if err := json.Unmarshal(content, &value); err != nil {
+	result, err := json.Unmarshal(content)
+	if err != nil {
 		return nil, err
 	}
-	return symbol.Deconstruct(model.NewSpan(), mapsToStructs(reflect.ValueOf(value))), nil
+	return result, nil
 }
 
 func (g *goBodyAsJSON) Doc() string {
@@ -120,70 +119,4 @@ func (g *goBodyAsJSON) Doc() string {
 
 func (g *goBodyAsJSON) Help() string {
 	return "BodyAsJSON(response?)"
-}
-
-// mapsToStructs recursively converts map[string]interface{} to structs.
-func mapsToStructs(v reflect.Value) reflect.Value {
-	switch v.Kind() {
-	case reflect.Map:
-		if v.Type().Key().Kind() == reflect.String && v.Type().Elem().Kind() == reflect.Interface {
-			// Conversion needed
-			keys := v.MapKeys()
-			// Create struct fields
-			fields := make([]reflect.StructField, 0, len(keys))
-			fieldValues := make([]reflect.Value, 0, len(keys))
-			for i, k := range keys {
-				fv := v.MapIndex(k)
-				fv = mapsToStructs(fv)
-				fields = append(fields, reflect.StructField{
-					Name: fmt.Sprintf("Field%d", i),
-					Type: fv.Type(),
-					Tag:  reflect.StructTag(fmt.Sprintf(`ko:"name=%s" json:"%s"`, k.String(), k.String())),
-				})
-				fieldValues = append(fieldValues, fv)
-			}
-			structType := reflect.StructOf(fields)
-			vsRef := reflect.New(structType)
-			vs := vsRef.Elem()
-			// Fill struct fields
-			for i := range keys {
-				vs.Field(i).Set(fieldValues[i])
-			}
-			return vsRef
-		}
-		// No conversion needed, just recurse into all fields
-		keys := v.MapKeys()
-		for _, k := range keys {
-			fv := v.MapIndex(k)
-			fv = mapsToStructs(fv)
-			v.SetMapIndex(k, fv)
-		}
-		return v
-	case reflect.Interface:
-		if v.IsNil() {
-			return v
-		}
-		return mapsToStructs(v.Elem())
-	case reflect.Ptr:
-		if v.IsNil() {
-			return v
-		}
-		return mapsToStructs(v.Elem()).Addr()
-	case reflect.Slice:
-		for i := 0; i < v.Len(); i++ {
-			sv := v.Index(i)
-			sv = mapsToStructs(sv)
-			v.Index(i).Set(sv)
-		}
-		return v
-	case reflect.Struct:
-		for i := 0; i < v.NumField(); i++ {
-			fv := v.Field(i)
-			fv = mapsToStructs(fv)
-			v.Field(i).Set(fv)
-		}
-		return v
-	default:
-		return v
-	}
 }
