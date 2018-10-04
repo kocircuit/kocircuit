@@ -218,7 +218,10 @@ func BasicFromKind(kind reflect.Kind) BasicType {
 	panic("o")
 }
 
+// BasicType is the type for basic values such as strings, bools and numbers
 type BasicType int
+
+var _ Type = BasicType(0)
 
 func (BasicType) IsType() {}
 
@@ -241,6 +244,7 @@ var (
 	goFloat64 = reflect.TypeOf(float64(0.0))
 )
 
+// GoType returns the Go equivalent of the type.
 func (basic BasicType) GoType() reflect.Type {
 	switch basic {
 	case BasicBool:

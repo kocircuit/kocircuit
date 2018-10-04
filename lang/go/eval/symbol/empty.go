@@ -95,6 +95,8 @@ func (empty EmptySymbol) Splay() tree.Tree {
 
 type EmptyType struct{}
 
+var _ Type = EmptyType{}
+
 func (EmptyType) IsType() {}
 
 func (EmptyType) String() string {
@@ -103,4 +105,9 @@ func (EmptyType) String() string {
 
 func (EmptyType) Splay() tree.Tree {
 	return tree.NoQuote{String_: "Empty"}
+}
+
+// GoType returns the Go equivalent of the type.
+func (EmptyType) GoType() reflect.Type {
+	return emptyGoType
 }

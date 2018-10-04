@@ -121,7 +121,13 @@ func (blob *BlobSymbol) Invoke(span *model.Span) (eval.Shape, eval.Effect, error
 	return nil, nil, span.Errorf(nil, "blob value %v cannot be invoked", blob)
 }
 
+// BlobType captures the []byte type.
 type BlobType struct{}
+
+var (
+	_          Type = BlobType{}
+	goBlobType      = reflect.TypeOf((*[]byte)(nil)).Elem()
+)
 
 func (blob BlobType) IsType() {}
 
@@ -131,4 +137,9 @@ func (blob BlobType) String() string {
 
 func (blob BlobType) Splay() tree.Tree {
 	return tree.NoQuote{String_: "Blob"}
+}
+
+// GoType returns the Go equivalent of the type.
+func (BlobType) GoType() reflect.Type {
+	return goBlobType
 }

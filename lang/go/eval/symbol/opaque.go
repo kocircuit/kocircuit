@@ -97,16 +97,24 @@ func (opaque *OpaqueSymbol) Splay() tree.Tree {
 	return opaque.Type().Splay()
 }
 
+// OpaqueType captures a specific Go type.
 type OpaqueType struct {
 	Type reflect.Type `ko:"name=type"`
 }
 
-func (opaque *OpaqueType) IsType() {}
+var _ Type = &OpaqueType{}
 
-func (opaque *OpaqueType) String() string {
-	return tree.Sprint(opaque)
+func (ot *OpaqueType) IsType() {}
+
+func (ot *OpaqueType) String() string {
+	return tree.Sprint(ot)
 }
 
-func (opaque *OpaqueType) Splay() tree.Tree {
-	return tree.NoQuote{String_: fmt.Sprintf("Opaque<%v>", opaque.Type)}
+func (ot *OpaqueType) Splay() tree.Tree {
+	return tree.NoQuote{String_: fmt.Sprintf("Opaque<%v>", ot.Type)}
+}
+
+// GoType returns the Go equivalent of the type.
+func (ot *OpaqueType) GoType() reflect.Type {
+	return ot.Type
 }

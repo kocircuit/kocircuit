@@ -123,12 +123,19 @@ type NamedType struct {
 	Type reflect.Type `ko:"name=type"`
 }
 
-func (named NamedType) IsType() {}
+var _ Type = NamedType{}
 
-func (named NamedType) String() string {
-	return tree.Sprint(named)
+func (nt NamedType) IsType() {}
+
+func (nt NamedType) String() string {
+	return tree.Sprint(nt)
 }
 
-func (named NamedType) Splay() tree.Tree {
-	return tree.NoQuote{String_: fmt.Sprintf("Named<%s.%s>", named.Type.PkgPath(), named.Type.Name())}
+func (nt NamedType) Splay() tree.Tree {
+	return tree.NoQuote{String_: fmt.Sprintf("Named<%s.%s>", nt.Type.PkgPath(), nt.Type.Name())}
+}
+
+// GoType returns the Go equivalent of the type.
+func (nt NamedType) GoType() reflect.Type {
+	return nt.Type
 }

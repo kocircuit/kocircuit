@@ -17,8 +17,11 @@
 package symbol
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/golang/protobuf/proto"
 
@@ -74,19 +77,21 @@ type FieldSymbol struct {
 	Value   Symbol `ko:"name=value"`
 }
 
-func disassembleFieldSymbolsToGo(span *model.Span, fields FieldSymbols) (map[string]interface{}, error) {
+func disassembleFieldSymbolsToGo(span *model.Span, fields FieldSymbols, st *StructType) (interface{}, error) {
 	filtered := FilterEmptyFieldSymbols(fields)
-	m := make(map[string]interface{})
+	goType, koToGoNameMap := st.GoTypeAndNameMap()
+	m := reflect.New(goType)
 	for _, field := range filtered {
 		value, err := field.Value.DisassembleToGo(span)
 		if err != nil {
 			return nil, err
 		}
 		if !isNil(value) {
-			m[field.Name] = value.Interface()
+			goName := koToGoNameMap[field.Name]
+			m.Elem().FieldByName(goName).Set(value)
 		}
 	}
-	return m, nil
+	return m.Interface(), nil
 }
 
 func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.SymbolField, error) {
@@ -112,8 +117,7 @@ func disassembleFieldSymbolsToPB(span *model.Span, fields FieldSymbols) ([]*pb.S
 
 // DisassembleToGo converts a Ko value into a Go value
 func (ss *StructSymbol) DisassembleToGo(span *model.Span) (reflect.Value, error) {
-	// TODO use actual struct type
-	fields, err := disassembleFieldSymbolsToGo(span, ss.Field)
+	fields, err := disassembleFieldSymbolsToGo(span, ss.Field, ss.Type_)
 	if err != nil {
 		return reflect.Value{}, err
 	}
@@ -261,6 +265,8 @@ type FieldType struct {
 	Type_ Type   `ko:"name=type"`
 }
 
+var _ Type = &StructType{}
+
 func (*StructType) IsType() {}
 
 func (st *StructType) String() string {
@@ -280,4 +286,35 @@ func (st *StructType) Splay() tree.Tree {
 		Bracket: "()",
 		Elem:    nameTrees,
 	}
+}
+
+// GoType returns the Go equivalent of the type.
+func (st *StructType) GoType() reflect.Type {
+	goType, _ := st.GoTypeAndNameMap()
+	return goType
+}
+
+// GoTypeAndNameMap returns the Go equivalent of the type
+// and a map from Ko (field) name to Go (field) name
+func (st *StructType) GoTypeAndNameMap() (reflect.Type, map[string]string) {
+	fields := make([]reflect.StructField, 0, len(st.Field))
+	koToGoNameMap := make(map[string]string)
+	for i, f := range st.Field {
+		goName := strings.ToUpper(f.Name[:1]) + f.Name[1:]
+		// Search for clashing names
+		for _, v := range koToGoNameMap {
+			if v == goName {
+				// Found a clash
+				goName = goName + strconv.Itoa(i)
+				break
+			}
+		}
+		fields = append(fields, reflect.StructField{
+			Name: goName,
+			Type: f.Type_.GoType(),
+			Tag:  reflect.StructTag(fmt.Sprintf(`ko:"name=%s" json:"%s"`, f.Name, f.Name)),
+		})
+		koToGoNameMap[f.Name] = goName
+	}
+	return reflect.StructOf(fields), koToGoNameMap
 }
