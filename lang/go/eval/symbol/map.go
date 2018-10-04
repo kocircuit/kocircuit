@@ -43,14 +43,17 @@ func MakeMapSymbol(span *model.Span, m map[string]Symbol) (Symbol, error) {
 	for _, s := range m {
 		vtypes = append(vtypes, s.Type())
 	}
+	var mapType *MapType
 	if unified, err := UnifyTypes(span, vtypes); err != nil {
-		return nil, err
+		// No explicit unified type found, use OpagueType<interface{}>
+		mapType = &MapType{Value:&OpaqueType{Type: interfaceGoType}}
 	} else {
-		return &MapSymbol{
-			Type_: &MapType{Value: unified},
-			Map:   m,
-		}, nil
+		mapType= &MapType{Value: unified}
 	}
+	return &MapSymbol{
+		Type_: mapType,
+		Map:   m,
+	}, nil
 }
 
 // MapSymbol captures map[string]Q types.
@@ -62,6 +65,7 @@ type MapSymbol struct {
 var (
 	_         Symbol = &MapSymbol{}
 	mapGoType        = reflect.TypeOf(map[string]interface{}{})
+	interfaceGoType = reflect.TypeOf((*interface{})(nil)).Elem()
 )
 
 // DisassembleToGo converts a Ko value into a Go value

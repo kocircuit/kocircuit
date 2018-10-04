@@ -17,10 +17,10 @@
 package http
 
 import (
-	"fmt"
+	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
-	"reflect"
 	"strings"
 
 	go_eval "github.com/kocircuit/kocircuit/lang/go/eval"
@@ -82,5 +82,16 @@ func (g *goRequest) createBodyReader() (io.Reader, error) {
 	if x, ok := g.Body.(string); ok {
 		return strings.NewReader(x), nil
 	}
-	return nil, fmt.Errorf("Unknown Body type %s", reflect.TypeOf(g.Body).String())
+	if x, ok := g.Body.([]byte); ok {
+		return bytes.NewReader(x), nil
+	}
+	if x, ok := g.Body.(io.Reader); ok {
+		return x, nil
+	}
+	// Convert to json
+	encoded, err := json.Marshal(g.Body)
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(encoded), nil
 }
