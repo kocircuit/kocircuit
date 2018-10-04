@@ -73,9 +73,8 @@ func (opaque *OpaqueSymbol) Link(span *model.Span, name string, monadic bool) (e
 func (opaque *OpaqueSymbol) Select(span *model.Span, path model.Path) (eval.Shape, eval.Effect, error) {
 	if len(path) == 0 {
 		return opaque, nil, nil
-	} else {
-		return nil, nil, span.Errorf(nil, "opaque value %v cannot be selected into", opaque)
 	}
+	return nil, nil, span.Errorf(nil, "opaque value %v of type %s cannot be selected into", opaque, opaque.Value.Type().String())
 }
 
 func (opaque *OpaqueSymbol) Augment(span *model.Span, _ eval.Fields) (eval.Shape, eval.Effect, error) {

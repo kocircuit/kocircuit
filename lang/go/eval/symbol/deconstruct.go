@@ -24,10 +24,12 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/kit/tree"
 )
 
+// DeconstructInterface deconstructs a Go interface value into a Ko value
 func DeconstructInterface(span *model.Span, any interface{}) Symbol {
 	return Deconstruct(span, reflect.ValueOf(any))
 }
 
+// Deconstruct a Go value into a Ko value
 func Deconstruct(span *model.Span, v reflect.Value) Symbol {
 	ctx := &typingCtx{Span: span}
 	if symbol, err := ctx.Deconstruct(v); err != nil {

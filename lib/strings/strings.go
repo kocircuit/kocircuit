@@ -35,6 +35,9 @@ func init() {
 	go_eval.RegisterNamedEvalGate("Quote", new(goQuote))
 	go_eval.RegisterNamedEvalGate("HasPrefix", new(goHasPrefix))
 	go_eval.RegisterNamedEvalGate("HasSuffix", new(goHasSuffix))
+	go_eval.RegisterNamedEvalGate("Contains", new(goContains))
+	go_eval.RegisterNamedEvalGate("Upper", new(goUpper))
+	go_eval.RegisterNamedEvalGate("Lower", new(goLower))
 }
 
 // goEqualStrings implements the Equal(string?) function.
@@ -216,4 +219,56 @@ func (g *goHasSuffix) Help() string {
 
 func (g *goHasSuffix) Doc() string {
 	return "HasSuffix(string?, suffix) returns true if the given string ends with the given suffix"
+}
+
+// goContains implements to Contains(string?, subString) function
+type goContains struct {
+	String    string `ko:"name=string,monadic"`
+	SubString string `ko:"name=subString"`
+}
+
+func (g *goContains) Play(ctx *runtime.Context) bool {
+	return strings.Contains(g.String, g.SubString)
+}
+
+func (g *goContains) Help() string {
+	return "Contains(string?, subString)"
+}
+
+func (g *goContains) Doc() string {
+	return "Contains(string?, subString) returns true if the given subString is contained anywhere in the given string"
+}
+
+// goUpper implements to Upper(string?) function
+type goUpper struct {
+	String string `ko:"name=string,monadic"`
+}
+
+func (g *goUpper) Play(ctx *runtime.Context) string {
+	return strings.ToUpper(g.String)
+}
+
+func (g *goUpper) Help() string {
+	return "Upper(string?)"
+}
+
+func (g *goUpper) Doc() string {
+	return "Upper(string?) returns the given string in all uppercase letters"
+}
+
+// goLower implements to Lower(string?) function
+type goLower struct {
+	String string `ko:"name=string,monadic"`
+}
+
+func (g *goLower) Play(ctx *runtime.Context) string {
+	return strings.ToLower(g.String)
+}
+
+func (g *goLower) Help() string {
+	return "Lower(string?)"
+}
+
+func (g *goLower) Doc() string {
+	return "Lower(string?) returns the given string in all lowercase letters"
 }

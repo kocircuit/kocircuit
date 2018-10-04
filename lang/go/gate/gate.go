@@ -25,6 +25,10 @@ import (
 	"github.com/kocircuit/kocircuit/lang/go/runtime"
 )
 
+var (
+	goErrorType = reflect.TypeOf((*error)(nil)).Elem()
+)
+
 // BindGate verifies the Go implementation before building and returning a harness object.
 func BindGate(receiver reflect.Type) (Gate, error) {
 	if receiver.Kind() != reflect.Ptr || receiver.Elem().Kind() != reflect.Struct {
@@ -43,8 +47,16 @@ func BindGate(receiver reflect.Type) (Gate, error) {
 	if play.Type.NumIn() != 2 || play.Type.In(1) != reflect.TypeOf(&runtime.Context{}) {
 		return Gate{}, fmt.Errorf("play method must have one context parameter")
 	}
-	if play.Type.NumOut() != 1 {
-		return Gate{}, fmt.Errorf("play method must return a single value")
+	switch play.Type.NumOut() {
+	case 1:
+		// OK
+	case 2:
+		// Accept (result, error)
+		if play.Type.Out(1) != goErrorType {
+			return Gate{}, fmt.Errorf("second return value of a play method must be of type error")
+		}
+	default:
+		return Gate{}, fmt.Errorf("play method must return a single value with an optional error")
 	}
 	return Gate{Receiver: receiver, Struct: arg}, nil
 }

@@ -69,3 +69,29 @@ TestHasPrefix() {
 		t1: testing.Assert(Not(strings.HasPrefix(string: "TheBrownFox", prefix: "Brown")))
 	)
 }
+
+// TestContains tests the Contains function
+TestContains() {
+	return: (
+		t0: testing.Assert(strings.Contains(string: "TheBrownFox", subString: "Brown"))
+		t1: testing.Assert(Not(strings.Contains(string: "TheBrownFox", subString: "Browny")))
+	)
+}
+
+// TestUpper tests the Upper function
+TestUpper() {
+	return: (
+		t0: testing.AssertEqual(strings.Upper("aBc"), "ABC")
+		t1: testing.AssertEqual(strings.Upper(""), "")
+		t3: testing.AssertEqual(strings.Upper("--BB--fe"), "--BB--FE")
+	)
+}
+
+// TestLower tests the Lower function
+TestLower() {
+	return: (
+		t0: testing.AssertEqual(strings.Lower("aBc"), "abc")
+		t1: testing.AssertEqual(strings.Lower(""), "")
+		t3: testing.AssertEqual(strings.Lower("--BB--fe"), "--bb--fe")
+	)
+}
