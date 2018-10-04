@@ -117,11 +117,7 @@ func (ctx *typingCtx) DeconstructKind(v reflect.Value) (Symbol, error) {
 			return &OpaqueSymbol{Value: v}, nil
 		}
 	case reflect.Interface:
-		if v.IsNil() {
-			return EmptySymbol{}, nil
-		}
-		return ctx.Deconstruct(v.Elem())
-		//		return &OpaqueSymbol{Value: v}, nil
+		return &OpaqueSymbol{Value: v}, nil
 	case reflect.Ptr:
 		if v.IsNil() {
 			return EmptySymbol{}, nil
