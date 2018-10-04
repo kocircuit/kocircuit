@@ -62,7 +62,8 @@ TestUnmarshalAndMarshal() {
 }
 
 assertUnmarshalAndMarshal(jsonStr?) {
-	decoded: json.Unmarshal(jsonStr)
-	encoded: json.Marshal(decoded)
-	return: testing.AssertEqual(String(encoded), String(jsonStr))
+	decoded1: json.Unmarshal(jsonStr)
+	encoded: json.Marshal(decoded1)
+	decoded2: json.Unmarshal(encoded)
+	return: testing.AssertEqual(decoded1, decoded2)
 }
