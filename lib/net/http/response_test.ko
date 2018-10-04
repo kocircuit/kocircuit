@@ -20,7 +20,7 @@ import "github.com/kocircuit/kocircuit/lib/testing"
 
 TestBodyAsJSON() {
 	resp: http.Get(url: "https://api.github.com/orgs/kocircuit")
-	body: http.BodyAsJSON(resp)
+	body: ShowType(Show(http.BodyAsJSON(resp)))
 	return: (
 		t1: testing.AssertEqual(resp.statusCode, 200)
 		t2: testing.AssertEqual(body.type, "Organization")
