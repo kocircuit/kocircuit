@@ -60,12 +60,12 @@ func (x *GoToolchain) PkgDir(pkgPath string) string {
 
 // PkgRoots returns all source folders that may contain packages.
 func (x *GoToolchain) PkgRoots() []string {
-	result := make([]string, len(x.KOPATH)+len(x.GOPATH))
-	for i, p := range x.KOPATH {
-		result[i] = path.Join(p, "src")
+	result := make([]string, 0, len(x.KOPATH)+len(x.GOPATH))
+	for _, p := range x.KOPATH {
+		result = append(result, path.Join(p, "src"))
 	}
-	for i, p := range x.GOPATH {
-		result[i] = path.Join(p, "src")
+	for _, p := range x.GOPATH {
+		result = append(result, path.Join(p, "src"))
 	}
 	return result
 }
