@@ -42,9 +42,8 @@ func (g *goServeLocalDir) Play(ctx *runtime.Context) bool {
 	if err := http.ListenAndServe(g.Address, nil); err != nil {
 		ctx.Fatalf("serving %q on %s%s (%v)", g.Dir, g.Address, g.URL, err)
 		return false // never reached
-	} else {
-		return true
 	}
+	return true
 }
 
 func (g *goServeLocalDir) Doc() string {
