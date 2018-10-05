@@ -1,0 +1,9 @@
+import "ko"
+
+// ko play github.com/kocircuit/kocircuit/lang/ko/cmd/ShowArgs
+ShowArgs(arg1, args?, expr) {
+    t1: Show("arg1", arg1)
+    t2: Show("args", args)
+    t3: Show(ko.Eval(expr))
+    return: ()
+}

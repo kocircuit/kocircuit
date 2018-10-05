@@ -19,6 +19,7 @@ package sys
 import (
 	"fmt"
 	"path"
+	"strings"
 
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
 	"github.com/kocircuit/kocircuit/lang/circuit/model"
@@ -76,4 +77,30 @@ type PlayResult struct {
 	PlayFuncEval *PlayFuncEval `ko:"name=playFuncEval"`
 	Returned     symbol.Symbol `ko:"name=returned"`
 	Error        error         `ko:"name=error"`
+}
+
+// ParsePlayArguments parses the given commandline arguments into a struct symbol.
+func ParsePlayArguments(args []string) *symbol.StructSymbol {
+	if len(args) == 0 {
+		return nil
+	}
+	fieldSymbols := symbol.FieldSymbols{}
+	for _, arg := range args {
+		kv := strings.SplitN(arg, "=", 2)
+		switch len(kv) {
+		case 1:
+			// monadic argument
+			fieldSymbols = append(fieldSymbols, &symbol.FieldSymbol{
+				Value:   symbol.BasicSymbol{Value: kv[0]},
+				Monadic: true,
+			})
+		case 2:
+			// key=value argument
+			fieldSymbols = append(fieldSymbols, &symbol.FieldSymbol{
+				Name:  kv[0],
+				Value: symbol.BasicSymbol{Value: kv[1]},
+			})
+		}
+	}
+	return symbol.MakeStructSymbol(fieldSymbols)
 }
