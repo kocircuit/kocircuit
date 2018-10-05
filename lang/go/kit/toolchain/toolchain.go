@@ -15,6 +15,7 @@ import (
 type GoToolchain struct {
 	GOROOT string   `ko:"name=GOROOT"`
 	GOPATH []string `ko:"name=GOPATH"`
+	KOPATH []string `ko:"name=KOPATH"`
 	Binary string   `ko:"name=binary"`
 }
 
@@ -27,15 +28,20 @@ func NewGoToolchain() *GoToolchain {
 	if goPath == "" {
 		log.Fatal("GOPATH is not set")
 	}
+	var koPath []string
+	if x := os.Getenv("KOPATH"); x != "" {
+		koPath = strings.Split(x, ":")
+	}
 	return &GoToolchain{
 		GOROOT: os.Getenv("GOROOT"),
 		GOPATH: strings.Split(goPath, ":"),
+		KOPATH: koPath,
 		Binary: binary,
 	}
 }
 
 // PkgDir returns the directory containing the given package path.
-// If will take the first element of the GOPATH that contains such a package.
+// If will take the first element of the KOPATH, GOPATH that contains such a package.
 func (x *GoToolchain) PkgDir(pkgPath string) string {
 	roots := x.PkgRoots()
 	for _, p := range roots {
@@ -44,15 +50,22 @@ func (x *GoToolchain) PkgDir(pkgPath string) string {
 			return result
 		}
 	}
+	// Not found, return path in first KOPATH element (if any)
+	if len(x.KOPATH) > 0 {
+		return path.Join(x.KOPATH[0], pkgPath)
+	}
 	// Not found, return path in first GOPATH element
 	return path.Join(x.GOPATH[0], pkgPath)
 }
 
 // PkgRoots returns all source folders that may contain packages.
 func (x *GoToolchain) PkgRoots() []string {
-	result := make([]string, len(x.GOPATH))
-	for i, p := range x.GOPATH {
-		result[i] = path.Join(p, "src")
+	result := make([]string, 0, len(x.KOPATH)+len(x.GOPATH))
+	for _, p := range x.KOPATH {
+		result = append(result, path.Join(p, "src"))
+	}
+	for _, p := range x.GOPATH {
+		result = append(result, path.Join(p, "src"))
 	}
 	return result
 }
@@ -69,6 +82,7 @@ func (x *GoToolchain) Env() []string {
 	return []string{
 		fmt.Sprintf("GOROOT=%s", x.GOROOT),
 		fmt.Sprintf("GOPATH=%s", strings.Join(x.GOPATH, ":")),
+		fmt.Sprintf("KOPATH=%s", strings.Join(x.KOPATH, ":")),
 	}
 }
 

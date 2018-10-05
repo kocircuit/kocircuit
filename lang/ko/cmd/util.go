@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"os"
+	"os/exec"
 	"path"
 	"strings"
 
@@ -72,23 +73,29 @@ var (
 	flagGoBinary string // go binary path
 	flagGOROOT   string // GOROOT
 	flagGOPATH   string // GOPATH
+	flagKOPATH   string // KOPATH
 )
 
 func newToolchain() *toolchain.GoToolchain {
+	splitPaths := func(s string) []string {
+		if s == "" {
+			return nil
+		}
+		return strings.Split(s, ":")
+	}
 	return &toolchain.GoToolchain{
 		GOROOT: flagGOROOT,
-		GOPATH: strings.Split(flagGOPATH, ":"),
+		GOPATH: splitPaths(flagGOPATH),
+		KOPATH: splitPaths(flagKOPATH),
 		Binary: flagGoBinary,
 	}
 }
 
 func initGoBasedCmd(cmd *cobra.Command) {
-	/*gobinary, err := exec.LookPath("go")
-	if err != nil {
-		panic("err")
-	}*/
-	goroot, gopath := os.Getenv("GOROOT"), os.Getenv("GOPATH")
-	//cmd.PersistentFlags().StringVarP(&flagGoBinary, "gobinary", "", gobinary, "Path to Go binary")
+	gobinary, _ := exec.LookPath("go")
+	goroot, gopath, kopath := os.Getenv("GOROOT"), os.Getenv("GOPATH"), os.Getenv("KOPATH")
+	cmd.PersistentFlags().StringVarP(&flagGoBinary, "gobinary", "", gobinary, "Path to Go binary")
 	cmd.PersistentFlags().StringVarP(&flagGOROOT, "goroot", "", goroot, "GOROOT setting")
 	cmd.PersistentFlags().StringVarP(&flagGOPATH, "gopath", "", gopath, "GOPATH setting")
+	cmd.PersistentFlags().StringVarP(&flagKOPATH, "kopath", "", kopath, "KOPATH setting")
 }
