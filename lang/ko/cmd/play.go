@@ -56,5 +56,5 @@ var playCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(playCmd)
-	initGoBasedCmd(playCmd)
+	//initGoBasedCmd(playCmd)
 }
