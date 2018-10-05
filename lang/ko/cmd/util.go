@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"os"
-	"os/exec"
 	"path"
 	"strings"
 
@@ -84,12 +83,12 @@ func newToolchain() *toolchain.GoToolchain {
 }
 
 func initGoBasedCmd(cmd *cobra.Command) {
-	gobinary, err := exec.LookPath("go")
+	/*gobinary, err := exec.LookPath("go")
 	if err != nil {
 		panic("err")
-	}
+	}*/
 	goroot, gopath := os.Getenv("GOROOT"), os.Getenv("GOPATH")
-	cmd.PersistentFlags().StringVarP(&flagGoBinary, "gobinary", "", gobinary, "Path to Go binary")
+	//cmd.PersistentFlags().StringVarP(&flagGoBinary, "gobinary", "", gobinary, "Path to Go binary")
 	cmd.PersistentFlags().StringVarP(&flagGOROOT, "goroot", "", goroot, "GOROOT setting")
 	cmd.PersistentFlags().StringVarP(&flagGOPATH, "gopath", "", gopath, "GOPATH setting")
 }
