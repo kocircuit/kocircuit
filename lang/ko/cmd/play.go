@@ -34,7 +34,7 @@ var playCmd = &cobra.Command{
 	Long:  `Play compiles a Ko program and then executes it.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		tools := newToolchain()
-		if len(args) != 1 {
+		if len(args) < 1 {
 			log.Fatalf("ko play expects a single argument in the form \"path/to/pkg/Func\"")
 		}
 		koPkg, koFunc := parsePkgFunc(args[0])
@@ -44,6 +44,7 @@ var playCmd = &cobra.Command{
 			Func:    koFunc,
 			Faculty: eval.EvalFaculty(),
 			Show:    false, // show compiled ko functions
+			Arg:     sys.ParsePlayArguments(args[1:]),
 		}
 		if result := b.Play(runtime.CompilerContext()); result.Error != nil {
 			log.Fatalln(result.Error)

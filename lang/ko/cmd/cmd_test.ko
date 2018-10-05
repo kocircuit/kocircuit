@@ -1,0 +1,9 @@
+import "ko"
+
+// ko play github.com/kocircuit/kocircuit/lang/ko/cmd/ShowArgs arg1=foo
+// ko play github.com/kocircuit/kocircuit/lang/ko/cmd/ShowArgs something
+ShowArgs(arg1, args?) {
+    t1: Show("arg1", arg1)
+    t2: Show("args", args)
+    return: ()
+}
