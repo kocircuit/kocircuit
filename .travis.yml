@@ -12,6 +12,7 @@ script:
   - go build github.com/kocircuit/kocircuit/lang/ko
   - go test ./...
   - ko test 
+    github.com/kocircuit/kocircuit/lang/go/eval/macros
     github.com/kocircuit/kocircuit/lib
     github.com/kocircuit/kocircuit/lib/encoding/json
     github.com/kocircuit/kocircuit/lib/encoding/yaml
