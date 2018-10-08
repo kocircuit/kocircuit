@@ -67,6 +67,7 @@ func GroupFieldsToSymbols(span *model.Span, fields eval.Fields) (FieldSymbols, e
 	return evalFields, nil
 }
 
+// FilterUnderscoreFields filters out all fields whose name begins with underscore.
 func FilterUnderscoreFields(fields []eval.Field) (filtered []eval.Field) {
 	for _, field := range fields {
 		if !beginsWithUnderscore(field.Name) {
