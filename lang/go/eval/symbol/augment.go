@@ -36,6 +36,7 @@ func (vty *VarietySymbol) Augment(span *model.Span, fields eval.Fields) (eval.Sh
 
 func GroupFieldsToSymbols(span *model.Span, fields eval.Fields) (FieldSymbols, error) {
 	evalFields := FieldSymbols{}
+	fields = FilterUnderscoreFields(fields)
 	for _, fieldGroup := range fields.FieldGroup() {
 		groupName := fieldGroup[0].Name
 		fieldGroup = FilterEmptyEvalFields(fieldGroup)
@@ -64,6 +65,20 @@ func GroupFieldsToSymbols(span *model.Span, fields eval.Fields) (FieldSymbols, e
 		}
 	}
 	return evalFields, nil
+}
+
+// FilterUnderscoreFields filters out all fields whose name begins with underscore.
+func FilterUnderscoreFields(fields []eval.Field) (filtered []eval.Field) {
+	for _, field := range fields {
+		if !beginsWithUnderscore(field.Name) {
+			filtered = append(filtered, field)
+		}
+	}
+	return
+}
+
+func beginsWithUnderscore(n string) bool {
+	return len(n) > 0 && n[0] == '_'
 }
 
 func FilterEmptyEvalFields(group []eval.Field) (filtered []eval.Field) {
