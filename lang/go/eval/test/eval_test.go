@@ -10,6 +10,7 @@ import (
 
 func TestEval(t *testing.T) {
 	RegisterEvalGateAt("test", "Gate", new(testNamedGate))
+	RegisterEvalGateAt("test", "Underscore", new(testUnderscoreGate))
 	tests := &EvalTests{T: t, Test: evalTests}
 	tests.Play(runtime.NewContext())
 }
@@ -534,6 +535,20 @@ var evalTests = []*EvalTest{
 		Arg:    nil,
 		Result: true,
 	},
+	{ // test underscore arguments
+		Enabled: true,
+		File: `
+		import "test"
+		Main() {
+			return: Equal(
+				test.Underscore(_: 1)
+				0
+			)
+		}
+		`,
+		Arg:    nil,
+		Result: true,
+	},
 }
 
 type testNamedGate struct {
@@ -544,4 +559,12 @@ type testNamedGate struct {
 
 func (g *testNamedGate) Play(ctx *runtime.Context) *testNamedGate {
 	return g
+}
+
+type testUnderscoreGate struct {
+	Underscore int64 `ko:"name=_"`
+}
+
+func (g *testUnderscoreGate) Play(ctx *runtime.Context) int64 {
+	return g.Underscore
 }
