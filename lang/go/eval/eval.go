@@ -2,8 +2,6 @@
 package eval
 
 import (
-	"fmt"
-
 	"github.com/kocircuit/kocircuit/lang/circuit/eval"
 	"github.com/kocircuit/kocircuit/lang/circuit/model"
 	"github.com/kocircuit/kocircuit/lang/go/eval/symbol"
@@ -133,7 +131,7 @@ func (m *EvalInterpretMacro) Label() string { return "eval" }
 func (m *EvalInterpretMacro) MacroSheathString() *string { return nil }
 
 func (m *EvalInterpretMacro) Help() string {
-	return fmt.Sprintf("%s", m.Func.FullPath())
+	return m.Func.FullPath()
 }
 
 func (m *EvalInterpretMacro) Doc() string {
